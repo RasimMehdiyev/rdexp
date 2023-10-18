@@ -4,7 +4,19 @@ module.exports = {
         "./src/**/*.{js,jsx,ts,tsx}",
     ],
     theme: {
+        colors: {
+            'primary': '#80C9D9;',
+        },
+        // text stroke
+
         extend: {},
     },
+    fontFamily: {
+        'sans': ['"Open Sans"', 'sans-serif'],
+        'serif': ['"Merriweather"', 'serif'],
+        'arial': ['"Arial"', 'sans-serif'],
+    },
+
+
     plugins: [],
 }
