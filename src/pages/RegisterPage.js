@@ -23,15 +23,16 @@ function RegisterPage() {
         }catch(error){
             alert(error.error_description || error.message);
         }
-        const addPlayerURL = "https://neeixstjxyxdbquebgkc.supabase.co/rest/v1/rpc/addplayer"
+        const addPlayerURL = "https://neeixstjxyxdbquebgkc.supabase.co/rest/v1/rpc/add_player"
         const addCoachURL = "https://neeixstjxyxdbquebgkc.supabase.co/rest/v1/rpc/addCoach"
 
         if (role === 'Player' || role === 'player'){
             axios.post(addPlayerURL, {
                 email: email,
                 fullname: fullName,
-                phoneNumber: phoneNumber,
-                password: password
+                phonenumber: phoneNumber,
+                password: password,
+                team: null
             }, {
                 headers: {
                     'apikey': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lZWl4c3RqeHl4ZGJxdWViZ2tjIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTU5OTQ1MjksImV4cCI6MjAxMTU3MDUyOX0.S9NLt_yf96o7gaNmNLYQiXqekZ2M55QhxYUWXeqZn5g",
