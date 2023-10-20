@@ -1,15 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SynthleteLogo from '../components/SynthleteLogo';
+import { supabase } from "../lib/helper/supabaseClient";
+
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const [user, setUser] = useState(null);
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        navigate('/')
+        try{
+            const { error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) throw error;
+            navigate('/')
+        }catch(error){
+            alert(error.error_description || error.message);
+        }
     };
+    useEffect(() => {
+        const session = supabase.auth.getSession();
+        setUser(session?.user ?? null);
+        console.log(session)
+    }, [])
 
     const isDisabled = !email || !password;
 

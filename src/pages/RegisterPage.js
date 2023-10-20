@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import SynthleteLogo from '../components/SynthleteLogo';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import { supabase } from "../lib/helper/supabaseClient";
+import axios from 'axios';
 
 function RegisterPage() {
     const [fullName, setFullName] = useState('');
@@ -10,10 +11,56 @@ function RegisterPage() {
     const [role, setRole] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const navigate = useNavigate();
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        // Handle form submission here
+
+        try{
+            const { error } = await supabase.auth.signUp({ email, password });
+            if (error) throw error;
+            navigate('/')
+        }catch(error){
+            alert(error.error_description || error.message);
+        }
+        const addPlayerURL = "https://neeixstjxyxdbquebgkc.supabase.co/rest/v1/rpc/add_player"
+        const addCoachURL = "https://neeixstjxyxdbquebgkc.supabase.co/rest/v1/rpc/addCoach"
+
+        if (role === 'Player' || role === 'player'){
+            axios.post(addPlayerURL, {
+                email: email,
+                fullname: fullName,
+                phonenumber: phoneNumber,
+                password: password,
+                team: null
+            }, {
+                headers: {
+                    'apikey': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lZWl4c3RqeHl4ZGJxdWViZ2tjIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTU5OTQ1MjksImV4cCI6MjAxMTU3MDUyOX0.S9NLt_yf96o7gaNmNLYQiXqekZ2M55QhxYUWXeqZn5g",
+                    "Content-Type": "application/json"
+                }
+            })
+            .then((response) => {
+                console.log(response)
+            })        
+        }
+        else if (role === "Coach" || role === "coach")
+        {
+            axios.post(addCoachURL, {
+                email: email,
+                fullname: fullName,
+                phoneNumber: phoneNumber
+            },
+            {
+                headers: {
+                    'apikey': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lZWl4c3RqeHl4ZGJxdWViZ2tjIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTU5OTQ1MjksImV4cCI6MjAxMTU3MDUyOX0.S9NLt_yf96o7gaNmNLYQiXqekZ2M55QhxYUWXeqZn5g",
+                    "Content-Type": "application/json"                
+                }
+            })
+            .then((response) => {
+                console.log(response)
+            })
+        } 
+
     };
     // if one of the necessary fields is empty, disable the submit button
     const isDisabled = !fullName || !email || !role || !password || !confirmPassword || password !== confirmPassword;
