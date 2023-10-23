@@ -23,7 +23,6 @@ code {
 
 @layer utilities {
      ::placeholder {
-        /* padding: 5px 16px; */
         margin-left: 10px;
         font-family: "Arial";
         font-size: 12px;
