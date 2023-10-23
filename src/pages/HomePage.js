@@ -33,19 +33,32 @@ const HomePage = () => {
         console.log("Logged out")
         navigate('/auth')
     }
-   
-    return (
-        <div className="flex flex-col justify-center items-center h-screen bg-gray-100">
-            <SynthleteLogo />
-
-            <div className="bg-white rounded-lg p-8">
-            {userData == null? <p>Nothing</p> : <p>Logged in as {userData.email}</p>} 
+    
+    if (userData){
+        return (
+            <div className="flex flex-col justify-center items-center ">
+                {/* Upcoming Events */}
+                <div className="mt-[30px] w-[325px] h-[150px] flex flex-col  bg-lf-dark-gray">
+                    <p className="p-[12px]">Upcoming events</p>
+                    <div className='p-[12px] flex flex-col justify-center items-center'>
+                        <p className='text-[gray]'>No upcoming events</p>
+                        <a href='#' className='underline'>Add events</a>
+                    </div>
+                </div>
+                <div className="mt-[30px] w-[325px] h-[150px] flex flex-col  bg-lf-dark-gray">
+                    <p className="p-[12px]">Announcements</p>
+                    <div className='p-[12px] flex flex-col justify-center items-center'>
+                        <p className='text-[gray]'>No Announcements</p>
+                        <a href="#" className='underline'>Add announcement</a>
+                    </div>
+                </div>
             </div>
-            <div className="bg-white rounded-lg p-8">
-                <button onClick={handleLogout} className="border-solid border-black">Log Out</button>
-            </div>
-        </div>
-    );
+        );
+    }
+    else{
+        navigate('/auth')
+    }
+    
 }
 
 export default HomePage;
