@@ -17,14 +17,14 @@ const ClubInfoComponent = ({isDone}) => {
             (
                 <form className='text-center gap-5 items-center flex flex-col justify-center' onSubmit={submitClub}>
                     <h1 className='text-[50px] my-[100px]  text-center'>Club info</h1>
-                    <input onChange={setClubName} value={clubName} className='shadow-md text-[12px] pl-2 font-[Arial] w-64 h-12 rounded-lg' type="text" placeholder='Club name'/>
-                    <select value={sportType} className='shadow-md pl-2 font-[Arial] text-[12px] border-[black] w-64 h-12 rounded-lg'>
+                    <input onChange={(event) => setClubName(event.target.value)} value={clubName} className='shadow-md text-[12px] pl-2 font-[Arial] w-64 h-12 rounded-lg' type="text" placeholder='Club name'/>
+                    <select value={sportType} onChange={(event)=>setSportType(event.target.value)} className='shadow-md pl-2 font-[Arial] text-[12px] border-[black] w-64 h-12 rounded-lg'>
                         <option className='font-[Arial]' value="">No Selection</option>
                         <option className='font-[Arial]' value="Basketball">Basketball</option>
                         <option className='font-[Arial]' value="Football">Football</option>
                         <option className='font-[Arial]' value="Volleyball">Volleyball</option>
                     </select>
-                    <select value={role} className='shadow-md pl-2 font-[Arial] text-[12px] border-[black] w-64 h-12 rounded-lg'>
+                    <select onChange={(event)=> setRole(event.target.value)} value={role} className='shadow-md pl-2 font-[Arial] text-[12px] border-[black] w-64 h-12 rounded-lg'>
                         <option className='font-[Arial]' value="">No Selection</option>
                         <option className='font-[Arial]' value="coach">Coach</option>
                         <option className='font-[Arial]' value="player">Player</option>
