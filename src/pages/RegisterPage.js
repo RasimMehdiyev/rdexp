@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import SynthleteLogo from '../components/SynthleteLogo';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { supabase } from "../lib/helper/supabaseClient";
 import axios from 'axios';
 import ClubInfoComponent from '../components/ClubInfoComponent';
@@ -14,16 +13,14 @@ const RegisterPage = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isDone , setIsDone] = useState(false);
-    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         try{
-            // const { error } = await supabase.auth.signUp({ email, password });
-            // if (error) throw error;
+            const { error } = await supabase.auth.signUp({ email, password });
+            if (error) throw error;
             setIsDone(true);
-            // navigate('/')
         }catch(error){
             alert(error.error_description || error.message);
         }

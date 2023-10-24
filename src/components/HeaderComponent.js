@@ -1,9 +1,7 @@
 import React from 'react';
-import SynthleteLogo from './SynthleteLogo';
 import { supabase } from "../lib/helper/supabaseClient";
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import SideBarComponent from './SideBarComponent';
 
 const  HeaderComponent = ({ isOpen, toggleSidebar }) => {
     let [userData, setUserData] = useState({})
@@ -12,9 +10,7 @@ const  HeaderComponent = ({ isOpen, toggleSidebar }) => {
     // wait until the data is fetched and then render the page
     useEffect(() => {
         const fetchData = async () => {
-            console.log("Fetching data")
             try {
-                console.log("Trying")
                 const user = await supabase.auth.getUser();
                 console.log(user)
                 if (user){
@@ -24,7 +20,6 @@ const  HeaderComponent = ({ isOpen, toggleSidebar }) => {
                 console.log(error)
             }
         }
-        console.log(userData)
         fetchData();
     },[]);
 
