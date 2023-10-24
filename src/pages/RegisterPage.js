@@ -3,23 +3,27 @@ import SynthleteLogo from '../components/SynthleteLogo';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from "../lib/helper/supabaseClient";
 import axios from 'axios';
+import ClubInfoComponent from '../components/ClubInfoComponent';
 
-function RegisterPage() {
+const RegisterPage = () => {
+
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [role, setRole] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [isDone , setIsDone] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         try{
-            const { error } = await supabase.auth.signUp({ email, password });
-            if (error) throw error;
-            navigate('/')
+            // const { error } = await supabase.auth.signUp({ email, password });
+            // if (error) throw error;
+            setIsDone(true);
+            // navigate('/')
         }catch(error){
             alert(error.error_description || error.message);
         }
@@ -67,25 +71,30 @@ function RegisterPage() {
     const isPasswordMatch = password === confirmPassword;
     return (
         <div className='m-auto p-10  text-center'>
-            <SynthleteLogo />
-            <form className='text-center gap-5 items-center flex flex-col justify-center' onSubmit={handleSubmit}>
-                    <input className='shadow-md text-[12px] pl-2 font-[Arial] w-64 h-12 rounded-lg' placeholder='Full Name' type="text" value={fullName} onChange={(event) => setFullName(event.target.value)} />
-                    <input className='shadow-md text-[12px] pl-2 font-[Arial] w-64 h-12 rounded-lg' placeholder='Email' type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
-                    <input className='shadow-md text-[12px] pl-2 font-[Arial] w-64 h-12 rounded-lg' placeholder='Phone number (Optional)' type="tel" value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} />
-                    <select className='shadow-md pl-2 font-[Arial] text-[12px] border-[black] w-64 h-12 rounded-lg' value={role} onChange={(event) => setRole(event.target.value)}>
-                        <option className='font-[Arial]' value="">No Selection</option>
-                        <option className='font-[Arial]' value="coach">Coach</option>
-                        <option className='font-[Arial]' value="player">Player</option>
-                        <option className='font-[Arial]' value="volunteer">Volunteer</option>
-                    </select>
-                    <input className='shadow-md pl-2 font-[Arial] w-64 h-12 rounded-lg' placeholder='Password' type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
-                    <input className='shadow-md pl-2 font-[Arial] w-64 h-12 rounded-lg' placeholder='Confirm Password' type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} />
-                    {isPasswordMatch ? null : 
-                        <p className='text-[10px] font-[Arial] leading-none text-[#ff0000d3] font-bold'>Passwords do not match!</p>
-                    }
-                <button className={`${(isDisabled) ? 'cursor-not-allowed' : 'cursor-pointer'} text-4xl text-[white] w-72 h-16 bg-[#656A6B]`}  type="submit">Sign Up</button>
-            </form>
-            <p className='py-2 text-xs font-[Arial]'>Already have an account? <Link className='font-[Arial] font-bold underline hover:text-[gray]' to="/login">Log In</Link></p>
+            {!isDone && (
+                            <form className='text-center gap-5 items-center flex flex-col justify-center' onSubmit={handleSubmit}>
+                            <h1 className='text-[50px] my-[50px]'>
+                                Sign up
+                            </h1>
+                            <input className='shadow-md text-[12px] pl-2 font-[Arial] w-64 h-12 rounded-lg' placeholder='Full Name' type="text" value={fullName} onChange={(event) => setFullName(event.target.value)} />
+                            <input className='shadow-md text-[12px] pl-2 font-[Arial] w-64 h-12 rounded-lg' placeholder='Email' type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
+                            <input className='shadow-md text-[12px] pl-2 font-[Arial] w-64 h-12 rounded-lg' placeholder='Phone number (Optional)' type="tel" value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} />
+                            <select className='shadow-md pl-2 font-[Arial] text-[12px] border-[black] w-64 h-12 rounded-lg' value={role} onChange={(event) => setRole(event.target.value)}>
+                                <option className='font-[Arial]' value="">No Selection</option>
+                                <option className='font-[Arial]' value="coach">Coach</option>
+                                <option className='font-[Arial]' value="player">Player</option>
+                                <option className='font-[Arial]' value="volunteer">Volunteer</option>
+                            </select>
+                            <input className='shadow-md pl-2 font-[Arial] w-64 h-12 rounded-lg' placeholder='Password' type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
+                            <input className='shadow-md pl-2 font-[Arial] w-64 h-12 rounded-lg' placeholder='Confirm Password' type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} />
+                            {isPasswordMatch ? null : 
+                                <p className='text-[10px] font-[Arial] leading-none text-[#ff0000d3] font-bold'>Passwords do not match!</p>
+                            }
+                        <button className={`${(isDisabled) ? 'cursor-not-allowed' : 'cursor-pointer'} text-4xl text-[white] w-72 h-16 bg-[#656A6B]`}  type="submit">Sign Up</button>
+                        <p className='py-2 text-xs font-[Arial]'>Already have an account? <Link className='font-[Arial] font-bold underline hover:text-[gray]' to="/login">Log In</Link></p>
+                    </form>
+            )}
+            <ClubInfoComponent isDone={isDone}/>
         </div>
     );
 }

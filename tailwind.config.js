@@ -8,6 +8,7 @@ module.exports = {
             'primary': '#80C9D9;',
             'lf-dark-gray':"#B7BDBE",
             'lf-light-gray':"#D9D9D9",
+            
         },
         // text stroke
 

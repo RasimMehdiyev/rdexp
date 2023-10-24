@@ -35,16 +35,7 @@ const  HeaderComponent = ({ isOpen, toggleSidebar }) => {
         console.log("Logged out")
         navigate('/auth')
     }
-    // Open sidebar on click
-    let brgIsDisabled = false;
-    const brgDisable = (brgIsDisabled) => {
-        if (brgIsDisabled === false){
-            brgIsDisabled = true;
-        }
-        else{
-            brgIsDisabled = false;
-        }
-    }
+
 
     return (
         <header className='bg-[#B7BDBE] pt-[20px] px-[14px] pb-0 flex flex-row justify-between'>

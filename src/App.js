@@ -8,13 +8,14 @@ import HeaderComponent from './components/HeaderComponent';
 import { useLocation } from 'react-router-dom';
 import SideBarComponent from './components/SideBarComponent';
 import { useState } from 'react';
+import StartPage from './pages/StartPage';
 
 const App = () => {
 
    // current link
    let location = useLocation();
    const [isOpen, setIsOpen] = useState(false);
-   if (location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth' || location.pathname === '/login/' || location.pathname === '/register/' || location.pathname === '/auth/'){
+   if (location.pathname === '/start' || location.pathname === '/start/' || location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth' || location.pathname === '/login/' || location.pathname === '/register/' || location.pathname === '/auth/'){
     return (
        <>
           <Routes>
@@ -22,6 +23,7 @@ const App = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/auth" element={<AuthenticationPage />} />
+            <Route path="/start" element={<StartPage />} />
           </Routes>
        </>
     );
@@ -35,6 +37,7 @@ const App = () => {
                <Route path="/login" element={<LoginPage />} />
                <Route path="/register" element={<RegisterPage />} />
                <Route path="/auth" element={<AuthenticationPage />} />
+               <Route path="/start" element={<StartPage />} />
             </Routes>
             <SideBarComponent isOpen={isOpen}/>
          </>
