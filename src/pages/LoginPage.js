@@ -34,7 +34,7 @@ const LoginPage = () => {
             <form className='text-center gap-5 items-center flex flex-col justify-center' onSubmit={handleLogin}>
                 <input placeholder='Email' className='shadow-md text-[12px] pl-2 font-[Arial]  w-64 h-12 rounded-lg' type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 <input placeholder="Password" className='shadow-md text-[12px]  pl-2 font-[Arial]  w-64 h-12 rounded-lg' type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                <button className={`${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} text-4xl border-black text-stroke font-black border-2 border-solid w-72 h-16 bg-primary`} type="submit">Log In</button>
+                <button className={`${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} text-4xl text-[white] w-72 h-16 bg-[black]`} type="submit">Log In</button>
             </form>
             <p className='py-2 text-xs font-[Arial]'>Do not have an account yet? <Link className='font-[Arial] font-bold underline hover:text-[gray]' to="/register">Register</Link></p>
         </div>
