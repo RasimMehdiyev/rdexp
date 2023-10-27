@@ -13,5 +13,9 @@
         "react"
     ],
     "rules": {
+<<<<<<< HEAD
+=======
+        "react/react-in-jsx-scope": "off"
+>>>>>>> 7ecaacd24c64a044c7c0f7c8593e28f12098109b
     }
 }
