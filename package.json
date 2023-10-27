@@ -20,7 +20,8 @@
         "local": "cross-env ./node_modules/.bin/react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test --env=jsdom",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     },
     "eslintConfig": {
         "extends": [
