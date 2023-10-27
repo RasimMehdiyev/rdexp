@@ -24,6 +24,8 @@ jobs:
         run: npm test
       - name: Lint
         run: npm run lint
+      - name: Fix the vulnerabilities
+        run: npm fund
       - name: Check for vulnerabilities
         run: npm audit fix --force
       - name: Install Vercel CLI
