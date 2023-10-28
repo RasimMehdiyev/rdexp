@@ -2,17 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 @font-face {
-    font-family: 'Nico Moji';
-    src: url('../public/fonts/NicoMoji/NicoMoji-Regular.ttf') format('truetype');
+    font-family: 'Russo One';
+    src: url('../public/fonts/RussoOne/RussoOne-Regular.ttf') format('truetype');
 }
 
 * {
-    font-family: 'Nico Moji';
+    font-family: 'Russo One';
 }
 
 body {
     margin: 0;
-    font-family: 'Nico Moji';
+    font-family: 'Russo One';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
