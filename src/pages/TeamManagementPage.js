@@ -27,12 +27,16 @@ const TeamManagementPage = () => {
 
     const togglePlayerBackground = () => {
         setPlayerClicked(!isPlayerClicked);
+        setRoleClicked(false);
+        setPersonClicked(false);
     };
 
     const [isPersonClicked, setPersonClicked] = useState(false);
 
     const togglePersonBackground = () => {
         setPersonClicked(!isPersonClicked);
+        setPlayerClicked(false);
+        setRoleClicked(false);
     };
 
     const [isRoleClicked, setRoleClicked] = useState(false);
@@ -40,6 +44,8 @@ const TeamManagementPage = () => {
     
     const toggleRoleBackground = () => {
         setRoleClicked(!isRoleClicked);
+        setPersonClicked(false);
+        setPlayerClicked(false);
     }
 
 
