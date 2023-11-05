@@ -3,7 +3,23 @@ module.exports = {
     content: [
         "./src/**/*.{js,jsx,ts,tsx}",
     ],
-    theme: {
+    theme: {    
+        fontFamily: {
+            'interReg': ['Inter Regular', 'sans'],
+            interBold: ['Inter Bold', 'sans'],
+            interMed: ['Inter Medium', 'sans'],
+            interSBold: ['Inter SemiBold', 'sans'],
+            interLight: ['Inter Light', 'sans'],
+            interthin: ['Inter Thin', 'sans'],
+            interElight: ['Inter ExtraLight', 'sans'],
+            interEBold: ['Inter ExtraBold', 'sans'],
+            interBlack: ['Inter Black', 'sans'],
+            'russoOne': ['Russo One', 'sans'],
+            nicoMoji: ['Nico Moji', 'sans'],
+            'sans': ['Open Sans', 'sans-serif'],
+            'serif': ['Merriweather', 'serif'],
+            'arial': ['Arial', 'sans-serif'],
+        },
         colors: {
             'primary': '#80C9D9;',
             'lf-dark-gray':"#B7BDBE",
@@ -15,33 +31,18 @@ module.exports = {
             'zinc': "#656A6B",
             'yellow': "#F2C94C",
             'green': "#219653",
-            'red': "#EB5757"
+            'red': "#EB5757",
+            'neutral':{
+                '900':"#333333",
+                '600':"#4F4F4F",
+                '300':"#828282",
+                '100':"#BDBDBD",
+            }
         },
-        // text stroke
 
         extend: {},
     },
-    fontFamily: {
-        'sans': ['Open Sans', 'sans-serif'],
-        'serif': ['Merriweather', 'serif'],
-        'arial': ['Arial', 'sans-serif'],
-        'inter-regular': ['"Inter Regular"', 'sans'],
-        'inter-bold': ['"Inter Bold"', 'sans'],
-        'inter-medium': ['"Inter Medium"', 'sans'],
-        'inter-semibold': ['"Inter SemiBold"', 'sans'],
-        'inter-light': ['"Inter Light"', 'sans'],
-        'inter-thin': ['"Inter Thin"', 'sans'],
-        'inter-extralight': ['"Inter ExtraLight"', 'sans'],
-        'inter-extrabold': ['"Inter ExtraBold"', 'sans'],
-        'inter-black': ['"Inter Black"', 'sans'],
-        'russo': ['"Russo One"', 'sans'],
-        'nicomoji': ['"Nico Moji"', 'sans'],
-    },
-
 
     plugins: [],
-    safelist:[
-        'bg-gradient-to-b',
-        'from-indigo-100',
-    ]
+
 }
