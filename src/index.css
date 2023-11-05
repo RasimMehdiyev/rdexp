@@ -11,6 +11,11 @@
     src: url('../public/fonts/Inter/Inter-Light.ttf') format('truetype');   
 }
 
+@font-face {
+    font-family: 'InterReg';
+    src: url('../public/fonts/Inter/Inter-Regular.ttf') format('truetype');   
+}
+
 * {
     /*font-family: 'Russo One';*/
 }
@@ -57,13 +62,12 @@ code {
     font-size: 3.5rem;
 }
 
-/*
-.arrow-left:hover::before {
-    color: #0074D9;
+.circle-number {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
   }
-  
-  .arrow-right:hover::after {
-    color: #0074D9;
-  }
-  
-*/

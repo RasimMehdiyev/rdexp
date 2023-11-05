@@ -10,6 +10,7 @@ module.exports = {
         },
         fontFamily: {
           inter: ['Inter', 'sans'],
+          interReg: ['InterReg', 'sans'],
           sans: ['"Open Sans"', 'sans-serif'],
           serif: ['"Merriweather"', 'serif'],
           arial: ['"Arial"', 'sans-serif'],
