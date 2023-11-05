@@ -1,5 +1,8 @@
 import React from 'react';
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 
 const TeamManagementPage = () => {
     const [isPlayerClicked, setPlayerClicked] = useState(false);
@@ -27,6 +30,11 @@ const TeamManagementPage = () => {
                     onClick={togglePlayerBackground} > 
                     Michael Johnson
                     </h5>
+                    {isPlayerClicked && (
+                    <span className="ml-2 text-blue-200"> {/* Adjust color as needed */}
+                    <FontAwesomeIcon icon={faWindowClose} className="pl-5 fa-4x"/> {/* Adjust size as needed */}
+                    </span>)}
+
                 </div>
             </div>
 
