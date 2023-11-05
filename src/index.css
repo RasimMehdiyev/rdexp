@@ -50,14 +50,14 @@ code {
 
 .arrow-left::before {
     content: '\00AB'; /* Left-pointing double angle quotation mark */
-    margin-right: 10rem;
+    margin-right: 5rem;
     font-weight: bold; 
     font-size: 3.5rem;
   }
   
 .arrow-right::after {
     content: '\00BB'; /* Right-pointing double angle quotation mark */
-    margin-left: 10rem;
+    margin-left: 5rem;
     font-weight: bold; 
     font-size: 3.5rem;
 }
