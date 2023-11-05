@@ -6,16 +6,27 @@
     src: url('../public/fonts/RussoOne/RussoOne-Regular.ttf') format('truetype');
 }
 
-* {
+.font-russo1 {
     font-family: 'Russo One';
 }
 
-body {
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    src: url('https://rsms.me/inter/inter.css');
+}
+
+.font-inter-regular {
+    font-family: 'Inter', sans-serif;
+}
+
+/* body {
     margin: 0;
     font-family: 'Russo One';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-}
+} */
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;

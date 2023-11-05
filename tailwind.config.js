@@ -17,6 +17,7 @@ module.exports = {
         'sans': ['"Open Sans"', 'sans-serif'],
         'serif': ['"Merriweather"', 'serif'],
         'arial': ['"Arial"', 'sans-serif'],
+        'Inter': ['Inter', 'sans'],
     },
 
 
