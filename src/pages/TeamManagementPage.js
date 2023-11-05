@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import PlayerDeletionModal from './PlayerDeletionModal.js';
+import PlayerDeletionModal from '../components/PlayerDeletionModal.js';
 
 const ClickablePerson = ({ name, isClicked, onClick }) => (
     <h5
@@ -52,18 +52,24 @@ const TeamManagementPage = () => {
 
     const openModal = () => {
         setModalOpen(true);
-    };
-
-    const closeModal = () => {
+      };
+    
+      const closeModal = () => {
         setModalOpen(false);
-    };
+      };
 
-    const CloseIcon = () => (
+    const CloseIcon = ({ onClick }) => (
         <span className="ml-2 text-blue-200">
-          <FontAwesomeIcon icon={faWindowClose} onClick={openModal} className="pl-3 fa-4x" />
-          {isModalOpen && <PlayerDeletionModal closeModal={closeModal} />}
+          <FontAwesomeIcon
+            icon={faWindowClose}
+            onClick={(event) => {
+              event.stopPropagation();
+              onClick();
+            }}
+            className="pl-3 fa-4x cursor-pointer"
+          />
         </span>
-    );
+      );
 
     const plusButton = (
         <button className="bg-blue-500 text-white rounded-lg mt-5 pt-5 pb-5 pl-72 pr-72 cursor-pointer">
@@ -90,7 +96,7 @@ const TeamManagementPage = () => {
                     isClicked={isPlayerClicked}
                     onClick={togglePlayerBackground}
                     />
-                    {isPlayerClicked && <CloseIcon />}
+                    {isPlayerClicked && <CloseIcon onClick={openModal} />}
                 </div>
                 {plusButton}
                 <h2 className={headerClass}>Extras</h2>
@@ -100,7 +106,7 @@ const TeamManagementPage = () => {
                         isClicked={isPersonClicked}
                         onClick={togglePersonBackground}
                     />
-                    {isPersonClicked && <CloseIcon />}
+                    {isPersonClicked && <CloseIcon onClick={openModal} />}
                 </div>
                 {plusButton}
 
@@ -111,11 +117,10 @@ const TeamManagementPage = () => {
                         isClicked={isRoleClicked}
                         onClick={toggleRoleBackground}
                     />
-                    {isRoleClicked && <CloseIcon />}
+                    {isRoleClicked && <CloseIcon onClick={openModal} />}
                 </div>
-
             </div>
-
+            <PlayerDeletionModal isOpen={isModalOpen} closeModal={closeModal} />
         </div>
     );
 };
