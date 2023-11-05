@@ -71,3 +71,9 @@ code {
     justify-content: center;
     font-size: 2rem;
   }
+
+.rect-background {
+    padding: 10px; 
+    border-radius: 5px; 
+    display: inline-block;
+}
