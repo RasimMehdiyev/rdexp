@@ -8,6 +8,7 @@ import HeaderComponent from './components/HeaderComponent';
 import { useLocation } from 'react-router-dom';
 import SideBarComponent from './components/SideBarComponent';
 import { useState } from 'react';
+import TeamManagementPage from './pages/TeamManagementPage';
 
 const App = () => {
 
@@ -33,6 +34,7 @@ const App = () => {
                <Route path="/login" element={<LoginPage />} />
                <Route path="/register" element={<RegisterPage />} />
                <Route path="/auth" element={<AuthenticationPage />} />
+               <Route path="/team-management" element={<TeamManagementPage/>} />
             </Routes>
             <SideBarComponent isOpen={isOpen}/>
          </>
