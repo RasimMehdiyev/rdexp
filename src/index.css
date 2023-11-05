@@ -3,11 +3,16 @@
 @tailwind utilities;
 @font-face {
     font-family: 'Russo One';
-    src: url('../public/fonts/RussoOne/RussoOne-Regular.ttf') format('truetype');
+    src: url('../public/fonts/RussoOne/RussoOne-Regular.ttf') format('truetype');   
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('../public/fonts/Inter/Inter-Light.ttf') format('truetype');   
 }
 
 * {
-    font-family: 'Russo One';
+    /*font-family: 'Russo One';*/
 }
 
 body {
@@ -37,3 +42,28 @@ code {
     color: white;
     border-color: black;
 }
+
+.arrow-left::before {
+    content: '\00AB'; /* Left-pointing double angle quotation mark */
+    margin-right: 10rem;
+    font-weight: bold; 
+    font-size: 3.5rem;
+  }
+  
+.arrow-right::after {
+    content: '\00BB'; /* Right-pointing double angle quotation mark */
+    margin-left: 10rem;
+    font-weight: bold; 
+    font-size: 3.5rem;
+}
+
+/*
+.arrow-left:hover::before {
+    color: #0074D9;
+  }
+  
+  .arrow-right:hover::after {
+    color: #0074D9;
+  }
+  
+*/
