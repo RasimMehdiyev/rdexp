@@ -10,6 +10,7 @@ module.exports = {
         },
         fontFamily: {
           inter: ['Inter', 'sans'],
+          russoOne: ['Russo One', 'sans'],
           interReg: ['InterReg', 'sans'],
           sans: ['"Open Sans"', 'sans-serif'],
           serif: ['"Merriweather"', 'serif'],
