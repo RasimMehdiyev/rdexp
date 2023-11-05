@@ -3,6 +3,7 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import PlayerDeletionModal from './PlayerDeletionModal.js';
 
 const ClickablePerson = ({ name, isClicked, onClick }) => (
     <h5
@@ -16,11 +17,7 @@ const ClickablePerson = ({ name, isClicked, onClick }) => (
     </h5>
 );
 
-const CloseIcon = () => (
-    <span className="ml-2 text-blue-200">
-      <FontAwesomeIcon icon={faWindowClose} className="pl-3 fa-4x" />
-    </span>
-);
+
 
 const TeamManagementPage = () => {
     const [isPlayerClicked, setPlayerClicked] = useState(false);
@@ -49,7 +46,24 @@ const TeamManagementPage = () => {
     }
 
 
-    const headerClass = "text-5xl text-blue-700 mb-5 mt-10";
+    const headerClass = "text-5xl text-blue-700 mb-5 mt-20";
+
+    const [isModalOpen, setModalOpen] = useState(false);
+
+    const openModal = () => {
+        setModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
+
+    const CloseIcon = () => (
+        <span className="ml-2 text-blue-200">
+          <FontAwesomeIcon icon={faWindowClose} onClick={openModal} className="pl-3 fa-4x" />
+          {isModalOpen && <PlayerDeletionModal closeModal={closeModal} />}
+        </span>
+    );
 
     const plusButton = (
         <button className="bg-blue-500 text-white rounded-lg mt-5 pt-5 pb-5 pl-72 pr-72 cursor-pointer">
@@ -99,7 +113,6 @@ const TeamManagementPage = () => {
                     />
                     {isRoleClicked && <CloseIcon />}
                 </div>
-                {plusButton}
 
             </div>
 
