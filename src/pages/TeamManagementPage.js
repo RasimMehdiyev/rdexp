@@ -46,7 +46,7 @@ const TeamManagementPage = () => {
     }
 
 
-    const headerClass = "text-5xl text-blue-700 mb-5 mt-20";
+    const headerClass = "font-russoOne text-5xl text-blue-700 mb-5 mt-20";
 
     const [isModalOpen, setModalOpen] = useState(false);
 
@@ -90,7 +90,7 @@ const TeamManagementPage = () => {
             <div style={{ marginLeft:"2rem"}}>
                 <h2 className={headerClass}>Players</h2>
                 <div className="flex items-center mb-5">
-                    <div className="circle-number bg-orange-500 text-white mr-8">21</div>
+                    <div className="font-russoOne circle-number bg-orange-500 text-white mr-8">21</div>
                     <ClickablePerson
                     name="Michael Johnson"
                     isClicked={isPlayerClicked}

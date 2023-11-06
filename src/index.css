@@ -22,7 +22,7 @@
 
 body {
     margin: 0;
-    font-family: 'Russo One';
+    /*font-family: 'Russo One';*/
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
