@@ -1,69 +1,60 @@
-import React from 'react';
-import SynthleteLogo from './SynthleteLogo';
-import { supabase } from "../lib/helper/supabaseClient";
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import SideBarComponent from './SideBarComponent';
+import { supabase } from "../lib/helper/supabaseClient";
 
-const  HeaderComponent = ({ isOpen, toggleSidebar }) => {
-    let [userData, setUserData] = useState({})
-    // navigate
-    const navigate = useNavigate();
-    // wait until the data is fetched and then render the page
-    useEffect(() => {
-        const fetchData = async () => {
-            console.log("Fetching data")
-            try {
-                console.log("Trying")
-                const user = await supabase.auth.getUser();
-                console.log(user)
-                if (user){
-                    setUserData(user.data.user)
-                }
-            }catch(error){
-                console.log(error)
-            }
-        }
-        console.log(userData)
-        fetchData();
-    },[]);
+const HeaderComponent = ({ isOpen, toggleSidebar }) => {
+  const [userData, setUserData] = useState({});
+  const [rotationDegree, setRotationDegree] = useState(0);
 
-    // handleLogout
-    const handleLogout = async (e) => {
-        e.preventDefault();
-        await supabase.auth.signOut();
-        console.log("Logged out")
-        navigate('/auth')
-    }
-    // Open sidebar on click
-    let brgIsDisabled = false;
-    const brgDisable = (brgIsDisabled) => {
-        if (brgIsDisabled === false){
-            brgIsDisabled = true;
-        }
-        else{
-            brgIsDisabled = false;
-        }
-    }
+  // navigate
+  const navigate = useNavigate();
 
-    return (
-        <header className='bg-[#B7BDBE] pt-[20px] px-[14px] pb-0 flex flex-row justify-between'>
-            <div className="flex flex-row gap-3 justify-normal h-[66px] w-[430px]">
-                <img onClick={() => toggleSidebar(!isOpen)} className='cursor-pointer w-[40px] h-[40px]' src={process.env.PUBLIC_URL + "/images/burger_menu.svg"} alt="menu" />
-                <Link to="/">
-                    <img className='cursor-pointer w-[40px] h-[40px]' src={process.env.PUBLIC_URL + "/images/home.svg"} alt="home" />
-                </Link>
-                <Link to="/profile">
-                    <img className='cursor-pointer w-[40px] h-[40px]' src={process.env.PUBLIC_URL + "/images/profile.svg"} alt="profile" />
-                </Link>
-                <img onClick={handleLogout} className='cursor-pointer w-[40px] h-[38px]' src={process.env.PUBLIC_URL + "/images/logout.svg"} alt="profile" />
-            </div>
-            <button className="flex flex-row gap-3 justify-normal h-[66px]">
-                {/* <SynthleteLogo /> */}
-                LOGO
-            </button>
-        </header>
-    );
-}
+  // Fetch user data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const user = await supabase.auth.getUser();
+        if (user) {
+          setUserData(user.data.user);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // Handle user logout
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate('/auth');
+  };
+
+  // Toggle sidebar and rotate burger menu
+  const toggleRotate = () => {
+    toggleSidebar(!isOpen);
+    setRotationDegree(prevDegree => prevDegree + 90);
+  };
+
+  return (
+<header className='bg-sn-main-blue items-center flex flex-row px-5 justify-between h-20 z-50'> {/* Ensure z-index is high enough */}
+  <img 
+    onClick={() => {
+      toggleSidebar(!isOpen); // Make sure this function is being called
+    }}
+    className='cursor-pointer w-[56px] h-[55px] z-50' // Again, ensure z-index is high enough
+    src={process.env.PUBLIC_URL + "/images/burger_menu.svg"} 
+    alt="menu" 
+  />
+      <Link to="/">
+        <img className='cursor-pointer' src={process.env.PUBLIC_URL + "/images/SYN.svg"} alt="home" />
+      </Link>
+      <Link to="/profile">
+        <img className='cursor-pointer w-[49px] h-[49px]' src={process.env.PUBLIC_URL + "/images/user.svg"} alt="profile" />
+      </Link>
+      {/* <img onClick={handleLogout} className='cursor-pointer w-[40px] h-[38px]' src={process.env.PUBLIC_URL + "/images/logout.svg"} alt="logout" /> */}
+    </header>
+  );
+};
 
 export default HeaderComponent;

@@ -32,6 +32,8 @@ module.exports = {
             'yellow': "#F2C94C",
             'green': "#219653",
             'red': "#EB5757",
+            'sn-main-blue':"#1C3FB7",
+            'sn-light-blue':"#A5B9F9",
             'neutral':{
                 '900':"#333333",
                 '600':"#4F4F4F",
