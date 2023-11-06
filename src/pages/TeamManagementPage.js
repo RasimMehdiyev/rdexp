@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import PlayerDeletionModal from '../components/PlayerDeletionModal.js';
+import PlayerAdditionModal from '../components/PlayerAdditionModal.js';
 
 const ClickablePerson = ({ name, isClicked, onClick }) => (
     <h5
@@ -48,14 +49,24 @@ const TeamManagementPage = () => {
 
     const headerClass = "font-russoOne text-5xl text-blue-700 mb-5 mt-20";
 
-    const [isModalOpen, setModalOpen] = useState(false);
+    const [isDeletionModalOpen, setDeletionModalOpen] = useState(false);
 
-    const openModal = () => {
-        setModalOpen(true);
+    const openDeletionModal = () => {
+        setDeletionModalOpen(true);
       };
     
-      const closeModal = () => {
-        setModalOpen(false);
+      const closeDeletionModal = () => {
+        setDeletionModalOpen(false);
+      };
+
+    const [isAdditionModalOpen, setAdditionModalOpen] = useState(false);
+
+    const openAdditionModal = () => {
+        setAdditionModalOpen(true);
+      };
+    
+      const closeAdditionModal = () => {
+        setAdditionModalOpen(false);
       };
 
     const CloseIcon = ({ onClick }) => (
@@ -73,7 +84,8 @@ const TeamManagementPage = () => {
 
     const plusButton = (
         <button className="bg-blue-500 text-white rounded-lg mt-5 pt-5 pb-5 pl-72 pr-72 cursor-pointer">
-          <FontAwesomeIcon icon={faPlus} className="ml-2 fa-2x" />
+          <FontAwesomeIcon icon={faPlus} className="ml-2 fa-2x" 
+                onClick={openAdditionModal} />
         </button>
       );
 
@@ -96,7 +108,7 @@ const TeamManagementPage = () => {
                     isClicked={isPlayerClicked}
                     onClick={togglePlayerBackground}
                     />
-                    {isPlayerClicked && <CloseIcon onClick={openModal} />}
+                    {isPlayerClicked && <CloseIcon onClick={openDeletionModal} />}
                 </div>
                 {plusButton}
                 <h2 className={headerClass}>Extras</h2>
@@ -106,7 +118,7 @@ const TeamManagementPage = () => {
                         isClicked={isPersonClicked}
                         onClick={togglePersonBackground}
                     />
-                    {isPersonClicked && <CloseIcon onClick={openModal} />}
+                    {isPersonClicked && <CloseIcon onClick={openDeletionModal} />}
                 </div>
                 {plusButton}
 
@@ -117,10 +129,13 @@ const TeamManagementPage = () => {
                         isClicked={isRoleClicked}
                         onClick={toggleRoleBackground}
                     />
-                    {isRoleClicked && <CloseIcon onClick={openModal} />}
+                    {isRoleClicked && <CloseIcon onClick={openDeletionModal} />}
                 </div>
+                {plusButton}
             </div>
-            <PlayerDeletionModal isOpen={isModalOpen} closeModal={closeModal} />
+            <PlayerDeletionModal isOpen={isDeletionModalOpen} closeModal={closeDeletionModal} />
+            <PlayerAdditionModal isOpen={isAdditionModalOpen} closeModal={closeAdditionModal} />
+            
         </div>
     );
 };
