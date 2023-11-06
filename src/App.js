@@ -8,7 +8,6 @@ import { useLocation } from 'react-router-dom';
 import SideBarComponent from './components/SideBarComponent';
 import { useState } from 'react';
 import ProfilePage from './pages/ProfilePage';
-
 const App = () => {
 
    // current link
