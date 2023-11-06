@@ -12,13 +12,13 @@ const SideBarComponent = ({ isOpen }) => {
     >
       <ul className='flex flex-col justify-center items-center'>
         <Link to='/team-management'>
-            <li className='w-[250px] m-auto mt-[20px] text-left pl-6 hover:bg-sn-light-blue h-[38px]'>Team management</li>
+            <li className='w-[250px] m-auto py-[8px] text-left pl-6 hover:bg-sn-light-blue h-[38px]'>Team management</li>
         </Link>
         <Link>
-            <li className='w-[250px] m-auto mt-[20px] text-left pl-6 hover:bg-sn-light-blue h-[38px]'>Schedule</li>
+            <li className='w-[250px] m-auto py-[8px] text-left pl-6 hover:bg-sn-light-blue h-[38px]'>Schedule</li>
         </Link>
         <Link>
-            <li className='w-[250px] m-auto mt-[20px] text-left pl-6 hover:bg-sn-light-blue h-[38px]'>Announcements</li>
+            <li className='w-[250px] m-auto py-[8px] text-left pl-6 hover:bg-sn-light-blue h-[38px]'>Announcements</li>
         </Link>
       </ul>
     </div>
