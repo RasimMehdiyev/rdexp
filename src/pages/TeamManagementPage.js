@@ -83,9 +83,9 @@ const TeamManagementPage = () => {
       );
 
     const plusButton = (
-        <button className="bg-blue-500 text-white rounded-lg mt-5 pt-5 pb-5 pl-72 pr-72 cursor-pointer">
+        <button onClick={openAdditionModal} className="bg-blue-500 text-white rounded-lg mt-5 pt-5 pb-5 pl-72 pr-72 cursor-pointer">
           <FontAwesomeIcon icon={faPlus} className="ml-2 fa-2x" 
-                onClick={openAdditionModal} />
+                 />
         </button>
       );
 
