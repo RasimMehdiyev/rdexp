@@ -42,16 +42,15 @@ export default function RoleAdditionModal({ isOpen, closeModal }) {
                     ADD ROLE
                     </Dialog.Title>
                       <div className="mt-4">
-                        <div className="relative mt-2 rounded-md shadow-sm">
+                        
                             <input
                             type="text"
                             name="price"
                             id="price"
-                            className="block w-full rounded-md border-0 py-1.5 pl-5 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            className="block w-full rounded-md border-0 py-1.5 pl-5 pr-64 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             placeholder="Enter new extra role needed for game"
-                            style={{ marginLeft: "50px" }}
                             />
-                        </div>
+                        
                       </div>
                     </div>
                   </div>
@@ -59,7 +58,7 @@ export default function RoleAdditionModal({ isOpen, closeModal }) {
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                 <button
                     type="button"
-                    className="mt-3 font-interReg inline-flex w-full justify-center text-blue-700 rounded-md bg-white px-3 py-4 text-sm shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                    className="mt-3 font-interReg inline-flex w-full justify-center text-blue-500 rounded-md bg-white px-3 py-4 text-sm shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                     onClick={closeModal}
                     ref={cancelButtonRef}
                   >
@@ -67,7 +66,7 @@ export default function RoleAdditionModal({ isOpen, closeModal }) {
                   </button>
                 <button
                     type="button"
-                    className="inline-flex font-interReg mr-2 w-full justify-center rounded-md bg-blue-700 px-3 py-4 text-sm text-white shadow-sm hover:bg-blue-200 sm:ml-3 "
+                    className="inline-flex font-interReg mr-2 w-full justify-center rounded-md bg-blue-500 px-3 py-4 text-sm text-white shadow-sm hover:bg-blue-200 sm:ml-3 "
                     onClick={closeModal}>
                     Add
                   </button>

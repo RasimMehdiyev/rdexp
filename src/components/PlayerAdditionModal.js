@@ -39,7 +39,7 @@ export default function PlayerAdditionModal({ isOpen, closeModal }) {
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                     <Dialog.Title as="h3" className="font-russoOne text-2xl leading-6 text-gray-900">
-                    ADD PLAYER
+                    ADD USER
                     </Dialog.Title>
                       <div className="mt-4">
                         <div className="relative mt-2 rounded-md shadow-sm">
