@@ -7,18 +7,18 @@ const SideBarComponent = ({ isOpen }) => {
 
   return (
     <div
-      className={`fixed top-0 left-0 w-[250px] bg-blue-700 mt-[80px] bg-white transform transition-transform duration-300 ease-in-out ${sidebarClass}`}
+      className={`fixed top-0 left-0 w-[230px] bg-blue-700 mt-[57px] bg-white transform transition-transform duration-300 ease-in-out ${sidebarClass}`}
       style={{ zIndex: 10 }} // You can set the zIndex to a value that suits your layout
     >
       <ul className='flex flex-col justify-center items-center'>
         <Link to='/team-management'>
-            <li className='w-[250px] m-auto py-[8px] text-left pl-6 hover:bg-sn-light-blue h-[38px]'>Team management</li>
+            <li className='w-[230px] items-center m-auto py-[4px] text-left pl-6 hover:bg-sn-light-blue h-[30px]'>Team management</li>
         </Link>
         <Link>
-            <li className='w-[250px] m-auto py-[8px] text-left pl-6 hover:bg-sn-light-blue h-[38px]'>Schedule</li>
+            <li className='w-[230px] items-center m-auto py-[4px] text-left pl-6 hover:bg-sn-light-blue h-[30px]'>Schedule</li>
         </Link>
         <Link>
-            <li className='w-[250px] m-auto py-[8px] text-left pl-6 hover:bg-sn-light-blue h-[38px]'>Announcements</li>
+            <li className='w-[230px] items-center m-auto py-[4px] text-left pl-6 hover:bg-sn-light-blue h-[30px]'>Announcements</li>
         </Link>
       </ul>
     </div>
