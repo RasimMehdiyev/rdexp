@@ -4,7 +4,7 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
-export default function PlayerAdditionModal({ isOpen, closeModal }) {
+export default function RoleAdditionModal({ isOpen, closeModal }) {
 
   const cancelButtonRef = useRef(null)
 
@@ -39,19 +39,16 @@ export default function PlayerAdditionModal({ isOpen, closeModal }) {
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                     <Dialog.Title as="h3" className="font-russoOne text-2xl leading-6 text-gray-900">
-                    ADD PLAYER
+                    ADD ROLE
                     </Dialog.Title>
                       <div className="mt-4">
                         <div className="relative mt-2 rounded-md shadow-sm">
-                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pr-2 pl-2">
-                                <FontAwesomeIcon icon={faUser} />
-                            </div>
                             <input
                             type="text"
                             name="price"
                             id="price"
                             className="block w-full rounded-md border-0 py-1.5 pl-5 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            placeholder="Enter user's name"
+                            placeholder="Enter new extra role needed for game"
                             style={{ marginLeft: "50px" }}
                             />
                         </div>
@@ -62,7 +59,7 @@ export default function PlayerAdditionModal({ isOpen, closeModal }) {
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                 <button
                     type="button"
-                    className="mt-3 font-interReg inline-flex w-full justify-center text-blue-500 rounded-md bg-white px-3 py-4 text-sm shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                    className="mt-3 font-interReg inline-flex w-full justify-center text-blue-700 rounded-md bg-white px-3 py-4 text-sm shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                     onClick={closeModal}
                     ref={cancelButtonRef}
                   >
@@ -70,7 +67,7 @@ export default function PlayerAdditionModal({ isOpen, closeModal }) {
                   </button>
                 <button
                     type="button"
-                    className="inline-flex font-interReg mr-2 w-full justify-center rounded-md bg-blue-500 px-3 py-4 text-sm text-white shadow-sm hover:bg-blue-200 sm:ml-3 "
+                    className="inline-flex font-interReg mr-2 w-full justify-center rounded-md bg-blue-700 px-3 py-4 text-sm text-white shadow-sm hover:bg-blue-200 sm:ml-3 "
                     onClick={closeModal}>
                     Add
                   </button>
