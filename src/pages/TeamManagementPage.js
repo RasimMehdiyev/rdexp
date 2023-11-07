@@ -5,6 +5,7 @@ import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import PlayerDeletionModal from '../components/PlayerDeletionModal.js';
 import PlayerAdditionModal from '../components/PlayerAdditionModal.js';
+import RoleAdditionModal from '../components/RoleAdditionModal.js';
 
 const ClickablePerson = ({ name, isClicked, onClick }) => (
     <h5
@@ -69,6 +70,16 @@ const TeamManagementPage = () => {
         setAdditionModalOpen(false);
       };
 
+    const [isRoleModalOpen, setRoleModalOpen] = useState(false);
+
+    const openRoleModal = () => {
+          setRoleModalOpen(true);
+     };
+      
+    const closeRoleModal = () => {
+          setRoleModalOpen(false);
+    };
+
     const CloseIcon = ({ onClick }) => (
         <span className="ml-2 text-blue-200">
           <FontAwesomeIcon
@@ -82,12 +93,14 @@ const TeamManagementPage = () => {
         </span>
       );
 
-    const plusButton = (
-        <button onClick={openAdditionModal} className="bg-blue-500 text-white rounded-lg mt-5 pt-5 pb-5 pl-72 pr-72 cursor-pointer">
-          <FontAwesomeIcon icon={faPlus} className="ml-2 fa-2x" 
-                 />
-        </button>
-      );
+
+    function PlusButton({onClick}) {
+        return (
+          <button onClick={onClick} className="bg-blue-500 text-white rounded-lg mt-5 pt-5 pb-5 pl-72 pr-72 cursor-pointer">
+          <FontAwesomeIcon icon={faPlus} className="ml-2 fa-2x"/>
+          </button>
+        );
+      }
 
     return (
         <div className="h-screen"> 
@@ -110,7 +123,10 @@ const TeamManagementPage = () => {
                     />
                     {isPlayerClicked && <CloseIcon onClick={openDeletionModal} />}
                 </div>
-                {plusButton}
+
+                <PlusButton onClick={openAdditionModal}>
+                </PlusButton>
+
                 <h2 className={headerClass}>Extras</h2>
                 <div className="flex items-center mb-5">
                     <ClickablePerson
@@ -120,7 +136,9 @@ const TeamManagementPage = () => {
                     />
                     {isPersonClicked && <CloseIcon onClick={openDeletionModal} />}
                 </div>
-                {plusButton}
+
+                <PlusButton onClick={openAdditionModal}>
+                </PlusButton>
 
                 <h2 className={headerClass}>Extra roles needed</h2>
                 <div className="flex items-center mb-5">
@@ -131,10 +149,14 @@ const TeamManagementPage = () => {
                     />
                     {isRoleClicked && <CloseIcon onClick={openDeletionModal} />}
                 </div>
-                {plusButton}
+
+                <PlusButton onClick={openRoleModal}>
+                </PlusButton>
+
             </div>
             <PlayerDeletionModal isOpen={isDeletionModalOpen} closeModal={closeDeletionModal} />
             <PlayerAdditionModal isOpen={isAdditionModalOpen} closeModal={closeAdditionModal} />
+            <RoleAdditionModal isOpen={isRoleModalOpen} closeModal={closeRoleModal} />
             
         </div>
     );
