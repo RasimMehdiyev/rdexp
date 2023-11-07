@@ -8,6 +8,7 @@ import { useLocation } from 'react-router-dom';
 import SideBarComponent from './components/SideBarComponent';
 import { useState } from 'react';
 import ProfilePage from './pages/ProfilePage';
+import NewGamePage from "./pages/NewGamePage";
 const App = () => {
 
    // current link
@@ -21,7 +22,6 @@ const App = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
              <Route path="/auth" element={<AuthenticationPage />} />
-             <Route path="/profile" element={<ProfilePage />} />
           </Routes>
        </>
     );
@@ -36,6 +36,7 @@ const App = () => {
                <Route path="/register" element={<RegisterPage />} />
                <Route path="/auth" element={<AuthenticationPage />} />
                <Route path="/profile" element={<ProfilePage />} />
+               <Route path="/game/create" element={<NewGamePage/>}/>
             </Routes>
             <SideBarComponent isOpen={isOpen}/>
          </>

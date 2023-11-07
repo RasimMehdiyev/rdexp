@@ -73,9 +73,9 @@ code {
 }
 
 @layer utilities {
-     ::placeholder {
+    input::placeholder {
+        padding: 5px 10px;
         margin-left: 10px;
-        font-family: "Arial";
         font-size: 12px;
         font-weight: 400;
         line-height: 16px;
@@ -87,4 +87,10 @@ code {
     -webkit-text-stroke: 1px black;
     color: white;
     border-color: black;
+}
+
+h1 {
+    font-family: "Russo One";
+    font-size: 30px;
+    color: #1C3FB7
 }
