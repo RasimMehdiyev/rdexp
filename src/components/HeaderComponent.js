@@ -46,7 +46,7 @@ const HeaderComponent = ({ isOpen, toggleSidebar }) => {
         style={{ transform: `rotate(${rotationDegree}deg)`, transition: 'transform 0.3s ease-in-out' }}
       />
       <Link to="/">
-        <img className='cursor-pointer' src={process.env.PUBLIC_URL + "/images/SYN.svg"} alt="home" onClick={toggleRotate} />
+        <img className='cursor-pointer' src={process.env.PUBLIC_URL + "/images/SYN.svg"} alt="home" />
       </Link>
       <Link to="/profile">
         <img className='cursor-pointer w-[49px] h-[49px]' src={process.env.PUBLIC_URL + "/images/user.svg"} alt="profile" />
