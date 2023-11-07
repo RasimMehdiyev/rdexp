@@ -76,7 +76,16 @@ const ProfilePage = () => {
         return (
             <div className="bg-gradient-to-b from-sn-light-blue to-white from-25% to-75% flex flex-col gap-20 items-center justify-center h-screen">
                 <div className="self-stretch h-[237px] p-2 flex-col justify-start items-center gap-5 flex">
-                    <img className="w-[142px] h-[142px] rounded-full border-4 border-white" src={userData.profilePicture} />
+                    
+                    {userData.profilePicture ? (
+                        <img className="w-[142px] h-[142px] rounded-full border-4 border-white" src={userData.profilePicture} />
+
+                    ) : (
+                        <img className="w-[142px] h-[142px] rounded-full border-4 border-white" src={process.env.PUBLIC_URL + "/images/no_user.png"} />
+                    )
+                        
+                    }
+                    
                     <div className="flex-col justify-start items-center gap-1 flex">
                         <div className="text-center text-blue-800 text-3xl font-russoOne leading-normal">{userData.fullName}</div>
                         <div className="text-center text-neutral-900 text-sm font-interEBold uppercase">{role}</div>
