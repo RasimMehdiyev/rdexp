@@ -37,19 +37,19 @@ const HeaderComponent = ({ isOpen, toggleSidebar }) => {
   };
 
   return (
-<header className='bg-sn-main-blue items-center flex flex-row px-5 justify-between h-20 z-50'> {/* Ensure z-index is high enough */}
+<header className='bg-sn-main-blue items-center flex flex-row px-5 justify-between h-14 z-50'> {/* Ensure z-index is high enough */}
     <img
         onClick={toggleRotate}
-        className='cursor-pointer w-[56px] h-[55px]'
+        className='cursor-pointer w-[36px] h-[35px]'
         src={process.env.PUBLIC_URL + "/images/burger_menu.svg"}
         alt="menu"
         style={{ transform: `rotate(${rotationDegree}deg)`, transition: 'transform 0.3s ease-in-out' }}
       />
-      <Link to="/">
-        <img className='cursor-pointer' src={process.env.PUBLIC_URL + "/images/SYN.svg"} alt="home" />
+      <Link className="flex justify-center items-center" to="/">
+        <img className='cursor-pointer mt-2' src={process.env.PUBLIC_URL + "/images/SYN_1.svg"} alt="home" />
       </Link>
       <Link to="/profile">
-        <img className='cursor-pointer w-[49px] h-[49px]' src={process.env.PUBLIC_URL + "/images/user.svg"} alt="profile" />
+        <img className='cursor-pointer w-[36px] h-[35px]' src={process.env.PUBLIC_URL + "/images/user-circle-svgrepo-com.svg"} alt="profile" />
       </Link>
       {/* <img onClick={handleLogout} className='cursor-pointer w-[40px] h-[38px]' src={process.env.PUBLIC_URL + "/images/logout.svg"} alt="logout" /> */}
     </header>
