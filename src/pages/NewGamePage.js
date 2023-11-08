@@ -160,7 +160,6 @@ const NewGamePage = () => {
                                 </div>
                                 <button type="submit" className="h-[40px] w-[150px] m-auto mt-5 bg-sn-main-blue rounded-md text-white font-russoOne">Save</button>
                             </form>
-
                         </div>  
         </div>
     );
