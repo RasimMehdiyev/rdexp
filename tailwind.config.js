@@ -21,8 +21,8 @@ module.exports = {
             'arial': ['Arial', 'sans-serif'],
         },
         colors: {
-            'primary': '#80C9D9;',
-            'lf-dark-gray':"#B7BDBE",
+            'primary': '#80C9D9',
+            'lf-dark-gray':"#949a9c",
             'lf-light-gray':"#D9D9D9",
             'indigo': "#5C6AC4",
             'white': "#FFFFFF",
@@ -33,7 +33,7 @@ module.exports = {
             'green': "#219653",
             'red': "#EB5757",
             'sn-main-blue':"#1C3FB7",
-            'sn-light-blue':"#A5B9F9",
+            'sn-light-blue':"#E1E8FF",
             'neutral':{
                 '900':"#333333",
                 '600':"#4F4F4F",
