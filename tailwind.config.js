@@ -27,8 +27,12 @@ module.exports = {
             'indigo': "#5C6AC4",
             'white': "#FFFFFF",
             'black': "#000000",
-            'orange': "#F2994A",
-            'zinc': "#656A6B",
+            'orange': {
+                '500':'#F27430'
+            },
+            'zinc': {
+                '300':'#D9D9D9'
+            },
             'yellow': "#F2C94C",
             'green': "#219653",
             'red': "#EB5757",
