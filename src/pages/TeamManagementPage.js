@@ -96,7 +96,7 @@ const TeamManagementPage = () => {
 
     function PlusButton({onClick}) {
         return (
-          <button onClick={onClick} className="bg-blue-500 text-white rounded-lg mt-5 pt-5 pb-5 w-3/4 cursor-pointer">
+          <button onClick={onClick} className="bg-blue-500 text-white rounded-lg mt-5 pt-5 pb-5 mb-10 w-3/4 cursor-pointer">
           <FontAwesomeIcon icon={faPlus} className="ml-2 fa-2x"/>
           </button>
         );
