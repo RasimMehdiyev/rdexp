@@ -10,7 +10,7 @@ import RoleAdditionModal from '../components/RoleAdditionModal.js';
 const ClickablePerson = ({ name, isClicked, onClick }) => (
     <h5
       className={`font-interReg cursor-pointer ${
-        isClicked ? "bg-blue-200 rounded-lg p-2 pl-5 pr-40 shadow-md" : ""
+        isClicked ? "bg-blue-200 rounded-lg p-2 w-2/4 shadow-md" : ""
       }`}
       style={{ fontSize: "2rem" }}
       onClick={onClick}
