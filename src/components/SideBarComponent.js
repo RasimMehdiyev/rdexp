@@ -1,33 +1,28 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-const SideBarComponent = ({isOpen}) => {
+const SideBarComponent = ({ isOpen }) => {
+  // Apply the transition class to the sidebar
+  const sidebarClass = isOpen ? 'translate-x-0' : '-translate-x-full';
 
-        /*
-    const navigate = useNavigate();
-
-    const handleManageTeams = () => {
-        navigate('/team-management')
-      };*/
-
-    return (
-        <>
-        {isOpen && (
-        <div className="absolute top-0 left-0 w-full h-screen bg-blue-700 mt-[85px] bg-lf-light-gray">
-                <ul className='flex flex-col justify-center items-center'>
-                    <li className='w-[80%] m-auto mt-[20px] bg-lf-dark-gray pt-[24px] text-center h-[68px]'>Announcements</li>
-                    <li className='w-[80%] m-auto mt-[20px] bg-lf-dark-gray pt-[24px] text-center h-[68px]'>
-                        <a href="/team-management">Manage Teams</a>
-                    </li>
-                    <li className='w-[80%] m-auto mt-[20px] bg-lf-dark-gray pt-[24px] text-center h-[68px]'>Line-up</li>
-                    <li className='w-[80%] m-auto mt-[20px] bg-lf-dark-gray pt-[24px] text-center h-[68px]'>Player stats</li>
-                </ul>
-        </div>
-        )}
-        </>
-
-
-    );
+  return (
+    <div
+      className={`fixed top-0 left-0 w-[230px] bg-blue-700 mt-[57px] bg-white transform transition-transform duration-300 ease-in-out ${sidebarClass}`}
+      style={{ zIndex: 10 }} // You can set the zIndex to a value that suits your layout
+    >
+      <ul className='flex flex-col justify-center items-center'>
+        <Link to='/team-management'>
+            <li className='w-[230px] items-center m-auto py-[4px] text-left pl-6 hover:bg-sn-light-blue h-[30px]'>Team management</li>
+        </Link>
+        <Link>
+            <li className='w-[230px] items-center m-auto py-[4px] text-left pl-6 hover:bg-sn-light-blue h-[30px]'>Schedule</li>
+        </Link>
+        <Link>
+            <li className='w-[230px] items-center m-auto py-[4px] text-left pl-6 hover:bg-sn-light-blue h-[30px]'>Announcements</li>
+        </Link>
+      </ul>
+    </div>
+  );
 };
 
 export default SideBarComponent;

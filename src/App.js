@@ -1,4 +1,3 @@
-import './App.css';
 import { Routes, Route } from "react-router-dom";
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -10,6 +9,7 @@ import SideBarComponent from './components/SideBarComponent';
 import { useState } from 'react';
 import TeamManagementPage from './pages/TeamManagementPage';
 
+import ProfilePage from './pages/ProfilePage';
 const App = () => {
 
    // current link
@@ -17,12 +17,15 @@ const App = () => {
    const [isOpen, setIsOpen] = useState(false);
    if (location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth' || location.pathname === '/login/' || location.pathname === '/register/' || location.pathname === '/auth/'){
     return (
+       <>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/auth" element={<AuthenticationPage />} />
+             <Route path="/auth" element={<AuthenticationPage />} />
+             <Route path="/profile" element={<ProfilePage />} />
           </Routes>
+       </>
     );
    }
    else{
@@ -35,6 +38,7 @@ const App = () => {
                <Route path="/register" element={<RegisterPage />} />
                <Route path="/auth" element={<AuthenticationPage />} />
                <Route path="/team-management" element={<TeamManagementPage/>} />
+               <Route path="/profile" element={<ProfilePage />} />
             </Routes>
             <SideBarComponent isOpen={isOpen}/>
          </>

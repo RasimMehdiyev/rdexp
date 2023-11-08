@@ -1,30 +1,71 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ////// */
+
 @font-face {
     font-family: 'Russo One';
-    src: url('../public/fonts/RussoOne/RussoOne-Regular.ttf') format('truetype');   
+    src: url('../public/fonts/RussoOne/RussoOne-Regular.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: 'Inter';
-    src: url('../public/fonts/Inter/Inter-Light.ttf') format('truetype');   
+    font-family: 'Inter Regular';
+    font-weight: 400;
+    src: url('../public/fonts/Inter/Inter-Regular.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: 'InterReg';
-    src: url('../public/fonts/Inter/Inter-Regular.ttf') format('truetype');   
+    font-family: 'Inter Bold';
+    font-weight: 700;
+    src: url('../public/fonts/Inter/Inter-Bold.ttf') format('truetype');
 }
 
-* {
-    /*font-family: 'Russo One';*/
+@font-face {
+    font-family: 'Inter Black';
+    font-weight: 900;
+    src: url('../public/fonts/Inter/Inter-Black.ttf') format('truetype');
 }
 
-body {
-    margin: 0;
-    /*font-family: 'Russo One';*/
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+@font-face {
+    font-family: 'Inter ExtraBold';
+    font-weight: 800;
+    src: url('../public/fonts/Inter/Inter-ExtraBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Inter ExtraLight';
+    font-weight: 200;
+    src: url('../public/fonts/Inter/Inter-ExtraLight.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Inter Light';
+    font-weight: 300;
+    src: url('../public/fonts/Inter/Inter-Light.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Inter Medium';
+    font-weight: 500;
+    src: url('../public/fonts/Inter/Inter-Medium.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Inter SemiBold';
+    font-weight: 600;
+    src: url('../public/fonts/Inter/Inter-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Inter Thin';
+    font-weight: 100;
+    src: url('../public/fonts/Inter/Inter-Thin.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Nico Moji';
+    src: url('../public/fonts/NicoMoji/NicoMoji-Regular.ttf') format('truetype');
 }
 
 code {
@@ -46,34 +87,4 @@ code {
     -webkit-text-stroke: 1px black;
     color: white;
     border-color: black;
-}
-
-.arrow-left::before {
-    content: '\00AB'; /* Left-pointing double angle quotation mark */
-    margin-right: 5rem;
-    font-weight: bold; 
-    font-size: 3.5rem;
-  }
-  
-.arrow-right::after {
-    content: '\00BB'; /* Right-pointing double angle quotation mark */
-    margin-left: 5rem;
-    font-weight: bold; 
-    font-size: 3.5rem;
-}
-
-.circle-number {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-  }
-
-.rect-background {
-    padding: 10px; 
-    border-radius: 5px; 
-    display: inline-block;
 }
