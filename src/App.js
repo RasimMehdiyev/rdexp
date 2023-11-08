@@ -8,6 +8,7 @@ import { useLocation } from 'react-router-dom';
 import SideBarComponent from './components/SideBarComponent';
 import { useState } from 'react';
 import ProfilePage from './pages/ProfilePage';
+import EditProfilePage from "./pages/EditProfilePage.js";
 
 const App = () => {
 
@@ -23,6 +24,7 @@ const App = () => {
             <Route path="/register" element={<RegisterPage />} />
              <Route path="/auth" element={<AuthenticationPage />} />
              <Route path="/profile" element={<ProfilePage />} />
+             <Route path="/editProfile" element={<EditProfilePage />} />
           </Routes>
        </>
     );
@@ -37,6 +39,7 @@ const App = () => {
                <Route path="/register" element={<RegisterPage />} />
                <Route path="/auth" element={<AuthenticationPage />} />
                <Route path="/profile" element={<ProfilePage />} />
+               <Route path="/editProfile" element={<EditProfilePage />} />
             </Routes>
             <SideBarComponent isOpen={isOpen}/>
          </>

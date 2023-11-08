@@ -24,7 +24,9 @@ module.exports = {
             'primary': '#80C9D9;',
             'lf-dark-gray':"#B7BDBE",
             'lf-light-gray':"#D9D9D9",
-            'indigo': "#5C6AC4",
+            'indigo': {
+                '100':'#E1E8FF'
+            },
             'white': "#FFFFFF",
             'black': "#000000",
             'orange': {
@@ -38,9 +40,13 @@ module.exports = {
             'red': "#EB5757",
             'neutral':{
                 '900':"#333333",
-                '600':"#4F4F4F",
+                '600': "#4F4F4F",
+                '500': '#656A6B',
                 '300':"#828282",
                 '100':"#BDBDBD",
+            },
+            'blue': {
+                '800': '#1C3FB7',
             }
         },
 
