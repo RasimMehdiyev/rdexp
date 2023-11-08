@@ -40,7 +40,7 @@ const NewGamePage = () => {
                                             checked={selectedOption === "game"}
                                             onChange={handleRadioChange}
                                         />
-                                        <label htmlFor="game">Game</label>
+                                        <label className="text-[14px]"htmlFor="game">Game</label>
                                     </div>
                                     <div className="flex flex-row justify-between gap-2">
                                         <input
@@ -51,7 +51,7 @@ const NewGamePage = () => {
                                         checked={selectedOption === "practice"}
                                         onChange={handleRadioChange}
                                         />
-                                        <label htmlFor="practice">Practice</label>
+                                        <label className="text-[14px]" htmlFor="practice">Practice</label>
                                     </div>
                                     <div className="flex flex-row justify-between gap-2">
                                         <input
@@ -62,63 +62,63 @@ const NewGamePage = () => {
                                         checked={selectedOption === "team-building"}
                                         onChange={handleRadioChange}
                                         />
-                                        <label htmlFor="team-building">Team Building</label>
+                                        <label className="text-[14px]" htmlFor="team-building">Team Building</label>
                                     </div>
                                 </div>
-                                <select value={teams} onChange={(e) => setTeams(e.target.value)} className="h-8 mt-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="teams" id="teams" placeholder="Choose team">
-                                    <option className="h-8 bg-white rounded-md" > Team 1</option>
-                                    <option className="h-8 bg-white rounded-md" > Team 2</option>
-                                    <option className="h-8 bg-white rounded-md" > Team 3</option>
+                                <select value={teams} onChange={(e) => setTeams(e.target.value)} className="h-7 mt-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="teams" id="teams" placeholder="Choose team">
+                                    <option className="h-7 bg-white rounded-md" > Team 1</option>
+                                    <option className="h-7 bg-white rounded-md" > Team 2</option>
+                                    <option className="h-7 bg-white rounded-md" > Team 3</option>
                                 </select>
                                 <div className="flex-row flex justify-between ">
-                                    <span><input value={date} onChange={(e) => setDate(e.target.value)} type="date" className="h-8 px-2 rounded-md border-sn-light-orange border-[1.5px]"/></span>
-                                    <span><input value={time} onChange={(e) => setTime(e.target.value)} type="time" className="h-8 px-2 rounded-md border-sn-light-orange border-[1.5px]"/></span>
+                                    <span><input value={date} onChange={(e) => setDate(e.target.value)} type="date" className="h-7 px-2 rounded-md border-sn-light-orange border-[1.5px]"/></span>
+                                    <span><input value={time} onChange={(e) => setTime(e.target.value)} type="time" className="h-7 px-2 rounded-md border-sn-light-orange border-[1.5px]"/></span>
                                 </div>
-                                <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location" type="text" className="h-8 px-2 rounded-md border-sn-light-orange border-[1.5px]" />
+                                <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location" type="text" className="h-7 px-2 rounded-md border-sn-light-orange border-[1.5px]" />
                                 <div id='players' className="flex flex-col gap-1 mt-[32px]">
                                     <h5 className="font-interSBold">Players</h5>
                                     <div className="flex flex-row justify-between items-center">
                                         <span>Point Guard</span>
                                         <span>
-                                            <select className="h-8 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
-                                                <option className="h-8 bg-white rounded-md" value="">Player 1</option>
-                                                <option className="h-8 bg-white rounded-md" value="">Player 2</option>
+                                            <select className="h-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
+                                                <option className="h-7 bg-white rounded-md" value="">Player 1</option>
+                                                <option className="h-7 bg-white rounded-md" value="">Player 2</option>
                                             </select>
                                         </span>
                                     </div>
                                     <div className="flex flex-row justify-between items-center">
                                         <span>Strong Guard</span>
                                         <span>
-                                            <select className="h-8 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
-                                                <option className="h-8 bg-white rounded-md" value="">Player 1</option>
-                                                <option className="h-8 bg-white rounded-md" value="">Player 2</option>
+                                            <select className="h-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
+                                                <option className="h-7 bg-white rounded-md" value="">Player 1</option>
+                                                <option className="h-7 bg-white rounded-md" value="">Player 2</option>
                                             </select>
                                         </span>
                                     </div>
                                     <div className="flex flex-row justify-between items-center">
                                         <span>Strong Forward</span>
                                         <span>
-                                            <select className="h-8 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
-                                                <option className="h-8 bg-white rounded-md" value="">Player 1</option>
-                                                <option className="h-8 bg-white rounded-md" value="">Player 2</option>
+                                            <select className="h-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
+                                                <option className="h-7 bg-white rounded-md" value="">Player 1</option>
+                                                <option className="h-7 bg-white rounded-md" value="">Player 2</option>
                                             </select>
                                         </span>
                                     </div>
                                     <div className="flex flex-row justify-between items-center">
                                         <span>Power Forward</span>
                                         <span>
-                                            <select className="h-8 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
-                                                <option className="h-8 bg-white rounded-md" value="">Player 1</option>
-                                                <option className="h-8 bg-white rounded-md" value="">Player 2</option>
+                                            <select className="h-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
+                                                <option className="h-7 bg-white rounded-md" value="">Player 1</option>
+                                                <option className="h-7 bg-white rounded-md" value="">Player 2</option>
                                             </select>
                                         </span>
                                     </div>
                                     <div className="flex flex-row justify-between items-center">
                                         <span>Center</span>
                                         <span>
-                                            <select className="h-8 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
-                                                <option className="h-8 bg-white rounded-md" value="">Player 1</option>
-                                                <option className="h-8 bg-white rounded-md" value="">Player 2</option>
+                                            <select className="h-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
+                                                <option className="h-7 bg-white rounded-md" value="">Player 1</option>
+                                                <option className="h-7 bg-white rounded-md" value="">Player 2</option>
                                             </select>
                                         </span>
                                     </div>
@@ -127,9 +127,9 @@ const NewGamePage = () => {
                                     <h5 className="font-interSBold">Substitutes</h5>
                                     <div className="flex flex-row gap-2 items-center">
                                         <span>
-                                            <select className="h-8 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
-                                                <option className="h-8 bg-white rounded-md" value="">Player 1</option>
-                                                <option className="h-8 bg-white rounded-md" value="">Player 2</option>
+                                            <select className="h-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
+                                                <option className="h-7 bg-white rounded-md" value="">Player 1</option>
+                                                <option className="h-7 bg-white rounded-md" value="">Player 2</option>
                                             </select>
                                         </span>
                                         <span>
@@ -142,18 +142,18 @@ const NewGamePage = () => {
                                     <div className="flex flex-row justify-between items-center">
                                         <span>Time Keeper</span>
                                         <span>
-                                            <select className="h-8 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
-                                                <option className="h-8 bg-white rounded-md" value="">Player 1</option>
-                                                <option className="h-8 bg-white rounded-md" value="">Player 2</option>
+                                            <select className="h-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
+                                                <option className="h-7 bg-white rounded-md" value="">Player 1</option>
+                                                <option className="h-7 bg-white rounded-md" value="">Player 2</option>
                                             </select>
                                         </span>
                                     </div>
                                     <div className="flex flex-row justify-between items-center">
                                         <span>Referee</span>
                                         <span>
-                                            <select className="h-8 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
-                                                <option className="h-8 bg-white rounded-md" value="">Player 1</option>
-                                                <option className="h-8 bg-white rounded-md" value="">Player 2</option>
+                                            <select className="h-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
+                                                <option className="h-7 bg-white rounded-md" value="">Player 1</option>
+                                                <option className="h-7 bg-white rounded-md" value="">Player 2</option>
                                             </select>
                                         </span>
                                     </div>
