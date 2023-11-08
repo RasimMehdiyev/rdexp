@@ -24,25 +24,25 @@ export default function PlayerAdditionModal({ isOpen, closeModal }) {
         </Transition.Child>
 
         <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+          <div className="flex min-h-full items-end justify-center p-4 text-center xxs:items-center xxs:p-0">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
-              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              enterTo="opacity-100 translate-y-0 sm:scale-100"
+              enterFrom="opacity-0 translate-y-4 xxs:translate-y-0 xxs:scale-95"
+              enterTo="opacity-100 translate-y-0 xxs:scale-100"
               leave="ease-in duration-200"
-              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              leaveFrom="opacity-100 translate-y-0 xxs:scale-100"
+              leaveTo="opacity-0 translate-y-4 xxs:translate-y-0 xxs:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                  <div className="sm:flex sm:items-start">
-                    <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all xxs:my-8 xxs:max-w-[80%]">
+                <div className="bg-white px-4 pb-4 pt-5 xxs:p-6 xxs:pb-4">
+                  <div className="xxs:flex xxs:items-start">
+                    <div className="mt-3 text-center xxs:ml-4 xxs:mt-0 xxs:text-left">
                     <Dialog.Title as="h3" className="font-russoOne text-2xl leading-6 text-gray-900">
                     ADD USER
                     </Dialog.Title>
                       <div className="mt-4">
-                        <div className="relative mt-2 rounded-md shadow-sm">
+                        <div className="relative mt-2 rounded-md shadow-xxs">
                             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pr-2 pl-2">
                                 <FontAwesomeIcon icon={faUser} />
                             </div>
@@ -50,7 +50,7 @@ export default function PlayerAdditionModal({ isOpen, closeModal }) {
                             type="text"
                             name="price"
                             id="price"
-                            className="block w-full rounded-md border-0 py-1.5 pl-5 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            className="block w-[78%] rounded-md border-0 py-1.5 pl-5 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 xxs:text-xxs xxs:leading-6"
                             placeholder="Enter user's name"
                             style={{ marginLeft: "50px" }}
                             />
@@ -59,10 +59,10 @@ export default function PlayerAdditionModal({ isOpen, closeModal }) {
                     </div>
                   </div>
                 </div>
-                <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                <div className="bg-gray-50 px-4 py-3 xxs:flex xxs:flex-row-reverse xxs:px-6">
                 <button
                     type="button"
-                    className="mt-3 font-interReg inline-flex w-full justify-center text-blue-500 rounded-md bg-white px-3 py-4 text-sm shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                    className="xxs:max-h-12 xxs:text-center xxs:items-center mt-3 font-interReg inline-flex w-full justify-center text-blue-500 rounded-md bg-white px-3 py-4 text-xxs shadow-xxs ring-1 ring-inset ring-gray-300 hover:bg-gray-50 xxs:mt-0 xxs:w-auto"
                     onClick={closeModal}
                     ref={cancelButtonRef}
                   >
@@ -70,7 +70,7 @@ export default function PlayerAdditionModal({ isOpen, closeModal }) {
                   </button>
                 <button
                     type="button"
-                    className="inline-flex font-interReg mr-2 w-full justify-center rounded-md bg-blue-500 px-3 py-4 text-sm text-white shadow-sm hover:bg-blue-200 sm:ml-3 "
+                    className="xxs:max-h-12 xxs:text-center xxs:items-center inline-flex font-interReg mr-2 w-full justify-center rounded-md bg-blue-500 px-3 py-4 text-xxs text-white shadow-xxs hover:bg-blue-200 xxs:ml-3 "
                     onClick={closeModal}>
                     Add
                   </button>
