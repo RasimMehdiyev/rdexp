@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from 'react-router-dom';
+import {PhoneIcon, EnvelopeIcon } from '@heroicons/react/24/outline'
 
 const ProfilePage = () => {
   return (
@@ -12,11 +13,12 @@ const ProfilePage = () => {
                 <div className="text-center text-neutral-900 text-sm font-interEBold uppercase">Coach</div>
             </div>
             <div className="self-stretch justify-center items-center gap-4 inline-flex">
-                <div className="justify-center items-center gap-1 flex">
+                      <div className="justify-center items-center gap-1 flex">
+                          <EnvelopeIcon className="h-6 w-6"/>
                     <div className="text-center text-neutral-900 text-sm font-interReg">jeff.hugh@email.co</div>
                 </div>
                 <div className="justify-center items-center gap-1 flex">
-                    <div className="w-[18px] h-[18px] relative"></div>
+                    <div className="w-[18px] h-[18px] relative"><PhoneIcon className="h-5 w-5"></PhoneIcon></div>
                     <div className="text-center text-black text-sm font-interReg">+12 345 567 89</div>
                 </div>
             </div>

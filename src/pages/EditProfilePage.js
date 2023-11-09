@@ -54,9 +54,11 @@ const EditProfilePage = () => {
             <div className="w-[322px] h-[33px] p-2.5 bg-orange-500 rounded justify-center items-center gap-2.5 inline-flex">
                 <div className="text-white text-sm font-normal font-interReg uppercase">save profile</div>
             </div>
+            <Link to="/profile">
             <div className="w-[322px] h-[33px] p-2.5 bg-zinc-300 rounded justify-center items-center gap-2.5 inline-flex">
                 <div className="text-neutral-900 text-sm font-normal font-interReg uppercase">cancel</div>
             </div>
+            </Link>
         </div>
       </div>
     </div>  
