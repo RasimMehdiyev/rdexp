@@ -1,6 +1,5 @@
 import React from "react";
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/helper/supabaseClient';
 import LoadingPage from "./LoadingPage";
 import { Link, useNavigate } from 'react-router-dom';
