@@ -1,4 +1,5 @@
 import React from "react";
+import { PencilIcon } from '@heroicons/react/24/solid'
 import { Link, useNavigate } from 'react-router-dom';
 
 const EditProfilePage = () => {
@@ -9,8 +10,11 @@ const EditProfilePage = () => {
             <div className="w-[142px] h-[142px] relative">
                 <img className="w-[142px] h-[142px] left-0 top-0 absolute rounded-full border-4 border-white" src="https://via.placeholder.com/142x142" />
                 <div className="w-[35px] h-[35px] left-[107px] top-[98px] absolute">
-                    <div className="w-[35px] h-[35px] left-[-3px] top-0 absolute bg-zinc-300 rounded-full" />
-                    <div className="w-[30px] h-[30px] left-0 top-[2px] absolute rounded" />
+                     
+                    <div className="w-[35px] h-[35px] left-[-3px] top-0 absolute bg-zinc-300 rounded-full flex justify-center items-center">
+                    <PencilIcon className="h-6 w-6" />   
+                    </div>
+                      
                 </div>
             </div>
         </div>
