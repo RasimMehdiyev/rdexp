@@ -75,8 +75,8 @@ const ProfilePage = () => {
         return <LoadingPage />; // You can replace this with any loading spinner or indicator
       }else{
         return (
-            <div className="bg-gradient-to-b from-indigo-100 from-40% to-white to-55% flex flex-col items-center justify-center h-screen">
-                <div className="self-stretch h-[237px] p-2 flex-col justify-start items-center gap-5 flex">
+            <div className="bg-gradient-to-b from-indigo-100 from-40% to-white to-55% flex flex-col items-center justify-start h-screen">
+                <div className="self-stretch h-auto p-2 flex-col justify-start items-center gap-5 flex">
                     
                     {userData.profilePicture ? (
                         <img className="w-[142px] h-[142px] rounded-full border-4 border-white" src={userData.profilePicture} />
@@ -93,7 +93,7 @@ const ProfilePage = () => {
                     </div>
                     <div className="self-stretch justify-center items-center gap-4 inline-flex">
                         <div className="justify-center items-center gap-1 flex">
-                          <EnvelopeIcon className="h-6 w-6"/>
+                            <EnvelopeIcon className="h-6 w-6"/>
                             <div className="text-center text-neutral-900 text-sm font-interReg">{userData.email}</div>
                         </div>
                         <div className="justify-center items-center gap-1 flex">
@@ -117,9 +117,11 @@ const ProfilePage = () => {
                         </div>
                 </div>
                 <div className="flex-col justify-start items-center gap-2 flex">
+                    <Link to="/editProfile">
                     <div className="w-[322px] h-[33px] p-2.5 bg-orange-500 rounded justify-center items-center gap-2.5 inline-flex">
                         <div className="text-white text-sm font-normal font-interReg uppercase">Edit Profile</div>
-                    </div>
+                        </div>
+                        </Link>
                     <button onClick={handleLogout} className="w-[322px] h-[33px] p-2.5 bg-zinc-300 rounded justify-center items-center gap-2.5 inline-flex">
                         <div className="text-neutral-900 text-sm font-normal font-interReg uppercase">Sign out</div>
                     </button>

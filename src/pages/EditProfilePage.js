@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const EditProfilePage = () => {
   return (
-    <div className="flex bg-indigo-100 flex-col items-center justify-center h-screen">
+    <div className="grow flex bg-indigo-100 flex-col items-center justify-start h-screen">
       <div className="grow p-4 flex-col justify-start items-center gap-4 inline-flex">
         <div className="w-[329px] justify-center items-start gap-2.5 inline-flex">
             <div className="w-[142px] h-[142px] relative">
