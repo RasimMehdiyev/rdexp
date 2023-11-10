@@ -1,18 +1,18 @@
 import React from 'react';
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
+import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faMinusSquare } from "@fortawesome/free-solid-svg-icons";
 import PlayerDeletionModal from '../components/PlayerDeletionModal.js';
 import PlayerAdditionModal from '../components/PlayerAdditionModal.js';
 import RoleAdditionModal from '../components/RoleAdditionModal.js';
 
 const ClickablePerson = ({ name, isClicked, onClick }) => (
     <h5
-      className={`font-interReg cursor-pointer ${
+      className={`font-interReg text-2xl cursor-pointer shadow-md p-2 rounded-md ${
         isClicked ? "bg-blue-200 rounded-lg p-2 w-2/4 shadow-md" : ""
       }`}
-      style={{ fontSize: "2rem" }}
       onClick={onClick}
     >
       {name}
@@ -47,8 +47,7 @@ const TeamManagementPage = () => {
         setPlayerClicked(false);
     }
 
-
-    const headerClass = "font-russoOne text-5xl text-blue-700 mb-5 mt-20";
+    const headerClass = "font-russoOne text-3xl text-blue-700 mb-5 mt-20";
 
     const [isDeletionModalOpen, setDeletionModalOpen] = useState(false);
 
@@ -80,15 +79,15 @@ const TeamManagementPage = () => {
           setRoleModalOpen(false);
     };
 
-    const CloseIcon = ({ onClick }) => (
+    const RemoveIcon = ({ onClick }) => (
         <span className="ml-2 text-blue-200">
           <FontAwesomeIcon
-            icon={faWindowClose}
+            icon={faSignOutAlt}
             onClick={(event) => {
               event.stopPropagation();
               onClick();
             }}
-            className="pl-3 fa-4x cursor-pointer"
+            className="pl-3 fa-2x cursor-pointer"
           />
         </span>
       );
@@ -96,7 +95,7 @@ const TeamManagementPage = () => {
 
     function PlusButton({onClick}) {
         return (
-          <button onClick={onClick} className="bg-blue-500 text-white rounded-lg mt-5 pt-5 pb-5 mb-10 w-3/4 cursor-pointer">
+          <button onClick={onClick} className="bg-blue-600 text-white shadow-lg rounded-lg mt-5 pt-2 pb-2 mb-2 w-full cursor-pointer">
           <FontAwesomeIcon icon={faPlus} className="ml-2 fa-2x"/>
           </button>
         );
@@ -104,24 +103,24 @@ const TeamManagementPage = () => {
 
     return (
         <div className="h-screen"> 
-            <div className="font-inter flex flex-col items-center">
-                <h1 className=" text-5xl mt-8">
-                <span className="font-russoOne arrow-left text-blue-700 hover:text-blue-500"></span>
+            <div className="font-russoOne flex flex-col items-center">
+                <h1 className=" text-4xl mt-8 text-blue-800 ">
+                <span className="font-russoOne arrow-left text-blue-600  hover:text-blue-500"></span>
                 Team 1
-                <span className="font-russoOne arrow-right text-blue-700 hover:text-blue-500"></span>
+                <span className="font-russoOne arrow-right text-blue-600 hover:text-blue-500"></span>
                 </h1>
             </div>
 
-            <div style={{ marginLeft:"2rem"}}>
+            <div style={{ margin:"2rem"}}>
                 <h2 className={headerClass}>Players</h2>
                 <div className="flex items-center mb-5">
-                    <div className="font-russoOne circle-number bg-sn-main-orange text-white mr-8">21</div>
+                    <div className="font-russoOne circle-number shadow-md bg-sn-main-orange text-white mr-8">21</div>
                     <ClickablePerson
                     name="Michael Johnson"
                     isClicked={isPlayerClicked}
                     onClick={togglePlayerBackground}
                     />
-                    {isPlayerClicked && <CloseIcon onClick={openDeletionModal} />}
+                    {isPlayerClicked && <RemoveIcon onClick={openDeletionModal} />}
                 </div>
 
                 <PlusButton onClick={openAdditionModal}>
@@ -134,7 +133,7 @@ const TeamManagementPage = () => {
                         isClicked={isPersonClicked}
                         onClick={togglePersonBackground}
                     />
-                    {isPersonClicked && <CloseIcon onClick={openDeletionModal} />}
+                    {isPersonClicked && <RemoveIcon onClick={openDeletionModal} />}
                 </div>
 
                 <PlusButton onClick={openAdditionModal}>
@@ -147,7 +146,7 @@ const TeamManagementPage = () => {
                         isClicked={isRoleClicked}
                         onClick={toggleRoleBackground}
                     />
-                    {isRoleClicked && <CloseIcon onClick={openDeletionModal} />}
+                    {isRoleClicked && <RemoveIcon onClick={openDeletionModal} />}
                 </div>
 
                 <PlusButton onClick={openRoleModal}>

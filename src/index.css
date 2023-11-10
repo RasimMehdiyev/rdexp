@@ -89,19 +89,18 @@ code {
 }
 
 .arrow-left::before {
-    content: '\00AB';
-    /* Left-pointing double angle quotation mark */
-    margin-right: 5rem;
+    content: '\00AB'; /* Left-pointing double angle quotation mark */
+    margin-right: 3rem;
     font-weight: bold;
-    font-size: 3.5rem;
+    font-size: 3rem;
 }
 
 .arrow-right::after {
     content: '\00BB';
     /* Right-pointing double angle quotation mark */
-    margin-left: 5rem;
+    margin-left: 3rem;
     font-weight: bold;
-    font-size: 3.5rem;
+    font-size: 3rem;
 }
 
 .circle-number {
