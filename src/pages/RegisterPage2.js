@@ -69,10 +69,10 @@ function RegisterPage2() {
         <div className='m-auto p-10  text-center'>
             <SynthleteLogo />
             <form className='text-center gap-5 items-center flex flex-col justify-center' onSubmit={handleSubmit}>
-                    <input className='text-[12px] pl-2 font-[Arial] w-64 h-12 rounded-lg' placeholder='Full Name' type="text" value={fullName} onChange={(event) => setFullName(event.target.value)} />
-                    <input className='text-[12px] pl-2 font-[Arial] w-64 h-12 rounded-lg' placeholder='Email' type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
-                    <input className='text-[12px] pl-2 font-[Arial] w-64 h-12 rounded-lg' placeholder='Phone number (Optional)' type="tel" value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} />
-                    <select className='pl-2 font-[Arial] text-[12px] border-[black] w-64 h-12 rounded-lg' value={role} onChange={(event) => setRole(event.target.value)}>
+                    <input className='text-[12px] pl-2 font-[Arial] w-64 h-12 rounded-lg border-2 border-orange' placeholder='Full Name' type="text" value={fullName} onChange={(event) => setFullName(event.target.value)} />
+                    <input className='text-[12px] pl-2 font-[Arial] w-64 h-12 rounded-lg border-2 border-orange' placeholder='Email' type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
+                    <input className='text-[12px] pl-2 font-[Arial] w-64 h-12 rounded-lg border-2 border-orange' placeholder='Phone number (Optional)' type="tel" value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} />
+                    <select className='pl-2 font-[Arial] text-[12px] border-[black] w-64 h-12 rounded-lg border-2 border-orange' value={role} onChange={(event) => setRole(event.target.value)}>
                         <option className='font-[Arial]' value="">No Selection</option>
                         <option className='font-[Arial]' value="coach">Coach</option>
                         <option className='font-[Arial]' value="player">Player</option>
