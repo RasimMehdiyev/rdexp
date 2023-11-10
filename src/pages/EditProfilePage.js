@@ -14,6 +14,9 @@ const EditProfilePage = () => {
     const [newEmail, setNewEmail] = useState('');
     const [newPhoneNumber, setNewPhoneNumber] = useState('');
 
+    const [phoneNumberError, setPhoneNumberError] = useState('');
+    const [emailError, setEmailError] = useState('');
+
     const [loading, setLoading] = useState(true); // Add a loading state
     // navigate
     const navigate = useNavigate();
@@ -61,9 +64,96 @@ const EditProfilePage = () => {
         };
     
         fetchData();
-      }, []);
+    }, []);
 
-    return (
+    const validateEmail = (newEmail) => {
+        // Regular expression for a valid email address
+        if (newEmail != '') {
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailPattern.test(newEmail);
+        } else return true;
+        
+    };
+
+    const validatePhoneNumber = (newPhoneNumber) => {
+        // Regular expression for a valid phone number
+        if (newPhoneNumber != '') {
+            const phonePattern = /^[\d\+\-\s]+$/;
+            return phonePattern.test(newPhoneNumber);
+        } else return true;
+        
+    };
+    
+    const handleSubmit = async (event) => {
+        setLoading(true);
+        event.preventDefault();
+
+        if (!validateEmail(newEmail)) {
+            setEmailError('Email is not valid.');
+            return;
+        }
+
+    // Validate phone number
+        if (!validatePhoneNumber(newPhoneNumber)) {
+            setPhoneNumberError('Phone number is not valid.');
+            return;
+        }
+
+        console.log("submit handled");
+        console.log("bio: ", newBio);
+        console.log("email: ", newEmail);
+        console.log("phone number: ", newPhoneNumber);
+
+        try {
+            const userResponse = await supabase.auth.getUser();
+            console.log("User:", userResponse);
+            const user = userResponse.data.user;
+            if (role == 'Coach' || role == 'Player') {
+                if (newBio != '') {
+                    const { data: bioData, error: bioError } = await supabase
+                    .from(role)
+                    .update({ bio: newBio })
+                    .eq('userID', user.id)
+                    .select()
+                }
+                if (newEmail != '') {
+                    const { data: emailData, error: emailError } = await supabase
+                    .from(role)
+                    .update({ email: newEmail })
+                    .eq('userID', user.id)
+                    .select()
+                }
+                if (newPhoneNumber != '') {
+                    const { data: phoneData, error: phoneError } = await supabase
+                    .from(role)
+                    .update({ phoneNumber: newPhoneNumber })
+                    .eq('userID', user.id)
+                    .select()
+                }
+            } else { console.error("role unknown"); }                           
+                
+                        
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        } finally {
+            setLoading(false);
+            navigate('/profile');
+        }
+
+    };
+
+    
+    /**
+     * TODO:
+     * - Put the inputs in a form
+     * - Handle submit form, test it first if needed
+     * - Update data using JSX
+     * 
+    */
+    if (loading) {
+        return <LoadingPage />; // You can replace this with any loading spinner or indicator
+    } else {
+        return (
     <div className="grow flex bg-indigo-100 flex-col items-center justify-start h-screen">
         <div className="grow p-4 flex-col justify-start items-center gap-4 inline-flex">
         <div className="w-[329px] justify-center items-start gap-2.5 inline-flex">
@@ -82,6 +172,7 @@ const EditProfilePage = () => {
                 </div>
             </div>
         </div>
+        <form onSubmit={handleSubmit}>
         <div className="flex-col justify-start items-start gap-2 flex">
             <div className="flex-col justify-start items-start gap-1 flex">
                 <div className="w-[178px] px-4 justify-start items-start gap-2.5 inline-flex">
@@ -109,9 +200,13 @@ const EditProfilePage = () => {
                             placeholder={userData.email}
                             type="email"
                             value={newEmail}
-                            onChange={(event) => setNewEmail(event.target.value)} />
+                                onChange={(event) => {
+                                    setNewEmail(event.target.value);
+                                    setEmailError(''); }
+                                } />
                     </div>
-                </div>
+                            </div>
+                            {(emailError != '') ? <div className="text-red-500">{emailError}</div>:<div></div>}
             </div>
             <div className="flex-col justify-start items-start gap-1 flex">
                 <div className="px-4 justify-start items-start gap-2.5 inline-flex">
@@ -124,24 +219,34 @@ const EditProfilePage = () => {
                             placeholder={userData.phoneNumber}
                             type="tel"
                             value={newPhoneNumber}
-                            onChange={(event) => setNewPhoneNumber(event.target.value)} />
+                                    onChange={(event) => {
+                                        setNewPhoneNumber(event.target.value);
+                                        setPhoneNumberError('');
+                                    }} />
                     </div>
-                </div>
+                            </div>
+                            {(phoneNumberError != '') ? <div className="text-red-500">{phoneNumberError}</div>:<div></div>}
             </div>
         </div>
         <div className="flex-col justify-end items-center gap-2 flex">
-            <div className="w-[322px] h-[33px] p-2.5 bg-orange-500 rounded justify-center items-center gap-2.5 inline-flex">
+            <button
+                className="w-[322px] h-[33px] p-2.5 bg-orange-500 rounded justify-center items-center gap-2.5 inline-flex"
+                type="submit">
                 <div className="text-white text-sm font-normal font-interReg uppercase">save profile</div>
-            </div>
+            </button>
             <Link to="/profile">
             <div className="w-[322px] h-[33px] p-2.5 bg-zinc-300 rounded justify-center items-center gap-2.5 inline-flex">
                 <div className="text-neutral-900 text-sm font-normal font-interReg uppercase">cancel</div>
             </div>
             </Link>
         </div>
+        </form>
         </div>
     </div>  
     );
+    }
+
+    
 }
 
 export default EditProfilePage;
