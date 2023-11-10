@@ -46,7 +46,7 @@ const HeaderComponent = ({ isOpen, toggleSidebar }) => {
         style={{ transform: `rotate(${rotationDegree}deg)`, transition: 'transform 0.3s ease-in-out' }}
       />
       <Link className="flex justify-center items-center" to="/">
-        <img className='cursor-pointer mt-2' src={process.env.PUBLIC_URL + "/images/SYN_1.svg"} alt="home" />
+        <img className='cursor-pointer ' src={process.env.PUBLIC_URL + "/images/SYN.svg"} alt="home" />
       </Link>
       <Link to="/profile">
         <img className='cursor-pointer w-[36px] h-[35px]' src={process.env.PUBLIC_URL + "/images/user-circle-svgrepo-com.svg"} alt="profile" />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import SynthleteLogo from '../components/SynthleteLogo';
+import SynthleteLogo from '../components/SynthleteLogo2';
 import { supabase } from "../lib/helper/supabaseClient";
 
 const LoginPage = () => {
@@ -29,14 +29,14 @@ const LoginPage = () => {
 
 
     return (
-        <div className='m-auto p-10 mt-20  text-center'>
+        <div className='min-h-screen  bg-sn-light-blue flex flex-col gap-4 justify-center items-center'>
             <SynthleteLogo />
             <form className='text-center gap-5 items-center flex flex-col justify-center' onSubmit={handleLogin}>
-                <input placeholder='Email' className='shadow-md text-[12px] pl-2 font-[Arial]  w-64 h-12 rounded-lg' type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                <input placeholder="Password" className='shadow-md text-[12px]  pl-2 font-[Arial]  w-64 h-12 rounded-lg' type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                <button className={`${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} text-4xl text-[white] w-72 h-16 bg-[black]`} type="submit">Log In</button>
+                <input placeholder='Email' className='shadow-md text-[12px] pl-2 font-interReg  w-64 h-12 rounded-lg border-2 border-sn-main-orange' type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input placeholder="Password" className='shadow-md text-[12px]  pl-2 font-interReg  w-64 h-12 rounded-lg border-2 border-sn-main-orange' type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <button className={`${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} text-2xl text-white w-72 h-16 bg-sn-main-orange font-russoOne rounded-10px`} type="submit">Log In</button>
             </form>
-            <p className='py-2 text-xs font-[Arial]'>Do not have an account yet? <Link className='font-[Arial] font-bold underline hover:text-[gray]' to="/register">Register</Link></p>
+            <p className='py-2 text-xs font-[Arial] text-orange'>Do not have an account yet? <Link className='font-[Arial] font-bold underline text-orange' to="/register">Register</Link></p>
         </div>
     );
 };

@@ -25,7 +25,7 @@ module.exports = {
           // => @media (min-width: 1536px) { ... }
         },
         fontFamily: {
-            'inter': ['Inter', 'sans-serif'],
+            'inter': ['Inter Light', 'sans'],
             'interReg': ['Inter Regular', 'sans'],
             interBold: ['Inter Bold', 'sans'],
             interMed: ['Inter Medium', 'sans'],
@@ -41,8 +41,8 @@ module.exports = {
             'arial': ['Arial', 'sans-serif'],
         },
         colors: {
-            'primary': '#80C9D9;',
-            'lf-dark-gray':"#B7BDBE",
+            'primary': '#80C9D9',
+            'lf-dark-gray':"#949a9c",
             'lf-light-gray':"#D9D9D9",
             'indigo': {
                 '100':'#E1E8FF'
@@ -122,7 +122,11 @@ module.exports = {
             },
           },
 
-        extend: {},
+        extend: {
+            borderRadius:{
+                '10px': '10px'
+            }
+        },
     },
 
     plugins: [],
