@@ -34,10 +34,10 @@ export default function RoleAdditionModal({ isOpen, closeModal }) {
               leaveFrom="opacity-100 translate-y-0 xxs:scale-100"
               leaveTo="opacity-0 translate-y-4 xxs:translate-y-0 xxs:scale-95"
             >
-              <Dialog.Panel className="xxs:max-w-[80%] sm-w-full relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all xxs:my-8 ">
+              <Dialog.Panel className="sm-w-full relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all xxs:my-8 ">
                 <div className="bg-white px-4 pb-4 pt-5 xxs:p-6 xxs:pb-4">
                   <div className="xxs:flex xxs:items-start">
-                    <div className="mt-3 text-center xxs:ml-4 xxs:mt-0 xxs:text-left">
+                    <div className="mt-3 text-center xxs:ml-2 xxs:mt-0 xxs:text-left">
                     <Dialog.Title as="h3" className="font-russoOne text-2xl leading-6 text-gray-900">
                     ADD ROLE
                     </Dialog.Title>
@@ -47,8 +47,8 @@ export default function RoleAdditionModal({ isOpen, closeModal }) {
                             type="text"
                             name="price"
                             id="price"
-                            className="block w-full rounded-md border-0 py-1.5 pl-5 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 xxs:text-xxs xxs:leading-6"
-                            placeholder="Enter new extra role needed for game"
+                            className="block w-full rounded-md border-0 py-1.5 pl-5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 xxs:text-xxs xxs:leading-6"
+                            placeholder="Enter new extra role"
                             />
                         
                       </div>
@@ -66,7 +66,7 @@ export default function RoleAdditionModal({ isOpen, closeModal }) {
                   </button>
                 <button
                     type="button"
-                    className="xxs:max-h-12 xxs:text-center xxs:items-center inline-flex font-interReg mr-2 w-full justify-center rounded-md bg-blue-500 px-3 py-4 text-xxs text-white shadow-xxs hover:bg-blue-200 xxs:ml-3 "
+                    className="xxs:max-h-12 xxs:text-center xxs:items-center inline-flex font-interReg mr-2 w-full justify-center rounded-md bg-blue-500 px-3 py-4 text-xxs text-white shadow-xxs hover:bg-blue-200 xxs:ml-2 "
                     onClick={closeModal}>
                     Add
                   </button>
