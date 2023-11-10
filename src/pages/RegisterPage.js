@@ -24,7 +24,7 @@ function RegisterPage() {
             alert(error.error_description || error.message);
         }
         const addPlayerURL = "https://neeixstjxyxdbquebgkc.supabase.co/rest/v1/rpc/add_player"
-        const addCoachURL = "https://neeixstjxyxdbquebgkc.supabase.co/rest/v1/rpc/addCoach"
+        const addCoachURL = "https://neeixstjxyxdbquebgkc.supabase.co/rest/v1/rpc/add_coach"
 
         if (role === 'Player' || role === 'player'){
             axios.post(addPlayerURL, {
@@ -48,7 +48,9 @@ function RegisterPage() {
             axios.post(addCoachURL, {
                 email: email,
                 fullname: fullName,
-                phoneNumber: phoneNumber
+                phonenumber: phoneNumber,
+                password: password,
+                team: null,
             },
             {
                 headers: {

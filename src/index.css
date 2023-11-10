@@ -73,9 +73,9 @@ code {
 }
 
 @layer utilities {
-     ::placeholder {
+    input::placeholder {
+        padding: 5px 10px;
         margin-left: 10px;
-        font-family: "Arial";
         font-size: 12px;
         font-weight: 400;
         line-height: 16px;
@@ -87,4 +87,43 @@ code {
     -webkit-text-stroke: 1px black;
     color: white;
     border-color: black;
+}
+
+h1 {
+    font-family: "Russo One";
+    font-size: 30px;
+    color: #1C3FB7
+}
+
+input[type="radio"] {
+    /* Add if not using autoprefixer */
+    -webkit-appearance: none;
+    appearance: none;
+    /* For iOS < 15 to remove gradient background */
+    background-color: #fff;
+    /* Not removed via appearance */
+    color: "#F27430";
+    width: 1.05em;
+    height: 1.05em;
+    border: 0.10em solid #F27430;
+    border-radius: 50%;
+    transform: translateY(-0.075em);
+    display: grid;
+    place-content: center;
+    margin-top: 2.5px;
+    vertical-align: middle;
+}
+
+input[type="radio"]::before {
+    content: "";
+    width: 0.45em;
+    height: 0.45em;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em #F27430;
+}
+
+input[type="radio"]:checked::before {
+    transform: scale(1);
 }

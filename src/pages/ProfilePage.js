@@ -1,8 +1,9 @@
 import React from "react";
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/helper/supabaseClient';
 import LoadingPage from "./LoadingPage";
+import { Link, useNavigate } from 'react-router-dom';
+import {PhoneIcon, EnvelopeIcon } from '@heroicons/react/24/outline'
 // get current logged in user from supabase
 // const { user } = useUser();
 
@@ -74,8 +75,8 @@ const ProfilePage = () => {
         return <LoadingPage />; // You can replace this with any loading spinner or indicator
       }else{
         return (
-            <div className="bg-gradient-to-b from-sn-light-blue to-white from-25% to-75% flex flex-col gap-20 items-center justify-center h-screen">
-                <div className="self-stretch h-[237px] p-2 flex-col justify-start items-center gap-5 flex">
+            <div className="bg-gradient-to-b from-indigo-100 from-40% to-white to-55% flex flex-col items-center justify-start h-screen">
+                <div className="self-stretch h-auto p-2 flex-col justify-start items-center gap-5 flex">
                     
                     {userData.profilePicture ? (
                         <img className="w-[142px] h-[142px] rounded-full border-4 border-white" src={userData.profilePicture} />
@@ -92,10 +93,11 @@ const ProfilePage = () => {
                     </div>
                     <div className="self-stretch justify-center items-center gap-4 inline-flex">
                         <div className="justify-center items-center gap-1 flex">
+                            <EnvelopeIcon className="h-6 w-6"/>
                             <div className="text-center text-neutral-900 text-sm font-interReg">{userData.email}</div>
                         </div>
                         <div className="justify-center items-center gap-1 flex">
-                            <div className="w-[18px] h-[18px] relative"></div>
+                            <div className="w-[18px] h-[18px] relative"><PhoneIcon className="h-5 w-5"></PhoneIcon></div>
                             {!userData.phoneNumber ? (
                             <div className="w-[150px] h-[10px] bg-gray-100 flex items-center justify-center">
                                 <span className="text-center text-gray-500 text-sm font-interReg">No phone number</span>
@@ -115,9 +117,11 @@ const ProfilePage = () => {
                         </div>
                 </div>
                 <div className="flex-col justify-start items-center gap-2 flex">
+                    <Link to="/editProfile">
                     <div className="w-[322px] h-[33px] p-2.5 bg-orange-500 rounded justify-center items-center gap-2.5 inline-flex">
                         <div className="text-white text-sm font-normal font-interReg uppercase">Edit Profile</div>
-                    </div>
+                        </div>
+                        </Link>
                     <button onClick={handleLogout} className="w-[322px] h-[33px] p-2.5 bg-zinc-300 rounded justify-center items-center gap-2.5 inline-flex">
                         <div className="text-neutral-900 text-sm font-normal font-interReg uppercase">Sign out</div>
                     </button>
@@ -127,6 +131,7 @@ const ProfilePage = () => {
       }
 
   
+
 }
 
 export default ProfilePage;
