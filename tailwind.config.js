@@ -5,11 +5,11 @@ module.exports = {
     ],
     theme: {    
         fontFamily: {
+            'inter': ['Inter Light', 'sans'],
             'interReg': ['Inter Regular', 'sans'],
             interBold: ['Inter Bold', 'sans'],
             interMed: ['Inter Medium', 'sans'],
             interSBold: ['Inter SemiBold', 'sans'],
-            interLight: ['Inter Light', 'sans'],
             interthin: ['Inter Thin', 'sans'],
             interElight: ['Inter ExtraLight', 'sans'],
             interEBold: ['Inter ExtraBold', 'sans'],
