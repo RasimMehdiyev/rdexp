@@ -5,6 +5,8 @@ import { supabase } from "../lib/helper/supabaseClient";
 import axios from 'axios';
 
 function RegisterPage() {
+    const [userID, setUserID] = useState('');
+    const [userData, setUserData] = useState({})
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -16,54 +18,26 @@ function RegisterPage() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        try{
+        try {
             const { error } = await supabase.auth.signUp({ email, password });
+            let user = await supabase.auth.getUser();
+            user = user.data.user
             if (error) throw error;
-            navigate('/')
-        }catch(error){
+            console.log(user)
+            if (user) {
+                const { error: errorUsers } = await supabase
+                    .from('Users')
+                    .insert([{ email: email, fullname: fullName, phone_number: phoneNumber, role: role, user_id: user.id }]);
+        
+                if (errorUsers) throw errorUsers;
+                navigate('/');
+            }
+        } catch (error) {
             alert(error.error_description || error.message);
         }
-        const addPlayerURL = "https://neeixstjxyxdbquebgkc.supabase.co/rest/v1/rpc/add_player"
-        const addCoachURL = "https://neeixstjxyxdbquebgkc.supabase.co/rest/v1/rpc/add_coach"
-
-        if (role === 'Player' || role === 'player'){
-            axios.post(addPlayerURL, {
-                email: email,
-                fullname: fullName,
-                phonenumber: phoneNumber,
-                password: password,
-                team: null
-            }, {
-                headers: {
-                    'apikey': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lZWl4c3RqeHl4ZGJxdWViZ2tjIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTU5OTQ1MjksImV4cCI6MjAxMTU3MDUyOX0.S9NLt_yf96o7gaNmNLYQiXqekZ2M55QhxYUWXeqZn5g",
-                    "Content-Type": "application/json"
-                }
-            })
-            .then((response) => {
-                console.log(response)
-            })        
-        }
-        else if (role === "Coach" || role === "coach")
-        {
-            axios.post(addCoachURL, {
-                email: email,
-                fullname: fullName,
-                phonenumber: phoneNumber,
-                password: password,
-                team: null,
-            },
-            {
-                headers: {
-                    'apikey': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lZWl4c3RqeHl4ZGJxdWViZ2tjIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTU5OTQ1MjksImV4cCI6MjAxMTU3MDUyOX0.S9NLt_yf96o7gaNmNLYQiXqekZ2M55QhxYUWXeqZn5g",
-                    "Content-Type": "application/json"                
-                }
-            })
-            .then((response) => {
-                console.log(response)
-            })
-        } 
-
-    };
+        
+        
+     };
     // if one of the necessary fields is empty, disable the submit button
     const isDisabled = !fullName || !email || !role || !password || !confirmPassword || password !== confirmPassword;
     const isPasswordMatch = password === confirmPassword;

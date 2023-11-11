@@ -128,7 +128,8 @@ input[type="radio"]:checked::before {
 }
 
 .arrow-left::before {
-    content: '\00AB'; /* Left-pointing double angle quotation mark */
+    content: '\00AB';
+    /* Left-pointing double angle quotation mark */
     margin-right: 3rem;
     font-weight: bold;
     font-size: 3rem;
@@ -156,4 +157,13 @@ input[type="radio"]:checked::before {
     padding: 10px;
     border-radius: 5px;
     display: inline-block;
+}
+
+@media(max-width: 500px) {
+    .mobile-email-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
 }
