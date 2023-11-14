@@ -4,9 +4,8 @@ import SynthleteLogo from '../components/SynthleteLogo';
 
 const AuthenticationPage = () => {
     return (
-        <div className='min-h-screen  bg-sn-main-blue flex flex-col justify-center items-center'>
+        <div className='min-h-screen gap-36 bg-sn-main-blue flex flex-col justify-center items-center'>
             <SynthleteLogo />
-            <br></br>
             <div className='flex flex-col gap-5'>
                 <Link to="/login">
                     <button data-testid="login-button" className="text-2xl text-white w-72 h-16 bg-sn-main-orange font-russoOne rounded-10px" type="submit">Log In</button>

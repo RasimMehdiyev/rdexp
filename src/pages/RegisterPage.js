@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SynthleteLogo from '../components/SynthleteLogo2';
+import SynthleteLogo from '../components/SynthleteLogo';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from "../lib/helper/supabaseClient";
 import axios from 'axios';
@@ -42,7 +42,7 @@ function RegisterPage() {
     const isDisabled = !fullName || !email || !role || !password || !confirmPassword || password !== confirmPassword;
     const isPasswordMatch = password === confirmPassword;
     return (
-        <div className='min-h-screen  bg-sn-light-blue flex flex-col gap-4 justify-center items-center'>
+        <div className='min-h-screen  bg-sn-bg-light-blue flex flex-col gap-12 justify-center items-center'>
             <SynthleteLogo />
             <form className='text-center gap-5 items-center flex flex-col justify-center' onSubmit={handleSubmit}>
                     <input className='shadow-md text-[12px] pl-2 font-interReg w-64 h-12 rounded-lg border-2 border-sn-main-orange' placeholder='Full Name' type="text" value={fullName} onChange={(event) => setFullName(event.target.value)} />
@@ -60,8 +60,8 @@ function RegisterPage() {
                         <p className='text-[10px] font-interReg leading-none text-[#ff0000d3] font-bold'>Passwords do not match!</p>
                     }
                 <button className={`${(isDisabled) ? 'cursor-not-allowed' : 'cursor-pointer'} text-2xl text-white w-72 h-16 bg-sn-main-orange font-russoOne rounded-10px`}  type="submit">Sign Up</button>
+                <p className='py-2 text-xs text-sn-main-blue font-interReg'>Already have an account? <Link className='font-interReg font-bold text-sn-main-blue underline hover:text-[gray]' to="/login">Log In</Link></p>
             </form>
-            <p className='py-2 text-xs font-interReg'>Already have an account? <Link className='font-interReg font-bold underline hover:text-[gray]' to="/login">Log In</Link></p>
         </div>
     );
 }
