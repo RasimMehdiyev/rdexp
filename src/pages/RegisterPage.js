@@ -49,10 +49,10 @@ function RegisterPage() {
                     <input className='shadow-md text-[12px] pl-2 font-interReg w-64 h-12 rounded-lg border-2 border-sn-main-orange' placeholder='Email' type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
                     <input className='shadow-md text-[12px] pl-2 font-interReg w-64 h-12 rounded-lg border-2 border-sn-main-orange' placeholder='Phone number (Optional)' type="tel" value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} />
                     <select className='shadow-md pl-2 font-interReg text-lf-dark-gray text-[12px] w-64 h-12 rounded-lg border-2 border-sn-main-orange' value={role} onChange={(event) => setRole(event.target.value)}>
-                        <option className='font-interReg' value="">No Selection</option>
-                        <option className='font-interReg' value="coach">Coach</option>
-                        <option className='font-interReg' value="player">Player</option>
-                        <option className='font-interReg' value="volunteer">Volunteer</option>
+                        <option className='font-interReg' value="0">No Selection</option>
+                        <option className='font-interReg' value='1'>Coach</option>
+                        <option className='font-interReg' value="2">Player</option>
+                        <option className='font-interReg' value="3">Volunteer</option>
                     </select>
                     <input className='shadow-md pl-2 font-interReg w-64 h-12 rounded-lg border-2 border-sn-main-orange' placeholder='Password' type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
                     <input className='shadow-md pl-2 font-interReg w-64 h-12 rounded-lg border-2 border-sn-main-orange' placeholder='Confirm Password' type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} />

@@ -11,7 +11,7 @@ import TeamManagementPage from './pages/TeamManagementPage';
 import RightSideBarComponent from './components/RightSidebarComponent';
 import ProfilePage from './pages/ProfilePage';
 import EditProfilePage from "./pages/EditProfilePage.js";
-import NewGamePage from "./pages/NewGamePage";
+import NewGamePage from "./pages/NewEventPage.js";
 
 const App = () => {
 
