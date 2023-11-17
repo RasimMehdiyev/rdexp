@@ -3,9 +3,9 @@ import { supabase } from "../lib/helper/supabaseClient";
 
 
 const NewGamePageComponent = ({eventTitle}) => {
-    const [title, setTitle] = useState(eventTitle);
-    const [selectedOption, setSelectedOption] = useState("");
-    const [teams, setTeams] = useState([]);
+    // const [title, setTitle] = useState(eventTitle);
+    const [selectedOption, setSelectedOption] = useState("Game");
+    const [team, setTeam] = useState();
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [location, setLocation] = useState('');
@@ -15,10 +15,23 @@ const NewGamePageComponent = ({eventTitle}) => {
     const [volunteers, setVolunteers] = useState([]);
 
 
-    
+    const submitEvent =  ()  => {
+
+        console.log("Title:", eventTitle);
+        console.log("Type:", selectedOption);
+        console.log("Team:", selectedID);
+        console.log("Date:", date);
+        console.log("Time:", time);
+        console.log("Location:", location);
+        console.log("Team Names:", teamNames);
+        console.log("Team Players:", teamPlayers);
+        console.log("Selected ID:", selectedID);
+    }
+
+
     const getVolunteers = async() =>{
         const {data: volunteers, error: volunteersError} = await supabase
-            .from('Users')
+            .from('users')
             .select('*')
             .eq('role_id', 3)
 
@@ -35,7 +48,7 @@ const NewGamePageComponent = ({eventTitle}) => {
             console.log(userID);
             // fetch user from 'Users' table
             const { data: user_data, error: userError } = await supabase
-                .from('Users')
+                .from('users')
                 .select('*')
                 .eq('user_id', userID)
                 .single();
@@ -51,13 +64,13 @@ const NewGamePageComponent = ({eventTitle}) => {
             let team_n = []
             for (const team of teams_list) {
                 const {data: team_data, error: teamError} = await supabase
-                    .from('Team')
+                    .from('team')
                     .select('*')
                     .eq('id', team.team_id)
                     .single();
                 if (teamError) throw teamError;
                 let team_info = {}
-                team_info['name'] = team_data.teamName;
+                team_info['team_name'] = team_data.team_name;
                 team_info['id'] = team_data.id;
                 team_n.push(team_info);
             }
@@ -80,8 +93,8 @@ const NewGamePageComponent = ({eventTitle}) => {
         let team_p = []
         for (const player of team_players) {
             const {data: player_data, error: playerError} = await supabase
-                .from('Users')
-                .select('fullname , id')
+                .from('users')
+                .select('full_name , id')
                 .eq('role_id', 2)
                 .eq('id', player.user_id)
             if (playerError) throw playerError;
@@ -91,8 +104,6 @@ const NewGamePageComponent = ({eventTitle}) => {
     }
 
     const handleChange = async (event) => {
-        // setTeams
-        setTeams(event.target.value);
         // Update the state with the selected option's id
         setSelectedID(event.target.value);
         getPlayerOfTeam(event.target.value);
@@ -114,7 +125,7 @@ const NewGamePageComponent = ({eventTitle}) => {
                         {
                             teamNames.map((team) => (
                                 <option key={team.id} value={team.id} className="h-7 w-[210px] bg-white rounded-md">
-                                    {team.name}
+                                    {team.team_name}
                                 </option>
                             ))
                         }
@@ -135,7 +146,7 @@ const NewGamePageComponent = ({eventTitle}) => {
                                                 {
                                                     teamPlayers.map((player) => (
                                                         <option key={player.id} value={player.id} className="h-7 w-[210px] bg-white rounded-md">
-                                                            {player.fullname}
+                                                            {player.full_name}
                                                         </option>
                                                     ))
                                                 }
@@ -150,7 +161,7 @@ const NewGamePageComponent = ({eventTitle}) => {
                                                 {
                                                     teamPlayers.map((player) => (
                                                         <option key={player.id} value={player.id} className="h-7 w-[210px] bg-white rounded-md">
-                                                            {player.fullname}
+                                                            {player.full_name}
                                                         </option>
                                                     ))
                                                 }
@@ -165,7 +176,7 @@ const NewGamePageComponent = ({eventTitle}) => {
                                                 {
                                                     teamPlayers.map((player) => (
                                                         <option key={player.id} value={player.id} className="h-7 w-[210px] bg-white rounded-md">
-                                                            {player.fullname}
+                                                            {player.full_name}
                                                         </option>
                                                     ))
                                                 }
@@ -180,7 +191,7 @@ const NewGamePageComponent = ({eventTitle}) => {
                                                 {
                                                     teamPlayers.map((player) => (
                                                         <option key={player.id} value={player.id} className="h-7 w-[210px] bg-white rounded-md">
-                                                            {player.fullname}
+                                                            {player.full_name}
                                                         </option>
                                                     ))
                                                 }
@@ -195,7 +206,7 @@ const NewGamePageComponent = ({eventTitle}) => {
                                                 {
                                                     teamPlayers.map((player) => (
                                                         <option key={player.id} value={player.id} className="h-7 w-[210px] bg-white rounded-md">
-                                                            {player.fullname}
+                                                            {player.full_name}
                                                         </option>
                                                     ))
                                                 }
@@ -212,7 +223,7 @@ const NewGamePageComponent = ({eventTitle}) => {
                                     {
                                                     teamPlayers.map((player) => (
                                                         <option key={player.id} value={player.id} className="h-7 w-[210px] bg-white rounded-md">
-                                                            {player.fullname}
+                                                            {player.full_name}
                                                         </option>
                                                     ))
                                                 }
@@ -233,7 +244,7 @@ const NewGamePageComponent = ({eventTitle}) => {
                                                 {
                                                     volunteers.map((volunteer) => (
                                                         <option key={volunteer.id} value={volunteer.id} className="h-7 bg-white rounded-md">
-                                                            {volunteer.fullname}
+                                                            {volunteer.full_name}
                                                         </option>
                                                     ))
                                                 }
@@ -248,7 +259,7 @@ const NewGamePageComponent = ({eventTitle}) => {
                                                 {
                                                     volunteers.map((volunteer) => (
                                                         <option key={volunteer.id} value={volunteer.id} className="h-7 bg-white rounded-md">
-                                                            {volunteer.fullname}
+                                                            {volunteer.full_name}
                                                         </option>
                                                     ))
                                                 }
@@ -256,8 +267,8 @@ const NewGamePageComponent = ({eventTitle}) => {
                                         </span>
                                     </div>
                 </div>
-                <button type="submit" className="h-[40px] w-[150px] m-auto mt-5 bg-sn-main-blue rounded-md text-white font-russoOne">Save</button>
-                {selectedID && <p>Selected ID: {selectedID}</p>}
+                <button onClick={submitEvent}  className="h-[40px] w-[150px] m-auto mt-5 bg-sn-main-blue rounded-md text-white font-russoOne">Save</button>
+                {selectedID && <p className="hidden">Selected ID: {selectedID}</p>}
                 </form>
 
     );
