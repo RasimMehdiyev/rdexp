@@ -82,13 +82,13 @@ const ProfilePage = () => {
                         </div>
                         <div className="justify-center items-center gap-1 flex">
                             <div className="w-[18px] h-[18px] relative"><PhoneIcon className="h-5 w-5"></PhoneIcon></div>
-                            {!userData.phoneNumber ? (
+                            {!userData.phone_number ? (
                             <div className="w-[150px] h-[10px] flex items-center justify-center">
                                 <div className="text-center text-neutral-900 text-sm font-interReg">No phone number</div>
                             </div>
                             ) : (
                             <div className="text-center text-neutral-900 text-sm font-interReg">
-                                {userData.phoneNumber}
+                                {userData.phone_number}
                             </div>
                             )}
                         </div>
