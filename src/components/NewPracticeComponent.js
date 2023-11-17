@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { supabase } from "../lib/helper/supabaseClient";
 
+
 const NewPracticeComponent = ({eventTitle}) => {
     const [title, setTitle] = useState(eventTitle);
     const [selectedOption, setSelectedOption] = useState("");
