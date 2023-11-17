@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { supabase } from "../lib/helper/supabaseClient";
 
-const NewPracticeComponent = () => {
-    const [title, setTitle] = useState('');
+const NewPracticeComponent = ({eventTitle}) => {
+    const [title, setTitle] = useState(eventTitle);
     const [selectedOption, setSelectedOption] = useState("");
     const [teams, setTeams] = useState([]);
     const [date, setDate] = useState('');

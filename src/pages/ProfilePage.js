@@ -18,6 +18,7 @@ const ProfilePage = () => {
           try {
             const userResponse = await supabase.auth.getUser();
             const user = userResponse.data.user;
+            console.log("User:", user);
             if (user) {
               // Initially, we don't know the user's role, so fetch from both tables.
               const { data: user_data, error: userError } = await supabase

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from "../lib/helper/supabaseClient";
 
 
-const NewGamePageComponent = () => {
-    const [title, setTitle] = useState('');
+const NewGamePageComponent = ({eventTitle}) => {
+    const [title, setTitle] = useState(eventTitle);
     const [selectedOption, setSelectedOption] = useState("");
     const [teams, setTeams] = useState([]);
     const [date, setDate] = useState('');
@@ -13,6 +12,21 @@ const NewGamePageComponent = () => {
     const [teamNames, setTeamNames] = useState([]);
     const [teamPlayers, setTeamPlayers] = useState([]);
     const [selectedID, setSelectedID] = useState('');
+    const [volunteers, setVolunteers] = useState([]);
+
+
+    
+    const getVolunteers = async() =>{
+        const {data: volunteers, error: volunteersError} = await supabase
+            .from('Users')
+            .select('*')
+            .eq('role_id', 3)
+
+        if (volunteersError) throw volunteersError;
+
+        setVolunteers(volunteers);
+        console.log(volunteers)
+    }
 
     useEffect(() => {
         const getTeams = async () => {
@@ -47,10 +61,11 @@ const NewGamePageComponent = () => {
                 team_info['id'] = team_data.id;
                 team_n.push(team_info);
             }
-            setTeamNames(team_n);
-            // get the id of the selected team from the dropdown
-      
-        
+            setTeamNames(team_n);    
+            
+            
+            // volunteers
+            getVolunteers();
         }
         getTeams();
     }, [])
@@ -88,6 +103,7 @@ const NewGamePageComponent = () => {
         console.log(teamPlayers);
         console.log(document.getElementById('player_select').childNodes);
     }
+
 
     
 
@@ -192,8 +208,14 @@ const NewGamePageComponent = () => {
                     <div className="flex flex-row gap-2 items-center">
                             <span>
                                 <select className="h-7 px-2 w-[210px] bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
-                                    <option className="h-7 w-[210px] bg-white rounded-md" value="">Player 1</option>
-                                    <option className="h-7 w-[210px] bg-white rounded-md" value="">Player 2</option>
+                                    <option className="h-7 w-[210px] bg-white rounded-md">No Selection</option>
+                                    {
+                                                    teamPlayers.map((player) => (
+                                                        <option key={player.id} value={player.id} className="h-7 w-[210px] bg-white rounded-md">
+                                                            {player.fullname}
+                                                        </option>
+                                                    ))
+                                                }
                                 </select>
                             </span>
                             <span>
@@ -207,8 +229,14 @@ const NewGamePageComponent = () => {
                                         <span>Time Keeper</span>
                                         <span>
                                             <select className="h-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
-                                                <option className="h-7 bg-white rounded-md" value="">Player 1</option>
-                                                <option className="h-7 bg-white rounded-md" value="">Player 2</option>
+                                                <option className="h-7 bg-white rounded-md" value="">No Selection</option>
+                                                {
+                                                    volunteers.map((volunteer) => (
+                                                        <option key={volunteer.id} value={volunteer.id} className="h-7 bg-white rounded-md">
+                                                            {volunteer.fullname}
+                                                        </option>
+                                                    ))
+                                                }
                                             </select>
                                         </span>
                                     </div>
@@ -216,8 +244,14 @@ const NewGamePageComponent = () => {
                                         <span>Referee</span>
                                         <span>
                                             <select className="h-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
-                                                <option className="h-7 bg-white rounded-md" value="">Player 1</option>
-                                                <option className="h-7 bg-white rounded-md" value="">Player 2</option>
+                                            <option className="h-7 bg-white rounded-md" value="">No Selection</option>
+                                                {
+                                                    volunteers.map((volunteer) => (
+                                                        <option key={volunteer.id} value={volunteer.id} className="h-7 bg-white rounded-md">
+                                                            {volunteer.fullname}
+                                                        </option>
+                                                    ))
+                                                }
                                             </select>
                                         </span>
                                     </div>

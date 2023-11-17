@@ -5,7 +5,7 @@ import NewPracticeComponent from '../components/NewPracticeComponent';
 import NewTBComponent from '../components/NewTBComponent';
 
 const NewGamePage = () => {
-    const [eventTitle, setTitle] = useState('');
+    const [eventTitle, setEventTitle] = useState('');
     const [selectedOption, setSelectedOption] = useState("");
 
 
@@ -16,7 +16,7 @@ const NewGamePage = () => {
     return (
         <div className="pt-6 h-screen bg-sn-bg-light-blue flex flex-col px-5">
             <h1>New {selectedOption ? selectedOption : "Game"}</h1>
-            <input value={eventTitle} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Title" className="h-10 px-2 rounded-md border-sn-light-orange border-[1.5px] "/>
+            <input value={eventTitle} onChange={(e) => setEventTitle(e.target.value)} type="text" placeholder="Title" className="h-10 px-2 rounded-md border-sn-light-orange border-[1.5px] "/>
                 <div className="flex flex-row justify-between gap-4 pt-2">
                     <div className="flex flex-row justify-between gap-2">
                         <input
@@ -52,8 +52,8 @@ const NewGamePage = () => {
                                                 <label className="text-[14px]" htmlFor="Team Building">Team Building</label>
                     </div>
                 </div>
-                    {(selectedOption === 'Game' || selectedOption === '') && <NewGamePageComponent />}
-                    {selectedOption === 'Practice' && <NewPracticeComponent />}
+                    {(selectedOption === 'Game' || selectedOption === '') && <NewGamePageComponent eventTitle={eventTitle}/>}
+                    {selectedOption === 'Practice' && <NewPracticeComponent  eventTitle={eventTitle}/>}
                     {selectedOption === 'Team Building' && <NewTBComponent eventTitle={eventTitle} />}
         </div>
         
