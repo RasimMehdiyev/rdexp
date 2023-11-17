@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
@@ -7,6 +7,11 @@ import { faMinusSquare } from "@fortawesome/free-solid-svg-icons";
 import PlayerDeletionModal from '../components/PlayerDeletionModal.js';
 import PlayerAdditionModal from '../components/PlayerAdditionModal.js';
 import RoleAdditionModal from '../components/RoleAdditionModal.js';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/helper/supabaseClient';
+
+
+
 
 const ClickablePerson = ({ name, isClicked, onClick }) => (
     <h5
@@ -23,6 +28,18 @@ const ClickablePerson = ({ name, isClicked, onClick }) => (
 
 const TeamManagementPage = () => {
     const [isPlayerClicked, setPlayerClicked] = useState(false);
+    const navigate = useNavigate();
+
+
+    useEffect(() => {
+      const isLoggedIn = async ()  =>{
+          const user = await supabase.auth.getUser();
+          if(!user.data.user){
+              navigate('/auth');
+          }
+      }
+      isLoggedIn();
+    },[])
 
     const togglePlayerBackground = () => {
         setPlayerClicked(!isPlayerClicked);

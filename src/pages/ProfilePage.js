@@ -30,6 +30,9 @@ const ProfilePage = () => {
               console.log("User data:", user_data);     
               setUserData(user_data);     
             }
+            else{
+                navigate('/auth');
+            }
           } catch (error) {
             console.error("Error fetching data:", error);
           }
@@ -53,7 +56,8 @@ const ProfilePage = () => {
 
       if (loading) {
         return <LoadingPage />; // You can replace this with any loading spinner or indicator
-      }else{
+      }
+      else{
         return (
             <div className="bg-gradient-to-b from-sn-bg-light-blue from-40% to-white to-55% flex flex-col items-center justify-start h-screen">
                 <div className="self-stretch h-auto p-2 flex-col justify-start items-center gap-5 mt-24 flex">

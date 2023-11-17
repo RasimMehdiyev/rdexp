@@ -28,6 +28,7 @@ const EditProfilePage = () => {
             const userResponse = await supabase.auth.getUser();
             console.log("User:", userResponse);
             const user = userResponse.data.user;
+            
             if (user) {
               // Initially, we don't know the user's role, so fetch from both tables.
               const { data: coachData, error: coachError } = await supabase
@@ -54,6 +55,9 @@ const EditProfilePage = () => {
                   console.log("Player Error:", playerError);
                 }
               }
+            }
+            else{
+                navigate('/auth');
             }
           } catch (error) {
             console.error("Error fetching data:", error);

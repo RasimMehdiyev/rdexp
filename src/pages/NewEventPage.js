@@ -3,16 +3,31 @@ import { Link, useNavigate } from 'react-router-dom';
 import NewGamePageComponent from '../components/NewGameComponent';
 import NewPracticeComponent from '../components/NewPracticeComponent';
 import NewTBComponent from '../components/NewTBComponent';
-
+import { supabase } from '../lib/helper/supabaseClient';
+import AuthenticationPage from './AuthenticationPage';
 const NewGamePage = () => {
     const [eventTitle, setEventTitle] = useState('');
     const [selectedOption, setSelectedOption] = useState("");
-
-
+    const [userData, setUserData] = useState({})
+    // navigate
+    const navigate = useNavigate();
     const handleRadioChange = (event) => {
       setSelectedOption(event.target.value);
     };
 
+    useEffect(() => {
+        //is user Logged in 
+        const isLoggedIn = async ()  =>{
+            const user = await supabase.auth.getUser();
+            console.log(user)
+            if(!user.data.user){
+                navigate('/auth');
+            }
+        }
+        isLoggedIn();
+    },[])
+
+    if (userData == {} || userData == null || userData.len == 0 || userData == undefined){
     return (
         <div className="pt-6 h-screen bg-sn-bg-light-blue flex flex-col px-5">
             <h1>New {selectedOption ? selectedOption : "Game"}</h1>
@@ -58,6 +73,9 @@ const NewGamePage = () => {
         </div>
         
       );
+
+    }
+
       
 
 

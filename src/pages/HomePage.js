@@ -15,9 +15,14 @@ const HomePage = () => {
                 console.log("Trying")
                 const user = await supabase.auth.getUser();
                 console.log(user)
-                if (user){
+                if (user.data.user){
                     setUserData(user.data.user)
+                    console.log(userData)
                 }
+                else{
+                    navigate('/auth');
+                }
+
             }catch(error){
                 console.log(error)
             }
@@ -25,16 +30,7 @@ const HomePage = () => {
         console.log(userData)
         fetchData();
     },[]);
-
-    // handleLogout
-    const handleLogout = async (e) => {
-        e.preventDefault();
-        await supabase.auth.signOut();
-        console.log("Logged out")
-        navigate('/auth')
-    }
     
-    if (userData){
         return (
             <div className="flex flex-col justify-center items-center ">
                 {/* Upcoming Events */}
@@ -54,10 +50,8 @@ const HomePage = () => {
                 </div>
             </div>
         );
-    }
-    else{
-        navigate('/auth')
-    }
+    
+
     
 }
 
