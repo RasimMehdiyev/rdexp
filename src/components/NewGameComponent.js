@@ -119,7 +119,7 @@ const NewGamePageComponent = ({eventTitle}) => {
     
 
     return (
-            <form  className="flex flex-col justify-center gap-2">
+            <form  className="flex bg-sn-bg-light-blue flex-col justify-center gap-2">
                 <select onChange={handleChange} className="h-7 mt-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="teams" id="teams" placeholder="Choose team">
                     <option className="h-7 w-[210px] bg-white rounded-md">No Selection</option>
                         {

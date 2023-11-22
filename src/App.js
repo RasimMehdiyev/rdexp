@@ -12,6 +12,7 @@ import RightSideBarComponent from './components/RightSidebarComponent';
 import ProfilePage from './pages/ProfilePage';
 import EditProfilePage from "./pages/EditProfilePage.js";
 import NewGamePage from "./pages/NewEventPage.js";
+import StickySubheaderComponent from "./components/StickySubheaderComponent.js";
 
 const App = () => {
 
@@ -35,6 +36,7 @@ const App = () => {
       return (
          <>
          <HeaderComponent isOpen={isOpen} toggleSidebar={setIsOpen} rightIsOpen={rightIsOpen} setRightIsOpen={setRightIsOpen}/>
+         <StickySubheaderComponent/>
             <Routes>
                <Route path="/" element={<HomePage />} />
                <Route path="/login" element={<LoginPage />} />

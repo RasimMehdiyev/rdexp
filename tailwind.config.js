@@ -63,6 +63,7 @@ module.exports = {
             'sn-main-orange':'#F27430',
             'sn-light-orange':'#E8834C',
             'sn-bg-light-blue': '#E1E8FF',
+            'sn-subheader-blue':"#4665D0",
             'neutral':{
                 '900':"#333333",
                 '600': "#4F4F4F",
