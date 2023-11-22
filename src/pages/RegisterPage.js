@@ -26,9 +26,9 @@ function RegisterPage() {
             console.log(user)
             if (user) {
                 const { error: errorUsers } = await supabase
-                    .from('Users')
-                    .insert([{ email: email, fullname: fullName, phone_number: phoneNumber, role_id: role, user_id: user.id }]);
-        
+                    .from('users')
+                    .insert([{ email: email, full_name: fullName, phone_number: phoneNumber, role_id: role, user_id: user.id }])
+                    .select();
                 if (errorUsers) throw errorUsers;
                 navigate('/');
             }
