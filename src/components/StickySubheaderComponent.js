@@ -7,13 +7,12 @@ const StickySubheaderComponent = () => {
     const nagivate = useNavigate();
 
     const getPreviousPage = () => {
-        console.log('previous page');
         nagivate(-1);
     }
 
 
   return (
-    <div className="bg-sn-subheader-blue sticky top-14 bg-white shadow-md z-10"> {/* Adjust top value based on the main header's height */}
+    <div className="bg-sn-subheader-blue sticky top-1 shadow-md z-10"> 
       <div className="p-2 h-14 flex flex-row justify-between items-center">
         <div className='flex flex-row justify-between gap-1 items-center'>
             <img className='cursor-pointer' onClick={getPreviousPage} src={process.env.PUBLIC_URL + "/images/chevron-down.svg"} alt="" />
