@@ -12,7 +12,7 @@ jobs:
 
     env:
       SUPABASE_ACCESS_TOKEN: sbp_03f561d6968eb4b5335ec8de677b21a8b671a595
-      SUPABASE_DB_PASSWORD: rasim=rasim14
+      SUPABASE_DB_PASSWORD: rasimsyn14!
       SUPABASE_PROJECT_ID: rkyfikgaznqjywzoskpj
 
     steps:
@@ -22,5 +22,5 @@ jobs:
         with:
           version: latest
 
-      - run: supabase link --project-ref $SUPABASE_PROJECT_ID
+      - run: supabase link --project-ref $SUPABASE_PROJECT_ID --debug
       - run: supabase db push
