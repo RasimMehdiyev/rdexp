@@ -71,7 +71,7 @@ const SettingsComponent = ({roles}) => {
     )
 }
 
-const PlayerClickable = ({clicked, name, number}) => {
+const PlayerClickable = ({ clicked, name, number, onClick }) => {
         return (
             <div className="self-stretch pl-3 pr-4 justify-between items-center inline-flex">
                 <div className=" self-stretch px-1 py-2 rounded-[10px] justify-start items-center gap-[12px] flex">
@@ -79,11 +79,13 @@ const PlayerClickable = ({clicked, name, number}) => {
                         <div className=" text-white text-2xl font-russoOne z-10">{number}</div>                        
                     </div>
                     {clicked ? (
-                        <div className="w-[229px] self-stretch px-2 bg-indigo-100 rounded-[10px] shadow justify-start items-center gap-2.5 flex">
+                        <div className="w-[229px] self-stretch px-2 bg-indigo-100 rounded-[10px] shadow justify-start items-center gap-2.5 flex"
+                            onClick={onClick}>
                             <div className="text-black text-xl font-interReg">{name}</div>
                         </div>
                         ): (
-                        <div className="w-[229px] self-stretch px-2 rounded-[10px] shadow justify-start items-center gap-2.5 flex">
+                            <div className="w-[229px] self-stretch px-2 rounded-[10px] shadow justify-start items-center gap-2.5 flex"
+                            onClick={onClick}>
                             <div className="text-black text-xl font-interReg">{name}</div>
                         </div> 
                         )}
@@ -104,12 +106,13 @@ const PlayerClickable = ({clicked, name, number}) => {
         
 }
 
-const ExtraClickable = ({ clicked, name }) => {
+const ExtraClickable = ({ clicked, name, onClick }) => {
     return (
         <div className='w-full'>
             {clicked ? (
                     <div className="w-full px-4 justify-between items-center inline-flex">
-                        <div className="w-[284px] h-[42px] px-2 bg-indigo-100 rounded-[10px] shadow justify-start items-center gap-2.5 inline-flex">
+                    <div className="w-[284px] h-[42px] px-2 bg-indigo-100 rounded-[10px] shadow justify-start items-center gap-2.5 inline-flex"
+                    onClick={onClick}>
                             <div className="text-black text-xl font-normal font-['Inter']">{name}</div>
                         </div>
                         <div className="w-8 h-[29.87px] pl-px pr-[0.70px] pt-[0.84px] pb-[0.79px] rounded-[4px] border-[2px] border-indigo-300 justify-center items-center flex">
@@ -118,7 +121,8 @@ const ExtraClickable = ({ clicked, name }) => {
                     </div>
             ) : (
                     <div className="w-full px-4 justify-start items-start flex">
-                        <div className="w-[284px] h-[42px] px-2 bg-white rounded-[10px] shadow justify-start items-center gap-2.5 inline-flex">
+                        <div className="w-[284px] h-[42px] px-2 bg-white rounded-[10px] shadow justify-start items-center gap-2.5 inline-flex"
+                        onClick={onClick}>
                             <div className="text-black text-xl font-normal font-['Inter']">{name}</div>
                         </div>
                     </div>
@@ -128,35 +132,8 @@ const ExtraClickable = ({ clicked, name }) => {
     )
 }
 
-const TeamManagementComponent = () => {
+const TeamManagementComponent = ({ players, extras, onPlayerClick, onExtraClick }) => {   
     
-    const [players, setPlayers] = useState([
-        { id: 1, clicked: false, name: 'John Doe' },
-        { id: 2, clicked: false, name: 'Jane Doe' },
-        // Add more people as needed
-    ]);
-
-    const toggleClickPlayer = (id) => {
-        setPlayers((prevPlayers) =>
-        prevPlayers.map((player) =>
-            player.id === id ? { ...player, clicked: !player.clicked } : player
-        )
-        );
-    };
-
-    const [extras, setExtras] = useState([
-        { id: 1, clicked: false, name: 'John Doe X' },
-        { id: 2, clicked: false, name: 'Jane Doe X' },
-        // Add more people as needed
-    ]);
-
-    const toggleClickExtras = (id) => {
-        setExtras((prevExtras) =>
-        prevExtras.map((extra) =>
-            extra.id === id ? { ...extra, clicked: !extra.clicked } : extra
-        )
-        );
-    };
     
 
     return (
@@ -177,9 +154,15 @@ const TeamManagementComponent = () => {
                     </div>
                 </div>
                 <div className="self-stretch flex-col justify-start items-start gap-4 flex">
-                    <PlayerClickable clicked={false} name="Michael Jordan" number="21" />
-                    <PlayerClickable clicked={false} name="De Monroe" number="11" />
-                    <PlayerClickable clicked={true} name="Chandler" number="33"/>
+                    {players.map((player) => (
+                        <PlayerClickable
+                            key={player.id}
+                            clicked={player.clicked}
+                            name={player.name}
+                            number={player.number}
+                            onClick={() => onPlayerClick(player.id)}
+                        />
+                    ))}
                 </div>
             </div>
             <div className="self-stretch px-4 justify-start items-center gap-4 inline-flex">
@@ -188,11 +171,15 @@ const TeamManagementComponent = () => {
                         <img src={process.env.PUBLIC_URL + "images/plus-square.svg"}></img>
                     </div>
             </div>
-            <div className="self-stretch h-[103px] flex-col justify-start items-start gap-[19px] flex">
-                
-                    <ExtraClickable clicked={false} name="Joe Mama" />
-                    <ExtraClickable clicked={true} name="Joever"/>
-                
+            <div className="self-stretch h-[103px] flex-col justify-start items-start gap-[19px] flex">                
+                {extras.map((extra) => (
+                    <ExtraClickable
+                        key={extra.id}
+                        clicked={extra.clicked}
+                        name={extra.name}
+                        onClick={() => onExtraClick(extra.id)}
+                    />
+                ))}                
             </div>
         </div>
     )
@@ -250,9 +237,40 @@ const TeamProfilePage = () => {
     const [roles, setRoles] = useState(["Referee", "Catering", "Referee 2"]);
 
     const [tab, setTab] = useState(0);
+    // Define the state for players and extras
+    const [players, setPlayers] = useState([
+        { id: 1, clicked: false, name: 'John Williams', number:21 },
+        { id: 2, clicked: false, name: 'Trae Y', number: 43 },
+        { id: 3, clicked: false, name: 'Mikey Jordy', number: 5 },
+        { id: 4, clicked: false, name: 'Luka Duka', number:10 },
+        // Add more people as needed
+    ]);
+
+    const [extras, setExtras] = useState([
+        { id: 1, clicked: false, name: 'John Doe X' },
+        { id: 2, clicked: false, name: 'Jane Doe X' },
+        // Add more people as needed
+    ]);
 
     const handleTabChange = (newTab) => {
         setTab(newTab);
+    };    
+
+    // Define the functions to handle player and extra clicks
+    const onPlayerClick = (id) => {
+        setPlayers((prevPlayers) =>
+            prevPlayers.map((player) =>
+                player.id === id ? { ...player, clicked: !player.clicked } : { ...player, clicked: false }
+            )
+        );
+    };
+
+    const onExtraClick = (id) => {
+        setExtras((prevExtras) =>
+            prevExtras.map((extra) =>
+                extra.id === id ? { ...extra, clicked: !extra.clicked } : { ...extra, clicked: false }
+            )
+        );
     };
 
     return (
@@ -294,7 +312,11 @@ const TeamProfilePage = () => {
             bio={bio}
             />
         )}
-        {tab === 1 && <TeamManagementComponent />}
+            {tab === 1 && <TeamManagementComponent
+                players={players}
+                extras={extras}
+                onPlayerClick={onPlayerClick}
+                onExtraClick={onExtraClick}/>}
         {tab === 2 && <SettingsComponent roles={roles} />}
         
             
