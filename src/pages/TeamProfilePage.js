@@ -2,6 +2,9 @@ import React, {useState} from 'react';
 import { supabase } from '../lib/helper/supabaseClient';
 import { MapPinIcon, EnvelopeIcon, PhoneIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { PencilIcon } from '@heroicons/react/24/solid'
+import PlayerDeletionModal from '../components/PlayerDeletionModal.js';
+import PlayerAdditionModal from '../components/PlayerAdditionModal.js';
+import RoleAdditionModal from '../components/RoleAdditionModal.js';
 
 const AboutComponent = ({email, phone, address, bio}) => {
     return (
@@ -40,13 +43,60 @@ const AboutComponent = ({email, phone, address, bio}) => {
     )
 }
 
-const SettingsComponent = ({roles}) => {
+const SettingsComponent = ({ roles, onDeleteRole, onAddRole, onUpdateRole }) => {
+    const [isRoleModalOpen, setRoleModalOpen] = useState(false);
+    const [editedRoles, setEditedRoles] = useState([]);
+    const handleDeleteRole = (roleIndex) => {
+        const updatedRoles = [...roles];
+        const deletedRole = updatedRoles.splice(roleIndex, 1)[0];
+        
+        // Update roles in the parent component
+        onDeleteRole(updatedRoles);
+        console.log("deleted role, now it's:")
+        console.log(updatedRoles)
+        
+    };
+
+    const handleAddRole = (newRole) => {
+        const updatedRoles = [...roles, newRole];
+
+        // Update roles in the parent component
+        onAddRole(updatedRoles);
+        console.log("added a role, now it's:")
+        console.log(updatedRoles)
+        
+    };    
+
+    const handleInputChange = (e, index) => {
+        const updatedRoles = [...editedRoles];
+        updatedRoles[index] = e.target.value;
+        setEditedRoles(updatedRoles);
+    };
+
+    const handleInputBlur = (index) => {
+        const editedRole = editedRoles[index];
+        if (editedRole !== undefined) {
+            // Update roles in the parent
+            onUpdateRole(index, editedRole);
+            // Clear the input field
+            const updatedRoles = [...editedRoles];
+            updatedRoles[index] = '';
+            setEditedRoles(updatedRoles);
+        }
+    };
+
+    const handleInputKeyPress = (e, index) => {
+    if (e.key === 'Enter') {
+        handleInputBlur(index);
+    }
+    };
     return (
         <div className="w-full py-4 flex-col justify-start items-center gap-6 inline-flex">
             <div className="self-stretch py-2 flex-col justify-start items-start gap-6 flex">
                 <div className="self-stretch px-4 justify-start items-center gap-4 inline-flex">
                     <div className="text-blue-800 text-2xl font-normal font-russoOne leading-normal">Extra roles needed</div>
-                    <div className="h-8 bg-blue-800 rounded-[10px] justify-center items-center gap-2.5 flex">
+                    <div className="h-8 bg-blue-800 rounded-[10px] justify-center items-center gap-2.5 flex"
+                        onClick={() => setRoleModalOpen(true)}>
                         <img src={process.env.PUBLIC_URL + "images/plus-square.svg"}></img>
                     </div>
                 </div>
@@ -59,19 +109,29 @@ const SettingsComponent = ({roles}) => {
                             className="w-full border-none outline-none bg-transparent text-gray-500 font-interReg justify-center text-xl"
                             placeholder={role}
                             type="text"
+                            value={editedRoles[index]}
+                            onChange={(e, index) => handleInputChange(e, index)}
+                            onBlur={(index)=> handleInputBlur(index)}
+                            onKeyPress={(e, index) => handleInputKeyPress(e, index)}
                             />
                         </div>
-                        <img src={process.env.PUBLIC_URL + "images/check-circle-2.svg"} alt={`Check ${role}`} />
+                            {/* <img src={process.env.PUBLIC_URL + "images/check-circle-2.svg"} alt={`Check ${role}`} /> */}
+                            <div className="w-8 h-[29.87px] pl-px pr-[0.70px] pt-[0.84px] pb-[0.79px] rounded-[4px] border-[2px] border-indigo-300 justify-center items-center flex"
+                                onClick={() => handleDeleteRole(index)} >
+                            <XMarkIcon className=' h-[20px] w-[20px] text-indigo-300'/>
+                            </div>
                         </div>
                     ))}
                     
                 </div>
             </div>
+        <RoleAdditionModal isOpen={isRoleModalOpen} closeModal={() => setRoleModalOpen(false)} onAddRole={handleAddRole} />
         </div>
     )
 }
 
 const PlayerClickable = ({ clicked, name, number, onClick }) => {
+        const [isDeletionModalOpen, setDeletionModalOpen] = useState(false);
         return (
             <div className="self-stretch pl-3 pr-4 justify-between items-center inline-flex">
                 <div className=" self-stretch px-1 py-2 rounded-[10px] justify-start items-center gap-[12px] flex">
@@ -92,7 +152,8 @@ const PlayerClickable = ({ clicked, name, number, onClick }) => {
                     
                 </div>
                 {clicked ? (
-                    <div className="w-8 h-[29.87px] pl-px pr-[0.70px] pt-[0.84px] pb-[0.79px] rounded-[4px] border-[2px] border-indigo-300 justify-center items-center flex">
+                    <div className="w-8 h-[29.87px] pl-px pr-[0.70px] pt-[0.84px] pb-[0.79px] rounded-[4px] border-[2px] border-indigo-300 justify-center items-center flex"
+                        onClick={() => setDeletionModalOpen(true)}>
                     <XMarkIcon className=' h-[20px] w-[20px] text-indigo-300'/>
                     </div>
                 ): (
@@ -100,13 +161,14 @@ const PlayerClickable = ({ clicked, name, number, onClick }) => {
                     
                     </div>  
                 )}
-                
+            <PlayerDeletionModal isOpen={isDeletionModalOpen} closeModal={() => setDeletionModalOpen(false)} />
             </div>
         )
         
 }
 
 const ExtraClickable = ({ clicked, name, onClick }) => {
+    const [isDeletionModalOpen, setDeletionModalOpen] = useState(false);
     return (
         <div className='w-full'>
             {clicked ? (
@@ -115,7 +177,8 @@ const ExtraClickable = ({ clicked, name, onClick }) => {
                     onClick={onClick}>
                             <div className="text-black text-xl font-normal font-['Inter']">{name}</div>
                         </div>
-                        <div className="w-8 h-[29.87px] pl-px pr-[0.70px] pt-[0.84px] pb-[0.79px] rounded-[4px] border-[2px] border-indigo-300 justify-center items-center flex">
+                    <div className="w-8 h-[29.87px] pl-px pr-[0.70px] pt-[0.84px] pb-[0.79px] rounded-[4px] border-[2px] border-indigo-300 justify-center items-center flex"
+                        onClick={() => setDeletionModalOpen(true)}>
                             <XMarkIcon className=' h-[20px] w-[20px] text-indigo-300'/>
                         </div>
                     </div>
@@ -127,14 +190,15 @@ const ExtraClickable = ({ clicked, name, onClick }) => {
                         </div>
                     </div>
             )                
-        }
+            }
+        <PlayerDeletionModal isOpen={isDeletionModalOpen} closeModal={() => setDeletionModalOpen(false)} />
         </div>
     )
 }
 
-const TeamManagementComponent = ({ players, extras, onPlayerClick, onExtraClick }) => {   
+const TeamManagementComponent = ({ players, extras, onPlayerClick, onExtraClick }) => {
     
-    
+    const [isAdditionModalOpen, setAdditionModalOpen] = useState(false);
 
     return (
         <div className="w-full py-4 bg-white flex-col justify-start items-center gap-6 inline-flex">
@@ -149,8 +213,9 @@ const TeamManagementComponent = ({ players, extras, onPlayerClick, onExtraClick 
             <div className="self-stretch py-2 flex-col justify-start items-start gap-6 flex">
                 <div className="self-stretch px-4 justify-start items-center gap-4 inline-flex">
                     <div className="text-blue-800 text-2xl font-russoOne leading-normal">Players</div>
-                    <div className="h-8 bg-blue-800 rounded-[10px] justify-center items-center gap-2.5 flex">
-                        <img src={process.env.PUBLIC_URL + "images/plus-square.svg"}></img>
+                    <div className="h-8 bg-blue-800 rounded-[10px] justify-center items-center gap-2.5 flex" onClick={() => setAdditionModalOpen(true)}>
+                        <img src={process.env.PUBLIC_URL + "images/plus-square.svg"}
+                            ></img>
                     </div>
                 </div>
                 <div className="self-stretch flex-col justify-start items-start gap-4 flex">
@@ -166,9 +231,10 @@ const TeamManagementComponent = ({ players, extras, onPlayerClick, onExtraClick 
                 </div>
             </div>
             <div className="self-stretch px-4 justify-start items-center gap-4 inline-flex">
-                <div className="text-blue-800 text-2xl font-normal font-['Russo One'] leading-normal">Extra</div>
-                <div className="h-8 bg-blue-800 rounded-[10px] justify-center items-center gap-2.5 flex">
-                        <img src={process.env.PUBLIC_URL + "images/plus-square.svg"}></img>
+                <div className="text-blue-800 text-2xl font-russoOne">Extra</div>
+                <div className="h-8 bg-blue-800 rounded-[10px] justify-center items-center gap-2.5 flex" onClick={() => setAdditionModalOpen(true)}>
+                        <img src={process.env.PUBLIC_URL + "images/plus-square.svg"}
+                            ></img>
                     </div>
             </div>
             <div className="self-stretch h-[103px] flex-col justify-start items-start gap-[19px] flex">                
@@ -181,6 +247,9 @@ const TeamManagementComponent = ({ players, extras, onPlayerClick, onExtraClick 
                     />
                 ))}                
             </div>
+            
+            <PlayerAdditionModal isOpen={isAdditionModalOpen} closeModal={() => setAdditionModalOpen(false)} />
+            
         </div>
     )
 }
@@ -251,6 +320,8 @@ const TeamProfilePage = () => {
         { id: 2, clicked: false, name: 'Jane Doe X' },
         // Add more people as needed
     ]);
+    
+    const [isRoleModalOpen, setRoleModalOpen] = useState(false);
 
     const handleTabChange = (newTab) => {
         setTab(newTab);
@@ -271,6 +342,25 @@ const TeamProfilePage = () => {
                 extra.id === id ? { ...extra, clicked: !extra.clicked } : { ...extra, clicked: false }
             )
         );
+    };
+
+    const handleDeleteRole = (updatedRoles) => {
+        setRoles(updatedRoles);
+        
+    };
+
+    const handleAddRole = (updatedRoles) => {
+        setRoles(updatedRoles);
+        
+    };
+
+    const handleUpdateRole = (index, newRole) => {
+        setRoles((prevRoles) => {
+            const updatedRoles = [...prevRoles];
+            updatedRoles[index] = newRole;
+            return updatedRoles;
+        });
+        console.log('Updated roles:', roles);
     };
 
     return (
@@ -317,7 +407,7 @@ const TeamProfilePage = () => {
                 extras={extras}
                 onPlayerClick={onPlayerClick}
                 onExtraClick={onExtraClick}/>}
-        {tab === 2 && <SettingsComponent roles={roles} />}
+            {tab === 2 && <SettingsComponent roles={roles} onDeleteRole={handleDeleteRole} onAddRole={handleAddRole} onUpdateRole={ handleUpdateRole} />}
         
             
         

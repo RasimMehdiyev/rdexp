@@ -4,9 +4,18 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 
-export default function RoleAdditionModal({ isOpen, closeModal }) {
-
+export default function RoleAdditionModal({ isOpen, closeModal, onAddRole }) {
+  const [newRole, setNewRole] = useState('');
   const cancelButtonRef = useRef(null)
+  const handleAddRole = () => {
+    
+    
+    // Call the parent callback to add the new role
+    onAddRole(newRole);
+    setNewRole("")
+    // Close the modal or perform other actions if needed
+    closeModal();
+  };
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -49,6 +58,7 @@ export default function RoleAdditionModal({ isOpen, closeModal }) {
                             id="price"
                             className="block w-full rounded-md border-0 py-1.5 pl-5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 xxs:text-xxs xxs:leading-6"
                             placeholder="Enter new extra role"
+                            onChange={(e) => setNewRole(e.target.value)}
                             />
                         
                       </div>
@@ -66,8 +76,11 @@ export default function RoleAdditionModal({ isOpen, closeModal }) {
                   </button>
                 <button
                     type="button"
-                    className="xxs:max-h-12 xxs:text-center xxs:items-center inline-flex font-interReg mr-2 w-full justify-center rounded-md bg-blue-500 px-3 py-4 text-xxs text-white shadow-xxs hover:bg-blue-200 xxs:ml-2 "
-                    onClick={closeModal}>
+                    className={`xxs:max-h-12 xxs:text-center xxs:items-center inline-flex font-interReg mr-2 w-full justify-center rounded-md ${
+                      newRole ? 'bg-blue-500 hover:bg-blue-200' : 'bg-gray-300 pointer-events-none'
+                    } px-3 py-4 text-xxs text-white shadow-xxs`}
+                    onClick={handleAddRole}
+                    disabled={!newRole}>
                     Add
                   </button>
                 </div>
