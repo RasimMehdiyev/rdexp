@@ -42,13 +42,16 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
 
   return (
     <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-14 z-10'> {/* Ensure z-index is high enough */}
-        <img
+        {/* <img
             onClick={toggleRotate}
             className='cursor-pointer w-[36px] h-[35px]'
             src={process.env.PUBLIC_URL + "/images/burger_menu.svg"}
             alt="menu"
             style={{ transform: `rotate(${rotationDegree}deg)`, transition: 'transform 0.3s ease-in-out' }}
-          />
+          /> */}
+          <Link to="team-management/">
+            <img className='cursor-pointer w-[60px] h-[59px]' src={process.env.PUBLIC_URL + "/images/team.png"} alt="back" />
+          </Link>
           <Link className="flex justify-center items-center" to="/">
             <img className='cursor-pointer ' src={process.env.PUBLIC_URL + "/images/SYN.svg"} alt="home" />
           </Link>
