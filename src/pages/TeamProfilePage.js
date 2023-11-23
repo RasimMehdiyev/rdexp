@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { supabase } from '../lib/helper/supabaseClient';
-import { MapPinIcon, EnvelopeIcon, PhoneIcon } from '@heroicons/react/24/outline'
+import { MapPinIcon, EnvelopeIcon, PhoneIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { PencilIcon } from '@heroicons/react/24/solid'
 
 const AboutComponent = ({email, phone, address, bio}) => {
@@ -51,27 +51,7 @@ const SettingsComponent = ({roles}) => {
                     </div>
                 </div>
                 <div className="self-stretch h-44 flex-col justify-start items-start gap-4 flex">
-                    {/* <div className="self-stretch px-4 justify-between items-center inline-flex">
-                        
-                        <div className="h-9 w-[275px] px-2 rounded-[10px] border border-orange-500 flex-col justify-center items-start gap-2.5 inline-flex">
-                        <input                            
-                            className="w-full border-none outline-none bg-transparent text-gray-500 font-interReg justify-center text-xl"                            
-                            placeholder="Referee"
-                            type="text"
-                        />
-                        </div>
-                        <img src={process.env.PUBLIC_URL + "images/check-circle-2.svg"}/>
-                    </div>
-                    <div className="self-stretch px-4 justify-between items-center inline-flex">
-                        <div className="h-9 w-[275px] px-2 rounded-[10px] border border-orange-500 flex-col justify-center items-start gap-2.5 inline-flex">
-                        <input                            
-                            className="w-full border-none outline-none bg-transparent text-gray-500 font-interReg justify-center text-xl"                            
-                            placeholder="Catering"
-                            type="text"
-                        />
-                        </div>
-                        <img src={process.env.PUBLIC_URL + "images/check-circle-2.svg"}/>
-                    </div> */}
+                    
                     {roles.map((role, index) => (
                         <div key={index} className="self-stretch px-4 justify-between items-center inline-flex">
                         <div className="h-9 w-[275px] px-2 rounded-[10px] border border-orange-500 flex-col justify-center items-start gap-2.5 inline-flex">
@@ -91,13 +71,189 @@ const SettingsComponent = ({roles}) => {
     )
 }
 
+const PlayerClickable = ({clicked, name, number}) => {
+        return (
+            <div className="self-stretch pl-3 pr-4 justify-between items-center inline-flex">
+                <div className=" self-stretch px-1 py-2 rounded-[10px] justify-start items-center gap-[12px] flex">
+                    <div className="w-[43px] h-[42px] flex items-center justify-center rounded-full bg-orange-500">
+                        <div className=" text-white text-2xl font-russoOne z-10">{number}</div>                        
+                    </div>
+                    {clicked ? (
+                        <div className="w-[229px] self-stretch px-2 bg-indigo-100 rounded-[10px] shadow justify-start items-center gap-2.5 flex">
+                            <div className="text-black text-xl font-interReg">{name}</div>
+                        </div>
+                        ): (
+                        <div className="w-[229px] self-stretch px-2 rounded-[10px] shadow justify-start items-center gap-2.5 flex">
+                            <div className="text-black text-xl font-interReg">{name}</div>
+                        </div> 
+                        )}
+                    
+                </div>
+                {clicked ? (
+                    <div className="w-8 h-[29.87px] pl-px pr-[0.70px] pt-[0.84px] pb-[0.79px] rounded-[4px] border-[2px] border-indigo-300 justify-center items-center flex">
+                    <XMarkIcon className=' h-[20px] w-[20px] text-indigo-300'/>
+                    </div>
+                ): (
+                    <div className="w-8 h-[29.87px] pl-px pr-[0.70px] pt-[0.84px] pb-[0.79px] rounded-[4px] justify-center items-center flex">
+                    
+                    </div>  
+                )}
+                
+            </div>
+        )
+        
+}
+
+const ExtraClickable = ({ clicked, name }) => {
+    return (
+        <div className='w-full'>
+            {clicked ? (
+                    <div className="w-full px-4 justify-between items-center inline-flex">
+                        <div className="w-[284px] h-[42px] px-2 bg-indigo-100 rounded-[10px] shadow justify-start items-center gap-2.5 inline-flex">
+                            <div className="text-black text-xl font-normal font-['Inter']">{name}</div>
+                        </div>
+                        <div className="w-8 h-[29.87px] pl-px pr-[0.70px] pt-[0.84px] pb-[0.79px] rounded-[4px] border-[2px] border-indigo-300 justify-center items-center flex">
+                            <XMarkIcon className=' h-[20px] w-[20px] text-indigo-300'/>
+                        </div>
+                    </div>
+            ) : (
+                    <div className="w-full px-4 justify-start items-start flex">
+                        <div className="w-[284px] h-[42px] px-2 bg-white rounded-[10px] shadow justify-start items-center gap-2.5 inline-flex">
+                            <div className="text-black text-xl font-normal font-['Inter']">{name}</div>
+                        </div>
+                    </div>
+            )                
+        }
+        </div>
+    )
+}
+
+const TeamManagementComponent = () => {
+    
+    const [players, setPlayers] = useState([
+        { id: 1, clicked: false, name: 'John Doe' },
+        { id: 2, clicked: false, name: 'Jane Doe' },
+        // Add more people as needed
+    ]);
+
+    const toggleClickPlayer = (id) => {
+        setPlayers((prevPlayers) =>
+        prevPlayers.map((player) =>
+            player.id === id ? { ...player, clicked: !player.clicked } : player
+        )
+        );
+    };
+
+    const [extras, setExtras] = useState([
+        { id: 1, clicked: false, name: 'John Doe X' },
+        { id: 2, clicked: false, name: 'Jane Doe X' },
+        // Add more people as needed
+    ]);
+
+    const toggleClickExtras = (id) => {
+        setExtras((prevExtras) =>
+        prevExtras.map((extra) =>
+            extra.id === id ? { ...extra, clicked: !extra.clicked } : extra
+        )
+        );
+    };
+    
+
+    return (
+        <div className="w-full py-4 bg-white flex-col justify-start items-center gap-6 inline-flex">
+            <div className="self-stretch h-[67px] px-4 flex-col justify-start items-start gap-[19px] flex">
+                <div className="self-stretch justify-start items-start gap-[19px] inline-flex">
+                    <div className="basis-0 text-blue-800 text-2xl font-russoOne">Coach</div>
+                </div>
+                <div className="justify-start items-center gap-[19px] inline-flex">
+                    <div className="text-black text-xl font-interReg">Jeff Hugh</div>
+                </div>
+            </div>
+            <div className="self-stretch py-2 flex-col justify-start items-start gap-6 flex">
+                <div className="self-stretch px-4 justify-start items-center gap-4 inline-flex">
+                    <div className="text-blue-800 text-2xl font-russoOne leading-normal">Players</div>
+                    <div className="h-8 bg-blue-800 rounded-[10px] justify-center items-center gap-2.5 flex">
+                        <img src={process.env.PUBLIC_URL + "images/plus-square.svg"}></img>
+                    </div>
+                </div>
+                <div className="self-stretch flex-col justify-start items-start gap-4 flex">
+                    <PlayerClickable clicked={false} name="Michael Jordan" number="21" />
+                    <PlayerClickable clicked={false} name="De Monroe" number="11" />
+                    <PlayerClickable clicked={true} name="Chandler" number="33"/>
+                </div>
+            </div>
+            <div className="self-stretch px-4 justify-start items-center gap-4 inline-flex">
+                <div className="text-blue-800 text-2xl font-normal font-['Russo One'] leading-normal">Extra</div>
+                <div className="h-8 bg-blue-800 rounded-[10px] justify-center items-center gap-2.5 flex">
+                        <img src={process.env.PUBLIC_URL + "images/plus-square.svg"}></img>
+                    </div>
+            </div>
+            <div className="self-stretch h-[103px] flex-col justify-start items-start gap-[19px] flex">
+                
+                    <ExtraClickable clicked={false} name="Joe Mama" />
+                    <ExtraClickable clicked={true} name="Joever"/>
+                
+            </div>
+        </div>
+    )
+}
+
+const Tabs = ({ tab, onTabChange }) => {
+  return (
+    <div className="w-full border-b border-orange-500 justify-between items-center flex py-2">
+      <div
+        className="basis-1/3 justify-center items-center flex "
+        onClick={() => onTabChange(0)}
+      >
+        <div className={`w-[85px] rounded-lg justify-center items-center flex ${
+            tab === 0 ? 'bg-indigo-100' : ''
+            }`}>
+          <div className={`text-center ${tab === 0 ? 'text-blue-800' : 'text-neutral-300'} text-xl font-interReg]`}>
+            About
+          </div>
+        </div>
+      </div>
+      <div
+        className="basis-1/3 justify-center items-center flex "
+        onClick={() => onTabChange(1)}
+      >
+        <div className={`w-[104px] rounded-lg justify-center items-center flex ${
+            tab === 1 ? 'bg-indigo-100' : ''
+            }`}>
+          <div className={`text-center ${tab === 1 ? 'text-blue-800' : 'text-neutral-300'} text-xl font-interReg]`}>
+            Members
+          </div>
+        </div>
+      </div>
+      <div
+        className="basis-1/3 justify-center items-center flex "
+        onClick={() => onTabChange(2)}
+      >
+        <div className={`w-[85px] rounded-lg justify-center items-center flex ${
+            tab === 2 ? 'bg-indigo-100' : ''
+            }`}>
+          <div className={`text-center ${tab === 2 ? 'text-blue-800' : 'text-neutral-300'} text-xl font-interReg]`}>
+            Settings
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Functional component for the page
 const TeamProfilePage = () => {
     const [email, setEmail] = useState("coolguy@cool.com");
     const [phone, setPhone] = useState("+123456789");
     const [address, setAddress] = useState("Mongoose Street 89 3000 Leuven");
     const [bio, setBio] = useState("The Synthlete Dunkers are a renowned basketball team hailing from the historic city of Leuven, Belgium. Their inception was as unique as their name—a group of ambitious athletes from the local university who shared a passion for both sports and synthetic biology, a pioneering field at KU Leuven...");
-    const [roles, setRoles] = useState(["Referee", "Catering", "Referee 2"])
+    const [roles, setRoles] = useState(["Referee", "Catering", "Referee 2"]);
+
+    const [tab, setTab] = useState(0);
+
+    const handleTabChange = (newTab) => {
+        setTab(newTab);
+    };
 
     return (
         <div className="w-screen h-screen py-4 bg-gradient-to-b from-indigo-100 via-white to-white flex-col justify-start items-center flex">
@@ -129,33 +285,19 @@ const TeamProfilePage = () => {
                 <img src={process.env.PUBLIC_URL + "images/twitter.svg"}></img>
             </div>
         </div>
-            
-        <div className="w-full border-b border-orange-500 justify-between items-center flex py-2">
-            <div className="basis-1/3 justify-center items-center flex">
-                <div className="w-[85px] bg-indigo-100 rounded-lg justify-center items-center flex">
-                    <div className="text-center text-blue-800 text-xl font-interReg]">About</div>
-                </div>
-            </div>
-            <div className="basis-1/3 justify-center items-center flex">
-                <div className="w-[104px] rounded-lg justify-center items-center flex">
-                    <div className="text-center text-neutral-300 text-xl font-interReg]">Members</div>
-                </div>
-            </div>
-            <div className="basis-1/3 justify-center items-center flex">
-                <div className="w-[85px] rounded-lg justify-center items-center flex">
-                    <div className="text-center text-neutral-300 text-xl font-interReg]">Settings</div>
-                </div>
-            </div>
-        </div>          
-            {/* <AboutComponent
-                email={email}
-                phone={phone}
-                address={address}
-                bio={bio}
-            /> */}
-            <SettingsComponent
-                roles = {roles}
+        <Tabs tab={tab} onTabChange={handleTabChange} />
+        {tab === 0 && (
+            <AboutComponent
+            email={email}
+            phone={phone}
+            address={address}
+            bio={bio}
             />
+        )}
+        {tab === 1 && <TeamManagementComponent />}
+        {tab === 2 && <SettingsComponent roles={roles} />}
+        
+            
         
         </div>
     );
