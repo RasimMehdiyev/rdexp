@@ -7,6 +7,7 @@ const StickySubheaderComponent = () => {
     const nagivate = useNavigate();
 
     const getPreviousPage = () => {
+        // console.log('previous page');
         nagivate(-1);
     }
 
