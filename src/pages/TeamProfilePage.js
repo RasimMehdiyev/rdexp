@@ -52,7 +52,7 @@ const SettingsComponent = ({ roles, onDeleteRole, onAddRole, onUpdateRole }) => 
     const handleDeleteRole = (roleIndex) => {
         const updatedRoles = [...roles];
         const deletedRole = updatedRoles.splice(roleIndex, 1)[0];
-        
+        setEditedRoles(Array.from({ length: updatedRoles.length }, () => '')) //setting a new length for the editedroles
         // Update roles in the parent component
         onDeleteRole(updatedRoles);
         console.log("deleted role, now it's:")
@@ -62,7 +62,7 @@ const SettingsComponent = ({ roles, onDeleteRole, onAddRole, onUpdateRole }) => 
 
     const handleAddRole = (newRole) => {
         const updatedRoles = [...roles, newRole];
-
+        setEditedRoles(Array.from({ length: updatedRoles.length }, () => '')) //setting a new length for the editedroles
         // Update roles in the parent component
         onAddRole(updatedRoles);
         console.log("added a role, now it's:")
