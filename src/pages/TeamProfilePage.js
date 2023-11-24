@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '../lib/helper/supabaseClient';
+import LoadingPage from "./LoadingPage";
 import { MapPinIcon, EnvelopeIcon, PhoneIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { PencilIcon } from '@heroicons/react/24/solid'
 import PlayerDeletionModal from '../components/PlayerDeletionModal.js';
@@ -315,10 +316,9 @@ const Tabs = ({ tab, onTabChange }) => {
 
 // Functional component for the page
 const TeamProfilePage = () => {
-    const [email, setEmail] = useState("coolguy@cool.com");
-    const [phone, setPhone] = useState("+123456789");
-    const [address, setAddress] = useState("Mongoose Street 89 3000 Leuven");
-    const [bio, setBio] = useState("The Synthlete Dunkers are a renowned basketball team hailing from the historic city of Leuven, Belgium. Their inception was as unique as their name—a group of ambitious athletes from the local university who shared a passion for both sports and synthetic biology, a pioneering field at KU Leuven...");
+    const [teamData, setTeamData] = useState({});
+    const [teamSocialsData, setTeamSocialsData] = useState({});
+    const [loading, setLoading] = useState(true);
     const [roles, setRoles] = useState(["Referee", "Catering", "Referee 2"]);
 
     const [tab, setTab] = useState(0);
@@ -338,6 +338,55 @@ const TeamProfilePage = () => {
     ]);
     
     const [isRoleModalOpen, setRoleModalOpen] = useState(false);
+
+    useEffect(() => {
+        const fetchData = async () =>{
+            console.log("Fetching data team");
+            try {
+                const userResponse = await supabase.auth.getUser();
+                const user = userResponse.data.user;
+
+                const { data: user_data, error:  userError} = await supabase
+                .from('users') 
+                .select('*') 
+                .eq('user_id', user.id) 
+                .single();
+                if (userError) throw userError;
+
+                const { data: team_user_data, error: teamUserError } = await supabase
+                    .from('team_users')
+                    .select('team_id')
+                    .eq('user_id', user_data.id)
+                    .single();
+
+                if (teamUserError) throw teamUserError;
+
+                const { data: team_data, error: teamError } = await supabase
+                    .from('team')
+                    .select('*')
+                    .eq('id', team_user_data.team_id)
+                    .single();
+                if (teamError) throw teamError;
+
+
+                const { data: team_socials_data, error: teamSocialsError } = await supabase
+                    .from('team_socials')
+                    .select('*')
+                    .eq('team_id', team_data.id)
+                    .single();
+                if (teamSocialsError) throw teamSocialsError;
+
+                setTeamData(team_data);
+                setTeamSocialsData(team_socials_data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchData();
+    }, []);
 
     const handleTabChange = (newTab) => {
         setTab(newTab);
@@ -380,57 +429,74 @@ const TeamProfilePage = () => {
         });
         console.log('Updated roles:', roles);
     };
-
-    return (
-        <div className="w-screen h-screen py-4 bg-gradient-to-b from-indigo-100 via-white to-white flex-col justify-start items-center flex">
-        {/* should be component */}
-            <div className=" justify-center items-center gap-[53px] flex">               
-                    
-            <img src={process.env.PUBLIC_URL + "images/arrow-left.svg"}></img>
-            <div className="text-neutral-300 font-interReg text-xl">Synthlete Dunkers</div>
-            <img src={process.env.PUBLIC_URL + "images/arrow-right.svg"}></img>                                
+    if (loading) {
+        return <LoadingPage />;
+    }
+    else{
+        return (
+            <div className="w-screen h-screen py-4 bg-gradient-to-b from-indigo-100 via-white to-white flex-col justify-start items-center flex">
+            {/* should be component */}
+                <div className=" justify-center items-center gap-[53px] flex">               
+                        
+                <img src={process.env.PUBLIC_URL + "images/arrow-left.svg"}></img>
+                <div className="text-neutral-300 font-interReg text-xl">{teamData.team_name}</div>
+                <img src={process.env.PUBLIC_URL + "images/arrow-right.svg"}></img>                                
+                
+            </div>           
             
-        </div>           
-        
-        <div className="self-stretch h-[258px] p-2 flex-col justify-start items-center gap-2 flex">
-            <img className="w-[142px] h-[142px] rounded-[100px] border-4 border-white" src="https://via.placeholder.com/142x142" />
-            <div className="flex-col justify-start items-center gap-1 flex">
-                <div className="text-center text-blue-800 text-3xl font-russoOne">Synthlete Dunkers </div>
-            </div>
-            <div className="justify-center items-center gap-4 inline-flex">
-                <div className="w-[177.12px] h-4 relative">
-                    <div className="w-[15.87px] h-4 px-[1.74px] py-[0.45px] left-0 top-0 absolute flex-col justify-center items-center inline-flex">
-                        <MapPinIcon className='h-6 w-6'></MapPinIcon>
+            <div className="self-stretch h-[258px] p-2 flex-col justify-start items-center gap-2 flex">
+                <img className="w-[142px] h-[142px] rounded-[100px] border-4 border-white" src="https://via.placeholder.com/142x142" />
+                <div className="flex-col justify-start items-center gap-1 flex">
+                    <div className="text-center text-blue-800 text-3xl font-russoOne">{teamData.team_name}</div>
+                </div>
+                <div className="justify-center items-center gap-4 inline-flex">
+                    <div className="w-[177.12px] h-4 relative">
+                        <div className="w-[15.87px] h-4 px-[1.74px] py-[0.45px] left-0 top-0 absolute flex-col justify-center items-center inline-flex">
+                            <MapPinIcon className='h-6 w-6'></MapPinIcon>
+                        </div>
+                        <div className="w-[177px] h-[15px] left-[0.12px] top-0 absolute text-center text-neutral-300 text-xs font-interReg uppercase">{teamData.stadium}</div>
                     </div>
-                    <div className="w-[177px] h-[15px] left-[0.12px] top-0 absolute text-center text-neutral-300 text-xs font-interReg uppercase">Leuven City Stadium</div>
+                </div>
+                <div className="w-28 justify-between items-start inline-flex">
+                    {teamSocialsData && teamSocialsData.facebook_handle && (
+                        <a href={`https://facebook.com/${teamSocialsData.facebook_handle}`} target="_blank" rel="noopener noreferrer">
+                        <img src={process.env.PUBLIC_URL + "/images/facebook.svg"} alt="Facebook" />
+                        </a>
+                    )}
+                    {teamSocialsData && teamSocialsData.x_handle && (
+                        <a href={`https://instagram.com/${teamSocialsData.instagram_handle}`} target="_blank" rel="noopener noreferrer">
+                        <img src={process.env.PUBLIC_URL + "/images/instagram.svg"} alt="Instagram" />
+                        </a>
+                    )}
+                    {teamSocialsData && teamSocialsData.x_handle && (
+                        <a href={`https://x.com/${teamSocialsData.x_handle}`} target="_blank" rel="noopener noreferrer">
+                        <img src={process.env.PUBLIC_URL + "/images/twitter.svg"} alt="Twitter" />
+                        </a>
+                    )}
                 </div>
             </div>
-            <div className="w-28 justify-between items-start inline-flex">
-                <img src={process.env.PUBLIC_URL + "images/facebook.svg"}></img>
-                <img src={process.env.PUBLIC_URL + "images/instagram.svg"}></img>
-                <img src={process.env.PUBLIC_URL + "images/twitter.svg"}></img>
-            </div>
-        </div>
-        <Tabs tab={tab} onTabChange={handleTabChange} />
-        {tab === 0 && (
-            <AboutComponent
-            email={email}
-            phone={phone}
-            address={address}
-            bio={bio}
-            />
-        )}
-            {tab === 1 && <TeamManagementComponent
-                players={players}
-                extras={extras}
-                onPlayerClick={onPlayerClick}
-                onExtraClick={onExtraClick}/>}
-            {tab === 2 && <SettingsComponent roles={roles} onDeleteRole={handleDeleteRole} onAddRole={handleAddRole} onUpdateRole={ handleUpdateRole} />}
-        
+            <Tabs tab={tab} onTabChange={handleTabChange} />
+            {tab === 0 && (
+                <AboutComponent
+                email={teamData.email}
+                phone={teamData.phone_number}
+                address={teamData.adress}
+                bio={teamData.bio}
+                />
+            )}
+                {tab === 1 && <TeamManagementComponent
+                    players={players}
+                    extras={extras}
+                    onPlayerClick={onPlayerClick}
+                    onExtraClick={onExtraClick}/>}
+                {tab === 2 && <SettingsComponent roles={roles} onDeleteRole={handleDeleteRole} onAddRole={handleAddRole} onUpdateRole={ handleUpdateRole} />}
             
-        
-        </div>
-    );
+                
+            
+            </div>
+        );
+    }
+    
 };
 
 export default TeamProfilePage;
