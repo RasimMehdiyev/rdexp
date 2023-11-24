@@ -7,6 +7,25 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 export default function PlayerAdditionModal({ isOpen, closeModal }) {
 
   const cancelButtonRef = useRef(null)
+  const [email, setEmail] = useState('')
+  console.log(email)
+  const handleAddPlayer = () => {
+    
+    if (checkInput()) {
+      console.log("Invitation sent to: %s", email)
+      closeModal()
+    } else {
+      console.log("Input isn't good")
+    }
+    setEmail('')
+    
+  }
+
+  const checkInput = () => {
+    if (email.trim() === '') {
+      return false;
+    } else { return true; };
+  }
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -53,6 +72,7 @@ export default function PlayerAdditionModal({ isOpen, closeModal }) {
                             className="block w-[78%] rounded-md border-0 py-1.5 pl-5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 xxs:text-xxs xxs:leading-6"
                             placeholder="Enter user's name"
                             style={{ marginLeft: "50px" }}
+                            onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
                       </div>
@@ -71,7 +91,7 @@ export default function PlayerAdditionModal({ isOpen, closeModal }) {
                 <button
                     type="button"
                     className="xxs:max-h-12 xxs:text-center xxs:items-center inline-flex font-interReg mr-2 w-full justify-center rounded-md bg-blue-500 px-3 py-4 text-xxs text-white shadow-xxs hover:bg-blue-200 xxs:ml-3 "
-                    onClick={closeModal}>
+                    onClick={handleAddPlayer}>
                     Add
                   </button>
                 </div>
