@@ -2,9 +2,14 @@ import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 
-export default function PlayerDeletionModal({ isOpen, closeModal }) {
+export default function PlayerDeletionModal({ isOpen, closeModal, person,  onDelete }) {
 
   const cancelButtonRef = useRef(null)
+  const handleOnDelete = () => {
+    onDelete();
+    console.log("handle on delete in modal")
+    closeModal();
+  }
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -44,7 +49,7 @@ export default function PlayerDeletionModal({ isOpen, closeModal }) {
                     </Dialog.Title>
                       <div className="mt-4">
                         <p className=" text-gray-500 ">
-                        Are you sure you want to remove <strong>Michael Johnson</strong> from <strong>Team 1</strong>?
+                          Are you sure you want to remove <strong>{person.name}</strong> from <strong>Team 1</strong>?
                         This action is final, but you can re-invite them to the team later if needed.
                         </p>
                       </div>
@@ -63,7 +68,7 @@ export default function PlayerDeletionModal({ isOpen, closeModal }) {
                 <button
                     type="button"
                     className="inline-flex xxs:max-h-12 xxs:text-center xxs:items-center mt-3 mr-2 w-full justify-center rounded-md bg-blue-700 px-3 py-2 text-sm text-white shadow-sm hover:bg-orange-500 sm:ml-3 sm:w-auto"
-                    onClick={closeModal}
+                    onClick={handleOnDelete}
                   >
                     Remove
                   </button>

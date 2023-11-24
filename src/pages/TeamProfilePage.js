@@ -146,23 +146,26 @@ const SettingsComponent = ({ roles, onDeleteRole, onAddRole, onUpdateRole }) => 
     )
 }
 
-const PlayerClickable = ({ clicked, name, number, onClick }) => {
-        const [isDeletionModalOpen, setDeletionModalOpen] = useState(false);
+const PlayerClickable = ({ clicked, person, onClick, onDelete }) => {
+    const [isDeletionModalOpen, setDeletionModalOpen] = useState(false);
+    const handlePlayerDelete = () => {
+        onDelete(person)
+    }
         return (
             <div className="self-stretch pl-3 pr-4 justify-between items-center inline-flex">
                 <div className=" self-stretch px-1 py-2 rounded-[10px] justify-start items-center gap-[12px] flex">
                     <div className="w-[43px] h-[42px] flex items-center justify-center rounded-full bg-orange-500">
-                        <div className=" text-white text-2xl font-russoOne z-10">{number}</div>                        
+                        <div className=" text-white text-2xl font-russoOne z-10">{person.number}</div>                        
                     </div>
                     {clicked ? (
                         <div className="w-[229px] self-stretch px-2 bg-indigo-100 rounded-[10px] shadow justify-start items-center gap-2.5 flex"
                             onClick={onClick}>
-                            <div className="text-black text-xl font-interReg">{name}</div>
+                            <div className="text-black text-xl font-interReg">{person.name}</div>
                         </div>
                         ): (
                             <div className="w-[229px] self-stretch px-2 rounded-[10px] shadow justify-start items-center gap-2.5 flex"
                             onClick={onClick}>
-                            <div className="text-black text-xl font-interReg">{name}</div>
+                            <div className="text-black text-xl font-interReg">{person.name}</div>
                         </div> 
                         )}
                     
@@ -177,21 +180,28 @@ const PlayerClickable = ({ clicked, name, number, onClick }) => {
                     
                     </div>  
                 )}
-            <PlayerDeletionModal isOpen={isDeletionModalOpen} closeModal={() => setDeletionModalOpen(false)} />
+            <PlayerDeletionModal isOpen={isDeletionModalOpen} closeModal={() => setDeletionModalOpen(false)} onDelete={handlePlayerDelete} person={person}/>
             </div>
         )
         
 }
 
-const ExtraClickable = ({ clicked, name, onClick }) => {
+const ExtraClickable = ({ clicked, person, onClick, onDelete }) => {
     const [isDeletionModalOpen, setDeletionModalOpen] = useState(false);
+
+    const handleExtraDelete = () => {
+        console.log("in clickable delete")
+        console.log(person)
+        onDelete(person)
+    }
+    
     return (
         <div className='w-full'>
             {clicked ? (
                     <div className="w-full px-4 justify-between items-center inline-flex">
                     <div className="w-[284px] h-[42px] px-2 bg-indigo-100 rounded-[10px] shadow justify-start items-center gap-2.5 inline-flex"
                     onClick={onClick}>
-                            <div className="text-black text-xl font-normal font-['Inter']">{name}</div>
+                            <div className="text-black text-xl font-normal font-['Inter']">{person.name}</div>
                         </div>
                     <div className="w-8 h-[29.87px] pl-px pr-[0.70px] pt-[0.84px] pb-[0.79px] rounded-[4px] border-[2px] border-indigo-300 justify-center items-center flex"
                         onClick={() => setDeletionModalOpen(true)}>
@@ -202,19 +212,26 @@ const ExtraClickable = ({ clicked, name, onClick }) => {
                     <div className="w-full px-4 justify-start items-start flex">
                         <div className="w-[284px] h-[42px] px-2 bg-white rounded-[10px] shadow justify-start items-center gap-2.5 inline-flex"
                         onClick={onClick}>
-                            <div className="text-black text-xl font-normal font-['Inter']">{name}</div>
+                            <div className="text-black text-xl font-normal font-['Inter']">{person.name}</div>
                         </div>
                     </div>
             )                
             }
-        <PlayerDeletionModal isOpen={isDeletionModalOpen} closeModal={() => setDeletionModalOpen(false)} />
+        <PlayerDeletionModal isOpen={isDeletionModalOpen} closeModal={() => setDeletionModalOpen(false)} onDelete={handleExtraDelete} person={person}/>
         </div>
     )
 }
 
-const TeamManagementComponent = ({ players, extras, onPlayerClick, onExtraClick }) => {
+const TeamManagementComponent = ({ players, extras, onPlayerClick, onExtraClick, onDeletePlayer, onDeleteExtra }) => {
     
     const [isAdditionModalOpen, setAdditionModalOpen] = useState(false);
+    const handleExtraDelete = (extra) => {
+        
+        onDeleteExtra(extra)
+    }
+    const handlePlayerDelete = (player) => {
+        onDeletePlayer(player)
+    }
 
     return (
         <div className="w-full py-4 bg-white flex-col justify-start items-center gap-6 inline-flex">
@@ -239,8 +256,8 @@ const TeamManagementComponent = ({ players, extras, onPlayerClick, onExtraClick 
                         <PlayerClickable
                             key={player.id}
                             clicked={player.clicked}
-                            name={player.name}
-                            number={player.number}
+                            person={player}
+                            onDelete={handlePlayerDelete}
                             onClick={() => onPlayerClick(player.id)}
                         />
                     ))}
@@ -258,13 +275,14 @@ const TeamManagementComponent = ({ players, extras, onPlayerClick, onExtraClick 
                     <ExtraClickable
                         key={extra.id}
                         clicked={extra.clicked}
-                        name={extra.name}
+                        person={extra}
                         onClick={() => onExtraClick(extra.id)}
+                        onDelete={handleExtraDelete}
                     />
                 ))}                
             </div>
             
-            <PlayerAdditionModal isOpen={isAdditionModalOpen} closeModal={() => setAdditionModalOpen(false)} />
+            <PlayerAdditionModal isOpen={isAdditionModalOpen} closeModal={() => setAdditionModalOpen(false)}  />
             
         </div>
     )
@@ -381,6 +399,24 @@ const TeamProfilePage = () => {
         console.log('Updated roles:', roles);
     };
 
+    const handlePlayerDelete = (player) => {
+        deletePlayer(player.id);
+    }
+    
+    const deletePlayer = (id) => {
+        setPlayers((prevPlayers) => prevPlayers.filter((player) => player.id !== id));
+    };
+
+    const handleExtraDelete = (extra) => {
+        //console.log(extra)
+        deleteExtra(extra.id);
+    }
+    
+    const deleteExtra = (id) => {
+        setExtras((prevExtras) => prevExtras.filter((extra) => extra.id !== id));
+        console.log("extra deleted")
+    };
+
     return (
         <div className="w-screen h-screen py-4 bg-gradient-to-b from-indigo-100 via-white to-white flex-col justify-start items-center flex">
         {/* should be component */}
@@ -424,7 +460,9 @@ const TeamProfilePage = () => {
                 players={players}
                 extras={extras}
                 onPlayerClick={onPlayerClick}
-                onExtraClick={onExtraClick}/>}
+                onExtraClick={onExtraClick}
+                onDeleteExtra={handleExtraDelete}
+                onDeletePlayer={handlePlayerDelete}/>}
             {tab === 2 && <SettingsComponent roles={roles} onDeleteRole={handleDeleteRole} onAddRole={handleAddRole} onUpdateRole={ handleUpdateRole} />}
         
             
