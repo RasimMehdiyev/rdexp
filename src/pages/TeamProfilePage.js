@@ -45,7 +45,10 @@ const AboutComponent = ({email, phone, address, bio}) => {
 
 const SettingsComponent = ({ roles, onDeleteRole, onAddRole, onUpdateRole }) => {
     const [isRoleModalOpen, setRoleModalOpen] = useState(false);
-    const [editedRoles, setEditedRoles] = useState([]);
+    
+    const [editedRoles, setEditedRoles] = useState(Array.from({ length: roles.length }, () => ''));
+    console.log("this is how much in edited roles")
+    console.log(editedRoles)
     const handleDeleteRole = (roleIndex) => {
         const updatedRoles = [...roles];
         const deletedRole = updatedRoles.splice(roleIndex, 1)[0];
@@ -68,26 +71,38 @@ const SettingsComponent = ({ roles, onDeleteRole, onAddRole, onUpdateRole }) => 
     };    
 
     const handleInputChange = (e, index) => {
-        const updatedRoles = [...editedRoles];
-        updatedRoles[index] = e.target.value;
-        setEditedRoles(updatedRoles);
+        
+        setEditedRoles((prevEditedRoles) => {
+            const newEditedRoles = [...prevEditedRoles]; // Create a copy of the array
+            newEditedRoles[index] = e.target.value; // Modify the desired element
+            return newEditedRoles; // Update the state with the modified array
+        });
+        console.log(editedRoles)
     };
 
     const handleInputBlur = (index) => {
+        console.log("handling edit blur, index: %d", index)
         const editedRole = editedRoles[index];
-        if (editedRole !== undefined) {
+        
+        if (editedRole !== undefined && editedRole != '') {
             // Update roles in the parent
             onUpdateRole(index, editedRole);
             // Clear the input field
-            const updatedRoles = [...editedRoles];
-            updatedRoles[index] = '';
-            setEditedRoles(updatedRoles);
+            // const updatedRoles = [...editedRoles];
+            // updatedRoles[index] = '';
+            //setEditedRoles(updatedRoles);
+            setEditedRoles((prevEditedRoles) => {
+                const newEditedRoles = [...prevEditedRoles]; // Create a copy of the array
+                newEditedRoles[index] = ''; // Modify the desired element
+                return newEditedRoles; // Update the state with the modified array
+            });
         }
     };
 
     const handleInputKeyPress = (e, index) => {
     if (e.key === 'Enter') {
         handleInputBlur(index);
+        //inputRef.current.blur(); // This will unselect the input
     }
     };
     return (
@@ -110,9 +125,10 @@ const SettingsComponent = ({ roles, onDeleteRole, onAddRole, onUpdateRole }) => 
                             placeholder={role}
                             type="text"
                             value={editedRoles[index]}
-                            onChange={(e, index) => handleInputChange(e, index)}
-                            onBlur={(index)=> handleInputBlur(index)}
-                            onKeyPress={(e, index) => handleInputKeyPress(e, index)}
+                            onChange={(e) => handleInputChange(e, index)}
+                            onBlur={()=> handleInputBlur(index)}
+                            onKeyPress={(e) => handleInputKeyPress(e, index)}
+                            
                             />
                         </div>
                             {/* <img src={process.env.PUBLIC_URL + "images/check-circle-2.svg"} alt={`Check ${role}`} /> */}
@@ -355,6 +371,8 @@ const TeamProfilePage = () => {
     };
 
     const handleUpdateRole = (index, newRole) => {
+        console.log(roles)
+        console.log("index and new: %d %s", index, newRole)
         setRoles((prevRoles) => {
             const updatedRoles = [...prevRoles];
             updatedRoles[index] = newRole;
