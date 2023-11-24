@@ -13,8 +13,12 @@ import ProfilePage from './pages/ProfilePage';
 import EditProfilePage from "./pages/EditProfilePage.js";
 import NewGamePage from "./pages/NewEventPage.js";
 import StickySubheaderComponent from "./components/StickySubheaderComponent.js";
+import LogRocket from 'logrocket'
 
 const App = () => {
+
+
+   LogRocket.init('u7ityk/synthlete');
 
    // current link
    let location = useLocation();

@@ -2,6 +2,8 @@ import SynthleteLogo from '../components/SynthleteLogo';
 import { supabase } from "../lib/helper/supabaseClient";
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import LogRocket, { sessionURL } from 'logrocket'
+import amplitude from 'amplitude-js'
 
 const HomePage = () => {
     let [userData, setUserData] = useState({})
@@ -17,6 +19,17 @@ const HomePage = () => {
                 console.log(user)
                 if (user.data.user){
                     setUserData(user.data.user)
+                    LogRocket.identify(user.data.user.id, {
+                        name: userData.full_name,
+                        email: userData.email,
+                        role: userData.role,
+                      });
+
+                      LogRocket.getSessionURL(sessionURL => {
+                        amplitude.getInstance().logEvent('LogRocket', {'sessionURL': sessionURL });
+                      });
+                      console.log("SessionURL:", sessionURL)                      
+
                     console.log(userData)
                 }
                 else{

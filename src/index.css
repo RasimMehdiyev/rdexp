@@ -94,6 +94,11 @@ h1 {
     color: #1C3FB7
 }
 
+input:focus {
+    /* remove focus */
+    outline: none;
+}
+
 input[type="radio"] {
     /* Add if not using autoprefixer */
     -webkit-appearance: none;
