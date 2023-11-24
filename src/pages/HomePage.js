@@ -2,6 +2,7 @@ import SynthleteLogo from '../components/SynthleteLogo';
 import { supabase } from "../lib/helper/supabaseClient";
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import EventCard from "../components/EventCard"
 
 const HomePage = () => {
     let [userData, setUserData] = useState({})
@@ -23,36 +24,50 @@ const HomePage = () => {
                     navigate('/auth');
                 }
 
-            }catch(error){
+            } catch (error) {
                 console.log(error)
             }
         }
         console.log(userData)
         fetchData();
-    },[]);
-    
-        return (
-            <div className="flex flex-col justify-center items-center ">
-                {/* Upcoming Events */}
-                <div className="mt-[30px] w-[325px] h-[150px] flex flex-col  bg-lf-dark-gray">
-                    <p className="p-[12px]">Upcoming events</p>
-                    <div className='p-[12px] flex flex-col justify-center items-center'>
-                        <p className='text-[gray]'>No upcoming events</p>
-                        <a href='#' className='underline'>Add events</a>
-                    </div>
-                </div>
-                <div className="mt-[30px] w-[325px] h-[150px] flex flex-col  bg-lf-dark-gray">
-                    <p className="p-[12px]">Announcements</p>
-                    <div className='p-[12px] flex flex-col justify-center items-center'>
-                        <p className='text-[gray]'>No Announcements</p>
-                        <a href="#" className='underline'>Add announcement</a>
-                    </div>
-                </div>
-            </div>
-        );
-    
+    }, []);
 
-    
+    return (
+        <div className="flex flex-col justify-center items-center">
+            {/* Upcoming Events */}
+            {/* Render the EventCard component */}
+            <EventCard
+            type="game"
+            eventName="Game 1 against Antwerp the losing team"
+            teamName="Team A"
+            eventTime="14:00"
+            location="Brussels, Brusselstreet 45"
+            attendance="5"
+            number_invitiation="20"
+            />
+            <EventCard
+            type="practice"
+            eventName="Condition training"
+            teamName="Team A"
+            eventTime="20:00"
+            location="Homecourt"
+            attendance="5"
+            number_invitiation="20"
+            />
+            <EventCard
+            type="teambuilding"
+            eventName="drinking beers"
+            teamName="Team A"
+            eventTime="22:00"
+            location="Café basketball"
+            attendance="5"
+            number_invitiation="20"
+            />
+        
+        </div>
+
+        
+    );
 }
 
 export default HomePage;
