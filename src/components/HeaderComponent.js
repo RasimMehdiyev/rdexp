@@ -53,10 +53,10 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
             <img className='cursor-pointer w-[60px] h-[59px]' src={process.env.PUBLIC_URL + "/images/team.png"} alt="back" />
           </Link>
           <Link className="flex justify-center items-center" to="/">
-            <img className='cursor-pointer ' src={process.env.PUBLIC_URL + "/images/SYN.svg"} alt="home" />
+            <img className='cursor-pointer mr-[14px]' src={process.env.PUBLIC_URL + "/images/SYN.svg"} alt="home" />
           </Link>
           <Link>
-            <img onClick={rightSideBarOpen} className='cursor-pointer w-[36px] h-[35px]' src={process.env.PUBLIC_URL + "/images/user-circle-svgrepo-com.svg"} alt="profile" />
+            <img onClick={rightSideBarOpen} className='cursor-pointer w-[36px] h-[35px]' src={process.env.PUBLIC_URL + "/images/user-icon-svg.svg"} alt="profile" />
           </Link>
     </header>
   );
