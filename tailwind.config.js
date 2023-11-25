@@ -63,6 +63,10 @@ module.exports = {
             'sn-main-orange':'#F27430',
             'sn-light-orange':'#E8834C',
             'sn-bg-light-blue': '#E1E8FF',
+            'sn-subheader-blue':"#4665D0",
+            'teambuilding-green':"#6BC54B",
+            'game-blue':"#2D68F8",
+            'practice-orange':"#F27430",
             'neutral':{
                 '900':"#333333",
                 '600': "#4F4F4F",
@@ -133,36 +137,3 @@ module.exports = {
     plugins: [],
 
 }
-
-
-// text-indigo-50	color: rgb(238 242 255);
-	
-// Aa
-// text-indigo-100	color: rgb(224 231 255);
-	
-// Aa
-// text-indigo-200	color: rgb(199 210 254);
-	
-// Aa
-// text-indigo-300	color: rgb(165 180 252);
-	
-// Aa
-// text-indigo-400	color: rgb(129 140 248);
-	
-// Aa
-// text-indigo-500	color: rgb(99 102 241);
-	
-// Aa
-// text-indigo-600	color: rgb(79 70 229);
-	
-// Aa
-// text-indigo-700	color: rgb(67 56 202);
-	
-// Aa
-// text-indigo-800	color: rgb(55 48 163);
-	
-// Aa
-// text-indigo-900	color: rgb(49 46 129);
-	
-// Aa
-// text-indigo-950	color: rgb(30 27 75);
