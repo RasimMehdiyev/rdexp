@@ -1,4 +1,3 @@
-import SynthleteLogo from '../components/SynthleteLogo';
 import { supabase } from "../lib/helper/supabaseClient";
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -6,10 +5,12 @@ import LogRocket, { sessionURL } from 'logrocket'
 import amplitude from 'amplitude-js'
 import EventCard from "../components/EventCard";
 import React from 'react';
+import LoadingPage from './LoadingPage';
 
 
 const HomePage = () => {
     const [userData, setUserData] = useState({});
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -38,9 +39,13 @@ const HomePage = () => {
             } catch (error) {
                 console.log(error);
             }
+            finally {
+              setLoading(false); // Stop loading regardless of the outcome
+            }
         }
         fetchData();
-    }, []);
+
+    }, [navigate]);
 
     const events = [
         {
@@ -113,6 +118,10 @@ const HomePage = () => {
         return acc;
     }, {});
 
+
+    if (loading) {
+      return <LoadingPage />; // You can replace this with any loading spinner or indicator
+    }else{
     return (
         
         <div className="flex flex-col justify-center items-center">
@@ -148,6 +157,7 @@ const HomePage = () => {
           ))}
         </div>
       );
+    }
 };
 
 export default HomePage;
