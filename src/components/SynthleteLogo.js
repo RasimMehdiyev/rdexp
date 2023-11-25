@@ -1,6 +1,4 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from "../lib/helper/supabaseClient";
 import { useState } from 'react';
 const SynthleteLogo = () => {
     
@@ -16,7 +14,6 @@ const SynthleteLogo = () => {
             setLogoState('Logo_Auth.svg')
         }else if (getCurrentURL() === '/login' || getCurrentURL() === '/register' || getCurrentURL() === '/login/' || getCurrentURL() === '/register/'){
             setLogoState('Logo_Login.svg')
-            console.log(currentURL)
         }
     },[])
 
@@ -24,7 +21,10 @@ const SynthleteLogo = () => {
         <div>
             {
                 logoState === 'Logo_Auth.svg' ? (
-                    <img className='cursor-pointer ' src={process.env.PUBLIC_URL + "/images/Logo_Auth.svg"} />
+                    <div className='flex flex-col'>
+                        <p className='text-logo'>SYNTHELETE</p>
+                        <p className='text-logo-moto'>Elevate Your Game, Unite Your Team!</p>
+                    </div>
                 ) : (
                     <img className='cursor-pointer ' src={process.env.PUBLIC_URL + "/images/Logo_Login.svg"} />
                 )

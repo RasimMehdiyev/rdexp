@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from "../lib/helper/supabaseClient";
+import SynthleteSmallLogo from './SynthleteSmallLogo';
 
 const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }) => {
   const [userData, setUserData] = useState({});
@@ -41,22 +42,15 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
   }
 
   return (
-    <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-14 z-10'> {/* Ensure z-index is high enough */}
-        {/* <img
-            onClick={toggleRotate}
-            className='cursor-pointer w-[36px] h-[35px]'
-            src={process.env.PUBLIC_URL + "/images/burger_menu.svg"}
-            alt="menu"
-            style={{ transform: `rotate(${rotationDegree}deg)`, transition: 'transform 0.3s ease-in-out' }}
-          /> */}
+    <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-10'> {/* Ensure z-index is high enough */}
           <Link to="team-management/">
-            <img className='cursor-pointer w-[60px] h-[59px]' src={process.env.PUBLIC_URL + "/images/team.png"} alt="back" />
+            <img className='cursor-pointer w-[60px] h-[59px] mb-[6px]' src={process.env.PUBLIC_URL + "/images/team.png"} alt="back" />
           </Link>
           <Link className="flex justify-center items-center" to="/">
-            <img className='cursor-pointer mr-[14px]' src={process.env.PUBLIC_URL + "/images/SYN.svg"} alt="home" />
+            <SynthleteSmallLogo />
           </Link>
           <Link>
-            <img onClick={rightSideBarOpen} className='cursor-pointer w-[36px] h-[35px]' src={process.env.PUBLIC_URL + "/images/user-icon-svg.svg"} alt="profile" />
+            <img onClick={rightSideBarOpen} className='cursor-pointer w-[36px] h-[35px] ' src={process.env.PUBLIC_URL + "/images/user-icon-svg.svg"} alt="profile" />
           </Link>
     </header>
   );
