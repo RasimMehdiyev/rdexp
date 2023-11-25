@@ -4,7 +4,7 @@ import SynthleteLogo from '../components/SynthleteLogo';
 
 const AuthenticationPage = () => {
     return (
-        <div className='min-h-screen gap-36 bg-sn-main-blue flex flex-col justify-center items-center'>
+        <div className='gap-36 min-h-screen bg-sn-main-blue flex flex-col justify-center items-center'>
             <SynthleteLogo />
             <div className='flex flex-col gap-5'>
                 <Link to="/login">
