@@ -22,7 +22,7 @@ const SynthleteLogo = () => {
             {
                 logoState === 'Logo_Auth.svg' ? (
                     <div className='flex flex-col'>
-                        <p className='text-logo xxs:text-[52px]'>SYNTHELETE</p>
+                        <p className='text-logo xxs:text-[52px]'>SYNTHLETE</p>
                         <p className='text-logo-moto'>Elevate Your Game, Unite Your Team!</p>
                     </div>
                 ) : (
