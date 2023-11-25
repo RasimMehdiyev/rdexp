@@ -28,16 +28,6 @@ const HomePage = () => {
 
     const events = [
         {
-            type: "game",
-            eventName: "Game 1 against Antwerp the losing team with an extra long name that does not end",
-            teamName: "Team A",
-            eventTime: "14:00",
-            location: "Brussels, Brusselstreet 45",
-            attendance: "5",
-            number_invitation: "20",
-            date: "2023-04-11"
-        },
-        {
             type: "practice",
             eventName: "Condition training",
             teamName: "Team A",
@@ -49,7 +39,7 @@ const HomePage = () => {
         },
         {
             type: "teambuilding",
-            eventName: "drinking beers",
+            eventName: "Drinking beers",
             teamName: "Team A",
             eventTime: "22:00",
             location: "Café basketball",
@@ -79,59 +69,64 @@ const HomePage = () => {
         }
     ];
 
-    // Organize events by month and then by day
-    const organizedEvents = events.reduce((acc, event) => {
-        const month = event.date.slice(0, 7); // Extracting yyyy-mm to represent a month
-        const day = event.date.slice(8, 10); // Extracting dd to represent a day
+    // Extract unique months from the events
+  const uniqueMonths = [...new Set(events.map(event => event.date.slice(0, 7)))];
 
-        if (!acc[month]) {
-            acc[month] = {};
-        }
+  // Sort months in chronological order
+  const sortedMonths = uniqueMonths.sort((a, b) => new Date(a) - new Date(b));
 
-        if (!acc[month][day]) {
-            acc[month][day] = [];
-        }
+  // Organize events by month and then by day
+  const organizedEvents = events.reduce((acc, event) => {
+    const month = event.date.slice(0, 7); // Extracting yyyy-mm to represent a month
+    const day = event.date.slice(8, 10); // Extracting dd to represent a day
 
-        acc[month][day].push(event);
+    if (!acc[month]) {
+      acc[month] = {};
+    }
 
-        return acc;
-    }, {});
+    if (!acc[month][day]) {
+      acc[month][day] = [];
+    }
 
-    return (
-        
-        <div className="flex flex-col justify-center items-center">
-          <br></br>
-          {/* Upcoming Events */}
-          {Object.entries(organizedEvents).map(([month, days]) => (
-            <div key={month} className="font-russoOne text-sn-main-blue">
-              <h2 className="text-4xl font-bold">{new Date(month).toLocaleString('default', { month: 'long' })}</h2>
-              {Object.entries(days).map(([day, dayEvents]) => (
-                <div key={day}>
-                  <p className="text-2xl font-semibold">{`${new Date(`${month}-${day}`).toLocaleString('default', { weekday: 'short' })}. ${day}`}</p>
-                  <div className="event-container">
-                    {dayEvents
-                      .sort((a, b) => a.eventTime.localeCompare(b.eventTime)) // Sort events by eventTime
-                      .map((event, index) => (
-                        <div key={index} className="event-card">
-                          {/* Render your EventCard component here */}
-                          <EventCard
-                            type={event.type}
-                            eventName={event.eventName}
-                            teamName={event.teamName}
-                            eventTime={event.eventTime}
-                            location={event.location}
-                            attendance={event.attendance}
-                            number_invitation={event.number_invitation}
-                          />
-                        </div>
-                      ))}
-                  </div>
-                </div>
-              ))}
+    acc[month][day].push(event);
+
+    return acc;
+  }, {});
+
+  return (
+    <div className="flex flex-col justify-center items-center">
+      <br></br>
+      {/* Upcoming Events */}
+      {sortedMonths.map((month) => (
+        <div key={month} className="font-russoOne text-sn-main-blue">
+          <h2 className="text-4xl font-bold">{new Date(month).toLocaleString('default', { month: 'long' })}</h2>
+          {Object.entries(organizedEvents[month]).map(([day, dayEvents]) => (
+            <div key={day}>
+              <p className="text-2xl font-semibold">{`${new Date(`${month}-${day}`).toLocaleString('default', { weekday: 'short' })}. ${day}`}</p>
+              <div className="event-container">
+                {dayEvents
+                  .sort((a, b) => a.eventTime.localeCompare(b.eventTime)) // Sort events by eventTime
+                  .map((event, index) => (
+                    <div key={index} className="event-card">
+                      {/* Render your EventCard component here */}
+                      <EventCard
+                        type={event.type}
+                        eventName={event.eventName}
+                        teamName={event.teamName}
+                        eventTime={event.eventTime}
+                        location={event.location}
+                        attendance={event.attendance}
+                        number_invitation={event.number_invitation}
+                      />
+                    </div>
+                  ))}
+              </div>
             </div>
           ))}
         </div>
-      );
+      ))}
+    </div>
+  );
 };
 
 export default HomePage;
