@@ -27,7 +27,7 @@ const GameOverview = () => {
 
   return (
     <div className="flex flex-col h-screen bg-sn-bg-light-blue font-interReg">
-      <div className="bg-sn-main-blue text-white text-xl font-bold p-4 w-full flex justify-between items-center">
+      {/* <div className="bg-sn-main-blue text-white text-xl font-bold p-4 w-full flex justify-between items-center">
         <button>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -38,7 +38,7 @@ const GameOverview = () => {
           <button className="bg-red-500 text-white px-3 py-1 rounded mr-2">DELETE</button>
           <button className="bg-orange-500 text-white px-3 py-1 rounded">SAVE</button>
         </div>
-      </div>
+      </div> */}
 
       <div className="p-4">
         <h2 className="text-2xl font-bold mb-4 font-russoOne">Game 1</h2>
