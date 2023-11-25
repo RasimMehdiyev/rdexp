@@ -13,7 +13,7 @@ const NewGamePageComponent = ({eventTitle}) => {
     const [teamPlayers, setTeamPlayers] = useState([]);
     const [selectedID, setSelectedID] = useState('');
     const [volunteers, setVolunteers] = useState([]);
-    const [extraRoles, setExtraRoles] = useState([]);
+    const [extraRoles, setExtraRoles] = useState([]); // Use state for extraRoles    
 
 
     const submitEvent =  ()  => {
@@ -30,28 +30,16 @@ const NewGamePageComponent = ({eventTitle}) => {
     }
 
 
-    const getExtraRoles = async(teamID) =>{
-        console.log("team id", teamID)
-        const {data: sup_extraRoles, error:extraRolesError} = await supabase
-        .from('team_extraroles')
-        .select('role_title,id')
-        .eq('team_id',teamID)
+    const getExtraRoles = async (teamID) => {
+        console.log("team id", teamID);
+        const { data: sup_extraRoles, error: extraRolesError } = await supabase
+            .from('team_extraroles')
+            .select('role_title,id')
+            .eq('team_id', teamID);
 
-        if (extraRolesError) throw extraRolesError
-
-        for (const extraRole of sup_extraRoles) {
-            const {data: extraRole_data, error: extraRoleError} = await supabase
-                .from('extraroles')
-                .select('role_title,id')
-                .eq('id', extraRole.extrarole_id)
-                .single();
-            if (extraRoleError) throw extraRoleError;
-            extraRole['role_title'] = extraRole_data.role_title;
-        }
-
-        setExtraRoles(sup_extraRoles);
-        console.log(extraRoles);
-    }
+        if (extraRolesError) throw extraRolesError;
+        setExtraRoles(sup_extraRoles); // Set state here
+    };
 
     const getVolunteers = async() =>{
         const {data: volunteers, error: volunteersError} = await supabase
@@ -62,15 +50,12 @@ const NewGamePageComponent = ({eventTitle}) => {
         if (volunteersError) throw volunteersError;
 
         setVolunteers(volunteers);
-        console.log(volunteers)
     }
 
     useEffect(() => {
         const getTeams = async () => {
             let user = await supabase.auth.getUser();
             let userID = user.data.user.id;
-            // console.log(userID);
-            // fetch user from 'Users' table
             const { data: user_data, error: userError } = await supabase
                 .from('users')
                 .select('*')
@@ -100,15 +85,13 @@ const NewGamePageComponent = ({eventTitle}) => {
                 team_n.push(team_info);
             }
             setTeamNames(team_n);    
-            
-            
-            // volunteers
-            getVolunteers();
-
-            // extra roles
         }
         getTeams();
     }, [])
+
+    useEffect(() => {
+        console.log("Updated extraRoles:", extraRoles);
+    }, [extraRoles]);
 
     const getPlayerOfTeam = async (teamID) => {
         const {data: team_players, error: teamPlayersError} = await supabase
@@ -141,7 +124,7 @@ const NewGamePageComponent = ({eventTitle}) => {
         setSelectedID(event.target.value);
         await getPlayerOfTeam(event.target.value);
         await getExtraRoles(event.target.value);
-        console.log(extraRoles)
+        console.log('extraRoles:',extraRoles)
       };
 
     const handlePlayerChange = (event) => {
@@ -256,12 +239,13 @@ const NewGamePageComponent = ({eventTitle}) => {
                                 <select className="h-7 px-2 w-[210px] bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
                                     <option className="h-7 w-[210px] bg-white rounded-md">No Selection</option>
                                     {
-                                                    teamPlayers.map((player) => (
-                                                        <option key={player.id} value={player.id} className="h-7 w-[210px] bg-white rounded-md">
-                                                            {player.full_name}
-                                                        </option>
-                                                    ))
-                                                }
+                                        teamPlayers.map((player) => 
+                                            (
+                                                <option key={player.id} value={player.id} className="h-7 w-[210px] bg-white rounded-md">
+                                                    {player.full_name}
+                                                </option>
+                                            ))  
+                                    }
                                 </select>
                             </span>
                             <span>
@@ -269,31 +253,25 @@ const NewGamePageComponent = ({eventTitle}) => {
                             </span>
                     </div>
                 </div>
-                <div id='extra-roles' className="flex flex-col gap-1 mt-[32px]">
-                                    <h5 className="font-interSBold">Extra Roles</h5>
-                                    {/* {extraRoles[0].role_title} */}
-                                    {
-                                        
-                                        extraRoles.map((extras) => {
-                                            
-                                            <div key={extras.id} value={extras.id}  className="flex flex-row justify-between items-center">
-                                                <span>{extras.role_title}</span>
-                                                <span>
-                                                    <select className="h-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
-                                                        <option className="h-7 bg-white rounded-md" value="">No Selection</option>
-                                                        {
-                                                            volunteers.map((volunteer) => (
-                                                                <option key={volunteer.id} value={volunteer.id} className="h-7 bg-white rounded-md">
-                                                                    {volunteer.full_name}
-                                                                </option>
-                                                            ))
-                                                        }
-                                                    </select>
-                                                </span>
-                                            </div> 
-                                        })
-                                    }
-                                    
+                <div id='extra-roles' className="flex flex-col gap-1 mt-[32px] bg-sn-bg-light-blue">
+                        <h5 className="font-interSBold">Extra Roles</h5>
+                            {extraRoles.map((extras) => (
+                                <div key={extras.id} className="flex flex-row justify-between items-center">
+                                    <div>{extras.role_title}</div>
+                                    <div>
+                                        <select className="h-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="">
+                                            <option className="h-7 bg-white rounded-md" value="">No Selection</option>
+                                                {
+                                                    volunteers.map((volunteer) => (
+                                                        <option key={volunteer.id} value={volunteer.id} className="h-7 bg-white rounded-md">
+                                                            {volunteer.full_name}
+                                                        </option>
+                                                    ))
+                                                }
+                                        </select>
+                                    </div>
+                                </div>
+                                ))}
                 </div>
                 {/* <button onClick={submitEvent}  className="h-[40px] w-[150px] m-auto mt-5 bg-sn-main-blue rounded-md text-white font-russoOne">Save</button> */}
                 {selectedID && <p className="hidden">Selected ID: {selectedID}</p>}
