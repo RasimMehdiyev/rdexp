@@ -12,11 +12,13 @@ import RightSideBarComponent from './components/RightSidebarComponent';
 import ProfilePage from './pages/ProfilePage';
 import EditProfilePage from "./pages/EditProfilePage.js";
 import NewGamePage from "./pages/NewEventPage.js";
+import StickySubheaderComponent from "./components/StickySubheaderComponent.js";
 
 const App = () => {
 
    // current link
    let location = useLocation();
+   console.log(location.pathname)
    const [isOpen, setIsOpen] = useState(false);
    const [rightIsOpen, setRightIsOpen] = useState(false);
    if (location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth' || location.pathname === '/login/' || location.pathname === '/register/' || location.pathname === '/auth/'){
@@ -35,6 +37,12 @@ const App = () => {
       return (
          <>
          <HeaderComponent isOpen={isOpen} toggleSidebar={setIsOpen} rightIsOpen={rightIsOpen} setRightIsOpen={setRightIsOpen}/>
+         {
+            location.pathname === "/game/create/" || location.pathname === "/game/create" ? 
+            <StickySubheaderComponent/>
+            :
+            <div style={{display:'none'}}></div>
+         }
             <Routes>
                <Route path="/" element={<HomePage />} />
                <Route path="/login" element={<LoginPage />} />
@@ -46,7 +54,7 @@ const App = () => {
                <Route path="/game/create" element={<NewGamePage/>}/>
 
             </Routes>
-            <SideBarComponent isOpen={isOpen}/>
+            {/* <SideBarComponent isOpen={isOpen}/> */}
             <RightSideBarComponent rightIsOpen={rightIsOpen}/>
          </>
       );

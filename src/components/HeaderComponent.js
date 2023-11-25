@@ -41,21 +41,23 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
   }
 
   return (
-<header className='bg-sn-main-blue items-center flex flex-row px-5 justify-between h-14 z-50'> {/* Ensure z-index is high enough */}
-    <img
-        onClick={toggleRotate}
-        className='cursor-pointer w-[36px] h-[35px]'
-        src={process.env.PUBLIC_URL + "/images/burger_menu.svg"}
-        alt="menu"
-        style={{ transform: `rotate(${rotationDegree}deg)`, transition: 'transform 0.3s ease-in-out' }}
-      />
-      <Link className="flex justify-center items-center" to="/">
-        <img className='cursor-pointer ' src={process.env.PUBLIC_URL + "/images/SYN.svg"} alt="home" />
-      </Link>
-      <Link>
-        <img onClick={rightSideBarOpen} className='cursor-pointer w-[36px] h-[35px]' src={process.env.PUBLIC_URL + "/images/user-circle-svgrepo-com.svg"} alt="profile" />
-      </Link>
-      {/* <img onClick={handleLogout} className='cursor-pointer w-[40px] h-[38px]' src={process.env.PUBLIC_URL + "/images/logout.svg"} alt="logout" /> */}
+    <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-14 z-10'> {/* Ensure z-index is high enough */}
+        {/* <img
+            onClick={toggleRotate}
+            className='cursor-pointer w-[36px] h-[35px]'
+            src={process.env.PUBLIC_URL + "/images/burger_menu.svg"}
+            alt="menu"
+            style={{ transform: `rotate(${rotationDegree}deg)`, transition: 'transform 0.3s ease-in-out' }}
+          /> */}
+          <Link to="team-management/">
+            <img className='cursor-pointer w-[60px] h-[59px]' src={process.env.PUBLIC_URL + "/images/team.png"} alt="back" />
+          </Link>
+          <Link className="flex justify-center items-center" to="/">
+            <img className='cursor-pointer mr-[14px]' src={process.env.PUBLIC_URL + "/images/SYN.svg"} alt="home" />
+          </Link>
+          <Link>
+            <img onClick={rightSideBarOpen} className='cursor-pointer w-[36px] h-[35px]' src={process.env.PUBLIC_URL + "/images/user-icon-svg.svg"} alt="profile" />
+          </Link>
     </header>
   );
 };
