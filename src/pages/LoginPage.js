@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SynthleteLogo from '../components/SynthleteLogo';
 import { supabase } from "../lib/helper/supabaseClient";
+import IsChrome from "../hooks/IsChrome";
 
 
 const LoginPage = () => {
@@ -9,7 +10,8 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
-
+    const isChromeBrowser = IsChrome();
+    const inputRef = useRef(null);
     const handleLogin = async (e) => {
         e.preventDefault();
         try{
@@ -21,6 +23,13 @@ const LoginPage = () => {
         }
     };
     useEffect(() => {
+        console.log("Is Chrome: ", isChromeBrowser)
+        if (isChromeBrowser) {
+            inputRef.current.focus();
+            inputRef.current.setSelectionRange(15,15);
+            console.log("Chrome")
+        }
+
         const session = supabase.auth.getSession();
         setUser(session?.user ?? null);
         console.log(session)
@@ -29,12 +38,14 @@ const LoginPage = () => {
     const isDisabled = !email || !password;
 
 
+
+
     return (
         <div className='min-h-screen bg-sn-bg-light-blue flex flex-col gap-12 justify-center items-center'>
             <SynthleteLogo />
             <form className='text-center gap-2 items-center flex flex-col justify-center' onSubmit={handleLogin}>
-                <input placeholder='Email' className='shadow-md text-[12px] pl-2 font-interReg  w-64 h-12 rounded-lg border-2 border-sn-main-orange' type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                <input placeholder="Password" className='shadow-md text-[12px]  pl-2 font-interReg  w-64 h-12 rounded-lg border-2 border-sn-main-orange' type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <input ref={inputRef}  placeholder='Email' className='shadow-md text-[12px] pl-2 font-interReg  w-64 h-12 rounded-lg border-2 border-sn-main-orange' type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input ref={inputRef} placeholder="Password" className='shadow-md text-[12px]  pl-2 font-interReg  w-64 h-12 rounded-lg border-2 border-sn-main-orange' type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 <button className={`${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} text-white mt-5 w-64 h-16 bg-sn-main-orange font-russoOne rounded-10px`} type="submit">LOG IN</button>
                 <p className='py-2 text-xs font-[Arial] text-sn-main-blue'>Do not have an account yet? <Link className='font-[Arial] font-bold underline text-sn-main-blue' to="/register">Register</Link></p>
             </form>
