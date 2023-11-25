@@ -36,12 +36,11 @@ const App = () => {
          <>
          <HeaderComponent isOpen={isOpen} toggleSidebar={setIsOpen} rightIsOpen={rightIsOpen} setRightIsOpen={setRightIsOpen}/>
          {
-            location.pathname === "/game/create/" || location.pathname === "/game/create" ? 
+            location.pathname === "/game-overview/" || location.pathname === "/game-overview" || location.pathname === "/game/create/" || location.pathname === "/game/create" ? 
             <StickySubheaderComponent/>
             :
             <div style={{display:'none'}}></div>
          }
-            {/* <HeaderComponent isOpen={isOpen} toggleSidebar={setIsOpen} rightIsOpen={rightIsOpen} setRightIsOpen={setRightIsOpen}/> */}
             <Routes>
                <Route path="/" element={<HomePage />} />
                <Route path="/login" element={<LoginPage />} />
@@ -53,7 +52,6 @@ const App = () => {
                <Route path="/game/create" element={<NewGamePage />} />
                <Route path="/game-overview" element={<GameOverview />} />
             </Routes>
-            {/* <SideBarComponent isOpen={isOpen}/> */}
             <RightSideBarComponent rightIsOpen={rightIsOpen}/>
          </>
       );
