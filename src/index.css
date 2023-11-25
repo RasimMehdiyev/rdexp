@@ -171,3 +171,14 @@ input[type="radio"]:checked::before {
 .inner-shadow {
     box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
 }
+
+input:focus{
+    outline: none;
+}
+.phone-input {
+    outline: none;
+  }
+
+.phone-input:focus {
+    outline: none;
+  }
