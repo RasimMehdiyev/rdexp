@@ -63,10 +63,10 @@ const ProfilePage = () => {
                 <div className="self-stretch h-auto p-2 flex-col justify-start items-center gap-5 mt-24 flex">
                     
                     {userData.profile_picture ? (
-                        <img className="w-[142px] max-h-[142px] rounded-full border-3 border-white" src={userData.profile_picture} />
+                        <img className="w-[142px] object-cover overflow-hidden h-[142px] rounded-full border-3 border-white" src={userData.profile_picture} />
 
                     ) : (
-                        <img className="max-w-[142px] max-h-[142px] rounded-full border-3 border-white" src={process.env.PUBLIC_URL + "/images/no_user.png"} />
+                        <img className="w-[142px] object-cover overflow-hidden h-[142px] rounded-full border-3 border-white" src={process.env.PUBLIC_URL + "/images/no_user.png"} />
                     )
                         
                     }
