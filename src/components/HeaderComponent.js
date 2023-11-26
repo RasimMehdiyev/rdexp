@@ -8,6 +8,7 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
   const [rotationDegree, setRotationDegree] = useState(0);
   const [teamData, setTeamData] = useState({}); // [team_id, team_name]
   const [clubData, setClubData] = useState({}); // [club_id, club_name]
+  const [loading, setLoading] = useState(true); // Add a loading state
 
   // navigate
   const navigate = useNavigate();
@@ -71,6 +72,9 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
+      finally{
+        setLoading(false); // Stop loading regardless of the outcome
+      }
 
     };
 
@@ -90,6 +94,9 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
     setRightIsOpen(!rightIsOpen);
   }
 
+  if (loading) {
+    return null; // You can replace this with any loading spinner or indicator
+  }
   return (
     <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-10'> {/* Ensure z-index is high enough */}
           <Link to="team-management/" className='flex flex-col items-center justify-center'>
