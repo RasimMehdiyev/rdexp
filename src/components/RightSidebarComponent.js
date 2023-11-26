@@ -15,7 +15,7 @@ const RightSideBarComponent = ({ rightIsOpen }) => {
 
   return (
     <div
-      className={`fixed top-0 right-0 w-[120px] bg-blue-700 mt-[57px] bg-white transform transition-transform duration-300 ease-in-out ${sidebarClass}`}
+      className={`fixed top-0 right-0 w-[120px] bg-blue-700 mt-[64px] bg-white transform transition-transform duration-300 ease-in-out ${sidebarClass}`}
       style={{ zIndex: 50 }} // You can set the zIndex to a value that suits your layout
     >
       <ul className='flex flex-col justify-center items-center'>
