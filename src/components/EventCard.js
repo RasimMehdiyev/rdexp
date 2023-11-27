@@ -16,10 +16,10 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
   };
 
   return (
-    <div className={`w-[368px] h-[197px] p-4 rounded-[10px] mt-4 flex-col justify-start items-start gap-[25px] inline-flex drop-shadow-[0_5px_8px_rgba(0,0,0,0.3)] ${getBackgroundColor()}`}>
+    <div className={`w-[368px] h-[210px] p-4 rounded-[10px] mt-4 flex-col justify-start items-start gap-[25px] inline-flex drop-shadow-[0_5px_8px_rgba(0,0,0,0.3)] ${getBackgroundColor()}`}>
       {/* Event Name Section */}
       <div className="title justify-start items-end gap-[5px]">
-        <div className="team-name h-[26px] text-white text-xl font-bold font-['Inter'] mb-2">{teamName}: {eventName}</div>
+        <div className="team-name h-[26px] text-white text-xl font-bold font-['Inter'] mb-5"> {eventName} ({teamName})</div>
 
       </div>
       
