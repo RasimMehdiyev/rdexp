@@ -22,7 +22,7 @@ const ProfilePage = () => {
             if (user) {
               // Initially, we don't know the user's role, so fetch from both tables.
               const { data: user_data, error: userError } = await supabase
-                .from('Users')
+                .from('users')
                 .select('*')
                 .eq('user_id', user.id)
                 .single(); // Use single to get a single record or null   
@@ -72,7 +72,7 @@ const ProfilePage = () => {
                     }
                     
                     <div className="flex-col justify-start items-center gap-1 flex">
-                        <div className="text-center text-blue-800 text-3xl font-russoOne leading-normal">{userData.fullname}</div>
+                        <div className="text-center text-blue-800 text-3xl font-russoOne leading-normal">{userData.full_name}</div>
                         <div className="text-center text-neutral-900 text-sm font-interEBold uppercase">{userData.role}</div>
                     </div>
                     <div className="mobile-email-box self-stretch justify-center items-center gap-4 inline-flex">
@@ -82,13 +82,13 @@ const ProfilePage = () => {
                         </div>
                         <div className="justify-center items-center gap-1 flex">
                             <div className="w-[18px] h-[18px] relative"><PhoneIcon className="h-5 w-5"></PhoneIcon></div>
-                            {!userData.phoneNumber ? (
+                            {!userData.phone_number ? (
                             <div className="w-[150px] h-[10px] flex items-center justify-center">
                                 <div className="text-center text-neutral-900 text-sm font-interReg">No phone number</div>
                             </div>
                             ) : (
                             <div className="text-center text-neutral-900 text-sm font-interReg">
-                                {userData.phoneNumber}
+                                {userData.phone_number}
                             </div>
                             )}
                         </div>

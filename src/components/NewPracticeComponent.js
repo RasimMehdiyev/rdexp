@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { supabase } from "../lib/helper/supabaseClient";
 
+
 const NewPracticeComponent = ({eventTitle}) => {
     const [title, setTitle] = useState(eventTitle);
     const [selectedOption, setSelectedOption] = useState("");
@@ -24,7 +25,7 @@ const NewPracticeComponent = ({eventTitle}) => {
             console.log(userID);
             // fetch user from 'Users' table
             const { data: user_data, error: userError } = await supabase
-                .from('Users')
+                .from('users')
                 .select('*')
                 .eq('user_id', userID)
                 .single();
@@ -40,13 +41,13 @@ const NewPracticeComponent = ({eventTitle}) => {
             let team_n = []
             for (const team of teams_list) {
                 const {data: team_data, error: teamError} = await supabase
-                    .from('Team')
+                    .from('team')
                     .select('*')
                     .eq('id', team.team_id)
                     .single();
                 if (teamError) throw teamError;
                 let team_info = {}
-                team_info['name'] = team_data.teamName;
+                team_info['team_name'] = team_data.team_name;
                 team_info['id'] = team_data.id;
                 team_n.push(team_info);
             }
@@ -77,7 +78,7 @@ const NewPracticeComponent = ({eventTitle}) => {
                                     {
                                         teamNames.map((team) => (
                                             <option key={team.id} value={team.id} className="h-7 w-[210px] bg-white rounded-md">
-                                                {team.name}
+                                                {team.team_name}
                                             </option>
                                         ))
                                     }

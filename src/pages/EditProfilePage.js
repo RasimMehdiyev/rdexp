@@ -30,31 +30,18 @@ const EditProfilePage = () => {
             const user = userResponse.data.user;
             
             if (user) {
-              // Initially, we don't know the user's role, so fetch from both tables.
-              const { data: coachData, error: coachError } = await supabase
-                .from('Coach')
+                const { data: userData, error: userError } = await supabase
+                .from('users')
                 .select('*')
-                .eq('userID', user.id)
-                .single(); // Use single to get a single record or null
-    
-              if (coachData) {
-                setUserData(coachData);
-                setRole("Coach");
-              } else {
-                console.log("Coach Error:", coachError);
-                const { data: playerData, error: playerError } = await supabase
-                  .from('Player')
-                  .select('*')
-                  .eq('userID', user.id)
-                  .single(); // Use single to get a single record or null
-    
-                if (playerData) {
-                  setUserData(playerData);
-                  setRole("Player");
-                } else {
-                  console.log("Player Error:", playerError);
-                }
-              }
+                .eq('user_id', user.id)
+                .single();
+                if (userError) throw userError;
+                console.log("User data:", userData);
+                setUserData(userData);
+                setRole(userData.role);
+                setNewBio(userData.bio);
+                setNewEmail(userData.email);
+                setNewPhoneNumber(userData.phone_number);
             }
             else{
                 navigate('/auth');
@@ -112,29 +99,21 @@ const EditProfilePage = () => {
             const userResponse = await supabase.auth.getUser();
             console.log("User:", userResponse);
             const user = userResponse.data.user;
-            if (role == 'Coach' || role == 'Player') {
-                if (newBio != '') {
-                    const { data: bioData, error: bioError } = await supabase
-                    .from(role)
-                    .update({ bio: newBio })
-                    .eq('userID', user.id)
-                    .select()
-                }
-                if (newEmail != '') {
-                    const { data: emailData, error: emailError } = await supabase
-                    .from(role)
-                    .update({ email: newEmail })
-                    .eq('userID', user.id)
-                    .select()
-                }
-                if (newPhoneNumber != '') {
-                    const { data: phoneData, error: phoneError } = await supabase
-                    .from(role)
-                    .update({ phoneNumber: newPhoneNumber })
-                    .eq('userID', user.id)
-                    .select()
-                }
-            } else { console.error("role unknown"); }                           
+            if (user) {
+                // Update the user's profile
+                const { data: user_data, error: userError } = await supabase
+                    .from('users')
+                    .update({
+                        bio: newBio,
+                        email: newEmail,
+                        phone_number: newPhoneNumber
+                    })
+                    .eq('user_id', user.id)
+                    .single();
+                if (userError) throw userError;
+                console.log("User data:", user_data);
+                setUserData(user_data);
+            }                       
                 
                         
         } catch (error) {
@@ -220,7 +199,7 @@ const EditProfilePage = () => {
                     <div className="grow h-auto basis-0 justify-start items-center flex">                            
                         <input
                             className="text-neutral-500 text-base font-normal font-interReg leading-normal"
-                            placeholder={userData.phoneNumber}
+                            placeholder={userData.phone_number}
                             type="tel"
                             value={newPhoneNumber}
                                     onChange={(event) => {
