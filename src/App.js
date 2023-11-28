@@ -14,6 +14,7 @@ import StickySubheaderComponent from "./components/StickySubheaderComponent.js";
 import LogRocket from 'logrocket'
 import GameOverview from './pages/GameOverview'; // Import GameOverview component
 import TeamCreatePage from './pages/TeamCreatePage.js';
+import { AboutClubPage } from './pages/AboutClubPage.js';
 
 LogRocket.init('u7ityk/synthlete');
 
@@ -22,23 +23,28 @@ const App = () => {
    const [rightIsOpen, setRightIsOpen] = useState(false);
    const location = useLocation();
 
-   if (location==='/team/create' || location==='/team/create/' || location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth' || location.pathname === '/login/' || location.pathname === '/register/' || location.pathname === '/auth/'){
+   if (location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth' || location.pathname === '/login/' || location.pathname === '/register/' || location.pathname === '/auth/'){
       return (
          <>
             <Routes>
-               <Route path="/" element={<HomePage />} />
-               <Route path="/login" element={<LoginPage />} />
-               <Route path="/register" element={<RegisterPage />} />
-               <Route path="/auth" element={<AuthenticationPage />} />
+               <Route path="/" element={<HomePage/>} />
+               <Route path="/login" element={<LoginPage/>} />
+               <Route path="/register" element={<RegisterPage/>} />
+               <Route path="/auth" element={<AuthenticationPage/>} />
                <Route path="/game-overview" element={<GameOverview />} />
-               <Route path="/team/create" element={<TeamCreatePage/>}/>
+               {/* <Route path="/team/create" element={<TeamCreatePage/>} />
+               <Route path="/club/create" element={<AboutClubPage/>} /> */}
             </Routes>
          </>
       );
    } else {
       return (
          <>
-         <HeaderComponent isOpen={isOpen} toggleSidebar={setIsOpen} rightIsOpen={rightIsOpen} setRightIsOpen={setRightIsOpen}/>
+         {  location.pathname !== '/team/create' || location.pathname !== '/team/create/' || location.pathname !== '/club/create' || location.pathname !== '/club/create/' ?
+            <HeaderComponent isOpen={isOpen} toggleSidebar={setIsOpen} rightIsOpen={rightIsOpen} setRightIsOpen={setRightIsOpen}/>
+            :
+            <div style={{display:'none'}}></div>
+         }
          {
             location.pathname === "/game-overview/" || location.pathname === "/game-overview" || location.pathname === "/game/create/" || location.pathname === "/game/create" ? 
             <StickySubheaderComponent/>
@@ -55,6 +61,8 @@ const App = () => {
                <Route path="/editProfile" element={<EditProfilePage />} />
                <Route path="/game/create" element={<NewGamePage />} />
                <Route path="/game-overview" element={<GameOverview />} />
+               <Route path="/team/create" element={<TeamCreatePage/>} />
+               <Route path="/club/create" element={<AboutClubPage/>} />
             </Routes>
             <RightSideBarComponent rightIsOpen={rightIsOpen}/>
          </>
