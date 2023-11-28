@@ -149,13 +149,13 @@ input[type="radio"]:checked::before {
 }
 
 .circle-number {
-    width: 60px;
-    height: 60px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
 .rect-background {

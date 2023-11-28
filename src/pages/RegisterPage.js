@@ -50,7 +50,7 @@ function RegisterPage() {
                     <input className='shadow-md text-[12px] pl-2 font-interReg w-full h-12 rounded-lg border-2 border-sn-main-orange' placeholder='Full Name' type="text" value={fullName} onChange={(event) => setFullName(event.target.value)} />
                     <input className='shadow-md text-[12px] pl-2 font-interReg w-full h-12 rounded-lg border-2 border-sn-main-orange' placeholder='Email' type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
                     <PhoneInput
-                    style={{ height: '3rem'}} 
+                    style={{ height: '3rem' }}
                     inputStyle={{ height: '100%', width:'100%' }}
                     className='phone-input border-2 rounded-lg border-sn-main-orange'
                     placeholder='Enter phone number'
