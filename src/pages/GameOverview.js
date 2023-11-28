@@ -3,6 +3,7 @@ import SynthleteLogo from '../components/SynthleteLogo';
 import { supabase } from "../lib/helper/supabaseClient";
 import { useNavigate } from 'react-router-dom';
 import { MdDateRange, MdAccessTime, MdLocationOn, MdGroup } from 'react-icons/md';
+import { MdIcon } from 'react-icons/md';
 
 
 
