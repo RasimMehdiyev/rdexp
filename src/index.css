@@ -227,3 +227,6 @@ input:focus {
     -webkit-text-stroke: 1.5px white;
 }
 
+.placeholder-text::placeholder {
+    font-size: 16px; 
+  }
