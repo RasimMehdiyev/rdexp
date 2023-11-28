@@ -171,7 +171,7 @@ const TeamManagementPage = () => {
 
             </div>
             <PlayerDeletionModal isOpen={isDeletionModalOpen} closeModal={closeDeletionModal} />
-            <PlayerAdditionModal isOpen={isAdditionModalOpen} closeModal={closeAdditionModal} />
+            <PlayerAdditionModal isOpen={isAdditionModalOpen} closeModal={closeAdditionModal} isPlayer={false}/>
             <RoleAdditionModal isOpen={isRoleModalOpen} closeModal={closeRoleModal} />
             
         </div>
