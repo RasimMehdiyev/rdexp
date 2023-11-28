@@ -1,5 +1,4 @@
-import React from "react";
-import { useEffect, useState } from 'react';
+import React,  { useEffect, useState } from "react";
 import { supabase } from '../lib/helper/supabaseClient';
 import LoadingPage from "./LoadingPage";
 import { PencilIcon } from '@heroicons/react/24/solid'

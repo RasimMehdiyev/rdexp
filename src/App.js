@@ -13,6 +13,7 @@ import NewGamePage from "./pages/NewEventPage.js";
 import StickySubheaderComponent from "./components/StickySubheaderComponent.js";
 import LogRocket from 'logrocket'
 import GameOverview from './pages/GameOverview'; // Import GameOverview component
+import TeamCreatePage from './pages/TeamCreatePage.js';
 
 LogRocket.init('u7ityk/synthlete');
 
@@ -21,7 +22,7 @@ const App = () => {
    const [rightIsOpen, setRightIsOpen] = useState(false);
    const location = useLocation();
 
-   if (location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth' || location.pathname === '/login/' || location.pathname === '/register/' || location.pathname === '/auth/'){
+   if (location==='/team/create' || location==='/team/create/' || location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth' || location.pathname === '/login/' || location.pathname === '/register/' || location.pathname === '/auth/'){
       return (
          <>
             <Routes>
@@ -30,6 +31,7 @@ const App = () => {
                <Route path="/register" element={<RegisterPage />} />
                <Route path="/auth" element={<AuthenticationPage />} />
                <Route path="/game-overview" element={<GameOverview />} />
+               <Route path="/team/create" element={TeamCreatePage}/>
             </Routes>
          </>
       );
