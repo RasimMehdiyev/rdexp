@@ -20,7 +20,7 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
       .select('team_id')
       .eq('user_id', userID)
       if (teamError) throw teamError;
-      console.log("team data:", team[0].team_id);     
+      // console.log("team data:", team[0].team_id);     
   
       const { data: club, error: clubError } = await supabase
       .from('club_teams')
@@ -28,7 +28,7 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
       .eq('team_id', team[0].team_id)
       .single(); // Use single to get a single record or null
       if (clubError) throw clubError;
-      console.log("club data:", club);
+      // console.log("club data:", club);
       
   
       const { data: clubData, error: clubNameError } = await supabase
@@ -37,7 +37,7 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
       .eq('id', club.club_id)
       .single(); // Use single to get a single record or null
       if (clubNameError) throw clubNameError;
-      console.log("club picture:", clubData);
+      // console.log("club picture:", clubData);
       setClubData(clubData);
       setTeamData(team);
     }
@@ -46,7 +46,7 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
   // Fetch user data
   useEffect(() => {
     const fetchData = async () => {
-      console.log("Fetching data");
+      // console.log("Fetching data");
       try {
         const userResponse = await supabase.auth.getUser();
         const user = userResponse.data.user;
@@ -59,7 +59,7 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
             .eq('user_id', user.id)
             .single(); // Use single to get a single record or null   
           if (userError) throw userError;
-          console.log("User data:", user_data);     
+          // console.log("User data:", user_data);     
           setUserData(user_data);  
 
           

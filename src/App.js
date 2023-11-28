@@ -23,7 +23,7 @@ const App = () => {
    const [rightIsOpen, setRightIsOpen] = useState(false);
    const location = useLocation();
 
-   if (location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth' || location.pathname === '/login/' || location.pathname === '/register/' || location.pathname === '/auth/'){
+   if (location === '/club/create' || location === '/club/create/' || location === '/team/create' || location === '/team/create/' || location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth' || location.pathname === '/login/' || location.pathname === '/register/' || location.pathname === '/auth/'){
       return (
          <>
             <Routes>
@@ -32,8 +32,8 @@ const App = () => {
                <Route path="/register" element={<RegisterPage/>} />
                <Route path="/auth" element={<AuthenticationPage/>} />
                <Route path="/game-overview" element={<GameOverview />} />
-               {/* <Route path="/team/create" element={<TeamCreatePage/>} />
-               <Route path="/club/create" element={<AboutClubPage/>} /> */}
+               <Route path="/team/create" element={<TeamCreatePage/>} />
+               <Route path="/club/create" element={<AboutClubPage/>} />
             </Routes>
          </>
       );

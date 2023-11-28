@@ -226,3 +226,46 @@ input:focus {
     /* stroke */
     -webkit-text-stroke: 1.5px white;
 }
+
+
+/* input file edit */
+
+input[type="file"] {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 10px;
+    /* Adjust as needed */
+    fill: #ccc;
+    /* Color of the SVG */
+}
+
+textarea:focus {
+    outline: none;
+}
+
+
+/* 
+input[type="text"] {
+    padding-left: 100px;
+    /* Adjust based on the size of your SVG */
+
+
+/* Other styling for your input 
+
+
+}
+*/
