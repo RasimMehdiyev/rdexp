@@ -14,6 +14,7 @@ import StickySubheaderComponent from "./components/StickySubheaderComponent.js";
 import LogRocket from 'logrocket'
 import GameOverview from './pages/GameOverview'; // Import GameOverview component
 import TeamCreatePage from './pages/TeamCreatePage.js';
+import GameSettings from './pages/GameSettings.js';
 import { AboutClubPage } from './pages/AboutClubPage.js';
 
 LogRocket.init('u7ityk/synthlete');
@@ -23,7 +24,7 @@ const App = () => {
    const [rightIsOpen, setRightIsOpen] = useState(false);
    const location = useLocation();
 
-   if (location.pathname === '/team/create' || location.pathname === '/team/create/' || location.pathname === '/club/create' || location.pathname === '/team/create' || location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth' || location.pathname === '/login/' || location.pathname === '/register/' || location.pathname === '/auth/'){
+   if (location.pathname==='/club/create/settings' || location.pathname==='/club/create/settings/'  || location.pathname === '/team/create'  || location.pathname === '/team/create/' || location.pathname === '/club/create' || location.pathname === '/team/create' || location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth' || location.pathname === '/login/' || location.pathname === '/register/' || location.pathname === '/auth/'){
       return (
          <>
             <Routes>
@@ -34,6 +35,7 @@ const App = () => {
                <Route path="/game-overview" element={<GameOverview />} />
                <Route path="/team/create" element={<TeamCreatePage/>} />
                <Route path="/club/create" element={<AboutClubPage/>} />
+               <Route path="/club/create/settings" element={<GameSettings/>} />
             </Routes>
          </>
       );
@@ -63,6 +65,7 @@ const App = () => {
                <Route path="/game-overview" element={<GameOverview />} />
                <Route path="/team/create" element={<TeamCreatePage/>} />
                <Route path="/club/create" element={<AboutClubPage/>} />
+               <Route path="/club/create/settings" element={<GameSettings/>} />
             </Routes>
             <RightSideBarComponent rightIsOpen={rightIsOpen}/>
          </>

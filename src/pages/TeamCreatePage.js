@@ -4,6 +4,8 @@ import { faPlus} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PersonTag from '../components/PersonTag.js';
 import UserInput from '../components/UserInput.js';
+import {Link} from 'react-router-dom'
+
 
 const TeamCreatePage = () => {
   return (
@@ -40,20 +42,17 @@ const TeamCreatePage = () => {
 
       </div>
 
-      <div className="bg-sn-bg-light-blue text-center pt-14">
-        <button className="bg-sn-main-orange text-2xl text-white font-interElight p-2 pl-3 pr-3 rounded-10px w-[70vw] h-16 ">
+      <div className="bg-sn-bg-light-blue flex flex-col justify-center align-items text-center pt-14 pl-[15%]">
+        <button className="bg-sn-main-orange text-2xl text-white font-interElight p-2 rounded-10px w-[70vw] h-16 ">
           SAVE
         </button>
 
-        <button className=" text-game-blue pt-10 underline underline-offset- font-interElight p-2 pl-3 pr-3 rounded-10px w-[70vw] h-12 pb-10 ">
+        <Link to="/club/create/settings" className=" text-game-blue pt-10 underline underline-offset- font-interElight p-2 rounded-10px w-[70vw] h-12 pb-10 ">
           skip this step
-        </button>
+        </Link>
 
       </div>
 
-
-
-    
     </div>
   )
 }
