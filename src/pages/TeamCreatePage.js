@@ -27,8 +27,8 @@ const TeamCreatePage = () => {
             Add players
         </h1>
 
-        <PersonTag name="Mick Johnson" number="21" isPlayer={true} />
-        <PersonTag name="Josh Davis" number="36" isPlayer={true} />
+        <PersonTag name="Mick Johnson" number="21" isPlayer={true} isMember={false} />
+        <PersonTag name="Josh Davis" number="36" isPlayer={true} isMember={false}/>
 
         <UserInput />
 
@@ -36,7 +36,7 @@ const TeamCreatePage = () => {
             Add extras
         </h1>
 
-        <PersonTag name="Jessica Smith" number="null" isPlayer={false} />
+        <PersonTag name="Jessica Smith" number="null" isPlayer={false} isMember={false} />
 
         <UserInput />
 
