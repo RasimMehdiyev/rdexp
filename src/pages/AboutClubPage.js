@@ -138,7 +138,7 @@ export const AboutClubPage = () => {
             <input onChange={handleClubNameInputChange} className="text-lf-dark-gray border-[1px] border-game-blue pl-2 w-[50vw] ml-[20%] align-center rounded-10px h-10 " type="text" placeholder='Club name'/>
         </div >
         <div className='flex flex-row gap-[20px] align-center'>
-            <span className='font-russoOne text-[20px] '>Logo</span>
+            <span className='font-russoOne text-[20px]'>Logo</span>
             <input type="file" id="fileInput" ref={fileInputRef} 
                 accept="image/*" 
                 onChange={handleFileChange} 
