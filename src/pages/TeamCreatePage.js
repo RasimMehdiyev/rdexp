@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PersonTag from '../components/PersonTag.js';
 import UserInput from '../components/UserInput.js';
 import {Link} from 'react-router-dom'
@@ -37,35 +37,62 @@ const TeamCreatePage = () => {
     };
     setExtras([...extras, newExtra]);
   };
+  
+  const getAllPlayers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('id, full_name');
 
+      if (error) {
+        console.error('Error fetching users:', error);
+        return;
+      }
+
+      setUsers(data);
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
+  };
+
+  useEffect(() => {
+    getAllPlayers();
+  }, []);
+
+  // Log users after the state has been updated
+  useEffect(() => {
+    console.log('Updated users:', users);
+  }, [users]);
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log({ teamName, players, extras, teamID });
+
+
     // TODO: Save to database
-    const [data , error] = supabase
-    .from('team')
-    .update(
-      [
-        {
-          name: teamName,
-        }
-      ]
-    )
-    .eq('id', teamID)
+    // const [data , error] = supabase
+    // .from('team')
+    // .update(
+    //   [
+    //     {
+    //       name: teamName,
+    //     }
+    //   ]
+    // )
+    // .eq('id', teamID)
 
-    if (error) console.log(error);
-    console.log(data);
+    // if (error) console.log(error);
+    // console.log(data);
 
-    const [data2 , error2] = supabase
-    .from('team_users')
-    .insert(
-      [
-        {
-          user_id: localStorage.getItem('userID'),
-          team_id: teamID,
-        }
-      ]
-    )
+    // const [data2 , error2] = supabase
+    // .from('team_users')
+    // .insert(
+    //   [
+    //     {
+    //       user_id: localStorage.getItem('userID'),
+    //       team_id: teamID,
+    //     }
+    //   ]
+    // )
   };
 
   const deletePlayer = (playerName) => {
@@ -103,7 +130,7 @@ const TeamCreatePage = () => {
             <PersonTag key={index} {...player} onDelete={deletePlayer} />        
           ))}
 
-          <UserInput onAdd={addPlayer} />
+          <UserInput onAdd={addPlayer} users={users} />
           <h1 className="pt-7 pb-4 text-3xl text-game-blue">
               Add extras
           </h1>
@@ -112,7 +139,7 @@ const TeamCreatePage = () => {
           {extras.map((extra, index) => (
             <PersonTag key={index} {...extra} onDelete={deleteExtra} />        
           ))}
-          <UserInput onAdd={addExtra} />
+          <UserInput onAdd={addExtra} users={users} />
         </div>
       </div>
 
