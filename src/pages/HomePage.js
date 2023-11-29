@@ -9,96 +9,149 @@ import LoadingPage from './LoadingPage';
 
 
 const HomePage = () => {
-    const [userData, setUserData] = useState({});
-    const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
+  const [userData, setUserData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [userTableData, setUserTableData] = useState({});
+  const [fetchedEvents, setFetchedEvents] = useState([]);
+  const navigate = useNavigate();
+  
+  const getUserTableInfo = async (uuid) => {
+    let { data: userTableIdAndRole, error: tableIdError } = await supabase
+      .from('users')
+      .select('id, role_id')
+      .eq("user_id", uuid)
+      .single();
+        
+    console.log("This is the user table id and role")
+    console.log(userTableIdAndRole)
+    
+    // Fetch team ID
+    let { data: teamData, error: teamError } = await supabase
+      .from('team_users')
+      .select('team_id')
+      .eq("user_id", userTableIdAndRole.id);
+      
+    
+    console.log("this is the team of the user")
+    console.log(teamData)
+    
+    if (tableIdError | teamError) {
+      console.error(tableIdError);
+      console.error(teamError);
+    } else {
+      if (userTableIdAndRole.role_id == 1) {
+        let { data, error } = await supabase
+          .rpc('get_event_attendees_team', {
+            team_ids: teamData.map(team => team.team_id)
+          });        
+          
+        if (error) console.error(error)
+        else console.log("event data: ", data)
+        setFetchedEvents(data);
+      } else {
+        let { data, error } = await supabase
+          .rpc('get_event_attendees', {
+            user_uuid: uuid
+          });
+        console.log("Events: ");
+        if (error) console.error(error)
+        else console.log("event data: ", data)
+        setFetchedEvents(data);
+      }
+    }
+  }
+    
+  useEffect(() => {
+      const fetchData = async () => {
+          try {
+            const user = await supabase.auth.getUser();
+            console.log("User: ")
+            console.log(user);
+              if (user.data.user){
+                setUserData(user.data.user)
+                LogRocket.identify(user.data.user.id, {
+                    name: userData.full_name,
+                    email: userData.email,
+                    role: userData.role,
+                  });
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const user = await supabase.auth.getUser();
-                console.log(user)
-                if (user.data.user){
-                    setUserData(user.data.user)
-                    LogRocket.identify(user.data.user.id, {
-                        name: userData.full_name,
-                        email: userData.email,
-                        role: userData.role,
-                      });
+                LogRocket.getSessionURL(sessionURL => {
+                  amplitude.getInstance().logEvent('LogRocket', {'sessionURL': sessionURL });
+                });
+                console.log("SessionURL:", sessionURL);     
+                
+                await getUserTableInfo(user.data.user.id);
+                
+              }
+              else{
+                  navigate('/auth');
+              }
+          } catch (error) {
+              console.error(error);
+          }
+          finally {
+            setLoading(false); // Stop loading regardless of the outcome
+          }
+    }
 
-                      LogRocket.getSessionURL(sessionURL => {
-                        amplitude.getInstance().logEvent('LogRocket', {'sessionURL': sessionURL });
-                      });
-                      console.log("SessionURL:", sessionURL)                      
-
-                    console.log(userData)
-                }
-                else{
-                    navigate('/auth');
-                }
-            } catch (error) {
-                console.log(error);
-            }
-            finally {
-              setLoading(false); // Stop loading regardless of the outcome
-            }
-        }
-        fetchData();
-
-    }, [navigate]);
-
-    const events = [
-        {
-            type: "game",
-            eventName: "Game 1 against Antwerp the losing team with an extra long name that does not end",
-            teamName: "Team A",
-            eventTime: "14:00",
-            location: "Brussels, Brusselstreet 45",
-            attendance: "5",
-            number_invitation: "20",
-            date: "2023-04-11"
-        },
-        {
-            type: "practice",
-            eventName: "Condition training",
-            teamName: "Team A",
-            eventTime: "20:00",
-            location: "Homecourt",
-            attendance: "5",
-            number_invitation: "20",
-            date: "2023-05-20"
-        },
-        {
-            type: "teambuilding",
-            eventName: "drinking beers",
-            teamName: "Team A",
-            eventTime: "22:00",
-            location: "Café basketball",
-            attendance: "5",
-            number_invitation: "20",
-            date: "2023-05-11"
-        },
-        {
-            type: "game",
-            eventName: "Game 2",
-            teamName: "Team A",
-            eventTime: "14:00",
-            location: "Brussels, Brusselstreet 45",
-            attendance: "5",
-            number_invitation: "20",
-            date: "2023-04-13"
-        },
-        {
-            type: "practice",
-            eventName: "Condition training",
-            teamName: "Team A",
-            eventTime: "19:00",
-            location: "Homecourt",
-            attendance: "5",
-            number_invitation: "20",
-            date: "2023-05-20"
-        }
-    ];
+    
+    console.log("Home page fetches starting now");
+    fetchData();
+    
+  }, [navigate]);
+  //console.log(fetchedEvents)
+  const events = [
+      {
+          type: "game",
+          eventName: "Game 1 against Antwerp the losing team with an extra long name that does not end",
+          teamName: "Team A",
+          eventTime: "14:00",
+          location: "Brussels, Brusselstreet 45",
+          attendance: "5",
+          number_invitation: "20",
+          date: "2023-04-11"
+      },
+      {
+          type: "practice",
+          eventName: "Condition training",
+          teamName: "Team A",
+          eventTime: "20:00",
+          location: "Homecourt",
+          attendance: "5",
+          number_invitation: "20",
+          date: "2023-05-20"
+      },
+      {
+          type: "teambuilding",
+          eventName: "drinking beers",
+          teamName: "Team A",
+          eventTime: "22:00",
+          location: "Café basketball",
+          attendance: "5",
+          number_invitation: "20",
+          date: "2023-05-11"
+      },
+      {
+          type: "game",
+          eventName: "Game 2",
+          teamName: "Team A",
+          eventTime: "14:00",
+          location: "Brussels, Brusselstreet 45",
+          attendance: "5",
+          number_invitation: "20",
+          date: "2023-04-13"
+      },
+      {
+          type: "practice",
+          eventName: "Condition training",
+          teamName: "Team A",
+          eventTime: "19:00",
+          location: "Homecourt",
+          attendance: "5",
+          number_invitation: "20",
+          date: "2023-05-20"
+      }
+  ];
 
     // Organize events by month and then by day
     const organizedEvents = events.reduce((acc, event) => {
