@@ -15,13 +15,20 @@ const GameSettings = () => {
             <h1 className="pt-2 text-5xl text-game-blue">
             SETTINGS
             </h1>
+            <h3 className="pb-7 text-2xl font-interELight text-game-blue">
+            Team 1
+            </h3>
         </div>
 
         <div className='pl-5'>
-            <h1 className="pt-7 pb-4 text-3xl text-game-blue">
+            <h1 className="pt-7 text-3xl text-game-blue">
                 Add roles
             </h1>
-            <PersonTag name="Referee" number="null" isPlayer={false} />
+            <h3 className="pb-7 font-interELight text-game-blue">
+            These roles are positions, distinct from players, that require someone to fill them during every game of the team.
+            </h3>
+            
+            <PersonTag name="Referee" number="null" isPlayer={false} isMember={true} />
             <RoleInput/>
         </div>
     </div>

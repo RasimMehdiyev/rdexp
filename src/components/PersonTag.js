@@ -9,7 +9,7 @@ const PersonTag = ({ name, number, isPlayer, isMember, onDelete }) => {
 //which results in the confirmation modal popping up
 //isMember being false means the trashIcon is pressed for a player 
 //that isn't part of that team (i.e. from the team creation page) 
-//and hence can't be removed from display without confirmation
+//and hence can't be removed from displa
   const [isDeletionModalOpen, setDeletionModalOpen] = useState(false);
 
   const openDeletionModal = () => {

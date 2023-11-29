@@ -3,6 +3,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
+import RoleInput from '../components/RoleInput.js';
 
 export default function RoleAdditionModal({ isOpen, closeModal }) {
 
@@ -20,7 +21,7 @@ export default function RoleAdditionModal({ isOpen, closeModal }) {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          <div className="fixed inset-0 bg-black opacity-75 transition-opacity" />
         </Transition.Child>
 
         <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -34,41 +35,26 @@ export default function RoleAdditionModal({ isOpen, closeModal }) {
               leaveFrom="opacity-100 translate-y-0 xxs:scale-100"
               leaveTo="opacity-0 translate-y-4 xxs:translate-y-0 xxs:scale-95"
             >
-              <Dialog.Panel className="sm-w-full relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all xxs:my-8 ">
-                <div className="bg-white px-4 pb-4 pt-5 xxs:p-6 xxs:pb-4">
+              <Dialog.Panel className="bg-blue-200 sm-w-full relative transform overflow-hidden rounded-lgtext-left shadow-xl transition-all xxs:my-8 ">
+                <div className=" px-4 pb-4 pt-5 xxs:p-6 xxs:pb-4">
                   <div className="xxs:flex xxs:items-start">
                     <div className="mt-3 text-center xxs:ml-2 xxs:mt-0 xxs:text-left">
-                    <Dialog.Title as="h3" className="font-russoOne text-2xl leading-6 text-gray-900">
+                    <Dialog.Title as="h3" className="font-russoOne text-2xl leading-6 text-game-blue">
                     ADD ROLE
                     </Dialog.Title>
                       <div className="mt-4">
-                        
-                            <input
-                            type="text"
-                            name="price"
-                            id="price"
-                            className="block w-full rounded-md border-0 py-1.5 pl-5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 xxs:text-xxs xxs:leading-6"
-                            placeholder="Enter new extra role"
-                            />
-                        
+                          <RoleInput/>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="bg-gray-50 px-4 py-3 xxs:flex xxs:flex-row-reverse xxs:px-6">
-                <button
+                <div className="px-4  py-3 xxs:flex xxs:flex-row-reverse xxs:px-6">
+                
+                  <button
                     type="button"
-                    className="xxs:max-h-12 xxs:text-center xxs:items-center mt-3 font-interReg inline-flex w-full justify-center text-blue-500 rounded-md bg-white px-3 py-4 text-xxs shadow-xxs ring-1 ring-inset ring-gray-300 hover:bg-gray-50 xxs:mt-0 xxs:w-auto"
-                    onClick={closeModal}
-                    ref={cancelButtonRef}
-                  >
-                    Cancel
-                  </button>
-                <button
-                    type="button"
-                    className="xxs:max-h-12 xxs:text-center xxs:items-center inline-flex font-interReg mr-2 w-full justify-center rounded-md bg-blue-500 px-3 py-4 text-xxs text-white shadow-xxs hover:bg-blue-200 xxs:ml-2 "
+                    className="xxs:max-h-12 w-[80vw] xxs:text-center xxs:items-center inline-flex font-interELight mr-6 justify-center rounded-10px bg-game-blue px-3 py-4 text-lg text-white shadow-xxs xxs:ml-3 "
                     onClick={closeModal}>
-                    Add
+                    SAVE
                   </button>
                 </div>
               </Dialog.Panel>
