@@ -99,7 +99,7 @@ const HomePage = () => {
     fetchData();
     
   }, [navigate]);
-  //console.log(fetchedEvents)
+  console.log("fetched events", fetchedEvents)
   const events = [
       {
           type: "game",
