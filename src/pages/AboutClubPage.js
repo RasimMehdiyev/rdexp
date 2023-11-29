@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {supabase} from '../lib/helper/supabaseClient';
+import {useNavigate} from 'react-router-dom';
+
 export const AboutClubPage = () => {
 
     const [fileName, setFileName] = useState('Choose Image');
@@ -7,11 +9,11 @@ export const AboutClubPage = () => {
     const [file, setFile] = useState(null); // file state for storing actual image
     const [file64, setFile64] = useState(''); // file64 state for storing base64 string of image
     const [clubName, setClubName] = useState(''); // club name
-    const [clubLogo, setClubLogo] = useState(''); // club logo
     const [clubEmail, setClubEmail] = useState(''); // club email
     const [clubPhone, setClubPhone] = useState(''); // club phone
     const [clubLocation, setClubLocation] = useState(''); // club location
     const [clubDescription, setClubDescription] = useState(''); // club description
+    const navigate = useNavigate();
 
     const base64String = (file) => {
         // use setFile64 to set the base64 string
@@ -125,7 +127,11 @@ export const AboutClubPage = () => {
         .select('id')
         .single()
         if (clubTeamError) console.log(clubTeamError);    
-        console.log('club id', clubTeamData.id); 
+        console.log('club id', clubTeamData.id);
+        
+        // add team id into local storage
+        localStorage.setItem('teamID', teamData.id);
+        navigate('/club/create/settings');
     }    
 
   return (
@@ -167,7 +173,9 @@ export const AboutClubPage = () => {
             <p className='font-russoOne text-[20px] '>Description</p>
             <textarea onChange={handleClubDescriptionInputChange} className='rounded-10px pt-2 pl-2 min-w-full m-auto border-[1px] border-game-blue text-lf-dark-gray' name="description" id="description" placeholder="(Optional)"cols="30" rows="5"></textarea>
         </div>
-        <button type='submit' className="font-interReg bg-sn-main-orange ml-[20%] align-center rounded-10px h-12 w-[50vw] text-white">SAVE</button>
+        <button type='submit' className="font-interReg bg-sn-main-orange ml-[20%] align-center rounded-10px h-12 w-[50vw] text-white">
+            SAVE
+        </button>
     </form>
   )
 }
