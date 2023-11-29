@@ -105,7 +105,7 @@ const TeamCreatePage = () => {
 
   return (
     <div className="h-screen flex flex-col justify-between bg-sn-bg-light-blue">
-      <div >
+      <div>
       <div className='text-center'>
           <h1 className="pt-20 text-5xl text-game-blue">
             CREATE 
