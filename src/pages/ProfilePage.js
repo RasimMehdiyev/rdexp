@@ -44,16 +44,7 @@ const ProfilePage = () => {
         fetchData();
       }, []);
       
-      const handleLogout = async (e) => {
-        e.preventDefault();
-        await supabase.auth.signOut();
-        console.log("Logged out")
-        navigate('/auth')
-    }
-
-
-
-
+      
       if (loading) {
         return <LoadingPage />; // You can replace this with any loading spinner or indicator
       }
@@ -100,16 +91,7 @@ const ProfilePage = () => {
                             {userData.bio}
                         </div>
                 </div>
-                <div className="flex-col justify-start items-center gap-2 flex">
-                    <Link to="/editProfile">
-                    <div className="w-[322px] h-[33px] p-2.5 bg-orange-500 rounded justify-center items-center gap-2.5 inline-flex">
-                        <div className="text-white text-sm font-normal font-interReg uppercase">Edit Profile</div>
-                        </div>
-                        </Link>
-                    <button onClick={handleLogout} className="w-[322px] h-[33px] p-2.5 bg-zinc-300 rounded justify-center items-center gap-2.5 inline-flex">
-                        <div className="text-neutral-900 text-sm font-normal font-interReg uppercase">Sign out</div>
-                    </button>
-                </div>
+                
         </div>
           );
       }
