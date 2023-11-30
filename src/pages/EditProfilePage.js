@@ -144,34 +144,20 @@ const EditProfilePage = () => {
                         )}                      
                         
                         <div className="w-[35px] h-[35px] left-[107px] top-[98px] absolute">                        
-                            <div className="w-[35px] h-[35px] left-[-3px] top-0 absolute bg-zinc-300 rounded-full flex justify-center items-center">
-                            <PencilIcon className="h-6 w-6" />   
+                            <div className="w-[35px] h-[35px] left-[-3px] top-0 absolute bg-blue-600 rounded-full flex justify-center items-center">
+                            <PencilIcon className="h-6 w-6 text-white" />   
                             </div>                        
                         </div>
                     </div>
                 </div>
-                <form onSubmit={handleSubmit}>
+                
                 <div className="flex-col justify-start items-start gap-2 flex">
-                    <div className="flex-col justify-start items-start gap-1 flex">
-                        <div className="w-[178px] px-4 justify-start items-start gap-2.5 inline-flex">
-                            <div className="text-black text-base font-normal font-interReg leading-normal">About yourself</div>
-                        </div>
-                        <div className="w-[322px] px-4 py-1 bg-white rounded-md border border-orange-500 justify-start items-center inline-flex">
-                            <div className="grow h-auto basis-0 justify-start items-center flex">
-                                <textarea
-                                    value={newBio}
-                                    onChange={(event) => setNewBio(event.target.value)}
-                                    className="grow basis-0 text-neutral-500 text-sm font-normal font-interReg"
-                                    placeholder={userData.bio}
-                                    />
-                            </div>
-                        </div>
-                    </div>
+                    
                     <div className="flex-col justify-start items-start gap-1 flex">
                         <div className="px-4 justify-start items-start gap-2.5 inline-flex">
-                            <div className="text-black text-base font-normal font-interReg leading-normal">Email</div>
+                            <div className="text-blue-600 text-xl font-russoOne">Contact details</div>
                         </div>
-                        <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-orange-500 justify-start items-center gap-2.5 inline-flex">
+                        <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-blue-600  justify-start items-center gap-2.5 inline-flex">
                             <div className="grow h-auto basis-0 justify-start items-center flex">
                                 <input
                                     className='text-neutral-500 text-base font-normal font-interReg leading-normal'
@@ -181,16 +167,11 @@ const EditProfilePage = () => {
                                         onChange={(event) => {
                                             setNewEmail(event.target.value);
                                             setEmailError(''); }
-                                        } />
+                                    } />
                             </div>
-                                    </div>
-                                    {(emailError != '') ? <div className="text-red-500">{emailError}</div>:<div></div>}
-                    </div>
-                    <div className="flex-col justify-start items-start gap-1 flex">
-                        <div className="px-4 justify-start items-start gap-2.5 inline-flex">
-                            <div className="text-black text-base font-normal font-interReg leading-normal">Phone number</div>
                         </div>
-                        <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-orange-500 justify-start items-center gap-2.5 inline-flex">
+                        {(emailError != '') ? <div className="text-red-500">{emailError}</div>:<div></div>}
+                        <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-blue-600 justify-start items-center gap-2.5 inline-flex">
                             <div className="grow h-auto basis-0 justify-start items-center flex">                            
                                 <input
                                     className="text-neutral-500 text-base font-normal font-interReg leading-normal"
@@ -202,26 +183,33 @@ const EditProfilePage = () => {
                                                 setPhoneNumberError('');
                                             }} />
                             </div>
-                                    </div>
-                                    {(phoneNumberError != '') ? <div className="text-red-500">{phoneNumberError}</div>:<div></div>}
+                        </div>
+                        {(phoneNumberError != '') ? <div className="text-red-500">{phoneNumberError}</div>:<div></div>}        
+                        
+                    </div>                                          
+                        
                     </div>
+                    <div className="flex-col justify-start items-start gap-1 flex">
+                        <div className="w-[178px] px-4 justify-start items-start gap-2.5 inline-flex">
+                            <div className="text-blue-600 text-xl font-russoOne">Bio</div>
+                        </div>
+                        <div className="w-[322px] px-4 py-1 bg-white rounded-md border border-blue-600  justify-start items-center inline-flex">
+                            <div className="grow h-auto basis-0 justify-start items-center flex">
+                                <textarea
+                                    value={newBio}
+                                    onChange={(event) => setNewBio(event.target.value)}
+                                    className="grow basis-0 text-neutral-500 text-sm font-normal font-interReg"
+                                    placeholder={userData.bio}
+                                    />
+                            </div>
+                        </div>
+                    </div>        
                 </div>
-                <div className="flex-col justify-end items-center gap-2 flex">
-                    <button
-                        className="w-[322px] h-[33px] p-2.5 bg-orange-500 rounded justify-center items-center gap-2.5 inline-flex"
-                        type="submit">
-                        <div className="text-white text-sm font-normal font-interReg uppercase">save profile</div>
-                    </button>
-                    <Link to="/profile">
-                    <div className="w-[322px] h-[33px] p-2.5 bg-zinc-300 rounded justify-center items-center gap-2.5 inline-flex">
-                        <div className="text-neutral-900 text-sm font-normal font-interReg uppercase">cancel</div>
-                    </div>
-                    </Link>
-                </div>
-                </form>
+                
+                
                 </div>
             </div>  
-            </div>
+            
     );
     }
 
