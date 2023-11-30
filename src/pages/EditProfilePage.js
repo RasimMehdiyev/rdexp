@@ -17,10 +17,25 @@ const EditProfilePage = () => {
 
     const [phoneNumberError, setPhoneNumberError] = useState('');
     const [emailError, setEmailError] = useState('');
-
+    const [previewImage, setPreviewImage] = useState(null);
     const [loading, setLoading] = useState(true); // Add a loading state
     // navigate
     const navigate = useNavigate();
+    
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        //console.log("handling img change, file is:", file);
+        if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            //console.log("image", reader.result)
+            setPreviewImage(reader.result);
+           
+        };
+        reader.readAsDataURL(file);
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,6 +58,7 @@ const EditProfilePage = () => {
                 setNewBio(userData.bio);
                 setNewEmail(userData.email);
                 setNewPhoneNumber(userData.phone_number);
+                setPreviewImage(userData.profile_picture);
             }
             else{
                 navigate('/auth');
@@ -102,6 +118,7 @@ const EditProfilePage = () => {
         console.log("bio: ", newBio);
         console.log("email: ", newEmail);
         console.log("phone number: ", newPhoneNumber);
+        console.log("new image:", previewImage);
 
         try {
             const userResponse = await supabase.auth.getUser();
@@ -114,7 +131,8 @@ const EditProfilePage = () => {
                     .update({
                         bio: newBio,
                         email: newEmail,
-                        phone_number: newPhoneNumber
+                        phone_number: newPhoneNumber,
+                        profile_picture: previewImage
                     })
                     .eq('user_id', user.id)
                     .single();
@@ -143,8 +161,8 @@ const EditProfilePage = () => {
             <div className="grow flex bg-indigo-100 flex-col items-center justify-start h-screen">
                 <div className="grow p-4 flex-col justify-start items-center gap-4 inline-flex">
                 <div className="w-[329px] justify-center items-start gap-2.5 inline-flex">
-                    <div className="w-[142px] h-[142px] relative">
-                        {userData.profile_picture ? (
+                    <div className="w-[142px] h-[142px] relative cursor-pointer">
+                        {/* {userData.profile_picture ? (
                             <img className="w-[142px] h-[142px] rounded-full object-cover overflow-hidden" src={userData.profile_picture} />
 
                         ) : (
@@ -155,7 +173,28 @@ const EditProfilePage = () => {
                             <div className="w-[35px] h-[35px] left-[-3px] top-0 absolute bg-blue-600 rounded-full flex justify-center items-center">
                             <PencilIcon className="h-6 w-6 text-white" />   
                             </div>                        
-                        </div>
+                        </div> */}
+                        <label htmlFor="profilePictureInput">
+                            {previewImage ? (
+                            <img className="w-[142px] h-[142px] rounded-full object-cover overflow-hidden" src={previewImage} alt="Preview" />
+                            ) : (
+                            <img className="w-[142px] h-[142px] rounded-full border-4 border-white" src={process.env.PUBLIC_URL + "/images/no_user.png"} alt="No user" />
+                            )}
+
+                            <div className="w-[35px] h-[35px] left-[107px] top-[98px] absolute">
+                            <div className="w-[35px] h-[35px] left-[-3px] top-0 absolute bg-blue-600 rounded-full flex justify-center items-center">
+                                <PencilIcon className="h-6 w-6 text-white" />
+                            </div>
+                            </div>
+                        </label>
+                        <input
+                            type="file"
+                            id="profilePictureInput"
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                            onChange={handleImageChange}
+                            
+                        />
                     </div>
                 </div>
                 
