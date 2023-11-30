@@ -17,6 +17,7 @@ import TeamCreatePage from './pages/TeamCreatePage.js';
 import GameSettings from './pages/GameSettings.js';
 import { AboutClubPage } from './pages/AboutClubPage.js';
 import StickyEditProfileComponent from './components/StickyEditProfileComponent.js';
+import StickySubheaderProfileComponent from './components/StickySubheaderProfileComponent.js';
 
 LogRocket.init('u7ityk/synthlete');
 
@@ -54,9 +55,10 @@ const App = () => {
             :
             <div style={{display:'none'}}></div>
          }
+         
          {
-            location.pathname === "/editProfile/" || location.pathname === "/editProfile" ? 
-            <StickyEditProfileComponent/>
+            location.pathname === "/profile/" || location.pathname === "/profile" ? 
+            <StickySubheaderProfileComponent/>
             :
             <div style={{display:'none'}}></div>
          }
