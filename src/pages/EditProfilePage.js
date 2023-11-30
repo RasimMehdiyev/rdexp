@@ -2,8 +2,8 @@ import React,  { useEffect, useState } from "react";
 import { supabase } from '../lib/helper/supabaseClient';
 import LoadingPage from "./LoadingPage";
 import { PencilIcon } from '@heroicons/react/24/solid'
+import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/24/outline'
 import { Link, useNavigate } from 'react-router-dom';
-import StickySubheaderComponent from "../components/StickySubheaderComponent";
 import StickyEditProfileComponent from "../components/StickyEditProfileComponent";
 
 const EditProfilePage = () => {
@@ -161,28 +161,17 @@ const EditProfilePage = () => {
             <div className="grow flex bg-indigo-100 flex-col items-center justify-start h-screen">
                 <div className="grow p-4 flex-col justify-start items-center gap-4 inline-flex">
                 <div className="w-[329px] justify-center items-start gap-2.5 inline-flex">
-                    <div className="w-[142px] h-[142px] relative cursor-pointer">
-                        {/* {userData.profile_picture ? (
-                            <img className="w-[142px] h-[142px] rounded-full object-cover overflow-hidden" src={userData.profile_picture} />
-
-                        ) : (
-                            <img className="w-[142px] h-[142px] rounded-full border-4 border-white" src={process.env.PUBLIC_URL + "/images/no_user.png"} />
-                        )}                      
+                    <div className="w-[142px] h-[142px] relative">
                         
-                        <div className="w-[35px] h-[35px] left-[107px] top-[98px] absolute">                        
-                            <div className="w-[35px] h-[35px] left-[-3px] top-0 absolute bg-blue-600 rounded-full flex justify-center items-center">
-                            <PencilIcon className="h-6 w-6 text-white" />   
-                            </div>                        
-                        </div> */}
                         <label htmlFor="profilePictureInput">
                             {previewImage ? (
-                            <img className="w-[142px] h-[142px] rounded-full object-cover overflow-hidden" src={previewImage} alt="Preview" />
+                            <img className="w-[142px] h-[142px] rounded-full object-cover overflow-hidden cursor-pointer" src={previewImage} alt="Preview" />
                             ) : (
-                            <img className="w-[142px] h-[142px] rounded-full border-4 border-white" src={process.env.PUBLIC_URL + "/images/no_user.png"} alt="No user" />
+                            <img className="w-[142px] h-[142px] rounded-full border-4 border-white cursor-pointer" src={process.env.PUBLIC_URL + "/images/no_user.png"} alt="No user" />
                             )}
 
                             <div className="w-[35px] h-[35px] left-[107px] top-[98px] absolute">
-                            <div className="w-[35px] h-[35px] left-[-3px] top-0 absolute bg-blue-600 rounded-full flex justify-center items-center">
+                            <div className="w-[35px] h-[35px] left-[-3px] top-0 absolute bg-blue-600 rounded-full flex justify-center items-center cursor-pointer">
                                 <PencilIcon className="h-6 w-6 text-white" />
                             </div>
                             </div>
@@ -205,7 +194,8 @@ const EditProfilePage = () => {
                             <div className="text-blue-600 text-xl font-russoOne">Contact details</div>
                         </div>
                         <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-blue-600  justify-start items-center gap-2.5 inline-flex">
-                            <div className="grow h-auto basis-0 justify-start items-center flex">
+                            <EnvelopeIcon className="h-5 w-5 text-neutral-500"></EnvelopeIcon>
+                            <div className="w-full h-auto basis-0 justify-start items-center flex">
                                 <input
                                     className='text-neutral-500 text-base font-normal font-interReg leading-normal'
                                     placeholder={userData.email}
@@ -219,7 +209,8 @@ const EditProfilePage = () => {
                         </div>
                         {(emailError != '') ? <div className="text-red-500">{emailError}</div>:<div></div>}
                         <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-blue-600 justify-start items-center gap-2.5 inline-flex">
-                            <div className="grow h-auto basis-0 justify-start items-center flex">                            
+                            <PhoneIcon className="h-5 w-5 text-neutral-500"></PhoneIcon>
+                            <div className="w-full h-auto basis-0 justify-start items-center flex">                            
                                 <input
                                     className="text-neutral-500 text-base font-normal font-interReg leading-normal"
                                     placeholder={userData.phone_number}
