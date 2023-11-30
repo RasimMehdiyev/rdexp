@@ -11,11 +11,10 @@ import LoadingPage from './LoadingPage';
 const HomePage = () => {
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
-  const [userTableData, setUserTableData] = useState({});
   const [fetchedEvents, setFetchedEvents] = useState([]);
   const navigate = useNavigate();
   
-  const getUserTableInfo = async (uuid) => {
+  const getEvents = async (uuid) => {
     let { data: userTableIdAndRole, error: tableIdError } = await supabase
       .from('users')
       .select('id, role_id')
@@ -80,7 +79,7 @@ const HomePage = () => {
                 });
                 console.log("SessionURL:", sessionURL);     
                 
-                await getUserTableInfo(user.data.user.id);
+                await getEvents(user.data.user.id);
                 
               }
               else{
