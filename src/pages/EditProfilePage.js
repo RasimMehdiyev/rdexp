@@ -4,6 +4,7 @@ import LoadingPage from "./LoadingPage";
 import { PencilIcon } from '@heroicons/react/24/solid'
 import { Link, useNavigate } from 'react-router-dom';
 import StickySubheaderComponent from "../components/StickySubheaderComponent";
+import StickyEditProfileComponent from "../components/StickyEditProfileComponent";
 
 const EditProfilePage = () => {
     const [userData, setUserData] = useState({});
@@ -75,20 +76,27 @@ const EditProfilePage = () => {
         
     };
     
-    const handleSubmit = async (event) => {
+    const onSave = async (event) => {
+        console.log("handling save in edit prof page");
         setLoading(true);
         event.preventDefault();
-
-        if (!validateEmail(newEmail)) {
-            setEmailError('Email is not valid.');
+        
+        if (!validateEmail(newEmail) | !validatePhoneNumber(newPhoneNumber)) {
+            if (!validateEmail(newEmail)) {
+                setEmailError('Email is not valid.');                
+            } else {
+                setEmailError('');
+            }
+            // Validate phone number
+            if (!validatePhoneNumber(newPhoneNumber)) {
+                setPhoneNumberError('Phone number is not valid.');
+            } else {
+                setPhoneNumberError('');
+            }
+            setLoading(false)
             return;
         }
-
-    // Validate phone number
-        if (!validatePhoneNumber(newPhoneNumber)) {
-            setPhoneNumberError('Phone number is not valid.');
-            return;
-        }
+        
 
         console.log("submit handled");
         console.log("bio: ", newBio);
@@ -131,13 +139,13 @@ const EditProfilePage = () => {
     } else {
         return (
             <div>
-            {/* <StickySubheaderComponent/> */}
+            <StickyEditProfileComponent onSave={onSave}/>
             <div className="grow flex bg-indigo-100 flex-col items-center justify-start h-screen">
                 <div className="grow p-4 flex-col justify-start items-center gap-4 inline-flex">
                 <div className="w-[329px] justify-center items-start gap-2.5 inline-flex">
                     <div className="w-[142px] h-[142px] relative">
-                        {userData.profilePicture ? (
-                            <img className="w-[142px] h-[142px] rounded-full border-4 border-white" src={userData.profilePicture} />
+                        {userData.profile_picture ? (
+                            <img className="w-[142px] h-[142px] rounded-full object-cover overflow-hidden" src={userData.profile_picture} />
 
                         ) : (
                             <img className="w-[142px] h-[142px] rounded-full border-4 border-white" src={process.env.PUBLIC_URL + "/images/no_user.png"} />

@@ -55,12 +55,7 @@ const App = () => {
             :
             <div style={{display:'none'}}></div>
          }
-         {
-            location.pathname === "/editProfile/" || location.pathname === "/editProfile" ? 
-            <StickyEditProfileComponent/>
-            :
-            <div style={{display:'none'}}></div>
-         }
+         
          {
             location.pathname === "/profile/" || location.pathname === "/profile" ? 
             <StickySubheaderProfileComponent/>

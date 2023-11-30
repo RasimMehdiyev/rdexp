@@ -2,7 +2,7 @@ import React from 'react'
 import {useNavigate} from 'react-router-dom';
 
 
-const StickyEditProfileComponent = () => {
+const StickyEditProfileComponent = ({onSave}) => {
     const nagivate = useNavigate();
 
     const getPreviousPage = () => {
@@ -18,7 +18,7 @@ const StickyEditProfileComponent = () => {
             <p className='text-[20px] font-russoOne text-white'>Edit Profile</p>
         </div>
         <div className='flex flex-row justify-between gap-4'>       
-            <button className='bg-sn-main-orange h-8 w-[72px] text-white rounded-[10px] text-[14px]'>SAVE</button>
+            <button className='bg-sn-main-orange h-8 w-[72px] text-white rounded-[10px] text-[14px]' onClick={onSave}>SAVE</button>
         </div>
       </div>
     </div>

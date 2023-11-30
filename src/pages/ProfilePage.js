@@ -51,8 +51,8 @@ const ProfilePage = () => {
       else{
         return (
             <div className="bg-gradient-to-b from-sn-bg-light-blue from-40% to-white to-55% flex flex-col items-center justify-start h-screen">
-                <div className="self-stretch h-auto p-2 flex-col justify-start items-center gap-5 mt-24 flex">
-                    
+                <div className="self-stretch h-auto p-4 flex-col justify-start items-center gap-5 flex">
+
                     {userData.profile_picture ? (
                         <img className="w-[142px] object-cover overflow-hidden h-[142px] rounded-full border-3 border-white" src={userData.profile_picture} />
 
