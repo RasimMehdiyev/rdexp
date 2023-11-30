@@ -2,6 +2,8 @@ import React from 'react';
 
 const EventCard = ({ type, eventName, teamName, eventTime, location, attendance, number_invitation, date}) => {
   // Define a function to determine the background color based on the type
+
+  
   const getBackgroundColor = () => {
     switch (type) {
       case 'practice':
@@ -55,7 +57,7 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
             <img
               className="w-[22px] h-[23px] relative mb-2"
               src={process.env.PUBLIC_URL + "/images/pin.svg"}
-              style={{left:'-1px'}}
+              style={{left:'-1px', top: '2px'}}
             />
           </div>
           <div className="location text-white text-[15px] font-extralight font-['Inter']">{location}</div>
@@ -68,6 +70,7 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
               <img
                 className="w-[22px] h-[23px] relative mb-2"
                 src={process.env.PUBLIC_URL + "/images/clock.svg "}
+                style={{top: '2px'}}
               />
               <div className="event-time text-white text-[15px] font-extralight font-['Inter'] whitespace-nowrap">
                 {eventTime}
@@ -78,7 +81,7 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
             <img
               className="w-[22px] h-[23px] relative mb-2"
               src={process.env.PUBLIC_URL + "/images/user-check.svg"}
-              style={{left:'1px'}}
+              style={{left:'2px'}}
             />
             <div className="teamname text-white text-[15px]  font-['Inter'] whitespace-nowrap font-bold">{teamName}: </div>
             <div className="attendence text-white text-[15px] font-extralight font-['Inter'] whitespace-nowrap">
