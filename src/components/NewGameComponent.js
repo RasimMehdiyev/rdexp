@@ -26,9 +26,15 @@ const NewGamePageComponent = ({ eventTitle }) => {
     useEffect(() => {
         // Update optionPlayers whenever selectedPlayers change
         console.log("selected players: ", selectedPlayers);
-        const updatedOptionPlayers = teamPlayers.filter(player => !selectedPlayers.includes(player));
+        const selectedPlayerNoPosition = selectedPlayers.map((player) => player.id)
+        console.log("selected player no pos", selectedPlayerNoPosition);
+        
+        const updatedOptionPlayers = teamPlayers.filter(player => !selectedPlayerNoPosition.includes(player.id));
+        console.log("updated option players", updatedOptionPlayers);
         setOptionPlayers(updatedOptionPlayers);
     }, [selectedPlayers]);
+
+    
 
     const handlePlayerSelection = (playerId) => {
         // Toggle player selection
@@ -238,6 +244,9 @@ const NewGamePageComponent = ({ eventTitle }) => {
                                 className="h-7 w-[210px] px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]"
                                 disabled={!selectedID}
                                 >
+                                <option className="h-7 w-[210px] bg-white rounded-md">
+                                    {selectedPlayers.find(player => player.position == position.position_name) ?
+                                        selectedPlayers.find(player => player.position == position.position_name).full_name : 'No Selection' }</option>
                                 <option className="h-7 w-[210px] bg-white rounded-md">No Selection</option>
                                 {optionPlayers.map((player) => (
                                     <option key={player.id} value={player.id} className="h-7 w-[210px] bg-white rounded-md">
