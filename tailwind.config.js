@@ -131,7 +131,12 @@ module.exports = {
         extend: {
             borderRadius:{
                 '10px': '10px'
-            }
+            },
+            letterSpacing: {
+                tighter: '-0.05em',  // You can adjust this value as needed
+                evenTighter: '-0.1em', // You can adjust this value as needed
+                evenMoreTighter: '-0.2em' // You can adjust this value as needed
+            },
         },
     },
 
