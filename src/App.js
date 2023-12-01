@@ -17,6 +17,7 @@ import TeamCreatePage from './pages/TeamCreatePage.js';
 import GameSettings from './pages/GameSettings.js';
 import { AboutClubPage } from './pages/AboutClubPage.js';
 import StickyEditProfileComponent from './components/StickyEditProfileComponent.js';
+import TeamProfilePage from './pages/TeamProfilePage.js';
 import StickySubheaderProfileComponent from './components/StickySubheaderProfileComponent.js';
 
 LogRocket.init('u7ityk/synthlete');
@@ -75,6 +76,7 @@ const App = () => {
                <Route path="/team/create" element={<TeamCreatePage/>} />
                <Route path="/club/create" element={<AboutClubPage/>} />
                <Route path="/club/create/settings" element={<GameSettings/>} />
+               <Route path="/team-profile/:clubId/:teamId" element={<TeamProfilePage />} />
             </Routes>
             <RightSideBarComponent rightIsOpen={rightIsOpen}/>
          </>

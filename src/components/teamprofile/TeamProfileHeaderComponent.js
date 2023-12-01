@@ -1,0 +1,41 @@
+import React from 'react';
+import { MapPinIcon } from '@heroicons/react/24/outline'
+
+const TeamProfileHeaderComponent = ({ clubData, teamData, teamSocialsData, renderSocialIcon }) => {
+    return (
+        <>
+        
+                <div className="justify-center items-center gap-[53px] flex">               
+                    <img src={`${process.env.PUBLIC_URL}/images/arrow-left.svg`} alt="Left Arrow" />
+                    <div className="text-neutral-300 font-interReg text-xl">{teamData.team_name}</div>
+                    <img src={`${process.env.PUBLIC_URL}/images/arrow-right.svg`} alt="Right Arrow" />
+                </div>
+
+                <div className="self-stretch h-[258px] p-2 flex-col justify-start items-center gap-2 flex">
+                    <img className="w-[142px] h-[142px] rounded-[100px] border-4 border-white" src="https://via.placeholder.com/142x142" />
+                    <div className="flex-col justify-start items-center gap-1 flex">
+                        <div className="text-center text-blue-800 text-3xl font-russoOne">{teamData.team_name}</div>
+                        
+                    </div>
+                    <div className="justify-center items-center gap-4 inline-flex">
+                        <div className="w-[177.12px] h-4 relative">
+                            <div className="w-[15.87px] h-4 px-[1.74px] py-[0.45px] left-0 top-0 absolute flex-col justify-center items-center inline-flex">
+                                <MapPinIcon className='h-6 w-6'></MapPinIcon>
+                            </div>
+                            <div className="w-[177px] h-[15px] left-[0.12px] top-0 absolute text-center text-neutral-300 text-xs font-interReg uppercase">{clubData.stadium}</div>
+                        </div>
+                    </div>
+                    <div className="w-28 justify-between items-start inline-flex">
+                        {renderSocialIcon(teamSocialsData.facebook_handle, "Facebook", "https://facebook.com", "facebook")}
+                        {renderSocialIcon(teamSocialsData.instagram_handle, "Instagram", "https://instagram.com", "instagram")}
+                        {renderSocialIcon(teamSocialsData.x_handle, "Twitter", "https://twitter.com", "twitter")}
+                    </div>
+                </div>
+        </>
+    );
+};
+
+export default TeamProfileHeaderComponent;
+
+
+

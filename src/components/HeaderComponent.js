@@ -28,18 +28,21 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
       .eq('team_id', team[0].team_id)
       .single(); // Use single to get a single record or null
       if (clubError) throw clubError;
-      // console.log("club data:", club);
+      //console.log("club data:", club);
       
   
       const { data: clubData, error: clubNameError } = await supabase
       .from('club')
-      .select('name, picture')
+      .select('id, name, picture')
       .eq('id', club.club_id)
       .single(); // Use single to get a single record or null
       if (clubNameError) throw clubNameError;
-      // console.log("club picture:", clubData);
       setClubData(clubData);
       setTeamData(team);
+      console.log("Team data:",teamData);
+      console.log("Club id:",clubData);
+      console.log("Team id:",teamData[0].team_id);
+      console.log("Club id:",clubData.id);
     }
 
 
@@ -99,10 +102,12 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
   }
   return (
     <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-10'> {/* Ensure z-index is high enough */}
-          <Link to="team-management/" className='flex flex-col items-center justify-center'>
+           
+          <Link to={`/team-profile/${clubData.id}/${teamData[0].team_id}`} className='flex flex-col items-center justify-center'>
             <img className='cursor-pointer border-2 border-white object-cover overflow-hidden w-[40px] h-[40px] rounded-full' src={clubData.picture} alt="team" />
             <p className="text-[8px] text-white font-russoOne font-400">My teams</p>
           </Link>
+          
           <Link className="flex justify-center items-center" to="/">
             <SynthleteSmallLogo />
           </Link>

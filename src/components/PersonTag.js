@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import PlayerDeletionModal from '../components/PlayerDeletionModal.js';
 
-const PersonTag = ({ name, number, isPlayer, isMember, onDelete }) => {
+const PersonTag = ({ id, name, number, team, isPlayer, isMember, onDelete }) => {
 //isMember being true means trashIcon is pressed for a player 
 //that's already part of that team (i.e. from the team management page) 
 //which results in the confirmation modal popping up
@@ -22,20 +22,20 @@ const PersonTag = ({ name, number, isPlayer, isMember, onDelete }) => {
 
   const handleDelete = () => {
     if (!isMember) {
-      onDelete(name); // Call the passed deletion handler with the name
+      onDelete(name); 
     } else {
-      openDeletionModal(); // Open deletion modal for existing members
+      openDeletionModal(); 
     }
   };
 
   return (
-    <div className="flex items-center mb-5 bg-white shadow-md p-2 rounded-10px w-[90vw]">
+    <div className="flex items-center bg-white shadow-md p-2 rounded-10px w-[90vw]">
       {isPlayer && (
         <div className="font-russoOne circle-number shadow-md bg-sn-main-orange text-white mr-8">{number}</div>
       )}
-      <h5 className="font-interReg text-2xl cursor-pointer">{name}</h5>
+      <h5 className="font-interReg text-2xl cursor-pointer">{name} </h5>
       <FontAwesomeIcon icon={faTrashAlt} className="ml-auto pr-2 text-game-blue text-2xl" onClick={handleDelete} />
-      {isMember && <PlayerDeletionModal isOpen={isDeletionModalOpen} closeModal={closeDeletionModal} />}
+      {isMember && <PlayerDeletionModal isOpen={isDeletionModalOpen} closeModal={closeDeletionModal} onConfirm={onDelete} id={id} name={name} number={number} team={team} />}
     </div>
   );
 };
