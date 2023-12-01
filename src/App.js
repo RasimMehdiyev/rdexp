@@ -12,7 +12,8 @@ import ProfilePage from './pages/ProfilePage';
 import EditProfilePage from "./pages/EditProfilePage.js";
 import NewGamePage from "./pages/NewEventPage.js";
 import StickySubheaderComponent from "./components/StickySubheaderComponent.js";
-import GameOverview from './pages/GameOverview'; // Import GameOverview component
+import EventOverview from './pages/EventOverview';
+import EventOverviewEdit from './pages/EventOverviewEdit';
 
 const App = () => {
    const [isOpen, setIsOpen] = useState(false);
@@ -27,20 +28,14 @@ const App = () => {
                <Route path="/login" element={<LoginPage />} />
                <Route path="/register" element={<RegisterPage />} />
                <Route path="/auth" element={<AuthenticationPage />} />
-               <Route path="/game-overview" element={<GameOverview />} />
+               {/* Removed GameOverview route */}
             </Routes>
          </>
       );
    } else {
       return (
          <>
-         <HeaderComponent isOpen={isOpen} toggleSidebar={setIsOpen} rightIsOpen={rightIsOpen} setRightIsOpen={setRightIsOpen}/>
-         {
-            location.pathname === "/game-overview/" || location.pathname === "/game-overview" || location.pathname === "/game/create/" || location.pathname === "/game/create" ? 
-            <StickySubheaderComponent/>
-            :
-            <div style={{display:'none'}}></div>
-         }
+            <HeaderComponent isOpen={isOpen} toggleSidebar={setIsOpen} rightIsOpen={rightIsOpen} setRightIsOpen={setRightIsOpen}/>
             <Routes>
                <Route path="/" element={<HomePage />} />
                <Route path="/login" element={<LoginPage />} />
@@ -50,12 +45,13 @@ const App = () => {
                <Route path="/profile" element={<ProfilePage />} />
                <Route path="/editProfile" element={<EditProfilePage />} />
                <Route path="/game/create" element={<NewGamePage />} />
-               <Route path="/game-overview" element={<GameOverview />} />
+               <Route path="/event-overview" element={<EventOverview />} />
+               <Route path="/event-overview/edit" element={<EventOverviewEdit />} />
             </Routes>
             <RightSideBarComponent rightIsOpen={rightIsOpen}/>
          </>
       );
    }
-}
+}   
 
 export default App;
