@@ -10,12 +10,25 @@ import { MdDateRange, MdAccessTime, MdLocationOn, MdGroup } from 'react-icons/md
 const GameOverview = () => {
   // Mock data for the players and their statuses
   const initialLineup = [
-    { position: 'PG', name: 'Michael Johnson', status: 'Not sent yet' },
+    { position: 'PG', name: 'Michael Johnson', status: 'Pending' },
     { position: 'SG', name: 'John Williams', status: 'Not sent yet' },
     { position: 'SF', name: 'James Davis', status: 'Not sent yet' },
     { position: 'PF', name: 'Robert Wilson', status: 'Not sent yet' },
     { position: 'C', name: 'Benjamin Taylor', status: 'Not sent yet' },
   ];
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Accepted':
+        return 'text-green-500';
+      case 'Pending':
+        return 'text-yellow-500';
+      case 'Declined':
+        return 'text-red-500';
+      default:
+        return 'text-black'; 
+    }
+  };
 
   const [otherPlayers, setOtherPlayers] = useState([
     { name: 'Fred Thompson', status: 'Not sent yet' },
@@ -91,19 +104,20 @@ const GameOverview = () => {
 
         
 
-      <div className="mb-4">
-        <h3 className="text-lg font-semibold mb-2 text-sn-main-blue font-russoOne">Initial Line-up</h3>
-          {initialLineup.map((player, index) => (
-            <div key={index} className="flex justify-between items-center mb-2">
-              <span className="font-semibold">{player.position}</span>
-              <select className="form-select px-3 py-2 bg-white border border-gray-300 rounded-lg">
-                <option>{player.name}</option>
-                {/* Add more player options here */}
-              </select>
-              <span>{player.status}</span>
-            </div>
-          ))}
+        <div className="mb-4">
+      <h3 className="text-lg font-semibold mb-2 text-sn-main-blue font-russoOne">Initial Line-up</h3>
+      {initialLineup.map((player, index) => (
+        <div key={index} className="flex items-center mb-2">
+          <div className="bg-blue-600 text-white font-bold p-1 rounded text-center w-12">
+            {player.position}
+          </div>
+          <span className="flex-1 ml-4">{player.name}</span>
+          <span className={`${getStatusColor(player.status)}`}>
+            {player.status}
+          </span>
         </div>
+      ))}
+    </div>
 
         <div className="mb-4">
         <h3 className="text-lg font-semibold mb-2 text-sn-main-blue font-russoOne">Other Players</h3>

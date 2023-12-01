@@ -28,7 +28,6 @@ const App = () => {
                <Route path="/login" element={<LoginPage />} />
                <Route path="/register" element={<RegisterPage />} />
                <Route path="/auth" element={<AuthenticationPage />} />
-               {/* Removed GameOverview route */}
             </Routes>
          </>
       );

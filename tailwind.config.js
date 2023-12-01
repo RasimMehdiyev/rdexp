@@ -125,6 +125,10 @@ module.exports = {
                 '50':"rgb(238, 242, 255);",
 
             },
+            'status-pending': '#ffc107', 
+                'status-accepted': '#28a745', 
+                'status-declined': '#dc3545', 
+                'position-blue': '#007bff', 
           },
 
         extend: {
