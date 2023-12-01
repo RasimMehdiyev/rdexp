@@ -2,8 +2,49 @@ import React from 'react'
 import PersonTag from '../components/PersonTag.js';
 import RoleInput from '../components/RoleInput.js';
 import {Link} from 'react-router-dom'
+import { useState } from 'react';
+import { supabase } from '../lib/helper/supabaseClient';
 
 const GameSettings = () => {
+  const [roles, setRoles] = useState([{ name: "Referee" }]); // Initial roles
+
+  const addRole = (roleName) => {
+    const newRole = { name: roleName };
+    setRoles([...roles, newRole]);
+  };
+
+  const deleteRole = (roleName) => {
+    setRoles(roles.filter((role) => role.name !== roleName));
+  }
+
+
+  const handleSubmit = async (e) =>{
+    e.preventDefault()
+    try {
+      // Map through each role and create an array of promises for insertion
+      const roleInsertPromises = roles.map(role => {
+        return supabase.from('team_extraroles').insert([
+          {
+            team_id: localStorage.getItem('teamID'),
+            role_title: role.name,
+          }
+        ]);
+      });
+  
+      // Await all the insertions
+      const roleResults = await Promise.all(roleInsertPromises);
+      roleResults.forEach(({ data, error }) => {
+        if (error) {
+          console.error('Error inserting role data:', error);
+        } else {
+          console.log('Role insertion successful:', data);
+        }
+      });
+    } catch (error) {
+      console.error('An error occurred during role insertion:', error);
+    }
+  };
+
   return (
     <div className="h-screen flex flex-col justify-between bg-sn-bg-light-blue">
 
@@ -28,14 +69,16 @@ const GameSettings = () => {
             These roles are positions, distinct from players, that require someone to fill them during every game of the team.
             </h3>
             
-            <PersonTag name="Referee" number="null" isPlayer={false} isMember={true} />
-            <RoleInput/>
+            {roles.map((role, index) => (
+              <PersonTag key={index} {...role} onDelete={() => deleteRole(role.name)} />
+            ))}          
+        <RoleInput onAdd={addRole} />
         </div>
     </div>
 
 
       <div className="bg-sn-bg-light-blue flex flex-col   align-items text-center pl-[15%]">
-        <button className="bg-sn-main-orange text-2xl text-white font-interElight p-2 rounded-10px w-[70vw] h-16 ">
+        <button onClick={handleSubmit} className="bg-sn-main-orange text-2xl text-white font-interElight p-2 rounded-10px w-[70vw] h-16 ">
           SAVE
         </button>
 
