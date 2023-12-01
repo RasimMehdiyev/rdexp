@@ -3,11 +3,10 @@ import SynthleteLogo from '../components/SynthleteLogo';
 import { supabase } from "../lib/helper/supabaseClient";
 import { useNavigate } from 'react-router-dom';
 import { MdDateRange, MdAccessTime, MdLocationOn, MdGroup } from 'react-icons/md';
-import { MdIcon } from 'react-icons/md';
 
 
 
-const GameOverview = () => {
+const EventOverview = () => {
   // Mock data for the players and their statuses
   const initialLineup = [
     { position: 'PG', name: 'Michael Johnson', status: 'Pending' },
@@ -120,4 +119,4 @@ const GameOverview = () => {
   );
 }
 
-export default GameOverview;
+export default EventOverview;
