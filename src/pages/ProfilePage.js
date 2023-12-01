@@ -44,29 +44,20 @@ const ProfilePage = () => {
         fetchData();
       }, []);
       
-      const handleLogout = async (e) => {
-        e.preventDefault();
-        await supabase.auth.signOut();
-        console.log("Logged out")
-        navigate('/auth')
-    }
-
-
-
-
+      
       if (loading) {
         return <LoadingPage />; // You can replace this with any loading spinner or indicator
       }
       else{
         return (
             <div className="bg-gradient-to-b from-sn-bg-light-blue from-40% to-white to-55% flex flex-col items-center justify-start h-screen">
-                <div className="self-stretch h-auto p-2 flex-col justify-start items-center gap-5 mt-24 flex">
-                    
+                <div className="self-stretch h-auto p-4 flex-col justify-start items-center gap-5 flex">
+
                     {userData.profile_picture ? (
-                        <img className="w-[142px] max-h-[142px] rounded-full border-3 border-white" src={userData.profile_picture} />
+                        <img className="w-[142px] object-cover overflow-hidden h-[142px] rounded-full border-3 border-white" src={userData.profile_picture} />
 
                     ) : (
-                        <img className="max-w-[142px] max-h-[142px] rounded-full border-3 border-white" src={process.env.PUBLIC_URL + "/images/no_user.png"} />
+                        <img className="w-[142px] object-cover overflow-hidden h-[142px] rounded-full border-3 border-white" src={process.env.PUBLIC_URL + "/images/no_user.png"} />
                     )
                         
                     }
@@ -100,16 +91,7 @@ const ProfilePage = () => {
                             {userData.bio}
                         </div>
                 </div>
-                <div className="flex-col justify-start items-center gap-2 flex">
-                    <Link to="/editProfile">
-                    <div className="w-[322px] h-[33px] p-2.5 bg-orange-500 rounded justify-center items-center gap-2.5 inline-flex">
-                        <div className="text-white text-sm font-normal font-interReg uppercase">Edit Profile</div>
-                        </div>
-                        </Link>
-                    <button onClick={handleLogout} className="w-[322px] h-[33px] p-2.5 bg-zinc-300 rounded justify-center items-center gap-2.5 inline-flex">
-                        <div className="text-neutral-900 text-sm font-normal font-interReg uppercase">Sign out</div>
-                    </button>
-                </div>
+                
         </div>
           );
       }

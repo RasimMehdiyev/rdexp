@@ -94,6 +94,11 @@ h1 {
     color: #1C3FB7
 }
 
+input:focus {
+    /* remove focus */
+    outline: none;
+}
+
 input[type="radio"] {
     /* Add if not using autoprefixer */
     -webkit-appearance: none;
@@ -144,13 +149,13 @@ input[type="radio"]:checked::before {
 }
 
 .circle-number {
-    width: 60px;
-    height: 60px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
 .rect-background {
@@ -172,13 +177,86 @@ input[type="radio"]:checked::before {
     box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
 }
 
-input:focus{
+input:focus {
     outline: none;
 }
+
 .phone-input {
     outline: none;
-  }
+}
 
 .phone-input:focus {
     outline: none;
-  }
+}
+
+.text-logo {
+    font-family: "Russo One";
+    font-size: 57px;
+    font-weight: 900;
+    color: #A5B9F9;
+    /* stroke */
+    -webkit-text-stroke: 2px white;
+    text-shadow: 1px 2px 2px white;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    line-height: 0.8;
+    transform: scale(0.95, 1.08);
+}
+
+.text-logo-moto {
+    font-family: "Russo One";
+    font-size: 12px;
+    color: white;
+    /* stroke */
+    /* -webkit-text-stroke: 1px white; */
+    /* text-shadow: 1px 1px 1px white; */
+    padding-top: 0px;
+    padding-bottom: 0px;
+    text-align: right;
+    padding-right: 14px;
+}
+
+.text-small-logo {
+    font-family: 'Russo One';
+    font-size: 32px;
+    font-weight: 900;
+    color: #1C3FB7;
+    transform: scale(1.2, 1.12);
+    letter-spacing: -0.5px;
+    /* stroke */
+    -webkit-text-stroke: 1.5px white;
+}
+
+
+/* input file edit */
+
+input[type="file"] {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 10px;
+    /* Adjust as needed */
+    fill: #ccc;
+    /* Color of the SVG */
+}
+
+textarea:focus {
+    outline: none;
+}
+
+.placeholder-text::placeholder {
+    font-size: 16px;
+}
