@@ -4,9 +4,22 @@ import UserInput from '../components/UserInput.js';
 import {Link} from 'react-router-dom'
 import { supabase } from '../lib/helper/supabaseClient';
 import { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const TeamCreatePage = () => {
+  toast.success('Club registration successful! 🎉', {
+    position: "top-center",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    });
+
   const [teamName, setTeamName] = useState('');
   const [players, setPlayers] = useState([]);
   const [extras, setExtras] = useState([]);
@@ -126,6 +139,8 @@ const TeamCreatePage = () => {
           skip this step
         </Link>
       </div>
+
+      <ToastContainer/>
 
     </div>
   )

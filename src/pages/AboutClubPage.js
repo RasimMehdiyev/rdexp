@@ -135,6 +135,7 @@ export const AboutClubPage = () => {
     }    
 
   return (
+    
     <form  onSubmit={submitChanges} className='bg-sn-bg-light-blue flex flex-col justify-center align-center px-8 h-screen gap-5 text-game-blue'>
         <div className='flex flex-col justify-center gap-0'>
             <h5 className='font-russoOne text-[40px] mx-[32px] text-center leading-none'>ABOUT</h5>
@@ -176,6 +177,7 @@ export const AboutClubPage = () => {
         <button type='submit' className="font-interReg bg-sn-main-orange ml-[20%] align-center rounded-10px h-12 w-[50vw] text-white">
             SAVE
         </button>
-    </form>
+ 
+    </form> 
   )
 }
