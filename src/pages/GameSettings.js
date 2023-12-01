@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PersonTag from '../components/PersonTag.js';
 import RoleInput from '../components/RoleInput.js';
 import {Link} from 'react-router-dom'
@@ -7,6 +7,7 @@ import { supabase } from '../lib/helper/supabaseClient';
 
 const GameSettings = () => {
   const [roles, setRoles] = useState([{ name: "Referee" }]); // Initial roles
+  const [teamName, setTeamName] = useState('');
 
   const addRole = (roleName) => {
     const newRole = { name: roleName };
@@ -16,6 +17,24 @@ const GameSettings = () => {
   const deleteRole = (roleName) => {
     setRoles(roles.filter((role) => role.name !== roleName));
   }
+
+  // getTeam id from local storage
+  const getTeam = async () => { 
+    const { data: team, error: teamError } = await supabase
+    .from('team')
+    .select('team_name')
+    .eq('id', localStorage.getItem('teamID'))
+    .single(); // Use single to get a single record or null
+    if (teamError) throw teamError;
+    console.log("team data:", team.id);
+    setTeamName(team.team_name);
+  }
+
+  useEffect(() => {
+      getTeam();
+    },
+  [])
+
 
 
   const handleSubmit = async (e) =>{
@@ -57,7 +76,7 @@ const GameSettings = () => {
             SETTINGS
             </h1>
             <h3 className="pb-7 text-2xl font-interELight text-game-blue">
-            Team 1
+              {teamName}
             </h3>
         </div>
 

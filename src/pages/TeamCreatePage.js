@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import PersonTag from '../components/PersonTag.js';
 import UserInput from '../components/UserInput.js';
-import {Link} from 'react-router-dom'
+import {Link,useNavigate} from 'react-router-dom'
 import { supabase } from '../lib/helper/supabaseClient';
 import { useState } from 'react';
 
@@ -12,7 +12,7 @@ const TeamCreatePage = () => {
   const [extras, setExtras] = useState([]);
   const [teamID, setTeamID] = useState(localStorage.getItem('teamID')); // [team_id, team_name]
   const [users, setUsers] = useState([]); // [user_id, user_name]
-
+  const navigate = useNavigate();
 
   const handleTeamNameChange = (e) => {
     setTeamName(e.target.value);
@@ -118,6 +118,11 @@ const TeamCreatePage = () => {
     } catch (error) {
       console.error('An error occurred:', error);
     }
+
+    // If player insertions are successful, proceed to add extras
+
+    // redirect to game settings
+    navigate('/club/create/settings');
   };
   
 
