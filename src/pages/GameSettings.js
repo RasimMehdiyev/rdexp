@@ -2,20 +2,34 @@ import React from 'react'
 import PersonTag from '../components/PersonTag.js';
 import RoleInput from '../components/RoleInput.js';
 import {Link} from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const GameSettings = () => {
+  toast.success('Team creation successful! 🎉', {
+    position: "top-center",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    });
+
   return (
     <div className="h-screen flex flex-col justify-between bg-sn-bg-light-blue">
 
     <div>
-        <div className='text-center'>
+        <div className='text-center flex flex-col justify-center items-center'>
             <h1 className="pt-20 text-5xl text-game-blue">
             GAME
             </h1>
-            <h1 className="pt-2 text-5xl text-game-blue">
+            <h1 className="text-5xl text-game-blue">
             SETTINGS
             </h1>
-            <h3 className="pb-7 text-2xl font-interELight text-game-blue">
+            
+            <h3 className="pb-7 mt-3 text-2xl font-interELight text-game-blue p-1 bg-white rounded-10px shadow-md h-[6vh] w-[70vw] ">
             Team 1
             </h3>
         </div>
@@ -43,6 +57,8 @@ const GameSettings = () => {
           skip this step
         </Link>
       </div>
+
+      <ToastContainer/>
 
     </div>
   )
