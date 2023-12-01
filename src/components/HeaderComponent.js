@@ -15,11 +15,14 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
 
     // get the club from team from user
     const getClub = async (userID) => {
+      console.log("user id:", userID);
       const { data: team, error: teamError } = await supabase
       .from('team_users')
       .select('team_id')
       .eq('user_id', userID)
       if (teamError) throw teamError;
+
+      console.log(team)
       // console.log("team data:", team[0].team_id);     
   
       const { data: club, error: clubError } = await supabase

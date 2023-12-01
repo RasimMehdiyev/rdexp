@@ -1,44 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const UserInput = ({ onAdd, users }) => {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState({ name: '', id: null });
   const [suggestions, setSuggestions] = useState([]);
-  const inputRef = React.useRef();
+  const inputRef = useRef();
+  const suggestionsRef = useRef();
 
   useEffect(() => {
-    if (inputValue) {
+    if (inputValue.name) {
       const filtered = users.filter(user => 
-        user.full_name.toLowerCase().includes(inputValue.toLowerCase())
+        user.full_name.toLowerCase().includes(inputValue.name.toLowerCase())
       );
       setSuggestions(filtered);
     } else {
       setSuggestions([]);
     }
-  }, [inputValue, users]);
+  }, [inputValue.name, users]);
 
   const handleInputChange = (e) => {
-    setInputValue(e.target.value);
+    setInputValue({ ...inputValue, name: e.target.value });
   };
 
   const handleAddClick = () => {
-    if (inputValue.trim()) {
+    if (inputValue.name.trim()) {
       onAdd(inputValue);
-      setInputValue('');
+      setInputValue({ name: '', id: null });
       setSuggestions([]);
     }
   };
 
-  const handleSuggestionClick = (suggestion,event) => {
+  const handleSuggestionClick = (user, event) => {
     event.preventDefault();
-    setInputValue(suggestion);
+    console.log('Suggestion clicked:', user.full_name); // Verify function is called
+    setInputValue({ name: user.full_name, id: user.id });
     setSuggestions([]);
+    console.log('Suggestions should be cleared now'); // Check if this line is reached
   };
+  
+  
+  
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (inputRef.current && !inputRef.current.contains(event.target)) {
+      if (inputRef.current && !inputRef.current.contains(event.target) &&
+          suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
         setSuggestions([]);
       }
     };
@@ -47,16 +54,16 @@ const UserInput = ({ onAdd, users }) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [inputRef]);
+  }, [inputRef, suggestionsRef]); // Add suggestionsRef as a dependency
   
 
   return (
     <div className="relative flex flex-col gap-1 items-start w-[90vw]">
-      <div className="flex flex-row items-center">
+      <div className="flex flex-row items-center" ref={inputRef}>
         <input
           className="h-[6vh] pl-10 w-[80vw] rounded-10px border-2 border-game-blue font-interReg"
           placeholder="Enter user's name"
-          value={inputValue}
+          value={inputValue.name}
           onChange={handleInputChange}
         />
         <div className="absolute left-3 top-2 pt-1">
@@ -68,13 +75,13 @@ const UserInput = ({ onAdd, users }) => {
       </div>
       {suggestions.length > 0 && (
         <div className="absolute bg-white shadow-md rounded-md ml-2 w-[60vw] mt-2 z-10">
-          {suggestions.map((suggestion, index) => (
+          {suggestions.map((user) => (
             <div 
-              key={index} 
+              key={user.id} 
               className="p-2 hover:bg-gray-200 cursor-pointer"
-              onClick={(e) => handleSuggestionClick(suggestion.full_name,e)}
+              onClick={(e) => handleSuggestionClick(user, e)}
             >
-              {suggestion.full_name}
+              {user.full_name}
             </div>
           ))}
         </div>
@@ -82,6 +89,5 @@ const UserInput = ({ onAdd, users }) => {
     </div>
   );
 };
-
 
 export default UserInput;

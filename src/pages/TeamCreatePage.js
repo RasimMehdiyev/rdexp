@@ -18,25 +18,29 @@ const TeamCreatePage = () => {
     setTeamName(e.target.value);
   };
 
-  const addPlayer = (playerName) => {
+  const addPlayer = (player) => {
     const newPlayer = {
-      name: playerName,
-      number: "21", // You might want to generate or assign this
-      isPlayer: true,
-      isMember: false
+      id: player.id,
+      name: player.name,
+      number: "21", // Make sure this is the correct value you want to display
+      isPlayer: true,  // Make sure to pass these properties if they are needed in PersonTag
+      isMember: false  // Make sure to pass these properties if they are needed in PersonTag
     };
     setPlayers([...players, newPlayer]);
   };
-
-  const addExtra = (extraName) => {
+  
+  
+  const addExtra = (extra) => {
     const newExtra = {
-      name: extraName,
+      id: extra.id,
+      name: extra.name,
       number: "EX", // or any appropriate value
       isPlayer: false,
       isMember: false
     };
     setExtras([...extras, newExtra]);
   };
+  
   
   const getAllPlayers = async () => {
     try {
@@ -63,37 +67,59 @@ const TeamCreatePage = () => {
   useEffect(() => {
     console.log('Updated users:', users);
   }, [users]);
-  const handleSubmit = (event) => {
+
+
+  
+  const handleSubmit = async (event) => {
     event.preventDefault();
     console.log({ teamName, players, extras, teamID });
+  
+    // First, update the team name
+    try {
+      const { data: updateData, error: updateError } = await supabase
+        .from('team')
+        .update({ team_name: teamName })
+        .eq('id', teamID);
+  
+      if (updateError) throw updateError;
+      console.log('Team update successful:', updateData);
+  
 
+      // add coach (authorized user to the team)
+      const { data: coachData, error: coachError } = await supabase
+        .from('team_users')
+        .insert([
+          {
+            user_id: localStorage.getItem('userID'),
+            team_id: teamID,
+          }
+        ]);
 
-    // TODO: Save to database
-    // const [data , error] = supabase
-    // .from('team')
-    // .update(
-    //   [
-    //     {
-    //       name: teamName,
-    //     }
-    //   ]
-    // )
-    // .eq('id', teamID)
-
-    // if (error) console.log(error);
-    // console.log(data);
-
-    // const [data2 , error2] = supabase
-    // .from('team_users')
-    // .insert(
-    //   [
-    //     {
-    //       user_id: localStorage.getItem('userID'),
-    //       team_id: teamID,
-    //     }
-    //   ]
-    // )
+      // If team update is successful, proceed to add players
+      const insertPromises = players.map(player => {
+        return supabase
+          .from('team_users')
+          .insert([
+            {
+              user_id: player.id,
+              team_id: teamID,
+            }
+          ]);
+      });
+  
+      const results = await Promise.all(insertPromises);
+      results.forEach(({ data, error }) => {
+        if (error) {
+          console.error('Error inserting data:', error);
+        } else {
+          console.log('Insertion successful:', data);
+        }
+      });
+    } catch (error) {
+      console.error('An error occurred:', error);
+    }
   };
+  
 
   const deletePlayer = (playerName) => {
     setPlayers(players.filter(player => player.name !== playerName));

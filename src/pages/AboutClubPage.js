@@ -13,6 +13,8 @@ export const AboutClubPage = () => {
     const [clubPhone, setClubPhone] = useState(''); // club phone
     const [clubLocation, setClubLocation] = useState(''); // club location
     const [clubDescription, setClubDescription] = useState(''); // club description
+    const [userID, setUserID] = useState(''); // user id
+    const [userData, setUserData] = useState({}); // user data
     const navigate = useNavigate();
 
     const base64String = (file) => {
@@ -61,6 +63,36 @@ export const AboutClubPage = () => {
 
 
 
+    useEffect(() => {
+       const fetchUserID = async () => {
+        try {
+            const userResponse = await supabase.auth.getUser();
+            const user = userResponse.data.user;
+            console.log("User:", user);
+            if (user) {
+              // Initially, we don't know the user's role, so fetch from both tables.
+              const { data: user_data, error: userError } = await supabase
+                .from('users')
+                .select('id')
+                .eq('user_id', user.id)
+                .single(); // Use single to get a single record or null   
+              if (userError) throw userError;
+              console.log("User data:", user_data);     
+              setUserData(user_data);   
+              localStorage.setItem('userID', user_data.id);  
+            }
+            else{
+                navigate('/auth');
+            }
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }     
+       }  
+         fetchUserID();
+    },[])
+
+    // set user ID from supabase in localstorage
+    
 
     useEffect(() => {
         // console.log('file', file);
@@ -97,7 +129,7 @@ export const AboutClubPage = () => {
         console.log('club id', clubID.id);
 
         // insert team into teams table
-    
+           
         
         const { data: teamData, error: teamError } = await supabase
         .from('team')
