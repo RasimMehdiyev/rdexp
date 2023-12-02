@@ -1,5 +1,6 @@
 import React from 'react';
 import { MapPinIcon } from '@heroicons/react/24/outline'
+import useTeamData from '../../hooks/useTeamData';
 
 const TeamProfileHeaderComponent = ({ clubData, teamData, teamSocialsData, renderSocialIcon }) => {
     return (
@@ -12,7 +13,14 @@ const TeamProfileHeaderComponent = ({ clubData, teamData, teamSocialsData, rende
                 </div>
 
                 <div className="self-stretch h-[258px] p-2 flex-col justify-start items-center gap-2 flex">
-                    <img className="w-[142px] h-[142px] rounded-[100px] border-4 border-white" src="https://via.placeholder.com/142x142" />
+                    {clubData.picture ? (
+                            <img className="w-[142px] object-cover overflow-hidden h-[142px] rounded-full border-3 border-white" src={clubData.picture} />
+
+                        ) : (
+                            <img className="w-[142px] object-cover overflow-hidden h-[142px] rounded-full border-3 border-white" src={process.env.PUBLIC_URL + "/images/no_user.png"} />
+                        )
+                            
+                    }
                     <div className="flex-col justify-start items-center gap-1 flex">
                         <div className="text-center text-blue-800 text-3xl font-russoOne">{teamData.team_name}</div>
                         

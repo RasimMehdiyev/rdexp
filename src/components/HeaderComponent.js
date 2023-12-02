@@ -39,10 +39,10 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
       if (clubNameError) throw clubNameError;
       setClubData(clubData);
       setTeamData(team);
-      console.log("Team data:",teamData);
-      console.log("Club id:",clubData);
-      console.log("Team id:",teamData[0].team_id);
-      console.log("Club id:",clubData.id);
+      console.log("1. Team data:",teamData);
+      console.log("2. Club data:",clubData);
+      console.log("3. Club id:",clubData.id);
+      console.log("4. Team id:",teamData[0].team_id);
     }
 
 

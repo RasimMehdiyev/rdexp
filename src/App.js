@@ -9,6 +9,7 @@ import TeamManagementPage from './pages/TeamManagementPage';
 import RightSideBarComponent from './components/RightSidebarComponent';
 import ProfilePage from './pages/ProfilePage';
 import EditProfilePage from "./pages/EditProfilePage.js";
+import EditTeamPage from './pages/EditTeamPage.js';
 import NewGamePage from "./pages/NewEventPage.js";
 import StickySubheaderComponent from "./components/StickySubheaderComponent.js";
 import LogRocket from 'logrocket'
@@ -19,6 +20,7 @@ import { AboutClubPage } from './pages/AboutClubPage.js';
 import StickyEditProfileComponent from './components/StickyEditProfileComponent.js';
 import TeamProfilePage from './pages/TeamProfilePage.js';
 import StickySubheaderProfileComponent from './components/StickySubheaderProfileComponent.js';
+
 
 LogRocket.init('u7ityk/synthlete');
 
@@ -70,13 +72,14 @@ const App = () => {
                <Route path="/auth" element={<AuthenticationPage />} />
                <Route path="/team-management" element={<TeamManagementPage />} />
                <Route path="/profile" element={<ProfilePage />} />
-               <Route path="/editProfile" element={<EditProfilePage />} />
+               <Route path="/profile/edit" element={<EditProfilePage />} />
                <Route path="/game/create" element={<NewGamePage />} />
                <Route path="/game-overview" element={<GameOverview />} />
                <Route path="/team/create" element={<TeamCreatePage/>} />
                <Route path="/club/create" element={<AboutClubPage/>} />
                <Route path="/club/create/settings" element={<GameSettings/>} />
                <Route path="/team-profile/:clubId/:teamId" element={<TeamProfilePage />} />
+               <Route path="/team-profile/edit/:clubId/:teamId" element={<EditTeamPage/>} />
             </Routes>
             <RightSideBarComponent rightIsOpen={rightIsOpen}/>
          </>

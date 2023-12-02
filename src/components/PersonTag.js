@@ -35,7 +35,7 @@ const PersonTag = ({ id, name, number, team, isPlayer, isMember, onDelete }) => 
       )}
       <h5 className="font-interReg text-2xl cursor-pointer">{name} </h5>
       <FontAwesomeIcon icon={faTrashAlt} className="ml-auto pr-2 text-game-blue text-2xl" onClick={handleDelete} />
-      {isMember && <PlayerDeletionModal isOpen={isDeletionModalOpen} closeModal={closeDeletionModal} onConfirm={onDelete} id={id} name={name} number={number} team={team} />}
+      {isMember && <PlayerDeletionModal isOpen={isDeletionModalOpen} closeModal={closeDeletionModal} onConfirm={onDelete} id={id} name={name} number={number} team={team} isPlayer={isPlayer}/>}
     </div>
   );
 };
