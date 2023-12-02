@@ -3,21 +3,14 @@ import { supabase } from '../../lib/helper/supabaseClient';
 import PersonTag from '../PersonTag.js';
 import PlayerAdditionModal from '../PlayerAdditionModal.js';
 import PersonTagNotDeletable from '../PersonTagNotDeletable.js';
-import useTeamData from '../../hooks/useTeamData';
-import { useParams } from 'react-router-dom';
-import LoadingPage from '../../pages/LoadingPage';
 
 
-const TeamManagementComponent = () => {
-    const { clubId, teamId } = useParams();
-    const { teamData, coach, players, extras, setPlayers, setExtras, loading, findUserIdByName, findUserNumberById, findUserRoleById} = useTeamData(teamId, clubId);
+
+const TeamManagementComponent = ({ teamData, coach, players, extras, isCoach, setPlayers, setExtras, findUserIdByName, findUserNumberById, findUserRoleById }) => {
     const [addingPlayer, setAddingPlayer] = useState(false);
-
-
-    
     const [isAdditionModalOpen, setAdditionModalOpen] = useState(false);
     
-
+    console.log("players", players)
     const addUserToTeam = async (name, isPlayer) => {
         try {
             const userId = await findUserIdByName(name);
@@ -47,7 +40,7 @@ const TeamManagementComponent = () => {
             const number = await findUserNumberById(userId);
             
             const newMember = {
-                team_id: teamId,
+                team_id: teamData.id,
                 user_id: userId,
             };
 
@@ -103,12 +96,7 @@ const TeamManagementComponent = () => {
             console.error('Extra not found');
         }
     };
-    
-    
-    if(loading)
-        return LoadingPage();
-    else
-        return (
+    return (
             <div className="w-full py-4 bg-white flex-col justify-start items-center gap-6 inline-flex">
                 {/* Coach Section */}
                 <div className="self-stretch py-2 flex-col justify-start items-start gap-6 flex">
@@ -125,28 +113,36 @@ const TeamManagementComponent = () => {
                 <div className="self-stretch py-2 flex-col justify-start items-start gap-6 flex">
                     <div className="self-stretch px-4 justify-start items-center gap-4 inline-flex">
                         <div className="text-blue-800 text-2xl font-russoOne leading-normal">Players</div>
-                        <div className="h-8 bg-blue-800 rounded-[10px] justify-center items-center gap-2.5 flex" onClick={() => { setAddingPlayer(true); setAdditionModalOpen(true); }}>
-                            <img src={`${process.env.PUBLIC_URL}/images/plus-square.svg`} alt="Add Player" />
-                        </div>
+                        {isCoach && (
+                            <div className="h-8 bg-blue-800 rounded-[10px] justify-center items-center gap-2.5 flex" onClick={() => { setAddingPlayer(true); setAdditionModalOpen(true); }}>
+                                <img src={`${process.env.PUBLIC_URL}/images/plus-square.svg`} alt="Add Player" />
+                            </div>
+            )}
                     </div>
                     <div className="self-stretch flex-col justify-start items-start gap-4 flex pl-4">
                         {players.map((player) => (
-                            <PersonTag key={player.id} {...player} team={teamData.team_name} onDelete={deletePlayer} /> 
+                            isCoach 
+                            ? <PersonTag key={player.id} {...player} team={teamData.team_name} onDelete={deletePlayer} />
+                            : <PersonTagNotDeletable key={player.id} {...player} team={teamData.team_name} />
                         ))}
                     </div>
                 </div>
                 {/* Extras Section */}
                 <div className="self-stretch px-4 justify-start items-center gap-4 inline-flex">
                     <div className="text-blue-800 text-2xl font-russoOne">Extra</div>
-                    <div className="h-8 bg-blue-800 rounded-[10px] justify-center items-center gap-2.5 flex" onClick={() => { setAddingPlayer(false); setAdditionModalOpen(true); }}>
-                        <img src={`${process.env.PUBLIC_URL}/images/plus-square.svg`} alt="Add Extra" />
-                    </div>
+                    {isCoach && (
+                        <div className="h-8 bg-blue-800 rounded-[10px] justify-center items-center gap-2.5 flex" onClick={() => { setAddingPlayer(false); setAdditionModalOpen(true); }}>
+                            <img src={`${process.env.PUBLIC_URL}/images/plus-square.svg`} alt="Add Extra" />
+                        </div>
+            )}
                 </div>
-                <div className="self-stretch h-[103px] flex-col justify-start items-start gap-[19px] flex pl-4">                
+                <div className="self-stretch flex-col justify-start items-start gap-4 flex pl-4">
                     {extras.map((extra) => (
-                        <PersonTag key={extra.id} {...extra} team={teamData.team_name} onDelete={deleteExtra} />        
-                    ))}              
-                </div>
+                        isCoach 
+                        ? <PersonTag key={extra.id} {...extra} team={teamData.team_name} onDelete={deleteExtra} />
+                        : <PersonTagNotDeletable key={extra.id} {...extra} team={teamData.team_name} />
+                    ))}
+</div>
                 
                 <PlayerAdditionModal 
                     isOpen={isAdditionModalOpen} 
@@ -158,7 +154,7 @@ const TeamManagementComponent = () => {
                 />
 
             </div>
-        )
+    )
 }
 
 

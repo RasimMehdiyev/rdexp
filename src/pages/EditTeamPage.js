@@ -10,6 +10,7 @@ import { useParams } from 'react-router-dom';
 const EditTeamPage = () => {
     const { clubId, teamId } = useParams();
 
+    const [userData, setUserData] = useState({});
     const [clubData, setClubData] = useState({});
     const [teamData, setTeamData] = useState({});
     const [teamSocialsData, setTeamSocialsData] = useState({});
@@ -23,6 +24,7 @@ const EditTeamPage = () => {
     const [newX, setNewX] = useState('');
     const [newInstagram, setNewInstagram] = useState('');
     const [newFacebook, setNewFacebook] = useState('');
+    const [isCoach, setIsCoach] = useState(false);
     
 
     const [phoneNumberError, setPhoneNumberError] = useState('');
@@ -50,6 +52,18 @@ const EditTeamPage = () => {
         const fetchData = async () => {
             console.log("Fetching data");
             try {
+
+                const userResponse = await supabase.auth.getUser();
+                const userId = userResponse.data.user.id;
+
+                const { data: user_data, error: userError } = await supabase
+                    .from('users')
+                    .select('*').eq('user_id', userId)
+                    .single();
+                if (userError) throw userError;
+                setUserData(user_data);
+
+
 
                 const { data: team_data, error: teamError } = await supabase
                     .from('team')
@@ -88,6 +102,12 @@ const EditTeamPage = () => {
                 setPreviewImage(clubData.picture);
                 setNewLocation(clubData.location);
                 setNewStadium(clubData.stadium);
+                setIsCoach(teamData.coach_id === userData.id);
+
+                if (!isCoach) {
+                    navigate(`/team-profile/${clubId}/${teamId}`);
+                }
+
 
           } catch (error) {
             console.error("Error fetching data:", error);
@@ -98,7 +118,7 @@ const EditTeamPage = () => {
         };
     
         fetchData();
-    }, []);
+    }, [isCoach, navigate, clubId, teamId]);
 
     const validateEmail = (newEmail) => {
         // Regular expression for a valid email address

@@ -2,16 +2,27 @@ import AboutComponent from '../components/teamprofile/AboutComponent.js';
 import SettingsComponent from '../components/teamprofile/SettingsComponent.js';
 import TeamManagementComponent from '../components/teamprofile/TeamManagementComponent.js';
 import TeamProfileHeaderComponent from '../components/teamprofile/TeamProfileHeaderComponent.js';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import LoadingPage from './LoadingPage.js';
 import useTeamData from '../hooks/useTeamData';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 
 const TeamProfilePage = () => {
     const { clubId, teamId } = useParams();
-    const { userData, teamData, clubData, coach, teamSocialsData, roles, players, extras, loading, error } = useTeamData(teamId, clubId);
+    const navigate = useNavigate()
+    const { 
+        teamData, clubData, coach, teamSocialsData, roles, players, 
+        extras, isCoach, userTeamIds, loading, setRoles, setExtras, 
+        setPlayers, findUserIdByName, findUserRoleById, findUserNumberById
+    } = useTeamData(teamId, clubId);
     const [tab, setTab] = useState(0);
+
+    useEffect(() => {
+        if (!loading && (!userTeamIds.includes(Number(teamId)))) {
+            navigate('/'); 
+        }
+    }, [loading, userTeamIds, navigate]);
 
     // Helper function to render social media icons
     const renderSocialIcon = (handle, type, urlPattern, imgName) => {
@@ -28,15 +39,35 @@ const TeamProfilePage = () => {
         switch (tab) {
             case 0:
                 return (
-                    <AboutComponent/>
+                    <AboutComponent
+                        clubData={clubData}
+                        teamData={teamData}
+                        isCoach={isCoach}
+                    />
                 );
             case 1:
                 return (
-                    <TeamManagementComponent/>
+                    <TeamManagementComponent
+                        setPlayers={setPlayers}
+                        setExtras={setExtras}
+                        teamData={teamData}
+                        coach={coach}
+                        players={players}
+                        extras={extras}
+                        isCoach={isCoach}
+                        findUserIdByName={findUserIdByName}
+                        findUserNumberById={findUserNumberById} 
+                        findUserRoleById={findUserRoleById}
+                    />
                 );
             case 2:
                 return (
-                    <SettingsComponent/>
+                    <SettingsComponent
+                        roles={roles}
+                        setRoles={setRoles}
+                        teamData={teamData}
+                        isCoach={isCoach}
+                    />
                 );
             default:
                 return null;
@@ -52,6 +83,7 @@ const TeamProfilePage = () => {
             <TeamProfileHeaderComponent
                 clubData={clubData}
                 teamData={teamData} 
+                userTeamIds={userTeamIds}
                 teamSocialsData={teamSocialsData} 
                 renderSocialIcon={renderSocialIcon}
             />
