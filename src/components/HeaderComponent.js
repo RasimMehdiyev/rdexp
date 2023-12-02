@@ -19,10 +19,11 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
       .from('team_users')
       .select('team_id')
       .eq('user_id', userID)
-      if (teamError) throw teamError;
+      if (teamError) throw teamError;      
+      // console.log("team data:", team[0].team_id);     
+
 
       console.log(team)
-      // console.log("team data:", team[0].team_id);     
     if (team[0] !== undefined){
 
           const { data: club, error: clubError } = await supabase
@@ -86,6 +87,13 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
 
   
 
+  const handleKeyDown = (event) => {
+    // Check if the key is 'Enter' or 'Space'
+    if (event.key === 'Enter' || event.key === ' ') {
+      rightSideBarOpen();
+    }
+  };
+
   const rightSideBarOpen = () => {
     setRightIsOpen(!rightIsOpen);
   }
@@ -94,18 +102,18 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
     return null; // You can replace this with any loading spinner or indicator
   }
   return (
-    <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-10'> {/* Ensure z-index is high enough */}
+    <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-10'> 
             {
               clubData.picture ? (
-                <Link>
-                  <img className='cursor-pointer border-2 border-white object-cover overflow-hidden rounded-full w-[50px] h-[50px] ' src={clubData.picture} alt="profile" />
+                <Link to="/team-management/">
+                  <img className='cursor-pointer border-2 border-white object-cover overflow-hidden w-[45px] h-[45px] rounded-10px' src={clubData.picture} alt="profile" />
                   {/* <p className="text-[8px] text-white font-russoOne font-400">My teams</p> */}
                 </Link>
 
 
                 ) : (
                 <Link to="no-team/" className='flex flex-col items-center justify-center'>
-                    <img className='bg-white cursor-pointer border-2 border-white object-cover overflow-hidden rounded-full w-[50px] h-[50px] ' src={process.env.PUBLIC_URL + "/images/no-team.png"} alt="profile" />
+                    <img className='bg-white cursor-pointer border-2 border-white object-cover overflow-hidden w-[50px] h-[50px] ' src={process.env.PUBLIC_URL + "/images/no-team.png"} alt="profile" />
                     {/* <p className="text-[8px] text-white font-russoOne font-400">No team</p> */}
                 </Link>
                 )
@@ -115,8 +123,13 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
             <SynthleteSmallLogo />
           </Link>
           <Link className='flex flex-col justify-center items-center'>
-            <img onClick={rightSideBarOpen} className='cursor-pointer border-2 border-white object-cover overflow-hidden rounded-full w-[50px] h-[50px] ' src={userData.profile_picture} alt="profile" />
-            {/* <p className="text-[8px] text-white font-russoOne font-400">Profile</p> */}
+          <button onClick={rightSideBarOpen} className="border-2 border-white rounded-full w-[50px] h-[50px] p-0 overflow-hidden">
+            <img 
+              src={userData.profile_picture} 
+              alt="Open Sidebar" // Description of the action or image content
+              className="object-cover w-full h-full"
+            />
+          </button>         
           </Link>
     </header>
   );
