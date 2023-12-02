@@ -48,14 +48,22 @@ const TeamManagementComponent = ({ teamData, coach, players, extras, isCoach, se
                 .from('team_users')
                 .insert([newMember]);
 
-
-            setPlayers(players => [...players, { 
-                id: userId, 
-                name: name,
-                number: number,
-                isPlayer: true, 
-                isMember: true,  
-            }]);
+            if(isPlayer){
+                setPlayers(players => [...players, { 
+                    id: userId, 
+                    name: name,
+                    number: number,
+                    isPlayer: true, 
+                    isMember: true,  
+                }]); 
+            }else{
+                setExtras(extras => [...extras, { 
+                    id: userId, 
+                    name: name,
+                    isPlayer: false, 
+                    isMember: true,  
+                }]); 
+            }
         } catch (error) {
             console.error('Error in adding user:', error);
             return "An error occurred while adding the player.";

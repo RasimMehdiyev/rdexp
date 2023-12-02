@@ -22,7 +22,7 @@ const RightSideBarComponent = ({ rightIsOpen }) => {
         <Link to='/profile'>
             <li className='w-[120px] items-center m-auto py-[4px] text-right pr-6 hover:bg-sn-light-blue h-[30px]'>My Profile</li>
         </Link>
-        <Link to='/editProfile'>
+        <Link to='/profile/edit'>
             <li className='w-[120px] items-center m-auto py-[4px] text-right pr-6 hover:bg-sn-light-blue h-[30px]'>Edit profile</li>
         </Link>
         <Link to='/auth'>
