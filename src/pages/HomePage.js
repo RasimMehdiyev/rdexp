@@ -6,12 +6,37 @@ import amplitude from 'amplitude-js'
 import EventCard from "../components/EventCard";
 import React from 'react';
 import LoadingPage from './LoadingPage';
+import StickyMonthHeader from '../components/StickyMonthComponent';
 
 const HomePage = () => {
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
   const [fetchedEvents, setFetchedEvents] = useState([]);
+  const [currentMonth, setCurrentMonth] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setCurrentMonth(entry.target.getAttribute('data-month'));
+          }
+        });
+      },
+      { threshold: 0.6 } // Adjust the threshold to when you want the month to switch
+    );
+  
+    // Observe each month section
+    document.querySelectorAll('.month-section').forEach((section) => {
+      observer.observe(section);
+    });
+  
+    // Clean up observer
+    return () => observer.disconnect();
+  }, []);
+  
+
 
   const getEvents = async (uuid) => {
     let { data: userTableIdAndRole, error: tableIdError } = await supabase
@@ -175,8 +200,9 @@ const organizedEvents = transformedEvents.reduce((acc, event) => {
         <br></br>
         {/* Upcoming Events */}
         {Object.entries(organizedEvents).map(([month, days]) => (
-          <div key={month} className="font-russoOne text-sn-main-blue">
-            <h2 className="text-4xl font-bold">{new Date(month).toLocaleString('default', { month: 'long' })}</h2>
+          <div key={month} className="font-russoOne text-sn-main-blue month-section">
+            <StickyMonthHeader currentMonth={new Date(month).toLocaleString('default', { month: 'long' })} />
+            {/* <h2 className="text-4xl font-bold">{new Date(month).toLocaleString('default', { month: 'long' })}</h2> */}
             {Object.entries(days).map(([day, dayEvents]) => (
               <div key={day}>
                 <p className="text-2xl font-semibold">{`${new Date(`${month}-${day}`).toLocaleString('default', { weekday: 'short' })}. ${day}`}</p>
