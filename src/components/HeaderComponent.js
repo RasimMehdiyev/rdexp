@@ -102,7 +102,7 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
     return null; // You can replace this with any loading spinner or indicator
   }
   return (
-    <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-10'> 
+    <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-20'> 
             {
               clubData.picture ? (
                 <Link to="/team-management/">
