@@ -23,66 +23,9 @@ const NewGamePageComponent = ({ eventTitle }) => {
     const [optionPlayers, setOptionPlayers] = useState([]);
     const [selectedExtras, setSelectedExtras] = useState([])
     const [optionExtras, setOptionExtras] = useState([]);
-    const [preSubstitutePlayers, setPreSubstitutePlayers] = useState([{ full_name: "No Selection", id: -1 }]);
+    const [preSubstitutePlayers, setPreSubstitutePlayers] = useState([]);
 
-    useEffect(() => {
-        // Update optionPlayers whenever selectedPlayers change
-        console.log("selected players: ", selectedPlayers);
-        const selectedPlayerNoPosition = selectedPlayers.map((player) => player.id)       
-        
-        const updatedOptionPlayers = teamPlayers.filter(player => !selectedPlayerNoPosition.includes(player.id));        
-        setOptionPlayers(updatedOptionPlayers);
-    }, [selectedPlayers]);
-
-    useEffect(() => {
-        // Update optionPlayers whenever selectedPlayers change
-        console.log("selected extras: ", selectedExtras);
-        const selectedExtraNoRole = selectedExtras.map((extra) => extra.id)      
-        
-        const updatedOptionExtras = volunteers.filter(extra => !selectedExtraNoRole.includes(extra.id));
-        setOptionExtras(updatedOptionExtras);
-    }, [selectedExtras]);
-
-
-
-    const submitEvent = () => {
-
-        console.log("Title:", eventTitle);
-        console.log("Type:", selectedOption);
-        console.log("Team:", selectedID);
-        console.log("Date:", date);
-        console.log("Time:", time);
-        console.log("Location:", location);
-        console.log("Team Names:", teamNames);
-        console.log("Team Players:", teamPlayers);
-        console.log("Selected ID:", selectedID);
-    }
-
-
-    const getExtraRoles = async (teamID) => {
-        console.log("team id", teamID);
-        const { data: sup_extraRoles, error: extraRolesError } = await supabase
-            .from('team_extraroles')
-            .select('role_title,id')
-            .eq('team_id', teamID);
-
-        if (extraRolesError) throw extraRolesError;
-        setExtraRoles(sup_extraRoles); // Set state here
-    };
-
-    const getVolunteers = async (teamID) => {
-        let { data, error } = await supabase
-        .rpc('get_team_users_by_role', {
-            param_role_id: 3, 
-            param_team_id: teamID,
-        })
-        if (error) console.error(error)
-        else console.log("extras: ", data);
-        setVolunteers(data);
-        setOptionExtras(data);
-    }
-
-    useEffect(() => {
+    useEffect(() => { // first thing that happens
         const getTeams = async () => {
             let user = await supabase.auth.getUser();
             let userID = user.data.user.id;
@@ -120,11 +63,48 @@ const NewGamePageComponent = ({ eventTitle }) => {
         setLoading(false);
     }, [])
 
-    useEffect(() => {
-        console.log("Updated extraRoles:", extraRoles);
-    }, [extraRoles]);
+    const handleChange = async (event) => { //happens when team is selected
+        // Update the state with the selected option's id
+        if (event.target.value != "No Selection") {
+            setLoading(true);
+            setSelectedID(event.target.value);
+            await getPlayerOfTeam(event.target.value);
+            await getExtraRoles(event.target.value);
+            await getPositionsOfTeam(event.target.value);
+            await getVolunteers(event.target.value);
+            console.log('extraRoles:', extraRoles);
+            console.log('positions:', positions);
+            setLoading(false);
+        } else {
+            setSelectedID('');
+            setTeamPlayers([]);
+            setExtraRoles([]);
+            setSelectedTeamName('');
+        }        
+    };
 
+    const getExtraRoles = async (teamID) => { //getting extra roles depending on team
+        console.log("team id", teamID);
+        const { data: sup_extraRoles, error: extraRolesError } = await supabase
+            .from('team_extraroles')
+            .select('role_title,id')
+            .eq('team_id', teamID);
 
+        if (extraRolesError) throw extraRolesError;
+        setExtraRoles(sup_extraRoles); // Set state here
+    };
+
+    const getVolunteers = async (teamID) => { //getting volunteer depending on team
+        let { data, error } = await supabase
+        .rpc('get_team_users_by_role', {
+            param_role_id: 3, 
+            param_team_id: teamID,
+        })
+        if (error) console.error(error)
+        else console.log("extras: ", data);
+        setVolunteers(data);
+        setOptionExtras(data);
+    }
 
     const getPlayerOfTeam = async (teamID) => {
         
@@ -147,30 +127,7 @@ const NewGamePageComponent = ({ eventTitle }) => {
         if (error) console.error(error)
         else console.log("positions", data)
         setPositions(data);
-    }    
-
-    const handleChange = async (event) => {
-        // Update the state with the selected option's id
-        if (event.target.value != "No Selection") {
-            setLoading(true);
-            setSelectedID(event.target.value);
-            await getPlayerOfTeam(event.target.value);
-            await getExtraRoles(event.target.value);
-            await getPositionsOfTeam(event.target.value);
-            await getVolunteers(event.target.value);
-            console.log('extraRoles:', extraRoles);
-            console.log('positions:', positions);
-            setLoading(false);
-        } else {
-            setSelectedID('');
-            setTeamPlayers([]);
-            setExtraRoles([]);
-            setSelectedTeamName('');
-        }
-        
-    };
-
-    
+    }   
 
     const handlePlayerChange = (event, position) => {
         const playerId = event.target.value;
@@ -234,6 +191,36 @@ const NewGamePageComponent = ({ eventTitle }) => {
         }
     };
 
+    useEffect(() => {
+        // Update optionPlayers whenever selectedPlayers change
+        console.log("selected players: ", selectedPlayers);
+        const selectedPlayerNoPosition = selectedPlayers.map((player) => player.id)       
+        
+        const updatedOptionPlayers = teamPlayers.filter(player => !selectedPlayerNoPosition.includes(player.id));        
+        setOptionPlayers(updatedOptionPlayers);
+    }, [selectedPlayers]);
+
+    useEffect(() => {
+        // Update optionPlayers whenever selectedPlayers change
+        console.log("selected extras: ", selectedExtras);
+        const selectedExtraNoRole = selectedExtras.map((extra) => extra.id)      
+        
+        const updatedOptionExtras = volunteers.filter(extra => !selectedExtraNoRole.includes(extra.id));
+        setOptionExtras(updatedOptionExtras);
+    }, [selectedExtras]);
+
+    const submitEvent = () => {
+
+        console.log("Title:", eventTitle);
+        console.log("Type:", selectedOption);
+        console.log("Team:", selectedID);
+        console.log("Date:", date);
+        console.log("Time:", time);
+        console.log("Location:", location);
+        console.log("Team Names:", teamNames);
+        console.log("Team Players:", teamPlayers);
+        console.log("Selected ID:", selectedID);
+    }  
     
 
     const handleAddSubstitute = () => {
