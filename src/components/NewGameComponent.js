@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/helper/supabaseClient";
 import LoadingPage from "../pages/LoadingPage";
+import { XMarkIcon } from '@heroicons/react/24/outline'
 
 
 const NewGamePageComponent = ({ eventTitle }) => {
@@ -22,29 +23,26 @@ const NewGamePageComponent = ({ eventTitle }) => {
     const [optionPlayers, setOptionPlayers] = useState([]);
     const [selectedExtras, setSelectedExtras] = useState([])
     const [optionExtras, setOptionExtras] = useState([]);
+    const [preSubstitutePlayers, setPreSubstitutePlayers] = useState([{ full_name: "No Selection", id: -1 }]);
 
     useEffect(() => {
         // Update optionPlayers whenever selectedPlayers change
         console.log("selected players: ", selectedPlayers);
-        const selectedPlayerNoPosition = selectedPlayers.map((player) => player.id)
-        console.log("selected player no pos", selectedPlayerNoPosition);
+        const selectedPlayerNoPosition = selectedPlayers.map((player) => player.id)       
         
-        const updatedOptionPlayers = teamPlayers.filter(player => !selectedPlayerNoPosition.includes(player.id));
-        console.log("updated option players", updatedOptionPlayers);
+        const updatedOptionPlayers = teamPlayers.filter(player => !selectedPlayerNoPosition.includes(player.id));        
         setOptionPlayers(updatedOptionPlayers);
     }, [selectedPlayers]);
 
-    
+    useEffect(() => {
+        // Update optionPlayers whenever selectedPlayers change
+        console.log("selected extras: ", selectedExtras);
+        const selectedExtraNoRole = selectedExtras.map((extra) => extra.id)      
+        
+        const updatedOptionExtras = volunteers.filter(extra => !selectedExtraNoRole.includes(extra.id));
+        setOptionExtras(updatedOptionExtras);
+    }, [selectedExtras]);
 
-    const handlePlayerSelection = (playerId) => {
-        // Toggle player selection
-        if (selectedPlayers.includes(playerId)) {
-        const updatedSelectedPlayers = selectedPlayers.filter(player => player !== playerId);
-        setSelectedPlayers(updatedSelectedPlayers);
-        } else {
-        setSelectedPlayers([...selectedPlayers, playerId]);
-        }
-    };
 
 
     const submitEvent = () => {
@@ -81,6 +79,7 @@ const NewGamePageComponent = ({ eventTitle }) => {
         if (error) console.error(error)
         else console.log("extras: ", data);
         setVolunteers(data);
+        setOptionExtras(data);
     }
 
     useEffect(() => {
@@ -171,12 +170,7 @@ const NewGamePageComponent = ({ eventTitle }) => {
         
     };
 
-    // const handlePlayerChange = (event) => {
-    //     //handlePlayerSelection(event.target.value);
-    //     console.log(event.target.value);
-    //     console.log(teamPlayers);
-    //     //console.log(document.getElementById('player_select').childNodes);
-    // }
+    
 
     const handlePlayerChange = (event, position) => {
         const playerId = event.target.value;
@@ -184,7 +178,7 @@ const NewGamePageComponent = ({ eventTitle }) => {
         
         if (playerId == 'No Selection') {
         // Find the existing player for the current position
-            const existingPlayerIndex = selectedPlayers.findIndex((player) => player.position == position.position_name);
+            const existingPlayerIndex = selectedPlayers.findIndex((player) => player.position == position.id);
             
             if (existingPlayerIndex != -1) {
                 // Remove the existing player if "No Selection" is chosen
@@ -196,8 +190,8 @@ const NewGamePageComponent = ({ eventTitle }) => {
             // If "No Selection" is chosen and the position is empty, nothing happens
         } else {            
             const selectedPlayer = teamPlayers.find((player) => player.id == playerId);            
-            const playerWithPosition = { ...selectedPlayer, position: position.position_name };            
-            const existingPlayerIndex = selectedPlayers.findIndex((player) => player.position == position.position_name);
+            const playerWithPosition = { ...selectedPlayer, position_name: position.position_name, position_id:position.id };            
+            const existingPlayerIndex = selectedPlayers.findIndex((player) => player.position_id == position.id);
             
             if (existingPlayerIndex !== -1) {                
                 const updatedPlayers = [...selectedPlayers];
@@ -209,6 +203,80 @@ const NewGamePageComponent = ({ eventTitle }) => {
         }
     };
 
+    const handleExtraChange = (event, extraRole) => {
+        const extraId = event.target.value;
+
+        
+        if (extraId == -1) {
+        // Find the existing player for the current position
+            const existingExtraIndex = selectedExtras.findIndex((extra) => extra.extraRole_id == extraRole.id);
+            
+            if (existingExtraIndex != -1) {
+                // Remove the existing player if "No Selection" is chosen
+                const updatedExtras = [...selectedExtras];
+                updatedExtras.splice(existingExtraIndex, 1);
+                
+                setSelectedExtras(updatedExtras);
+            }
+            // If "No Selection" is chosen and the position is empty, nothing happens
+        } else {            
+            const selectedExtra = volunteers.find((extra) => extra.id == extraId);            
+            const extraWithRole = { ...selectedExtra, extraRole_id: extraRole.id, extraRole: extraRole.role_title };            
+            const existingExtraIndex = selectedExtras.findIndex((extra) => extra.extraRole_id == extraRole.id);
+            
+            if (existingExtraIndex !== -1) {                
+                const updatedExtras = [...selectedExtras];
+                updatedExtras[existingExtraIndex] = extraWithRole;                
+                setSelectedExtras(updatedExtras);
+            } else {
+                setSelectedExtras((prevSelectedExtras) => [...prevSelectedExtras, extraWithRole]);
+            }
+        }
+    };
+
+    
+
+    const handleAddSubstitute = () => {
+        setPreSubstitutePlayers(prev => [...prev, { full_name: "No Selection", id: -1 }]);
+    };
+
+    
+    
+    const handleSubstituteChange = (index, playerId) => {
+        let selectedPlayer = { full_name: "No Selection", id: -1 };
+        if (playerId != -1) {
+            selectedPlayer = teamPlayers.find((player) => player.id == playerId);
+        }
+        const updatedSubstitute = [...preSubstitutePlayers];
+        updatedSubstitute[index] = { full_name: selectedPlayer.full_name, id: selectedPlayer.id };
+        
+        setPreSubstitutePlayers(updatedSubstitute);        
+        
+    };
+    
+    useEffect(() => {
+        // Update selectedPlayer whenever preSubstitutePlayer change
+        setSelectedPlayers((prevSelected) => {
+            // Remove players with position "substitute"
+            const updatedSelected = prevSelected.filter(
+            (player) => player.position !== "substitute"
+            );
+
+            // Add players from preSubstitutePlayer with id not equal to -1
+            preSubstitutePlayers.forEach((substitute) => {
+            if (substitute.id !== -1) {
+                updatedSelected.push({ ...substitute, position: "substitute", position_id: 6 });
+            }
+            });
+
+            return updatedSelected;
+        });
+    }, [preSubstitutePlayers]);
+
+    const handleRemoveSubstitute = (indexToRemove) => {        
+        setPreSubstitutePlayers((prev) => prev.filter((_, index) => index !== indexToRemove));
+        
+    };
 
     if (loading) {
         return <LoadingPage />; // You can replace this with any loading spinner or indicator
@@ -245,8 +313,8 @@ const NewGamePageComponent = ({ eventTitle }) => {
                                 disabled={!selectedID}
                                 >
                                 <option className="h-7 w-[210px] bg-white rounded-md">
-                                    {selectedPlayers.find(player => player.position == position.position_name) ?
-                                        selectedPlayers.find(player => player.position == position.position_name).full_name : 'No Selection' }</option>
+                                    {selectedPlayers.find(player => player.position_id == position.id) ?
+                                        selectedPlayers.find(player => player.position_id == position.id).full_name : 'No Selection' }</option>
                                 <option className="h-7 w-[210px] bg-white rounded-md">No Selection</option>
                                 {optionPlayers.map((player) => (
                                     <option key={player.id} value={player.id} className="h-7 w-[210px] bg-white rounded-md">
@@ -260,36 +328,60 @@ const NewGamePageComponent = ({ eventTitle }) => {
                     
                 </div>
                 <div id='players' className="flex flex-col gap-1 mt-[32px]">
-                    <h5 className="font-interSBold">Substitutes</h5>
-                    <div className="flex flex-row gap-2 items-center">
-                        <span>
-                            <select className="h-7 px-2 w-[210px] bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="" disabled={!selectedID}>
-                                <option className="h-7 w-[210px] bg-white rounded-md">No Selection</option>
-                                {
-                                    teamPlayers.map((player) =>
-                                    (
-                                        <option key={player.id} value={player.id} className="h-7 w-[210px] bg-white rounded-md">
-                                            {player.full_name}
-                                        </option>
-                                    ))
-                                }
+                    <div className="flex gap-4 items-center">
+                        <h5 className="font-interSBold">Substitutes</h5>
+                        <span onClick={handleAddSubstitute}>
+                            <img src={process.env.PUBLIC_URL + "/images/small-plus.svg"} alt="" className="w-6 h-6 cursor-pointer"/>
+                        </span>
+                    </div>
+                    
+                    <div className="flex flex-col gap-2 justify-center items-start">
+                        
+                        {preSubstitutePlayers.map((substitute, index) => (
+                            <div key={index} className="flex gap-4 items-start w-full" >
+                            <select
+                                className="h-7 px-2 w-[210px] bg-white rounded-md border-sn-light-orange border-[1.5px]"
+                                name={`substituteSelect_${index}`}
+                                id={`substituteSelect_${index}`}
+                                value={substitute.id}
+                                onChange={(e) => handleSubstituteChange(index, e.target.value)}
+                                // onFocus={handleSelectFocus}
+                                // onBlur={handleSelectBlur}
+                                >
+                                <option className="h-7 w-[210px] bg-white rounded-md">
+                                    {preSubstitutePlayers[index].full_name}</option>
+                                <option value={-1} className="h-7 w-[210px] bg-white rounded-md">No Selection</option>
+                                {optionPlayers.map((player) => (
+                                <option key={player.id} value={player.id} className="h-7 w-[210px] bg-white rounded-md">
+                                    {player.full_name}
+                                </option>
+                                ))}
                             </select>
-                        </span>
-                        <span>
-                            <img src={process.env.PUBLIC_URL + "/images/small-plus.svg"} alt="" />
-                        </span>
+
+                                {/* {isSelectFocused ? (<XMarkIcon className="w-8 h-8"
+                                    onClick={() => handleRemoveSubstitute(index)} />)
+                                    : (<div className="w-8 h-8"></div>)} */}
+                                <XMarkIcon className="w-6 h-6 text-neutral-300 cursor-pointer"
+                                    onClick={() => handleRemoveSubstitute(index)}></XMarkIcon>
+                            </div>
+                        ))}
+                        
                     </div>
                 </div>
                 <div id='extra-roles' className="flex flex-col gap-1 mt-[32px] bg-sn-bg-light-blue">
                     <h5 className="font-interSBold">Extra Roles</h5>
-                    {extraRoles.map((extras) => (
-                        <div key={extras.id} className="flex flex-row justify-between items-center">
-                            <div>{extras.role_title}</div>
+                    {extraRoles.map((extraRole) => (
+                        <div key={extraRole.id} className="flex flex-row justify-between items-center">
+                            <div>{extraRole.role_title}</div>
                             <div>
-                                <select className="h-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="" disabled={!selectedID}>
-                                    <option className="h-7 bg-white rounded-md" value="">No Selection</option>
+                                <select className="h-7 px-2 w-[210px] bg-white rounded-md border-sn-light-orange border-[1.5px]" name="" id="" disabled={!selectedID}
+                                onChange={(event) => handleExtraChange(event, extraRole)}>
+                                    <option className="h-7 w-[210px] bg-white rounded-md">
+                                    {selectedExtras.find(extra => extra.extraRole_id == extraRole.id) ?
+                                        selectedExtras.find(extra => extra.extraRole_id == extraRole.id).full_name : 'No Selection' }</option>
+                                    <option className="h-7 bg-white rounded-md" value={-1}>No Selection</option>
                                     {
-                                        volunteers.map((volunteer) => (
+                                        optionExtras.map((volunteer) => (
                                             <option key={volunteer.id} value={volunteer.id} className="h-7 bg-white rounded-md">
                                                 {volunteer.full_name}
                                             </option>
