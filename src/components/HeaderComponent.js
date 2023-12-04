@@ -15,35 +15,40 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
 
     // get the club from team from user
     const getClub = async (userID) => {
-      const { data: team, error: teamError } = await supabase
-      .from('team_users')
-      .select('team_id')
-      .eq('user_id', userID)
-      if (teamError) throw teamError;
-      // console.log("team data:", team[0].team_id);     
+      try {
+          const { data: team, error: teamError } = await supabase
+              .from('team_users')
+              .select('team_id')
+              .eq('user_id', userID);
   
-      const { data: club, error: clubError } = await supabase
-      .from('club_teams')
-      .select('club_id')
-      .eq('team_id', team[0].team_id)
-      .single(); // Use single to get a single record or null
-      if (clubError) throw clubError;
-      //console.log("club data:", club);
-      
+          if (teamError) throw teamError;
+          if (team.length === 0) {
+              console.error('No team found for user:', userID);
+              return; // Exit the function if no team is found
+          }
   
-      const { data: clubData, error: clubNameError } = await supabase
-      .from('club')
-      .select('id, name, picture')
-      .eq('id', club.club_id)
-      .single(); // Use single to get a single record or null
-      if (clubNameError) throw clubNameError;
-      setClubData(clubData);
-      setTeamData(team);
-      console.log("Team data:",teamData);
-      console.log("Club id:",clubData);
-      console.log("Team id:",teamData[0].team_id);
-      console.log("Club id:",clubData.id);
-    }
+          const { data: club, error: clubError } = await supabase
+              .from('club_teams')
+              .select('club_id')
+              .eq('team_id', team[0].team_id)
+              .single(); // Use single to get a single record or null
+  
+          if (clubError) throw clubError;
+  
+          const { data: clubData, error: clubNameError } = await supabase
+              .from('club')
+              .select('id, name, picture')
+              .eq('id', club.club_id)
+              .single(); // Use single to get a single record or null
+  
+          if (clubNameError) throw clubNameError;
+          setClubData(clubData);
+          setTeamData(team[0]); // Update to set the first element of team array
+      } catch (error) {
+          console.error("Error in getClub:", error);
+      }
+  };
+  
 
 
   // Fetch user data
@@ -53,7 +58,6 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
       try {
         const userResponse = await supabase.auth.getUser();
         const user = userResponse.data.user;
-        // console.log("User:", user);
         if (user) {
           // Initially, we don't know the user's role, so fetch from both tables.
           const { data: user_data, error: userError } = await supabase
@@ -103,8 +107,15 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
   return (
     <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-10'> {/* Ensure z-index is high enough */}
            
-          <Link to={`/team-profile/${clubData.id}/${teamData[0].team_id}`} className='flex flex-col items-center justify-center'>
+          <Link to={`/team-profile/${clubData.id}/${teamData.team_id}`} className='flex flex-col items-center justify-center'>
+          {clubData.picture ? (
             <img className='cursor-pointer border-2 border-white object-cover overflow-hidden w-[40px] h-[40px] rounded-full' src={clubData.picture} alt="team" />
+              ) : (
+              <div className='cursor-pointer border-2 border-white w-[40px] h-[40px] rounded-full flex justify-center items-center'>
+                <img className='object-cover overflow-hidden w-[30px] h-[30px] rounded-full' src={process.env.PUBLIC_URL + "/images/team.png"} alt="team" />
+              </div>
+              )
+          }
             <p className="text-[8px] text-white font-russoOne font-400">My teams</p>
           </Link>
           
@@ -112,7 +123,12 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
             <SynthleteSmallLogo />
           </Link>
           <Link className='flex flex-col justify-center items-center'>
+          {userData.profile_picture ? (
             <img onClick={rightSideBarOpen} className='cursor-pointer border-2 border-white object-cover overflow-hidden rounded-full w-[40px] h-[40px] ' src={userData.profile_picture} alt="profile" />
+              ) : (
+            <img onClick={rightSideBarOpen} className='cursor-pointer border-2 border-white object-cover overflow-hidden rounded-full w-[40px] h-[40px] ' src={process.env.PUBLIC_URL + "/images/no_user.png"} />
+              )
+          }
             <p className="text-[8px] text-white font-russoOne font-400">Profile</p>
           </Link>
     </header>

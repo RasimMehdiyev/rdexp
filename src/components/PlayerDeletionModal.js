@@ -3,7 +3,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import PersonTagNotDeletable from '../components/PersonTagNotDeletable.js';
 
-export default function PlayerDeletionModal({ isOpen, closeModal, onConfirm, id, name, number, team}) {
+export default function PlayerDeletionModal({ isOpen, closeModal, onConfirm, id, name, number, team, isPlayer}) {
 
   const cancelButtonRef = useRef(null)
 
@@ -48,7 +48,7 @@ export default function PlayerDeletionModal({ isOpen, closeModal, onConfirm, id,
                         Are you sure you want to remove</p>
                         
                         
-                        <PersonTagNotDeletable name={name} number={number} isPlayer={true} />
+                        <PersonTagNotDeletable name={name} number={number} isPlayer={isPlayer} />
                         <p className=" text-game-blue">
                         
                         from <strong>{team}</strong>?</p>

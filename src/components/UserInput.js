@@ -13,6 +13,7 @@ const UserInput = ({ onAdd }) => {
   const handleAddClick = () => {
     if (inputValue.trim()) {
       onAdd(inputValue);
+
       setInputValue(''); // Reset input field after adding
     }
   };

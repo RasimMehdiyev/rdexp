@@ -3,15 +3,38 @@ import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import UserInput from '../components/UserInput.js';
+import PlayerInput from '../components/PlayerInput.js';
 
-export default function PlayerAdditionModal({ isOpen, closeModal, isPlayer }) {
+export default function PlayerAdditionModal({ isOpen, closeModal, onSave, isPlayer}) {
+  const [inputValue, setInputValue] = useState('');
+  const [error, setError] = useState("");
 
   const cancelButtonRef = useRef(null)
 
+  const handleInputChange = (value) => {
+    setInputValue(value);
+  };
+
+  const handleAddPlayer = async () => {
+    const errorMsg = await onSave(inputValue, isPlayer);
+    setError(errorMsg);
+    if (!errorMsg) {
+        closeModal();
+        setInputValue(''); // Reset the input field after adding
+    }
+  };
+
+  const resetAndCloseModal = () => {
+    setInputValue('');
+    setError("");
+    closeModal();
+  }
+
+
+
   return (
     <Transition.Root show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={closeModal} initialFocus={cancelButtonRef}>
+      <Dialog as="div" className="relative z-10" onClose={resetAndCloseModal} initialFocus={cancelButtonRef}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -43,7 +66,7 @@ export default function PlayerAdditionModal({ isOpen, closeModal, isPlayer }) {
                       {isPlayer ? 'ADD PLAYER' : 'ADD EXTRA'}
                     </Dialog.Title>
                       <div className="mt-4">
-                          <UserInput/>
+                      <PlayerInput onInputChange={handleInputChange} errorMessage={error} />
                       </div>
                     </div>
                   </div>
@@ -53,7 +76,7 @@ export default function PlayerAdditionModal({ isOpen, closeModal, isPlayer }) {
                   <button
                     type="button"
                     className="xxs:max-h-12 w-[80vw] xxs:text-center xxs:items-center inline-flex font-interELight mr-6 justify-center rounded-10px bg-game-blue px-3 py-4 text-lg text-white shadow-xxs xxs:ml-3 "
-                    onClick={closeModal}>
+                    onClick={handleAddPlayer}>
                     SAVE
                   </button>
                 </div>

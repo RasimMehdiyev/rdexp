@@ -4,7 +4,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 
 
-const RoleInput = ({ value, onAdd }) => {
+const RoleInput = ({ onAdd }) => {
   const [role, setRole] = useState("");
 
   const handleInputChange = (e) => {
@@ -12,7 +12,7 @@ const RoleInput = ({ value, onAdd }) => {
   };
 
   const handleAddRole = () => {
-    console.log("Added role:", role)
+    if(!role.trim()) return;
     onAdd(role); 
     setRole("");
   };
