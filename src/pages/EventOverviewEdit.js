@@ -7,11 +7,41 @@ import { MdDateRange, MdAccessTime, MdLocationOn, MdGroup } from 'react-icons/md
 import PlayerSetupBlock from '../components/PlayerSetupBlock';
 
 
+ // Function to get text color based on status
+ const getStatusColor = (status) => {
+  switch (status) {
+    case 'Accepted':
+      return 'text-green-500';
+    case 'Pending':
+      return 'text-yellow-500';
+    case 'Declined':
+      return 'text-red-500';
+    default:
+      return 'text-black'; 
+  }
+};
+
+// Function to get border color based on status
+const getStatusBorderColor = (status) => {
+  switch (status) {
+    case 'Accepted':
+      return 'border-green-500';
+    case 'Pending':
+      return 'border-yellow-500';
+    case 'Declined':
+      return 'border-red-500';
+    default:
+      return 'border-black'; 
+  }
+};
+
+
+
 const EventOverviewEdit = () => {
   const initialLineup = [
     { position: 'PG', name: 'Michael Johnson', status: 'Pending' },
-    { position: 'SG', name: 'John Williams', status: 'Not sent yet' },
-    { position: 'SF', name: 'James Davis', status: 'Not sent yet' },
+    { position: 'SG', name: 'John Williams', status: 'Declined' },
+    { position: 'SF', name: 'James Davis', status: 'Accepted' },
     { position: 'PF', name: 'Robert Wilson', status: 'Not sent yet' },
     { position: 'C', name: 'Benjamin Taylor', status: 'Not sent yet' },
   ];
@@ -19,24 +49,24 @@ const EventOverviewEdit = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'Accepted':
-        return 'text-green-500';
+        return 'text-status-accepted border-status-accepted'; // Use the custom color key from your Tailwind config
       case 'Pending':
-        return 'text-yellow-500';
+        return 'text-status-pending border-status-pending'; // Use the custom color key from your Tailwind config
       case 'Declined':
-        return 'text-red-500';
+        return 'text-status-declined border-status-declined'; // Use the custom color key from your Tailwind config
       default:
-        return 'text-black'; 
+        return 'text-black border-black'; // Default case
     }
-  };
+  }
 
   const [otherPlayers, setOtherPlayers] = useState([
-    { name: 'Fred Thompson', status: 'Not sent yet' },
-    { name: 'Jan De Man', status: 'Not sent yet' },
+    { name: 'Fred Thompson', status: 'Pending' },
+    { name: 'Jan De Man', status: 'Pending' },
   ]);
 
 
   const addPlayer = () => {
-    const newPlayer = { name: '', status: 'Not sent yet' }; // Adjust as necessary for your default values
+    const newPlayer = { name: '', status: 'Pending' }; // Adjust as necessary for your default values
     setOtherPlayers([...otherPlayers, newPlayer]);
   };
 
@@ -75,10 +105,13 @@ const EventOverviewEdit = () => {
         />
       </div> 
 
-      
+  
         <div className="mb-4 flex items-center">
           <MdGroup className="text-sn-main-orange mr-3" size={24} />
-          <select className="form-select block w-full py-2 bg-white border border-gray-300 rounded-lg text-neutral-600">
+          <select 
+            className="form-select bg-white border border-gray-300 rounded-lg text-neutral-600"
+            style={{ maxWidth: '200px', padding: '0.5rem 1rem' }} // Set a max-width
+          >
             <option>Team 1</option>
             <option>Team 2</option>
             <option>Team 3</option>
@@ -97,7 +130,12 @@ const EventOverviewEdit = () => {
 
         <div className="mb-4 flex items-center">
           <MdLocationOn className="text-sn-main-orange mr-3" size={24} />
-          <input type="text" placeholder="Fill in location" className="form-input w-full py-2 border border-gray-300 rounded-lg text-neutral-600"/>
+          <input 
+            type="text" 
+            placeholder="Fill in location" 
+            className="form-input border border-gray-300 rounded-lg text-neutral-600"
+            style={{ maxWidth: '300px', padding: '0.5rem 1rem' }} // Set a max-width
+          />
         </div>
 
         
