@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import useEventData from '../hooks/useEventData';
 import SynthleteLogo from '../components/SynthleteLogo';
 import { supabase } from "../lib/helper/supabaseClient";
 import { useNavigate } from 'react-router-dom';
@@ -7,73 +8,70 @@ import { MdDateRange, MdAccessTime, MdLocationOn, MdGroup } from 'react-icons/md
 import PlayerSetupBlock from '../components/PlayerSetupBlock';
 
 
- // Function to get text color based on status
- const getStatusColor = (status) => {
-  switch (status) {
-    case 'Accepted':
-      return 'text-green-500';
-    case 'Pending':
-      return 'text-yellow-500';
-    case 'Declined':
-      return 'text-red-500';
-    default:
-      return 'text-black'; 
-  }
-};
-
-// Function to get border color based on status
-const getStatusBorderColor = (status) => {
-  switch (status) {
-    case 'Accepted':
-      return 'border-green-500';
-    case 'Pending':
-      return 'border-yellow-500';
-    case 'Declined':
-      return 'border-red-500';
-    default:
-      return 'border-black'; 
-  }
-};
-
 
 
 const EventOverviewEdit = () => {
-  const initialLineup = [
-    { position: 'PG', name: 'Michael Johnson', status: 'Pending' },
-    { position: 'SG', name: 'John Williams', status: 'Declined' },
-    { position: 'SF', name: 'James Davis', status: 'Accepted' },
-    { position: 'PF', name: 'Robert Wilson', status: 'Not sent yet' },
-    { position: 'C', name: 'Benjamin Taylor', status: 'Not sent yet' },
-  ];
+  const eventId = 1;
+  const { eventDetails, teamName, teamPlayers, loading, error } = useEventData(eventId);
+  const [initialLineup, setInitialLineup] = useState([]);
+  const [Substitutes, setSubstitutes] = useState([]);
+  const [selectedInitialPlayers, setSelectedInitialPlayers] = useState(Array(5).fill(''));
+  const [selectedSubstitutePlayers, setSelectedSubstitutePlayers] = useState([]);
+  
+  const positionLabels = ['PG', 'SG', 'SF', 'PF', 'C']; //for basketball mvp
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'Accepted':
-        return 'text-status-accepted border-status-accepted'; // Use the custom color key from your Tailwind config
-      case 'Pending':
-        return 'text-status-pending border-status-pending'; // Use the custom color key from your Tailwind config
-      case 'Declined':
-        return 'text-status-declined border-status-declined'; // Use the custom color key from your Tailwind config
-      default:
-        return 'text-black border-black'; // Default case
+
+
+  useEffect(() => {
+    setInitialLineup(teamPlayers.slice(0, 5));
+    setSubstitutes(teamPlayers.slice(5, 7));
+  }, [teamPlayers]);
+
+  const handlePlayerClick = (index, type) => {
+    setShowPlayerSelect({ index, type });
+  };
+
+
+  const handleInitialSelectChange = (event, index) => {
+    const newSelectedPlayers = [...selectedInitialPlayers];
+    newSelectedPlayers[index] = event.target.value;
+    setSelectedInitialPlayers(newSelectedPlayers);
+  };
+
+  // Function to handle selection change for substitutes
+  const handleSubstituteSelectChange = (event, index) => {
+    const newSelectedPlayers = [...selectedSubstitutePlayers];
+    newSelectedPlayers[index] = event.target.value;
+    setSelectedSubstitutePlayers(newSelectedPlayers);
+  };
+
+
+  const handleSelectPlayer = (playerId, index, type) => {
+    if (type === 'initial') {
+      const newLineup = [...initialLineup];
+      newLineup[index] = playerId;
+      setInitialLineup(newLineup);
+    } else if (type === 'substitute') {
+      const newSubs = [...substitutes];
+      newSubs[index] = playerId;
+      setSubstitutes(newSubs);
     }
-  }
-
-  const [otherPlayers, setOtherPlayers] = useState([
-    { name: 'Fred Thompson', status: 'Pending' },
-    { name: 'Jan De Man', status: 'Pending' },
-  ]);
-
+    setShowPlayerSelect({ index: null, type: null }); // Hide the dropdown after selection
+  };
 
   const addPlayer = () => {
     const newPlayer = { name: '', status: 'Pending' }; // Adjust as necessary for your default values
-    setOtherPlayers([...otherPlayers, newPlayer]);
+    setSubstitutes([...Substitutes, newPlayer]);
   };
 
   const extras = [
     { role: 'Referee', name: 'Fred Thompson', status: 'Not sent yet' },
     // Add more extras
   ];
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
 
   return (
     <div className="flex flex-col min-h-screen bg-sn-bg-light-blue font-interReg">
@@ -95,6 +93,7 @@ const EventOverviewEdit = () => {
       <input
           type="text"
           defaultValue="Game 1" 
+          value={eventDetails.title || ''} 
           onChange={() => {}}
           className="text-2xl font-bold text-center text-sn-main-blue font-russoOne bg-white border border-gray-300 rounded-lg"
           style={{
@@ -105,72 +104,83 @@ const EventOverviewEdit = () => {
         />
       </div> 
 
-  
-        <div className="mb-4 flex items-center">
-          <MdGroup className="text-sn-main-orange mr-3" size={24} />
-          <select 
-            className="form-select bg-white border border-gray-300 rounded-lg text-neutral-600"
-            style={{ maxWidth: '200px', padding: '0.5rem 1rem' }} // Set a max-width
-          >
-            <option>Team 1</option>
-            <option>Team 2</option>
-            <option>Team 3</option>
-          </select>
-        </div>
+        
+       <div className="mb-4 flex items-center">
+        <MdGroup className="text-sn-main-orange mr-3" size={24} />
+        <span className="form-input bg-white border border-gray-300 rounded-lg text-neutral-600" style={{ maxWidth: '200px', padding: '0.5rem 1rem' }}>
+          {teamName || 'Team not set'}
+        </span>
+      </div>
 
-        <div className="mb-4 flex items-center">
-          <MdDateRange className="text-sn-main-orange mr-3" size={24} />
-          <input type="date" style={{ width: '130px' }} className="form-input py-2 border border-gray-300 rounded-lg text-neutral-600"/>
-        </div>
+      <div className="mb-4 flex items-center">
+        <MdDateRange className="text-sn-main-orange mr-3" size={24} />
+        <input 
+          type="date" 
+          value={eventDetails.datetime ? eventDetails.datetime.split('T')[0] : ''} 
+          className="form-input py-2 border border-gray-300 rounded-lg text-neutral-600"
+          style={{ width: '130px' }} 
+          
+        />
+      </div>
 
-        <div className="mb-4 flex items-center">
-          <MdAccessTime className="text-sn-main-orange mr-3" size={24} />
-          <input type="time" style={{ width: '70px' }} className="form-input py-2 border border-gray-300 rounded-lg text-neutral-600"/>
-        </div>
+      <div className="mb-4 flex items-center">
+        <MdAccessTime className="text-sn-main-orange mr-3" size={24} />
+        <input 
+          type="time" 
+          value={eventDetails.datetime ? eventDetails.datetime.split('T')[1].substring(0, 5) : ''} 
+          className="form-input py-2 border border-gray-300 rounded-lg text-neutral-600"
+          style={{ width: '80px' }} 
+          
+        />
+      </div>
 
-        <div className="mb-4 flex items-center">
-          <MdLocationOn className="text-sn-main-orange mr-3" size={24} />
-          <input 
-            type="text" 
-            placeholder="Fill in location" 
-            className="form-input border border-gray-300 rounded-lg text-neutral-600"
-            style={{ maxWidth: '300px', padding: '0.5rem 1rem' }} // Set a max-width
-          />
-        </div>
+      <div className="mb-4 flex items-center">
+        <MdLocationOn className="text-sn-main-orange mr-3" size={24} />
+        <input 
+          type="text" 
+          value={eventDetails.location || ''} 
+          placeholder="Fill in location" 
+          className="form-input border border-gray-300 rounded-lg text-neutral-600"
+          style={{ maxWidth: '300px', padding: '0.5rem 1rem' }} 
+          
+        />
+      </div>
 
         
 
-        <div className="mb-4">
-        <h3 className="text-lg font-semibold mb-2 text-sn-main-blue font-russoOne">Initial Line-up</h3>
-        {initialLineup.map((player, index) => (
-          <PlayerSetupBlock
-            key={index}
-            label={player.position} // Initial lineup uses the player's position
-            name={player.name}
-            status={player.status}
-            getStatusColor={getStatusColor}
-          />
-        ))}
-      </div>
-
       <div className="mb-4">
-        <h3 className="text-lg font-semibold mb-2 text-sn-main-blue font-russoOne">Substitutes</h3>
-        {otherPlayers.map((player, index) => (
-          <PlayerSetupBlock
-            key={index}
-            label="SUB" // Substitutes use the "SUB" label
-            name={player.name}
-            status={player.status}
-            getStatusColor={getStatusColor}
-          />
-        ))}
-        <button 
-          onClick={addPlayer} 
-          className="mt-2 p-2 bg-white text-black rounded-lg"
-        >
-          Add Player
-        </button>
-      </div>
+      <h3 className="text-lg font-semibold mb-2 text-sn-main-blue font-russoOne">Initial Line-up</h3>
+      {positionLabels.map((positionLabel, index) => (
+        <PlayerSetupBlock
+          key={index}
+          label={positionLabel}
+          selectedPlayerId={selectedInitialPlayers[index]}
+          allPlayers={teamPlayers}
+          onSelectPlayer={e => handleInitialSelectChange(e, index)}
+          
+        />
+      ))}
+    </div>
+
+    <div className="mb-4">
+      <h3 className="text-lg font-semibold mb-2 text-sn-main-blue font-russoOne">Substitutes</h3>
+      {Substitutes.map((player, index) => (
+        <PlayerSetupBlock
+          key={index}
+          label="SUB"
+          selectedPlayerId={selectedSubstitutePlayers[index]}
+          allPlayers={teamPlayers}
+          onSelectPlayer={e => handleSubstituteSelectChange(e, index)}
+          
+        />
+      ))}
+      <button 
+        onClick={addPlayer} 
+        className="mt-2 p-2 bg-white text-black rounded-lg"
+      >
+        Add Player
+      </button>
+    </div>
 
         <div className="mb-4">
           <h3 className="text-lg font-semibold mb-2 text-sn-main-blue font-russoOne">Extras</h3>
