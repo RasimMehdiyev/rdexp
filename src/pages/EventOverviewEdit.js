@@ -11,7 +11,7 @@ import PlayerSetupBlock from '../components/PlayerSetupBlock';
 
 
 const EventOverviewEdit = () => {
-  const eventId = 1;
+  const eventId = 4;
   const { eventDetails, teamName, teamPlayers, loading, error } = useEventData(eventId);
   const [initialLineup, setInitialLineup] = useState([]);
   const [Substitutes, setSubstitutes] = useState([]);
@@ -23,6 +23,7 @@ const EventOverviewEdit = () => {
 
 
   useEffect(() => {
+    console.log('teamPlayers updated:', teamPlayers);
     setInitialLineup(teamPlayers.slice(0, 5));
     setSubstitutes(teamPlayers.slice(5, 7));
   }, [teamPlayers]);
@@ -72,6 +73,7 @@ const EventOverviewEdit = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
+  console.log('Team Players to render:', teamPlayers);
 
   return (
     <div className="flex flex-col min-h-screen bg-sn-bg-light-blue font-interReg">
@@ -157,7 +159,7 @@ const EventOverviewEdit = () => {
           selectedPlayerId={selectedInitialPlayers[index]}
           allPlayers={teamPlayers}
           onSelectPlayer={e => handleInitialSelectChange(e, index)}
-          
+          status = 'Accepted'
         />
       ))}
     </div>
@@ -171,7 +173,7 @@ const EventOverviewEdit = () => {
           selectedPlayerId={selectedSubstitutePlayers[index]}
           allPlayers={teamPlayers}
           onSelectPlayer={e => handleSubstituteSelectChange(e, index)}
-          
+          status = 'Accepted'
         />
       ))}
       <button 

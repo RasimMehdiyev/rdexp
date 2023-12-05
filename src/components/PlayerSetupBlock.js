@@ -26,7 +26,6 @@ const PlayerSetupBlock = ({ label, selectedPlayerId, allPlayers = [], onSelectPl
     break;
   }
 
-  // Default player name when none is selected
   const selectedPlayerName = selectedPlayer.full_name || 'Select a player';
 
   return (

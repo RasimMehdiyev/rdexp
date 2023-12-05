@@ -11,11 +11,12 @@ const useEventData = (eventId) => {
 
     // Fetch event details from the 'event' table
     const fetchEventDetails = async () => {
-        const { data, error } = await supabase
+        const { data, erroar } = await supabase
             .from('event')
             .select('*')
             .eq('id', eventId)
             .single();
+
 
         if (error) {
             throw error;
@@ -25,35 +26,40 @@ const useEventData = (eventId) => {
 
     // Fetch the team name based on the team_id
     const fetchTeamName = async (teamId) => {
-        const { data, error } = await supabase
+        let { data: team, error } = await supabase
             .from('team')
             .select('team_name')
-            .eq('id', teamId)
+            .eq('id', 1)
             .single();
 
+            console.log('Team name', team);
         if (error) {
             throw error;
         }
         setTeamName(data ? data.team_name : '');
     };
 
-    // Fetch players related to the team from the 'team_users' and 'users' tables
-    const fetchTeamPlayers = async (teamId) => {
+    const fetchTeamPlayers = async (team) => {
+        console.log(`Fetching players for team ID: ${team}`);
         const { data, error } = await supabase
             .from('team_users')
             .select(`
                 user_id,
                 users (id, full_name)
             `)
-            .eq('team_id', teamId);
-
+            .eq('team', team);
+    
         if (error) {
+            console.error('Error fetching team players:', error);
             throw error;
         }
-
-        // Map the data to extract user details
+    
+        console.log('Team players data:', data);
         return data.map(teamUser => teamUser.users);
     };
+    
+
+    console.log('Fetched team players:', teamPlayers);
 
     const fetchAttendanceStatus = async (eventId) => {
         const { data, error } = await supabase
@@ -78,32 +84,35 @@ const useEventData = (eventId) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                console.log(`Fetching data for event ID: ${eventId}`);
                 setLoading(true);
     
                 const event = await fetchEventDetails();
+                console.log('Event details fetched:', event);
                 setEventDetails(event);
     
-                if (event && event.team_id) {
-                    await fetchTeamName(event.team_id);
-                    const playersData = await fetchTeamPlayers(event.team_id);
+                if (event && event.team) {
+                    const teamNameData = await fetchTeamName(event.team);
+                    console.log('Team name fetched:', teamNameData);
+                    setTeamName(teamNameData.team_name);
+                    
+                    const playersData = await fetchTeamPlayers(event.team);
+                    console.log('Team players fetched:', playersData);
                     setTeamPlayers(playersData);
     
-                    // Fetch attendance statuses for the event
                     const attendanceStatuses = await fetchAttendanceStatus(eventId);
-                    // You'll need to add a new piece of state to hold this data
+                    console.log('Attendance statuses fetched:', attendanceStatuses);
                     setPlayersAttendance(attendanceStatuses);
                 }
-    
             } catch (error) {
+                console.error('Error fetching event data:', error);
                 setError(error);
             } finally {
                 setLoading(false);
             }
         };
     
-        if (eventId) {
-            fetchData();
-        }
+        fetchData();
     }, [eventId]);
     
 
