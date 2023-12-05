@@ -18,36 +18,39 @@ const NewGamePage = () => {
     const navigate = useNavigate();
 
     const handleOnChange = async () => {
-        if (selectedOption == "Game") {
+        if (selectedOption == "game") {
             console.log("general info", generalInfo);
             console.log("players", selectedPlayers);
             console.log("extras", selectedExtras);
             console.log("team", selectedTeam);
 
-            try {
-                const userResponse = await supabase.auth.getUser();
-                console.log("User:", userResponse);
-                const user = userResponse.data.user;
-                if (user) {
-                    // Update general info => inserting column in event table
-                    const { data, error } = await supabase
-                        .from('event')
-                        .insert([
-                            { title: eventTitle, team: 'otherValue', datetime: "", location: "", type:"" },
-                        ])
-                        .select()
-                    if (error) throw userError;
-                    console.log("User data:", data);
+            const timestamp = `${generalInfo.date} ${generalInfo.time}:00+00`;
+            console.log("timestamp", timestamp);
+
+            // try {
+            //     const userResponse = await supabase.auth.getUser();
+            //     console.log("User:", userResponse);
+            //     const user = userResponse.data.user;
+            //     if (user) {
+            //         // Update general info => inserting column in event table
+            //         const { data, error } = await supabase
+            //             .from('event')
+            //             .insert([
+            //                 { title: eventTitle, team: 'otherValue', datetime: "", location: "", type:"" },
+            //             ])
+            //             .select()
+            //         if (error) throw userError;
+            //         console.log("User data:", data);
                     
-                }                       
+            //     }                       
                     
                             
-            } catch (error) {
-                console.error("Error uploading data", error);
-            } finally {
-                setLoading(false);
-                navigate('/game/create');
-            }
+            // } catch (error) {
+            //     console.error("Error uploading data", error);
+            // } finally {
+            //     setLoading(false);
+            //     navigate('/game/create');
+            // }
             } else {
                 console.log("submit handling not developed yet")
             }
