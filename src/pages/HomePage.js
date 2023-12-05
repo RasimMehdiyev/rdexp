@@ -127,7 +127,7 @@ const HomePage = () => {
   console.log("fetched events", fetchedEvents);
 
   // Check if fetchedEvents is empty
-  if (fetchedEvents.length === 0) {
+  if (fetchedEvents === undefined || fetchedEvents === null) {
     return (
       <div className="mt-[-80px]">
         <div className="flex flex-col justify-center items-center h-screen font-Inter text-sn-main-orange">
