@@ -15,7 +15,7 @@ const NewGamePage = () => {
     const [selectedPlayers, setSelectedPlayers] = useState([]);
     const [selectedExtras, setSelectedExtras] = useState([]);
     const [selectedTeam, setSelectedTeam] = useState([]);
-
+    const [inputCheck, setInputCheck] = useState(true);
     const navigate = useNavigate();
 
     const handleOnChange = async () => {
@@ -36,6 +36,13 @@ const NewGamePage = () => {
 
             console.log("to upload players", toUploadPlayers);
             console.log("to upload extras", toUploadExtras);
+
+            if (checkInput()) setInputCheck(true);
+            else {
+                setInputCheck(false);
+                setLoading(false);
+                return;
+            }
 
             try {
                 const userResponse = await supabase.auth.getUser();
@@ -60,9 +67,9 @@ const NewGamePage = () => {
                     else {
                         console.log("event data is", eventDataID);
                         const event_id = eventDataID[0].id;
-                        const finalUploadPlayers = toUploadPlayers.map((p) => ({ ...p, event_id: event_id }));
+                        const finalUploadPlayers = toUploadPlayers.map((p) => ({ ...p, event_id: event_id, is_attending: "Pending" }));
                         console.log("finalUploadPlayers: ", finalUploadPlayers);
-                        const finalUploadExtras = toUploadExtras.map((ex) => ({ ...ex, event_id: event_id }));
+                        const finalUploadExtras = toUploadExtras.map((ex) => ({ ...ex, event_id: event_id, is_attending: "Pending" }));
                         console.log("finalUploadExtras: ", finalUploadExtras);
 
                         const { playersData, errorPlayersData } = await supabase
@@ -88,10 +95,17 @@ const NewGamePage = () => {
             } finally {
                 setLoading(false);
                 navigate('/');
+
             }
         } else {
             console.log("submit handling not developed yet")
         }
+    }
+
+    const checkInput = () => {
+        if (!generalInfo.date | !generalInfo.location | !generalInfo.time | !eventTitle | !selectedTeam) {
+            return false;
+        } else return true;
     }
 
     const handleRadioChange = (event) => {
@@ -134,6 +148,8 @@ const NewGamePage = () => {
                 <StickySubheaderEventCreateComponent onSave={handleOnChange} />
                 <div className="pt-6 h-screen bg-sn-bg-light-blue flex flex-col px-5">
                     <h1>New {selectedOption ? selectedOption : "game"}</h1>
+                    {inputCheck? (<div/>):(<div className='text-sm text-red-500'>Please insure that title event, date, time, team, and location are filled/selected</div>)}
+                    
                     <input value={eventTitle} onChange={(e) => setEventTitle(e.target.value)} type="text" placeholder="Title" className="h-10 px-2 rounded-md border-sn-light-orange border-[1.5px] " />
                     <div className="flex flex-row justify-between gap-4 pt-2">
                         <div className="flex flex-row justify-between gap-2">
