@@ -79,7 +79,7 @@ const TeamProfilePage = () => {
     }  
     else{
         return (
-        <div className="w-screen h-screen py-4 bg-gradient-to-b from-indigo-100 via-white to-white flex-col justify-start items-center flex">
+        <div className="w-screen h-screen py-4 bg-gradient-to-b from-sn-bg-light-blue from-40% to-white to-55% flex-col justify-start items-center flex">
             <TeamProfileHeaderComponent
                 clubData={clubData}
                 teamData={teamData} 
