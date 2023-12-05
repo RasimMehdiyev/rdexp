@@ -51,7 +51,7 @@ const App = () => {
             <div style={{display:'none'}}></div>
          }
          {
-            location.pathname === "/game-overview/" || location.pathname === "/game-overview" || location.pathname === "/game/create/" || location.pathname === "/game/create" ? 
+            location.pathname === "/game-overview/" || location.pathname === "/game-overview"  ? 
             <StickySubheaderComponent/>
             :
             <div style={{display:'none'}}></div>

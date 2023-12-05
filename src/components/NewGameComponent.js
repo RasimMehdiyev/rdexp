@@ -4,10 +4,9 @@ import LoadingPage from "../pages/LoadingPage";
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
 
-const NewGamePageComponent = ({ eventTitle }) => {
+const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlayerChanges, onSelectedExtraChanges, onTeamChanges }) => {
     // const [title, setTitle] = useState(eventTitle);
     const [selectedOption, setSelectedOption] = useState("Game");
-    const [team, setTeam] = useState();
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [location, setLocation] = useState('');
@@ -74,6 +73,9 @@ const NewGamePageComponent = ({ eventTitle }) => {
             await getVolunteers(event.target.value);
             console.log('extraRoles:', extraRoles);
             console.log('positions:', positions);
+            setPreSubstitutePlayers([]);
+            setSelectedExtras([]);
+            setSelectedPlayers([]);
             setLoading(false);
         } else {
             setSelectedID('');
@@ -133,9 +135,9 @@ const NewGamePageComponent = ({ eventTitle }) => {
         const playerId = event.target.value;
 
         
-        if (playerId == 'No Selection') {
+        if (playerId == -1) {
         // Find the existing player for the current position
-            const existingPlayerIndex = selectedPlayers.findIndex((player) => player.position == position.id);
+            const existingPlayerIndex = selectedPlayers.findIndex((player) => player.position_id == position.id);
             
             if (existingPlayerIndex != -1) {
                 // Remove the existing player if "No Selection" is chosen
@@ -194,6 +196,7 @@ const NewGamePageComponent = ({ eventTitle }) => {
     useEffect(() => {
         // Update optionPlayers whenever selectedPlayers change
         console.log("selected players: ", selectedPlayers);
+        onSelectedPlayerChanges(selectedPlayers);
         const selectedPlayerNoPosition = selectedPlayers.map((player) => player.id)       
         
         const updatedOptionPlayers = teamPlayers.filter(player => !selectedPlayerNoPosition.includes(player.id));        
@@ -203,11 +206,20 @@ const NewGamePageComponent = ({ eventTitle }) => {
     useEffect(() => {
         // Update optionPlayers whenever selectedPlayers change
         console.log("selected extras: ", selectedExtras);
+        onSelectedExtraChanges(selectedExtras);
         const selectedExtraNoRole = selectedExtras.map((extra) => extra.id)      
         
         const updatedOptionExtras = volunteers.filter(extra => !selectedExtraNoRole.includes(extra.id));
         setOptionExtras(updatedOptionExtras);
     }, [selectedExtras]);
+
+    useEffect(() => {
+        onTeamChanges(selectedID);
+    }, [selectedID]);
+
+    useEffect(() => {
+        onGeneralInfoChanges({date:date, time:time, location:location});
+    }, [date, time, location]);
 
     const submitEvent = () => {
 
@@ -302,7 +314,7 @@ const NewGamePageComponent = ({ eventTitle }) => {
                                 <option className="h-7 w-[210px] bg-white rounded-md">
                                     {selectedPlayers.find(player => player.position_id == position.id) ?
                                         selectedPlayers.find(player => player.position_id == position.id).full_name : 'No Selection' }</option>
-                                <option className="h-7 w-[210px] bg-white rounded-md">No Selection</option>
+                                <option className="h-7 w-[210px] bg-white rounded-md" value={-1}>No Selection</option>
                                 {optionPlayers.map((player) => (
                                     <option key={player.id} value={player.id} className="h-7 w-[210px] bg-white rounded-md">
                                     {player.full_name}
