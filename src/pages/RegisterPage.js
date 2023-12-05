@@ -32,14 +32,18 @@ function RegisterPage() {
                     .insert([{ email: email, full_name: fullName, phone_number: phoneNumber, role_id: role, user_id: user.id }])
                     .select();
                 if (errorUsers) throw errorUsers;
-                navigate('/');
+                if (role === '1') {
+                navigate('/club/create/');
+                }else{
+                    navigate('/');
+                }
             }
         } catch (error) {
             alert(error.error_description || error.message);
         }
         
         
-     };""
+     };
     // if one of the necessary fields is empty, disable the submit button
     const isDisabled = !fullName || !email || !role || !password || !confirmPassword || password !== confirmPassword;
     const isPasswordMatch = password === confirmPassword;
