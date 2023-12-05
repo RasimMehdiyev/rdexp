@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 export const AboutClubPage = () => {
+    
 
 
     const [fileName, setFileName] = useState('Choose Image');
@@ -20,6 +21,8 @@ export const AboutClubPage = () => {
     const [userID, setUserID] = useState(''); // user id
     const [userData, setUserData] = useState({}); // user data
     const navigate = useNavigate();
+
+    
 
     const base64String = (file) => {
         // use setFile64 to set the base64 string
@@ -173,13 +176,13 @@ export const AboutClubPage = () => {
         localStorage.setItem('teamID', teamData.id);
         //navigate('/team/create');
            // Show success toast
-    toast.success('Successful club registration! 🎉', {
+    toast.success('Successful club registration! 🎉 Redirecting...', {
         position: 'top-center',
         autoClose: 5000,
         hideProgressBar: false,
-        closeOnClick: true,
+        closeOnClick: false,
         pauseOnHover: true,
-        draggable: true,
+        draggable: false,
         progress: undefined,
         theme: 'light',
       });

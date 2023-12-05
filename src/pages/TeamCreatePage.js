@@ -11,17 +11,17 @@ import 'react-toastify/dist/ReactToastify.css';
 const TeamCreatePage = () => {
   const navigate = useNavigate();
   
-  /*
-  toast.success('Successful club registration! 🎉', {
+  toast.success('Successful team creation! 🎉 Redirecting...', {
     position: 'top-center',
     autoClose: 5000,
     hideProgressBar: false,
-    closeOnClick: true,
+    closeOnClick: false,
     pauseOnHover: true,
-    draggable: true,
+    draggable: false,
     progress: undefined,
     theme: 'light',
-  });*/
+  });
+  
   
 
   const [teamName, setTeamName] = useState('');
@@ -201,6 +201,8 @@ const TeamCreatePage = () => {
           skip this step
         </Link>
       </div>
+
+      <ToastContainer/>
 
       
 
