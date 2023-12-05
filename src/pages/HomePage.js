@@ -207,22 +207,28 @@ const organizedEvents = transformedEvents.reduce((acc, event) => {
               <div key={day}>
                 <p className="text-2xl font-semibold">{`${new Date(`${month}-${day}`).toLocaleString('default', { weekday: 'short' })}. ${day}`}</p>
                 <div className="event-container">
-                  {dayEvents
-                    .sort((a, b) => a.dateTime.localeCompare(b.dateTime)) // Sort events by dateTime
-                    .map((event, index) => (
-                      <div key={index} className="event-card">
-                        {/* Render your EventCard component here */}
-                        <EventCard
-                          type={event.type}
-                          eventName={event.eventName}
-                          teamName={event.teamName}
-                          eventTime={event.eventTime}
-                          location={event.location}
-                          attendance={event.attendance}
-                          number_invitation={event.number_invitation}
-                        />
-                      </div>
-                    ))}
+                  {
+                    dayEvents
+                      .sort((a, b) => {
+                        if (a.dateTime != null && b.dateTime != null) {
+                          a.dateTime.localeCompare(b.dateTime)                        
+                        }
+                      }) // Sort events by dateTime
+                      .map((event, index) => (
+                        <div key={index} className="event-card">
+                          {/* Render your EventCard component here */}
+                          <EventCard
+                            type={event.type}
+                            eventName={event.eventName}
+                            teamName={event.teamName}
+                            eventTime={event.eventTime}
+                            location={event.location}
+                            attendance={event.attendance}
+                            number_invitation={event.number_invitation}
+                          />
+                        </div>
+                      ))
+                    }
                 </div>
               </div>
             ))}
