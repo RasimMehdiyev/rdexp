@@ -24,6 +24,7 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
 
 
       console.log(team)
+      // console.log("team data:", team[0].team_id);     
     if (team[0] !== undefined){
 
           const { data: club, error: clubError } = await supabase
@@ -102,7 +103,7 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
     return null; // You can replace this with any loading spinner or indicator
   }
   return (
-    <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-20'> 
+    <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-10'> {/* Ensure z-index is high enough */}
             {
               clubData.picture ? (
                 <Link to="/team-management/">

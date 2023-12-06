@@ -3,17 +3,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 
-const RoleInput = ({ onAdd }) => {
-  const [role, setRole] = useState("");
+const RoleInput = ({ value, onAdd }) => {
+  const [roleName, setRoleName] = useState('');
 
   const handleInputChange = (e) => {
-    setRole(e.target.value); 
+    setRoleName(e.target.value);
   };
 
-  const handleAddRole = () => {
-    if(!role.trim()) return;
-    onAdd(role); 
-    setRole("");
+  const handleAddClick = () => {
+    if (roleName.trim()) {
+      onAdd(roleName);
+      setRoleName(''); // Reset input field after adding
+    }
   };
 
   return (
@@ -22,15 +23,12 @@ const RoleInput = ({ onAdd }) => {
         <input
           className="h-[6vh] w-[80vw] pl-5 rounded-10px border-2 border-game-blue font-interReg placeholder-text"
           placeholder="Enter new role"
-          value={role}         
-          onChange={handleInputChange}  
+          value={roleName}
+          onChange={handleInputChange}
         />
       </div>
 
-      <button 
-        className="bg-game-blue p-2 pl-3 pr-3  rounded-10px ml-auto"
-        onClick={handleAddRole}
-      >
+      <button onClick={handleAddClick} className="bg-game-blue p-2 pl-3 pr-3 rounded-10px ml-auto">
         <FontAwesomeIcon icon={faPlus} className="text-white" />
       </button>
     </div>

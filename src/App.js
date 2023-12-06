@@ -79,9 +79,9 @@ const App = () => {
                <Route path="/team/create" element={<TeamCreatePage/>} />
                <Route path="/club/create" element={<AboutClubPage/>} />
                <Route path="/club/create/settings" element={<GameSettings/>} />
-               <Route path="/no-team" element={<NoTeamPage/>} />
                <Route path="/team-profile/:clubId/:teamId" element={<TeamProfilePage />} />
                <Route path="/team-profile/edit/:clubId/:teamId" element={<EditTeamPage/>} />
+               <Route path="/no-team" element={<NoTeamPage/>} />
             </Routes>
             <RightSideBarComponent rightIsOpen={rightIsOpen}/>
          </>

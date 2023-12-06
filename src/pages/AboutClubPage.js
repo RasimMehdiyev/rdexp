@@ -1,8 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {supabase} from '../lib/helper/supabaseClient';
 import {useNavigate} from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export const AboutClubPage = () => {
+    
+
 
     const [fileName, setFileName] = useState('Choose Image');
     const fileInputRef = useRef(null);
@@ -16,6 +21,8 @@ export const AboutClubPage = () => {
     const [userID, setUserID] = useState(''); // user id
     const [userData, setUserData] = useState({}); // user data
     const navigate = useNavigate();
+
+    
 
     const base64String = (file) => {
         // use setFile64 to set the base64 string
@@ -105,6 +112,10 @@ export const AboutClubPage = () => {
     },[file, clubName, clubEmail, clubPhone, clubLocation, clubDescription])
 
 
+    // useEffect(() => {
+
+    // },[navigate])
+
     const submitChanges = async (event) =>{
         // do not reload page
         event.preventDefault();
@@ -163,10 +174,26 @@ export const AboutClubPage = () => {
         
         // add team id into local storage
         localStorage.setItem('teamID', teamData.id);
-        navigate('/club/create/settings');
-    }    
-
+        //navigate('/team/create');
+           // Show success toast
+    toast.success('Successful club registration! 🎉 Redirecting...', {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: false,
+        progress: undefined,
+        theme: 'light',
+      });
+  
+      // Delay the navigation after 5 seconds
+      setTimeout(() => {
+        navigate('/team/create');
+      }, 5000); 
+    }
   return (
+    
     <form  onSubmit={submitChanges} className='bg-sn-bg-light-blue flex flex-col justify-center align-center px-8 h-screen gap-5 text-game-blue'>
         <div className='flex flex-col justify-center gap-0'>
             <h5 className='font-russoOne text-5xl  text-center leading-none'>ABOUT</h5>
@@ -208,6 +235,7 @@ export const AboutClubPage = () => {
         <button type='submit' className="font-interReg bg-sn-main-orange ml-[20%] align-center rounded-10px h-12 w-[50vw] text-white">
             SAVE
         </button>
-    </form>
+        <ToastContainer/>
+    </form> 
   )
 }

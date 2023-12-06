@@ -1,18 +1,34 @@
 import React, { useEffect } from 'react'
 import PersonTag from '../components/PersonTag.js';
 import UserInput from '../components/UserInput.js';
-import {Link,useNavigate} from 'react-router-dom'
+import {Link,useNavigate,useLocation} from 'react-router-dom'
 import { supabase } from '../lib/helper/supabaseClient';
 import { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const TeamCreatePage = () => {
+  const navigate = useNavigate();
+  
+  toast.success('Successful team creation! 🎉 Redirecting...', {
+    position: 'top-center',
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: false,
+    pauseOnHover: true,
+    draggable: false,
+    progress: undefined,
+    theme: 'light',
+  });
+  
+  
+
   const [teamName, setTeamName] = useState('');
   const [players, setPlayers] = useState([]);
   const [extras, setExtras] = useState([]);
   const [teamID, setTeamID] = useState(localStorage.getItem('teamID')); // [team_id, team_name]
   const [users, setUsers] = useState([]); // [user_id, user_name]
-  const navigate = useNavigate();
 
   const handleTeamNameChange = (e) => {
     setTeamName(e.target.value);
@@ -123,6 +139,7 @@ const TeamCreatePage = () => {
 
     // redirect to game settings
     navigate('/club/create/settings');
+   
   };
   
 
@@ -184,6 +201,10 @@ const TeamCreatePage = () => {
           skip this step
         </Link>
       </div>
+
+      <ToastContainer/>
+
+      
 
     </div>
   )
