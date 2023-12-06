@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from "../lib/helper/supabaseClient";
 import SynthleteSmallLogo from './SynthleteSmallLogo';
 
-const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }) => {
+const HeaderComponent = ({ setRightIsOpen , rightIsOpen }) => {
   const [userData, setUserData] = useState({});
   const [teamData, setTeamData] = useState({}); // [team_id, team_name]
   const [clubData, setClubData] = useState({}); // [club_id, club_name]
@@ -83,18 +83,12 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
     fetchData();
   }, []);
 
-  
-
-  const handleKeyDown = (event) => {
-    // Check if the key is 'Enter' or 'Space'
-    if (event.key === 'Enter' || event.key === ' ') {
-      rightSideBarOpen();
-    }
-  };
 
   const rightSideBarOpen = () => {
     setRightIsOpen(!rightIsOpen);
+    console.log("rightIsOpen: ", rightIsOpen);
   }
+
 
   if (loading) {
     return null; // You can replace this with any loading spinner or indicator

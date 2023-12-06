@@ -20,6 +20,7 @@ import { AboutClubPage } from './pages/AboutClubPage.js';
 import TeamProfilePage from './pages/TeamProfilePage.js';
 import StickySubheaderProfileComponent from './components/StickySubheaderProfileComponent.js';
 import NoTeamPage from './pages/NoTeamPage.js';
+import { useEffect } from 'react';
 
 
 LogRocket.init('u7ityk/synthlete');
@@ -28,6 +29,8 @@ const App = () => {
    const [isOpen, setIsOpen] = useState(false);
    const [rightIsOpen, setRightIsOpen] = useState(false);
    const location = useLocation();
+
+     // Close sidebar on route change
 
    if ( location.pathname==='/club/create/settings' || location.pathname==='/club/create/settings/'  || location.pathname === '/team/create'  || location.pathname === '/team/create/' || location.pathname === '/club/create' || location.pathname === '/club/create/' || location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth' || location.pathname === '/login/' || location.pathname === '/register/' || location.pathname === '/auth/'){
       return (
@@ -48,7 +51,7 @@ const App = () => {
       return (
          <>
          {  location.pathname !== '/team/create' || location.pathname !== '/team/create/' || location.pathname !== '/club/create' || location.pathname !== '/club/create/' ?
-            <HeaderComponent isOpen={isOpen} toggleSidebar={setIsOpen} rightIsOpen={rightIsOpen} setRightIsOpen={setRightIsOpen}/>
+            <HeaderComponent rightIsOpen={rightIsOpen} setRightIsOpen={setRightIsOpen}/>
             :
             <div style={{display:'none'}}></div>
          }
@@ -82,7 +85,7 @@ const App = () => {
                <Route path="/team-profile/edit/:clubId/:teamId" element={<EditTeamPage/>} />
                <Route path="/no-team" element={<NoTeamPage/>} />
             </Routes>
-            <RightSideBarComponent rightIsOpen={rightIsOpen}/>
+            <RightSideBarComponent rightIsOpen={rightIsOpen} setRightIsOpen={setRightIsOpen} />
          </>
       );
    }
