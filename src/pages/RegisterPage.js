@@ -16,22 +16,6 @@ function RegisterPage() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const user =  supabase.auth.getUser();;
-        if (user) {
-            toast.info('You are already logged in.');
-            navigate('/');
-        }
-
-        return () => {
-            setFullName('');
-            setEmail('');
-            setPhoneNumber('+32');
-            setRole('0');
-            setPassword('');
-            setConfirmPassword('');
-        }
-    }, [navigate]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -42,12 +26,14 @@ function RegisterPage() {
         }
 
         try {
-            const { user, error } = await supabase.auth.signUp({ email, password });
+            const { error } = await supabase.auth.signUp({ email, password });
             if (error) throw error;
+            let user = await supabase.auth.getUser();
+            user = user.data.user
 
             const { error: errorUsers } = await supabase
                 .from('users')
-                .insert([{ email, full_name: fullName, phone_number: phoneNumber, role_id: role, user_id: user.id }]);
+                .insert([{ email:email, full_name: fullName, phone_number: phoneNumber, role_id: role, user_id: user.id }]);
 
             if (errorUsers) throw errorUsers;
 

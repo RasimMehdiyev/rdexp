@@ -17,7 +17,6 @@ import GameOverview from './pages/GameOverview'; // Import GameOverview componen
 import TeamCreatePage from './pages/TeamCreatePage.js';
 import GameSettings from './pages/GameSettings.js';
 import { AboutClubPage } from './pages/AboutClubPage.js';
-import StickyEditProfileComponent from './components/StickyEditProfileComponent.js';
 import TeamProfilePage from './pages/TeamProfilePage.js';
 import StickySubheaderProfileComponent from './components/StickySubheaderProfileComponent.js';
 import NoTeamPage from './pages/NoTeamPage.js';
