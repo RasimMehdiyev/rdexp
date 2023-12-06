@@ -22,14 +22,9 @@ const LoginPage = () => {
             alert(error.error_description || error.message);
         }
     };
-    useEffect(() => {
-        console.log("Is Chrome: ", isChromeBrowser)
-        if (isChromeBrowser) {
-            inputRef.current.focus();
-            inputRef.current.setSelectionRange(15,15);
-            console.log("Chrome")
-        }
 
+
+    useEffect(() => {
         const session = supabase.auth.getSession();
         setUser(session?.user ?? null);
         console.log(session)

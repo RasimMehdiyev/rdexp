@@ -8,6 +8,7 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
   const [teamData, setTeamData] = useState({}); // [team_id, team_name]
   const [clubData, setClubData] = useState({}); // [club_id, club_name]
   const [loading, setLoading] = useState(true); // Add a loading state
+  const [notificationCount, setNotificationCount] = useState(3); // Example test data
 
   // navigate
   const navigate = useNavigate();
@@ -51,20 +52,16 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
   // Fetch user data
   useEffect(() => {
     const fetchData = async () => {
-      // console.log("Fetching data");
       try {
         const userResponse = await supabase.auth.getUser();
         const user = userResponse.data.user;
-        // console.log("User:", user);
         if (user) {
-          // Initially, we don't know the user's role, so fetch from both tables.
           const { data: user_data, error: userError } = await supabase
             .from('users')
             .select('*')
             .eq('user_id', user.id)
             .single(); // Use single to get a single record or null   
           if (userError) throw userError;
-          // console.log("User data:", user_data);     
           setUserData(user_data);  
 
           
@@ -114,7 +111,7 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
 
                 ) : (
                 <Link to="no-team/" className='flex flex-col items-center justify-center'>
-                    <img className='bg-white cursor-pointer border-2 border-white object-cover overflow-hidden w-[50px] h-[50px] ' src={process.env.PUBLIC_URL + "/images/no-team.png"} alt="profile" />
+                    <img className='bg-white cursor-pointer border-2 border-white object-cover overflow-hidden w-[50px] h-[50px] rounded-10px' src={process.env.PUBLIC_URL + "/images/no-team.png"} alt="profile" />
                     {/* <p className="text-[8px] text-white font-russoOne font-400">No team</p> */}
                 </Link>
                 )
@@ -124,13 +121,21 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
             <SynthleteSmallLogo />
           </Link>
           <Link className='flex flex-col justify-center items-center'>
-          <button onClick={rightSideBarOpen} className="border-2 border-white rounded-full w-[50px] h-[50px] p-0 overflow-hidden">
-            <img 
-              src={userData.profile_picture} 
-              alt="Open Sidebar" // Description of the action or image content
-              className="object-cover w-full h-full"
-            />
-          </button>         
+          <button onClick={rightSideBarOpen} className="rounded-full w-[50px] h-[50px] p-0 overflow-hidden">
+          {
+            userData.picture ? (
+              <img className='object-cover overflow-hidden border-2   border-white w-[50px] h-[50px]' src={userData.picture} alt="profile" />
+              ) : (
+              <img className='object-cover overflow-hidden border-2   border-white w-[50px] h-[50px]' src={process.env.PUBLIC_URL + "/images/no_user.png"} alt="profile" />
+              )
+          }
+          </button> 
+              {/* Notification Indicator */}
+          {notificationCount > 0 && (
+            <div className="absolute bottom-2 right-3 w-5 h-5 bg-red-700 text-white text-xs rounded-full flex items-center justify-center" style={{ transform: 'translate(-25%, 25%)' }}>
+              {notificationCount}
+            </div>
+          )}        
           </Link>
     </header>
   );
