@@ -100,7 +100,7 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
     return null; // You can replace this with any loading spinner or indicator
   }
   return (
-    <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-10'> {/* Ensure z-index is high enough */}
+    <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-20'> {/* Ensure z-index is high enough */}
             {
               clubData.picture ? (
                 <Link to="/team-management/">
@@ -123,10 +123,10 @@ const HeaderComponent = ({ isOpen, toggleSidebar, setRightIsOpen , rightIsOpen }
           <Link className='flex flex-col justify-center items-center'>
           <button onClick={rightSideBarOpen} className="rounded-full w-[50px] h-[50px] p-0 overflow-hidden">
           {
-            userData.picture ? (
-              <img className='object-cover overflow-hidden border-2   border-white w-[50px] h-[50px]' src={userData.picture} alt="profile" />
+            userData.profile_picture ? (
+              <img className='object-cover overflow-hidden border-2 rounded-full  border-white w-[50px] h-[50px]' src={userData.profile_picture} alt="profile" />
               ) : (
-              <img className='object-cover overflow-hidden border-2   border-white w-[50px] h-[50px]' src={process.env.PUBLIC_URL + "/images/no_user.png"} alt="profile" />
+              <img className='object-cover overflow-hidden border-2 rounded-full  border-white w-[50px] h-[50px]' src={process.env.PUBLIC_URL + "/images/no_user.png"} alt="profile" />
               )
           }
           </button> 
