@@ -20,6 +20,7 @@ import { AboutClubPage } from './pages/AboutClubPage.js';
 import StickyEditProfileComponent from './components/StickyEditProfileComponent.js';
 import TeamProfilePage from './pages/TeamProfilePage.js';
 import StickySubheaderProfileComponent from './components/StickySubheaderProfileComponent.js';
+import NotificationPage from './pages/NotificationPage.js';
 
 
 LogRocket.init('u7ityk/synthlete');
@@ -79,7 +80,8 @@ const App = () => {
                <Route path="/club/create" element={<AboutClubPage/>} />
                <Route path="/club/create/settings" element={<GameSettings/>} />
                <Route path="/team-profile/:clubId/:teamId" element={<TeamProfilePage />} />
-               <Route path="/team-profile/edit/:clubId/:teamId" element={<EditTeamPage/>} />
+               <Route path="/team-profile/edit/:clubId/:teamId" element={<EditTeamPage />} />
+               <Route path="/notification" element={<NotificationPage />} />
             </Routes>
             <RightSideBarComponent rightIsOpen={rightIsOpen}/>
          </>
