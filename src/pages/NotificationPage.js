@@ -6,6 +6,7 @@ import LoadingPage from './LoadingPage';
 const NotificationPage = () => {
     const [teamInvites, setTeamInvites] = useState([]);
     const [eventInvites, setEventInvites] = useState([]);
+    const [tableUser, setTableUser] = useState();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -17,7 +18,18 @@ const NotificationPage = () => {
                 console.log("User:", userResponse);
                 const user = userResponse.data.user;
                 
-                if (user) {                     
+                if (user) {
+                    let { data: tableUser, tableUserError } = await supabase
+                        .from('users')
+                        .select('id')
+                        .eq('user_id', user.id)
+                        .single()
+                    if (tableUserError) console.error(tableUserError)
+                    else {
+                        console.log("table user: ", tableUser);
+                        setTableUser(tableUser);
+                    }
+
                     let { data: teamInviteData, teamInviteError } = await supabase
                         .rpc('get_team_user_invites', {
                             param_user_id: user.id
@@ -89,6 +101,44 @@ const NotificationPage = () => {
         // console.log(updatedElements); // Log the updated array
     };
 
+    const handleTeamInvite = async (id, team_id, isAccept) => {
+        updateTeamInviteLoadingStatus(id, true);
+        console.log("handling team invite:", id, isAccept);
+
+        try {
+            const { updateError } = await supabase
+                .from('team_user_invite')
+                .update({ accepted: isAccept })
+                .eq('id', id)
+            if (isAccept) {
+                const { insertData, insertError } = await supabase
+                .from('team_users')
+                .insert([
+                    { user_id: tableUser.id, team_id: team_id },
+                ])
+                .select()
+                
+                window.location.reload();
+            }            
+            updateTeamInviteLoadingStatus(id, false);
+            removeTeamInviteById(id);
+            
+        } catch (error) {
+            console.error(error);
+            alert("Something wrong happened. If it persists, please kindly wait while the devs fix it");
+            updateTeamInviteLoadingStatus(id, false);
+            navigate('/notifications');
+        }       
+        
+    }
+
+    const handleEventInvite = async (id, isAccept) => {
+        updateEventInviteLoadingStatus(id, true);
+        console.log("handling event invite:", id, isAccept);
+        updateEventInviteLoadingStatus(id, false);
+        removeEventInviteById(id);
+    }
+
     if (loading) {
         return ( <LoadingPage></LoadingPage>)
     } else {
@@ -107,8 +157,8 @@ const NotificationPage = () => {
                                         <div className='text-sm font-interReg'>{teamInvite.club_name}</div>
                                     </div>
                                     <div className='flex flex-row gap-8'>
-                                        <button className='rounded-sm'>Accept</button>
-                                        <button className='rounded-sm'>Decline</button>
+                                        <button className='rounded-sm' onClick={() => handleTeamInvite(teamInvite.id, teamInvite.team_id, true)}>Accept</button>
+                                        <button className='rounded-sm' onClick={() => handleTeamInvite(teamInvite.id, teamInvite.team_id, false)}>Decline</button>
                                     </div>
                                 </div>
                                 )
@@ -139,8 +189,8 @@ const NotificationPage = () => {
                                             }
                                     </div>
                                     <div className='flex flex-row gap-8'>
-                                        <button className='rounded-sm'>Accept</button>
-                                        <button className='rounded-sm'>Decline</button>
+                                        <button className='rounded-sm' onClick={() => handleEventInvite(eventInvite.id, true)}>Accept</button>
+                                        <button className='rounded-sm' onClick={() => handleEventInvite(eventInvite.id, false)}>Decline</button>
                                     </div>
                                     </div>
                             )}                        
