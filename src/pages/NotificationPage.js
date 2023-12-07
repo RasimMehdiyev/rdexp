@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {supabase} from '../lib/helper/supabaseClient';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import LoadingPage from './LoadingPage';
 
 const NotificationPage = () => {
     const [teamInvites, setTeamInvites] = useState([]);
@@ -53,7 +54,10 @@ const NotificationPage = () => {
         fetchData();
     }, []);
 
-    return (
+    if (loading) {
+        return ( <LoadingPage></LoadingPage>)
+    } else {
+        return (
         <div className='h-full w-full flex flex-col gap-4'>
             <div className='text-xl font-russoOne text-game-blue'>Team invites</div>
             <div className='flex flex-col gap-4'>
@@ -79,11 +83,16 @@ const NotificationPage = () => {
             <div className='flex flex-col gap-4'>
                 {eventInvites ?                    
                     eventInvites.map((eventInvite) => (
-                        <div key={eventInvite.id }>
-                        <div className='flex flex-col gap-1 bg-sn-bg-light-blue rounded-md'>
-                            <div className='text-sm font-interReg'>{eventInvite.id}</div>
+                        <div key={eventInvite.id}>                        
+                        <div className='flex flex-col gap-1 bg-sn-bg-light-blue rounded-md'>                            
                             <div className='text-sm font-interReg'>{eventInvite.title}</div>
-                            <div className='text-sm font-interReg'>{eventInvite.datetime}</div>
+                                <div className='text-sm font-interReg'>{eventInvite.datetime}</div>
+                                <div className='text-sm font-interReg'>{eventInvite.location}</div>
+                                <div className='text-sm font-interReg'>{eventInvite.type}</div>
+                                <div className='text-sm font-interReg'>{eventInvite.team_name}</div>
+                                {eventInvite.position_name &&
+                                    <div className='text-sm font-interReg'>{eventInvite.position_name}</div>
+                                }
                         </div>
                         <div className='flex flex-row gap-8'>
                             <button>Accept</button>
@@ -99,6 +108,9 @@ const NotificationPage = () => {
             </div>
         </div>
     )
+    }
+
+    
 }
 
 export default NotificationPage;
