@@ -126,7 +126,7 @@ const NotificationPage = () => {
         } catch (error) {
             console.error(error);
             alert("Something wrong happened. If it persists, please kindly wait while the devs fix it");
-            updateTeamInviteLoadingStatus(id, false);
+            
             navigate('/notifications');
         }       
         
@@ -135,8 +135,24 @@ const NotificationPage = () => {
     const handleEventInvite = async (id, isAccept) => {
         updateEventInviteLoadingStatus(id, true);
         console.log("handling event invite:", id, isAccept);
-        updateEventInviteLoadingStatus(id, false);
-        removeEventInviteById(id);
+
+        const is_attending = isAccept ? "Accepted" : "Declined";
+        try {
+            const { updateData, error } = await supabase
+            .from('event_users')
+            .update({ is_attending: is_attending })
+            .eq('id', id)
+            .select()
+            
+            updateEventInviteLoadingStatus(id, false);
+            removeEventInviteById(id);
+        } catch (error) {
+            console.error(error);
+            alert("Something wrong happened. If it persists, please kindly wait while the devs fix it");
+            
+            navigate('/notifications');
+        }
+        
     }
 
     if (loading) {
