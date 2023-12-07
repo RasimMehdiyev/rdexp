@@ -54,7 +54,30 @@ const NotificationPage = () => {
     }, []);
 
     return (
-        <div>Notification Page</div>
+        <div className='flex-col gap-6'>
+            <div className='text-xl font-russoOne text-game-blue'>Team invites</div>
+            <div className='flex-col gap-4'>
+                {teamInvites && teamInvites.map((teamInvite) => (
+                    <div key={teamInvite.id } className='flex-col gap-4'>
+                        <div className='text-sm font-interReg'>{teamInvite.id}</div>
+                        <div className='text-sm font-interReg'>{teamInvite.title}</div>
+                        <div className='text-sm font-interReg'>{teamInvite.datetime}</div>
+                    </div>       
+                )
+                )}
+            </div>
+            <div className='text-xl font-russoOne text-game-blue'>Event invites</div>
+            <div className='flex-col gap-4'>
+                {eventInvites && eventInvites.map((eventInvite) => (
+                    <div key={eventInvite.id } className='flex-col gap-4'>
+                        <div className='text-sm font-interReg'>{eventInvite.id}</div>
+                        <div className='text-sm font-interReg'>{eventInvite.title}</div>
+                        <div className='text-sm font-interReg'>{eventInvite.datetime}</div>
+                    </div>       
+                )
+                )}
+            </div>
+        </div>
     )
 }
 
