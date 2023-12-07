@@ -171,21 +171,18 @@ export const AboutClubPage = () => {
         .single()
         if (clubTeamError) console.log(clubTeamError);    
         console.log('club id', clubTeamData.id);
-        
-        // add team id into local storage
         localStorage.setItem('teamID', teamData.id);
-        //navigate('/team/create');
-           // Show success toast
-    toast.success('Successful club registration! 🎉 Redirecting...', {
-        position: 'top-center',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: false,
-        progress: undefined,
-        theme: 'light',
-      });
+
+        toast.success('Successful club registration! 🎉 Redirecting...', {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+            theme: 'light',
+        });
   
       // Delay the navigation after 5 seconds
       setTimeout(() => {
