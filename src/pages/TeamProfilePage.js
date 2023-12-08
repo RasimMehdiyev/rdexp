@@ -28,6 +28,7 @@ const TeamProfilePage = () => {
                 navigate('/auth');
             }
         }
+
     }, [loading, userTeamIds, navigate]);
 
     // Helper function to render social media icons

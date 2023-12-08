@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 
-const PlayerInput = ({ onInputChange, errorMessage }) => {
+const PlayerInput = ({ onInputChange, errorMessage, isPlayer}) => {
 
 
 
@@ -13,7 +13,7 @@ const PlayerInput = ({ onInputChange, errorMessage }) => {
       <div className="relative">
         <input
           className="h-[6vh] pl-10 w-[80vw] rounded-10px border-2 border-game-blue font-interReg placeholder-text"
-          placeholder="Enter player's name"
+          placeholder={isPlayer ? "Enter player's name" : "Enter name"}
           onChange={(e) => onInputChange(e.target.value)}
         />
         <div className="absolute left-3 top-2 pt-1">
