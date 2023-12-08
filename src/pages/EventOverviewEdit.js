@@ -49,48 +49,125 @@ const EventOverview = () => {
                 return;
             }
 
+            //all the same up till here
             try {
                 const userResponse = await supabase.auth.getUser();
                 console.log("User:", userResponse);
                 const user = userResponse.data.user;
                 if (user) {
-                    // Update general info => inserting column in event table
-                    if (!generalInfo.date || !generalInfo.time || !generalInfo.location || !eventTitle || !selectedTeam) {
-                    const { eventData, errorEventData } = await supabase
-                        .from('event')
-                        .insert([
-                            { title: eventTitle, team: selectedTeam, datetime: timestamp, location: generalInfo.location, type: selectedOption },
-                        ])
-                        .select()
-                    if (errorEventData) throw errorEventData;
-                      }
-                    let { data: eventDataID, errorEventDataID } = await supabase
-                        .from('event')
-                        .select('*')
-                        .order('id', { ascending: false }) // Sort by id in descending order
-                        .limit(1); // Limit the result to 1 row
-                    if (errorEventDataID) console.error('Error fetching latest event:', errorEventDataID)
-                    else {
-                        console.log("event data is", eventDataID);
-                        const event_id = eventDataID[0].id;
-                        const finalUploadPlayers = toUploadPlayers.map((p) => ({ ...p, event_id: event_id, is_attending: "Pending" }));
-                        console.log("finalUploadPlayers: ", finalUploadPlayers);
-                        const finalUploadExtras = toUploadExtras.map((ex) => ({ ...ex, event_id: event_id, is_attending: "Pending" }));
-                        console.log("finalUploadExtras: ", finalUploadExtras);
+                  const { data: updatedEvent, error: updateError } = await supabase
+                  .from('event')
+                  .update({
+                      title: eventTitle,
+                      datetime: `${generalInfo.date}T${generalInfo.time}:00+00`, // Ensure this is in the correct format
+                      location: generalInfo.location,
+                      team: generalInfo.teamId, 
+                      type: selectedOption // Make sure this is the correct event type you want to set
+                  })
+                  .eq('id', generalInfo.eventid);
+          
+                  if (updateError) throw updateError;
+                
+                  console.log("Updated event:", updatedEvent);
+                
 
-                        const { playersData, errorPlayersData } = await supabase
-                            .from('event_users')
-                            .insert(finalUploadPlayers)
-                            .select()
-                        if (errorPlayersData) throw errorPlayersData;
+
+                  let { data: existingUsers, error: existingUsersError } = await supabase
+                        .from('event_users')
+                        .select('user_id, is_attending')
+                        .eq('event_id', generalInfo.eventid);
+
+                    if (existingUsersError) {
+                        console.error('Error retrieving existing users:', existingUsersError);
+                        throw existingUsersError;
+                    } else {
+                        console.log('Existing event users retrieved:', existingUsers);
+                    }
+
+                    // Convert existing users to a map for easy lookup
+                    const existingUsersMap = new Map(existingUsers.map(user => [user.user_id, user.is_attending]));
+                    console.log('Existing users map:', Array.from(existingUsersMap.entries()));
+
+                    // Step 2: Determine the is_attending status for new records
+                    const combinedUsers = [...toUploadPlayers, ...toUploadExtras].map(user => ({
+                        ...user,
+                        event_id: generalInfo.eventid,
+                        is_attending: existingUsersMap.has(user.user_id) ? existingUsersMap.get(user.user_id) : "Pending"
+                    }));
+                    console.log('Combined users with is_attending status:', combinedUsers);
+
+                    const usersToDelete = existingUsers.filter(user => !combinedUsers.some(cu => cu.user_id === user.user_id));
+                      console.log('Users to delete:', usersToDelete);
+
+                      for (const user of usersToDelete) {
+                          const { error: deleteError } = await supabase
+                              .from('event_users')
+                              .delete()
+                              .eq('user_id', user.user_id)
+                              .eq('event_id', generalInfo.eventid);
+
+                          if (deleteError) {
+                              console.error(`Error deleting user ${user.user_id}:`, deleteError);
+                              throw deleteError;
+                          } else {
+                              console.log(`Deleted user ${user.user_id} from event ${generalInfo.eventid}`);
+                          }
+                      }
+
+                      // Step 4: Insert or Update 'event_users' records
+                      for (const user of combinedUsers) {
+                          if (existingUsersMap.has(user.user_id)) {
+                              // Update existing user
+                              const { error: updateError } = await supabase
+                                  .from('event_users')
+                                  .update({ position_id: user.position_id, extrarole_id: user.extrarole_id })
+                                  .eq('user_id', user.user_id)
+                                  .eq('event_id', generalInfo.eventid);
+                              
+                              if (updateError) {
+                                  console.error(`Error updating user ${user.user_id}:`, updateError);
+                                  throw updateError;
+                              } else {
+                                  console.log(`Updated user ${user.user_id} for event ${generalInfo.eventid}`);
+                              }
+                          } else {
+                              // Insert new user
+                              const { error: insertError } = await supabase
+                                  .from('event_users')
+                                  .insert([user]);
+
+                              if (insertError) {
+                                  console.error(`Error inserting new user ${user.user_id}:`, insertError);
+                                  throw insertError;
+                              } else {
+                                  console.log(`Inserted new user ${user.user_id} to event ${generalInfo.eventid}`);
+                              }
+                          }
+                      }
+
+                    //delete all event users where event id = event id
+                    // if (errorEventDataID) console.error('Error fetching latest event:', errorEventDataID)
+                    // else {
+                    //     console.log("event data is", eventDataID);
+                    //     const event_id = eventDataID[0].id;
+                    //     const finalUploadPlayers = toUploadPlayers.map((p) => ({ ...p, event_id: event_id, is_attending: "Pending" }));
+                    //     console.log("finalUploadPlayers: ", finalUploadPlayers);
+                    //     const finalUploadExtras = toUploadExtras.map((ex) => ({ ...ex, event_id: event_id, is_attending: "Pending" }));
+                    //     console.log("finalUploadExtras: ", finalUploadExtras);
+
+                    //     const { playersData, errorPlayersData } = await supabase
+                    //         .from('event_users')
+                    //         .insert(finalUploadPlayers)
+                    //         .select()
+                    //     if (errorPlayersData) throw errorPlayersData;
                         
 
-                        const { extrasData, errorExtrasData } = await supabase
-                            .from('event_users')
-                            .insert(finalUploadExtras)
-                            .select()
-                        if (errorExtrasData) throw errorExtrasData;
-                    };                            
+                    //     const { extrasData, errorExtrasData } = await supabase
+                    //         .from('event_users')
+                    //         .insert(finalUploadExtras)
+                    //         .select()
+                    //     if (errorExtrasData) throw errorExtrasData;
+                    // };                            
                 }                    
                             
             } catch (error) {
@@ -209,11 +286,11 @@ const EventOverview = () => {
       const fetchEventDetails = async () => {
           setLoading(true);
           console.log('Starting to fetch details for event with hardcoded ID: 1');
-      
+          
           try {
               const { data: event, error } = await supabase
                   .from('event')
-                  .select('title, datetime, location, team')
+                  .select('id, title, datetime, location, team')
                   .eq('id', 1) // Hardcoded event ID
                   .single();
     
@@ -224,30 +301,31 @@ const EventOverview = () => {
     
               console.log('Fetched event data:', event);
               if (event) {
-                  // Update eventTitle and generalInfo only if they are not already set
-                  if (!eventTitle) setEventTitle(event.title);
-                  if (!generalInfo.date || !generalInfo.time || !generalInfo.location) {
-                      setGeneralInfo({
-                          date: event.datetime.slice(0, 10),
-                          time: event.datetime.slice(11, 16),
-                          location: event.location,
-                      });
-                  }
+                  const newGeneralInfo = {
+                      date: event.datetime.slice(0, 10),
+                      time: event.datetime.slice(11, 16),
+                      location: event.location,
+                      gameName: event.title,
+                      eventid: event.id
+                  };
+                  setEventTitle(event.title);
+                  // Fetch the team name
+                  const { data: teamData, error: teamError } = await supabase
+                      .from('team')
+                      .select('team_name')
+                      .eq('id', event.team)
+                      .single();
     
-                  // Fetch and update selectedTeam only if it's not already set
-                  if (!selectedTeam || !selectedTeam.team_name) {
-                      const { data: teamData, error: teamError } = await supabase
-                          .from('team')
-                          .select('team_name')
-                          .eq('id', event.team)
-                          .single();
-    
-                      if (teamError) {
-                          console.error('Error fetching team name:', teamError);
-                      } else {
-                          setSelectedTeam({ id: event.team, team_name: teamData.team_name });
-                      }
+                  if (teamError) {
+                      console.error('Error fetching team name:', teamError);
+                  } else {
+                      // Append the team name and ID to the newGeneralInfo object
+                      newGeneralInfo.teamName = teamData.team_name;
+                      newGeneralInfo.teamId = event.team;
                   }
+                   
+                  // Now, set the generalInfo state with the newGeneralInfo object
+                  setGeneralInfo(newGeneralInfo);
               }
           } catch (error) {
               console.error('Caught an error while fetching event details:', error);
@@ -258,6 +336,7 @@ const EventOverview = () => {
     
       fetchEventDetails();
     }, []);
+    
     
     
     useEffect(() => {
@@ -283,7 +362,7 @@ const EventOverview = () => {
                 )}
 
                 <input
-                    value={eventTitle}
+                    value={eventTitle} // Use the gameName from generalInfo
                     onChange={(e) => setEventTitle(e.target.value)}
                     type="text"
                     placeholder="Title"

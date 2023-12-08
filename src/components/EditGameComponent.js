@@ -32,18 +32,92 @@ const EditGameComponent = ({
     const [selectedExtras, setSelectedExtras] = useState([])
     const [optionExtras, setOptionExtras] = useState([]);
     const [preSubstitutePlayers, setPreSubstitutePlayers] = useState([]);
-
-    const [teamName, setTeamName] = useState(selectedTeam?.team_name || '');
-    const [teamId, setTeamId] = useState(selectedTeam?.id || '');
+    const [userEvents, setUserEvents] = useState([]);
 
 
-    
+    const teamName = generalInfo?.teamName || 'No team selected';
+    const teamId = generalInfo?.teamId || '';
+         
+
 
     useEffect(() => { // first thing that happens
-        
+        handleChange(generalInfo.teamId);
         setLoading(false);
     }, [])
 
+
+    const handleChange = async (selectedTeam) => { //happens when team is selected
+        // Update the state with the selected option's id
+        if (selectedTeam) {
+            setLoading(true);
+            setSelectedID(selectedTeam);
+            await getPlayerOfTeam(selectedTeam);
+            await getExtraRoles(selectedTeam);
+            await getPositionsOfTeam(selectedTeam);
+            await getVolunteers(selectedTeam);
+            await getSelectedUsers();
+            console.log('extraRoles:', extraRoles);
+            console.log('positions:', positions);
+            setLoading(false);
+        } else {
+            setSelectedID('');
+            setTeamPlayers([]);
+            setExtraRoles([]);
+            
+        }   
+        
+        
+    };
+
+    const getSelectedUsers = async () => { //getting extra roles depending on team
+        let { data, error } = await supabase
+        .rpc('get_event_users', {
+            param_event_id: generalInfo.eventid
+        })
+        if (error) console.error(error)
+        else console.log("user events rpc", data)
+      
+
+        const substitutes = data
+            .filter(user => user.role_id === 2 && user.position_id === 6)
+            .map(user => ({
+                full_name: user.full_name,
+                id: user.user_tableid
+            }));
+            console.log("substitutes array:", substitutes);
+
+
+        const players = data
+            .filter(user => user.role_id === 2 && user.position_id !== null && user.position_id !== 6)
+            .map(user => ({
+                full_name: user.full_name,
+                id: user.user_tableid,
+                position_name: user.extra_role_name || 'Player',
+                position_id: user.position_id
+            }));
+
+            console.log("Players array:", players);
+
+            // Filter and map the extra roles
+        const extras = data
+        .filter(user => user.role_id === 3)
+        .map(user => ({
+            full_name: user.full_name,
+            id: user.user_tableid,
+            extra_role_name: user.extra_role_name,
+            extraRole_id: user.extra_role_id
+        }));
+
+        console.log("extras array:", extras);
+
+        
+            
+
+
+        setPreSubstitutePlayers(substitutes);
+        setSelectedExtras(extras);
+        setSelectedPlayers(players);
+    };
     
 
     const getExtraRoles = async (teamID) => { //getting extra roles depending on team
@@ -174,25 +248,11 @@ const EditGameComponent = ({
         setOptionExtras(updatedOptionExtras);
     }, [selectedExtras]);
 
-    useEffect(() => {
-        onTeamChanges(selectedID);
-    }, [selectedID]);
+    
 
   
 
-    const submitEvent = () => {
-
-        console.log("Title:", eventTitle);
-        console.log("Type:", selectedOption);
-        console.log("Team:", selectedID);
-        console.log("Date:", date);
-        console.log("Time:", time);
-        console.log("Location:", location);
-        console.log("Team Names:", teamNames);
-        console.log("Team Players:", teamPlayers);
-        console.log("Selected ID:", selectedID);
-    }  
-    
+   
 
     const handleAddSubstitute = () => {
         setPreSubstitutePlayers(prev => [...prev, { full_name: "No Selection", id: -1 }]);
@@ -247,31 +307,35 @@ const EditGameComponent = ({
 }, [generalInfo, selectedTeam]);
 
 
+    //   useEffect(() => {
+    //     // Fetch the team name based on the selectedID
+    //     const fetchTeamName = async () => {
+    //       const { data, error } = await supabase
+    //         .from('team')
+    //         .select('team_name')
+    //         .eq('id', selectedID)
+    //         .single();
+      
+    //       if (error) {
+    //         console.error('Error fetching team name:', error);
+    //       } else {
+    //         setSelectedTeam({ ...selectedTeam, team_name: data.team_name });
+    //       }
+    //     };
+      
+    //     if (selectedID) {
+    //       fetchTeamName();
+    //     }
+    //   }, []);
+      
+    //   useEffect(() => {
+    //     console.log('Received selectedTeam in EditGameComponent:', selectedTeam);
+    //   }, [selectedTeam]);
       useEffect(() => {
-        // Fetch the team name based on the selectedID
-        const fetchTeamName = async () => {
-          const { data, error } = await supabase
-            .from('team')
-            .select('team_name')
-            .eq('id', selectedID)
-            .single();
-      
-          if (error) {
-            console.error('Error fetching team name:', error);
-          } else {
-            setSelectedTeam({ ...selectedTeam, team_name: data.team_name });
-          }
-        };
-      
-        if (selectedID) {
-          fetchTeamName();
-        }
-      }, []);
-      
-      useEffect(() => {
-        console.log('Received selectedTeam in EditGameComponent:', selectedTeam);
-      }, [selectedTeam]);
-      
+        onGeneralInfoChanges(prevState => {
+            return { ...prevState, date:date, time:time, location:location };
+          });
+      }, [date, time, location]);
     
 
     if (loading) {
@@ -281,14 +345,14 @@ const EditGameComponent = ({
         return (
             <form className="flex bg-sn-bg-light-blue flex-col justify-center gap-2">
                 <div className="team-info">
-        <label className="block text-sm font-medium text-gray-700">Team</label>
-        <input
-            type="text"
-            readOnly
-            value={selectedTeam?.team_name || 'No team selected'}
-            className="mt-1 block w-full pl-3 pr-3 sm:text-sm border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-        />
-    </div>
+                <label className="block text-sm font-medium text-gray-700">Team</label>
+                <input
+                    type="text"
+                    readOnly
+                    value={generalInfo?.teamName || 'No team selected'} // Use the teamName from generalInfo
+                    className="mt-1 block w-full pl-3 pr-3 sm:text-sm border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                />
+                </div>
 
 
                 <div className="flex-row flex justify-between ">
