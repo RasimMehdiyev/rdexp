@@ -73,7 +73,7 @@ const App = () => {
                <Route path="/editProfile" element={<EditProfilePage />} />
                <Route path="/game/create" element={<NewGamePage />} />
                <Route path="/event-overview" element={<EventOverview />} />
-               <Route path="/event-overview/edit" element={<EventOverviewEdit />} />
+               <Route path="/event-overview/edit/1" element={<EventOverviewEdit />} />
                <Route path="/team/create" element={<TeamCreatePage/>} />
                <Route path="/club/create" element={<AboutClubPage/>} />
                <Route path="/club/create/settings" element={<GameSettings/>} />

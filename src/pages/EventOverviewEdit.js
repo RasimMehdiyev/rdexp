@@ -1,205 +1,308 @@
-import React, { useState, useEffect } from 'react';
-import useEventData from '../hooks/useEventData';
-import SynthleteLogo from '../components/SynthleteLogo';
-import { supabase } from "../lib/helper/supabaseClient";
-import { useNavigate } from 'react-router-dom';
-import { MdDateRange, MdAccessTime, MdLocationOn, MdGroup } from 'react-icons/md';
+import React, { useEffect, useState } from 'react';
+import EditGameComponent from '../components/EditGameComponent';
+import NewPracticeTBComponent from '../components/NewPracticeTBComponent';
+import { useNavigate, useParams } from 'react-router-dom';
+import { supabase } from '../lib/helper/supabaseClient';
+import StickySubheaderEventCreateComponent from '../components/StickySubheaderEventCreateComponent';
+import LoadingPage from './LoadingPage';
 
-import PlayerSetupBlock from '../components/PlayerSetupBlock';
+const EditGamePage = () => {
+    const { eventId } = useParams(); // Retrieve eventId from the URL
+    const navigate = useNavigate();
 
-
-
-
-const EventOverviewEdit = () => {
-  const eventId = 4;
-  const { eventDetails, teamName, teamPlayers, loading, error } = useEventData(eventId);
-  const [initialLineup, setInitialLineup] = useState([]);
-  const [Substitutes, setSubstitutes] = useState([]);
-  const [selectedInitialPlayers, setSelectedInitialPlayers] = useState(Array(5).fill(''));
-  const [selectedSubstitutePlayers, setSelectedSubstitutePlayers] = useState([]);
-  
-  const positionLabels = ['PG', 'SG', 'SF', 'PF', 'C']; //for basketball mvp
-
-
-
-  useEffect(() => {
-    console.log('teamPlayers updated:', teamPlayers);
-    setInitialLineup(teamPlayers.slice(0, 5));
-    setSubstitutes(teamPlayers.slice(5, 7));
-  }, [teamPlayers]);
-
-  const handlePlayerClick = (index, type) => {
-    setShowPlayerSelect({ index, type });
-  };
+    const [eventData, setEventData] = useState(null);
+    const [eventTitle, setEventTitle] = useState('');
+    const [selectedOption, setSelectedOption] = useState("game");
+    const [loading, setLoading] = useState(false);
+    const [generalInfo, setGeneralInfo] = useState({ date: "", time: "", location: "" });
+    const [selectedPlayers, setSelectedPlayers] = useState([]);
+    const [selectedExtras, setSelectedExtras] = useState([]);
+    const [selectedTeam, setSelectedTeam] = useState([]);
+    const [inputCheck, setInputCheck] = useState(true);
+    
+    
 
 
-  const handleInitialSelectChange = (event, index) => {
-    const newSelectedPlayers = [...selectedInitialPlayers];
-    newSelectedPlayers[index] = event.target.value;
-    setSelectedInitialPlayers(newSelectedPlayers);
-  };
+    const handleOnChange = async () => {
+        
+        if (selectedOption == "game" | selectedOption == "") {
+            setLoading(true);
+            console.log("event title", eventTitle);
+            console.log("selected option", selectedOption);
+            console.log("general info", generalInfo);
+            console.log("players", selectedPlayers);
+            console.log("extras", selectedExtras);
+            console.log("team", selectedTeam);
 
-  // Function to handle selection change for substitutes
-  const handleSubstituteSelectChange = (event, index) => {
-    const newSelectedPlayers = [...selectedSubstitutePlayers];
-    newSelectedPlayers[index] = event.target.value;
-    setSelectedSubstitutePlayers(newSelectedPlayers);
-  };
+            const timestamp = `${generalInfo.date} ${generalInfo.time}:00+00`;
+            console.log("timestamp", timestamp);
 
+            const toUploadPlayers = selectedPlayers.map((p) => ({ user_id: p.id, position_id: p.position_id }));
+            const toUploadExtras = selectedExtras.map((ex) => ({ user_id: ex.id, extrarole_id: ex.extraRole_id }));
 
-  const handleSelectPlayer = (playerId, index, type) => {
-    if (type === 'initial') {
-      const newLineup = [...initialLineup];
-      newLineup[index] = playerId;
-      setInitialLineup(newLineup);
-    } else if (type === 'substitute') {
-      const newSubs = [...substitutes];
-      newSubs[index] = playerId;
-      setSubstitutes(newSubs);
+            console.log("to upload players", toUploadPlayers);
+            console.log("to upload extras", toUploadExtras);
+
+            if (checkInput()) setInputCheck(true);
+            else {
+                setInputCheck(false);
+                setLoading(false);
+                return;
+            }
+
+            try {
+                const userResponse = await supabase.auth.getUser();
+                console.log("User:", userResponse);
+                const user = userResponse.data.user;
+                if (user) {
+                    // Update general info => inserting column in event table
+                    if (!generalInfo.date || !generalInfo.time || !generalInfo.location || !eventTitle || !selectedTeam) {
+                    const { eventData, errorEventData } = await supabase
+                        .from('event')
+                        .insert([
+                            { title: eventTitle, team: selectedTeam, datetime: timestamp, location: generalInfo.location, type: selectedOption },
+                        ])
+                        .select()
+                    if (errorEventData) throw errorEventData;
+                      }
+                    let { data: eventDataID, errorEventDataID } = await supabase
+                        .from('event')
+                        .select('*')
+                        .order('id', { ascending: false }) // Sort by id in descending order
+                        .limit(1); // Limit the result to 1 row
+                    if (errorEventDataID) console.error('Error fetching latest event:', errorEventDataID)
+                    else {
+                        console.log("event data is", eventDataID);
+                        const event_id = eventDataID[0].id;
+                        const finalUploadPlayers = toUploadPlayers.map((p) => ({ ...p, event_id: event_id, is_attending: "Pending" }));
+                        console.log("finalUploadPlayers: ", finalUploadPlayers);
+                        const finalUploadExtras = toUploadExtras.map((ex) => ({ ...ex, event_id: event_id, is_attending: "Pending" }));
+                        console.log("finalUploadExtras: ", finalUploadExtras);
+
+                        const { playersData, errorPlayersData } = await supabase
+                            .from('event_users')
+                            .insert(finalUploadPlayers)
+                            .select()
+                        if (errorPlayersData) throw errorPlayersData;
+                        
+
+                        const { extrasData, errorExtrasData } = await supabase
+                            .from('event_users')
+                            .insert(finalUploadExtras)
+                            .select()
+                        if (errorExtrasData) throw errorExtrasData;
+                    };                            
+                }                    
+                            
+            } catch (error) {
+                console.error("Error uploading data", error);
+            } finally {
+                setLoading(false);
+                navigate('/');
+
+            }
+        } else {
+            setLoading(true);
+            if (checkInput()) setInputCheck(true);
+            else {
+                setInputCheck(false);
+                setLoading(false);
+                return;
+            }
+            console.log("event title", eventTitle);
+            console.log("selected option", selectedOption);
+            console.log("general info", generalInfo);
+            console.log("players", selectedPlayers);
+            console.log("team", selectedTeam);
+
+            const timestamp = `${generalInfo.date} ${generalInfo.time}:00+00`;
+            console.log("timestamp", timestamp);
+
+            const toUploadPlayers = selectedPlayers.map((p) => ({ user_id: p.id }));
+
+            console.log("to upload players", toUploadPlayers);
+            try {
+                const userResponse = await supabase.auth.getUser();
+                console.log("User:", userResponse);
+                const user = userResponse.data.user;
+                if (user) {
+                    // Update general info => inserting column in event table
+                    if (!generalInfo.date || !generalInfo.time || !generalInfo.location || !eventTitle || !selectedTeam) {
+                    const { eventData, errorEventData } = await supabase
+                        .from('event')
+                        .insert([
+                            { title: eventTitle, team: selectedTeam, datetime: timestamp, location: generalInfo.location, type: selectedOption },
+                        ])
+                        .select()
+                    if (errorEventData) throw errorEventData;
+                      }
+                      if (!generalInfo.date || !generalInfo.time || !generalInfo.location || !eventTitle || !selectedTeam) {
+                    let { data: eventDataID, errorEventDataID } = await supabase
+                        .from('event')
+                        .select('*')
+                        .order('id', { ascending: false }) // Sort by id in descending order
+                        .limit(1); // Limit the result to 1 row
+                    if (errorEventDataID) console.error('Error fetching latest event:', errorEventDataID)}
+                    else {
+                        console.log("event data is", eventDataID);
+                        const event_id = eventDataID[0].id;
+                        const finalUploadPlayers = toUploadPlayers.map((p) => ({ ...p, event_id: event_id, is_attending: "Pending" }));
+                        console.log("finalUploadPlayers: ", finalUploadPlayers);                        
+
+                        const { playersData, errorPlayersData } = await supabase
+                            .from('event_users')
+                            .insert(finalUploadPlayers)
+                            .select()
+                        if (errorPlayersData) throw errorPlayersData;    
+                    };                            
+                }                  
+            } catch (error) {
+                console.error("Error uploading data", error);
+            } finally {
+                setLoading(false);
+                navigate('/');
+            }
+            
+            
+        }
     }
-    setShowPlayerSelect({ index: null, type: null }); // Hide the dropdown after selection
-  };
 
-  const addPlayer = () => {
-    const newPlayer = { name: '', status: 'Pending' }; // Adjust as necessary for your default values
-    setSubstitutes([...Substitutes, newPlayer]);
-  };
+    const checkInput = () => {
+        if (!generalInfo.date | !generalInfo.location | !generalInfo.time | !eventTitle | !selectedTeam) {
+            return false;
+        } else return true;
+    }
 
-  const extras = [
-    { role: 'Referee', name: 'Fred Thompson', status: 'Not sent yet' },
-    // Add more extras
-  ];
+    
+  
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+    const handleRadioChange = (event) => {
+        setSelectedOption(event.target.value);
+    };
 
-  console.log('Team Players to render:', teamPlayers);
+    useEffect(() => {
+        console.log("new general info", generalInfo);
+    }, [generalInfo]);
 
-  return (
-    <div className="flex flex-col min-h-screen bg-sn-bg-light-blue font-interReg">
-    <div className="bg-sn-main-blue text-white text-xl font-bold p-4 w-full flex justify-between items-center">
-        <button>
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <span className="font-russoOne">Game</span>
+    useEffect(() => {
+        console.log("new selected extras in parent", selectedExtras);
+    }, [selectedExtras]);
+
+    useEffect(() => {
+        console.log("new selected players in parent", selectedPlayers);
+    }, [selectedPlayers]);
+
+
+
+    useEffect(() => {
+        const isLoggedIn = async () => {
+            const user = await supabase.auth.getUser();
+            console.log(user)
+            if (!user.data.user) {
+                navigate('/auth');
+            }
+        }
+        isLoggedIn();
+    }, [])
+    
+
+    useEffect(() => {
+      const fetchEventDetails = async () => {
+          setLoading(true);
+          console.log('Starting to fetch details for event with hardcoded ID: 1');
+      
+          try {
+              const { data: event, error } = await supabase
+                  .from('event')
+                  .select('title, datetime, location, team')
+                  .eq('id', 1) // Hardcoded event ID
+                  .single();
+  
+              if (error) {
+                  console.error('Error fetching event:', error);
+                  throw error;
+              }
+  
+              console.log('Fetched event data:', event);
+              if (event) {
+                  // Update eventTitle and generalInfo only if they are not already set
+                  if (!eventTitle) setEventTitle(event.title);
+                  if (!generalInfo.date || !generalInfo.time || !generalInfo.location) {
+                      setGeneralInfo({
+                          date: event.datetime.slice(0, 10),
+                          time: event.datetime.slice(11, 16),
+                          location: event.location,
+                      });
+                  }
+  
+                  // Fetch and update selectedTeam only if it's not already set
+                  if (!selectedTeam.team_name) {
+                      const { data: teamData, error: teamError } = await supabase
+                          .from('team')
+                          .select('team_name')
+                          .eq('id', event.team)
+                          .single();
+  
+                      if (teamError) {
+                          console.error('Error fetching team name:', teamError);
+                      } else {
+                          setSelectedTeam({ id: event.team, team_name: teamData.team_name });
+                      }
+                  }
+                  console.log("new selected team", selectedTeam);
+              }
+          } catch (error) {
+              console.error('Caught an error while fetching event details:', error);
+          } finally {
+              setLoading(false);
+          }
+      };
+  
+      fetchEventDetails();
+  }, []);
+    
+    useEffect(() => {
+      console.log("Selected Team in Parent:", selectedTeam);
+    }, [selectedTeam]);
+    
+
+    if (loading) {
+        return (<LoadingPage></LoadingPage>)
+    } else {
+
+      return (
         <div>
-          <button className="bg-blue-500 text-white px-3 py-1 rounded mr-2">DELETE</button>
-          <button className="bg-orange-500 text-white px-3 py-1 rounded">SAVE</button>
-        </div>
-      </div>
+            <StickySubheaderEventCreateComponent onSave={handleOnChange} />
+            <div className="pt-6 h-screen bg-sn-bg-light-blue flex flex-col px-5">
+                <h1 className="font-russoOne text-sn-main-blue text-2xl">New Game</h1>
+                {inputCheck ? (
+                    <div />
+                ) : (
+                    <div className='text-sm text-red-500'>Please ensure that title event, date, time, team, and location are filled/selected</div>
+                )}
 
-      <div className="p-4">
-      <div className="flex justify-center mb-4">
-      <input
-          type="text"
-          defaultValue="Game 1" 
-          value={eventDetails.title || ''} 
-          onChange={() => {}}
-          className="text-2xl font-bold text-center text-sn-main-blue font-russoOne bg-white border border-gray-300 rounded-lg"
-          style={{
-            outline: 'none',
-            boxShadow: 'none',
-            padding: '0.5rem 1rem', // Adjust padding to your preference
-          }}
-        />
-      </div> 
+                <input
+                    value={eventTitle}
+                    onChange={(e) => setEventTitle(e.target.value)}
+                    type="text"
+                    placeholder="Title"
+                    className="h-10 px-2 rounded-md border-sn-light-orange border-[1.5px] font-russoOne"
+                />
 
-        
-       <div className="mb-4 flex items-center">
-        <MdGroup className="text-sn-main-orange mr-3" size={24} />
-        <span className="form-input bg-white border border-gray-300 rounded-lg text-neutral-600" style={{ maxWidth: '200px', padding: '0.5rem 1rem' }}>
-          {teamName || 'Team not set'}
-        </span>
-      </div>
-
-      <div className="mb-4 flex items-center">
-        <MdDateRange className="text-sn-main-orange mr-3" size={24} />
-        <input 
-          type="date" 
-          value={eventDetails.datetime ? eventDetails.datetime.split('T')[0] : ''} 
-          className="form-input py-2 border border-gray-300 rounded-lg text-neutral-600"
-          style={{ width: '130px' }} 
-          
-        />
-      </div>
-
-      <div className="mb-4 flex items-center">
-        <MdAccessTime className="text-sn-main-orange mr-3" size={24} />
-        <input 
-          type="time" 
-          value={eventDetails.datetime ? eventDetails.datetime.split('T')[1].substring(0, 5) : ''} 
-          className="form-input py-2 border border-gray-300 rounded-lg text-neutral-600"
-          style={{ width: '80px' }} 
-          
-        />
-      </div>
-
-      <div className="mb-4 flex items-center">
-        <MdLocationOn className="text-sn-main-orange mr-3" size={24} />
-        <input 
-          type="text" 
-          value={eventDetails.location || ''} 
-          placeholder="Fill in location" 
-          className="form-input border border-gray-300 rounded-lg text-neutral-600"
-          style={{ maxWidth: '300px', padding: '0.5rem 1rem' }} 
-          
-        />
-      </div>
-
-        
-
-      <div className="mb-4">
-      <h3 className="text-lg font-semibold mb-2 text-sn-main-blue font-russoOne">Initial Line-up</h3>
-      {positionLabels.map((positionLabel, index) => (
-        <PlayerSetupBlock
-          key={index}
-          label={positionLabel}
-          selectedPlayerId={selectedInitialPlayers[index]}
-          allPlayers={teamPlayers}
-          onSelectPlayer={e => handleInitialSelectChange(e, index)}
-          status = 'Accepted'
-        />
-      ))}
-    </div>
-
-    <div className="mb-4">
-      <h3 className="text-lg font-semibold mb-2 text-sn-main-blue font-russoOne">Substitutes</h3>
-      {Substitutes.map((player, index) => (
-        <PlayerSetupBlock
-          key={index}
-          label="SUB"
-          selectedPlayerId={selectedSubstitutePlayers[index]}
-          allPlayers={teamPlayers}
-          onSelectPlayer={e => handleSubstituteSelectChange(e, index)}
-          status = 'Accepted'
-        />
-      ))}
-      <button 
-        onClick={addPlayer} 
-        className="mt-2 p-2 bg-white text-black rounded-lg"
-      >
-        Add Player
-      </button>
-    </div>
-
-        <div className="mb-4">
-          <h3 className="text-lg font-semibold mb-2 text-sn-main-blue font-russoOne">Extras</h3>
-          {extras.map((extra, index) => (
-            <div key={index} className="flex justify-between items-center mb-2">
-              <span className="font-semibold">{extra.role}</span>
-              <select className="form-select px-3 py-2 bg-white border border-gray-300 rounded-lg">
-                <option>{extra.name}</option>
-                {/* Add more extra options here */}
-              </select>
-              <span>{extra.status}</span>
+                {/* Render EditGameComponent */}
+                <EditGameComponent
+                    eventTitle={eventTitle}
+                    generalInfo={generalInfo}
+                    selectedTeam={selectedTeam}
+                    onGeneralInfoChanges={setGeneralInfo}
+                    onSelectedPlayerChanges={setSelectedPlayers}
+                    onSelectedExtraChanges={setSelectedExtras}
+                    onTeamChanges={setSelectedTeam}
+                />
             </div>
-          ))}
         </div>
-      </div>
-    </div>
-  );
+    );
+}
 }
 
-export default EventOverviewEdit;
+export default EditGamePage;

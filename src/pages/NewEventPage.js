@@ -3,6 +3,7 @@ import {useNavigate } from 'react-router-dom';
 import NewGamePageComponent from '../components/NewGameComponent';
 import NewPracticeTBComponent from '../components/NewPracticeTBComponent';
 
+
 import { supabase } from '../lib/helper/supabaseClient';
 import StickySubheaderEventCreateComponent from '../components/StickySubheaderEventCreateComponent';
 import LoadingPage from './LoadingPage';
@@ -202,47 +203,63 @@ const NewGamePage = () => {
 
         return (
             <div>
-                <StickySubheaderEventCreateComponent onSave={handleOnChange} />
-                <div className="pt-6 h-screen bg-sn-bg-light-blue flex flex-col px-5">
-                    <h1>New {selectedOption ? selectedOption : "game"}</h1>
-                    {inputCheck? (<div/>):(<div className='text-sm text-red-500'>Please insure that title event, date, time, team, and location are filled/selected</div>)}
-                    
-                    <input value={eventTitle} onChange={(e) => setEventTitle(e.target.value)} type="text" placeholder="Title" className="h-10 px-2 rounded-md border-sn-light-orange border-[1.5px] " />
-                    <div className="flex flex-row justify-between gap-4 pt-2">
-                        <div className="flex flex-row justify-between gap-2">
-                            <input
-                                type="radio"
-                                id="Game"
-                                name="activity"
-                                value="game"
-                                checked={selectedOption === "game"}
-                                onChange={handleRadioChange}
-                            />
-                            <label className="text-[14px]" htmlFor="game">Game</label>
-                        </div>
-                        <div className="flex flex-row justify-between gap-2">
-                            <input
-                                type="radio"
-                                id="Practice"
-                                name="activity"
-                                value="practice"
-                                checked={selectedOption === "practice"}
-                                onChange={handleRadioChange}
-                            />
-                            <label className="text-[14px]" htmlFor="practice">Practice</label>
-                        </div>
-                        <div className="flex flex-row justify-between gap-2">
-                            <input
-                                type="radio"
-                                id="Team Building"
-                                name="activity"
-                                value="team building"
-                                checked={selectedOption === "team building"}
-                                onChange={handleRadioChange}
-                            />
-                            <label className="text-[14px]" htmlFor="team building">Team Building</label>
-                        </div>
-                    </div>
+        <StickySubheaderEventCreateComponent onSave={handleOnChange} />
+        <div className="pt-6 h-screen bg-sn-bg-light-blue flex flex-col px-5">
+            <h1 className="font-russoOne text-sn-main-blue text-2xl">New {selectedOption ? selectedOption : "game"}</h1>
+            {inputCheck ? (
+                <div />
+            ) : (
+                <div className='text-sm text-red-500'>Please ensure that title event, date, time, team, and location are filled/selected</div>
+            )}
+
+            <input
+                value={eventTitle}
+                onChange={(e) => setEventTitle(e.target.value)}
+                type="text"
+                placeholder="Title"
+                className="h-10 px-2 rounded-md border-sn-light-orange border-[1.5px] font-russoOne"
+            />
+            <div className="flex flex-row justify-between gap-4 pt-2">
+                <div className="flex flex-row justify-between gap-2">
+                    <input
+                        type="radio"
+                        id="Game"
+                        name="activity"
+                        value="game"
+                        checked={selectedOption === "game"}
+                        onChange={handleRadioChange}
+                    />
+                    <label className="text-[14px] font-russoOne text-sn-main-blue" htmlFor="game">
+                        Game
+                    </label>
+                </div>
+                <div className="flex flex-row justify-between gap-2">
+                    <input
+                        type="radio"
+                        id="Practice"
+                        name="activity"
+                        value="practice"
+                        checked={selectedOption === "practice"}
+                        onChange={handleRadioChange}
+                    />
+                    <label className="text-[14px] font-russoOne text-sn-main-blue" htmlFor="practice">
+                        Practice
+                    </label>
+                </div>
+                <div className="flex flex-row justify-between gap-2">
+                    <input
+                        type="radio"
+                        id="Team Building"
+                        name="activity"
+                        value="team building"
+                        checked={selectedOption === "team building"}
+                        onChange={handleRadioChange}
+                    />
+                    <label className="text-[14px] font-russoOne text-sn-main-blue" htmlFor="team building">
+                        Team Building
+                    </label>
+                </div>
+            </div>
                 
                     {(selectedOption === 'game' || selectedOption === '') &&
                         <NewGamePageComponent
