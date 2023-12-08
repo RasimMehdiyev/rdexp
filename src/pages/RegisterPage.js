@@ -20,6 +20,7 @@ function RegisterPage() {
 
     const [passwordEdited, setPasswordEdited] = useState(false);
     const [confirmPasswordEdited, setConfirmPasswordEdited] = useState(false);
+    const [passwordLengthError, setPasswordLengthError] = useState(false);
 
     const checkPasswordMatch = () => {
         if (passwordEdited && confirmPasswordEdited && password !== confirmPassword) {
@@ -48,6 +49,7 @@ function RegisterPage() {
     
       const handlePasswordBlur = () => {
         checkPasswordMatch();
+        setPasswordLengthError(password.length < 8 && passwordEdited);
       };
     
       const handleConfirmPasswordBlur = () => {
@@ -159,9 +161,9 @@ function RegisterPage() {
                     />
                     
                     <input
-                        className={`shadow-md pl-2 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue
-                        ${!isPasswordMatch ? 'border-red-500' : 'border-club-header-blue'}
-                        ${!isPasswordMatch? 'text-red-500' : ''}`}
+                        className={`shadow-md pl-2 mt-7 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue
+                        ${!isPasswordMatch || passwordLengthError ? 'border-red-500' : 'border-club-header-blue'}
+                        ${!isPasswordMatch || passwordLengthError ? 'text-red-500' : ''}`}
                         placeholder='Password'
                         type="password"
                         value={password}
@@ -170,17 +172,20 @@ function RegisterPage() {
                     />
                     <input
                         className={`shadow-md pl-2 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue
-                        ${!isPasswordMatch ? 'border-red-500' : 'border-club-header-blue'}
-                        ${!isPasswordMatch? 'text-red-500' : ''}`}
+                        ${!isPasswordMatch || passwordLengthError  ? 'border-red-500' : 'border-club-header-blue'}
+                        ${!isPasswordMatch || passwordLengthError ? 'text-red-500' : ''}`}
                         placeholder='Confirm Password'
                         type="password"
                         value={confirmPassword}
                         onChange={handleConfirmPasswordChange}
                         onBlur={handleConfirmPasswordBlur}
                     />
+                    {passwordLengthError && (
+                        <p className='text-[10px] text-sm mb-7 font-interReg leading-none text-red-500 font-bold'>Password must be at least 8 characters.</p>
+                    )}
 
-                    <select className='shadow-md pl-2 font-interReg text-lf-dark-gray text-[12px] w-full h-9 mt-5 rounded-lg border-2 ' value={role} onChange={(event) => setRole(event.target.value)}>
-                        <option className='font-interReg' value="0">Choose role</option>
+                    <select className='shadow-md pl-2 font-interReg border-club-header-blue text-lf-dark-gray text-[12px] w-full h-9 rounded-lg border-2 appearance-none focus:outline-none ' value={role} onChange={(event) => setRole(event.target.value)}>
+                        <option className='font-interReg' value="" disabled selected>Choose role</option>
                         <option className='font-interReg' value='1'>Coach</option>
                         <option className='font-interReg' value="2">Player</option>
                         <option className='font-interReg' value="3">Volunteer</option>
