@@ -33,7 +33,6 @@ const EditTeamPage = () => {
                 // Check if the necessary data is available
                 if(!loading){
                     if(userData){
-                        console.log("userData", userData)
                         if(isCoach){
                             if (teamData && clubData && teamSocialsData) {
                                 // Update form fields with the fetched data
@@ -154,7 +153,7 @@ const EditTeamPage = () => {
                     description: formData.bio,
                     location: formData.location,
                     stadium: formData.stadium,
-                    picture: formData.previewImage, 
+                    picture: previewImage, 
                 })
                 .eq('id', clubId);
     
