@@ -18,6 +18,42 @@ function RegisterPage() {
 
     const navigate = useNavigate();
 
+    const [passwordEdited, setPasswordEdited] = useState(false);
+    const [confirmPasswordEdited, setConfirmPasswordEdited] = useState(false);
+
+    const checkPasswordMatch = () => {
+        if (passwordEdited && confirmPasswordEdited && password !== confirmPassword) {
+        toast.error("Passwords don't match. Please check and try again.", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+        });
+        }
+    };
+
+    const handlePasswordChange = (event) => {
+        setPasswordEdited(true);
+        setPassword(event.target.value);
+      };
+    
+      const handleConfirmPasswordChange = (event) => {
+        setConfirmPasswordEdited(true);
+        setConfirmPassword(event.target.value);
+      };
+    
+      const handlePasswordBlur = () => {
+        checkPasswordMatch();
+      };
+    
+      const handleConfirmPasswordBlur = () => {
+        checkPasswordMatch();
+      };
+
     const validateEmail = (inputEmail) => {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailPattern.test(inputEmail);
@@ -46,6 +82,7 @@ function RegisterPage() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
 
         if (role === '0') {
             toast.error('Please select a valid role.');
@@ -98,7 +135,8 @@ function RegisterPage() {
                     />
                     
                     <input
-                    className={`shadow-md text-[12px] pl-2 font-interReg w-full h-12 rounded-lg border-2 ${
+                    className={`shadow-md text-[12px] pl-2 font-interReg w-full h-12 rounded-lg border-2 
+                    ${
                         emailError ? 'border-red-500' : 'border-club-header-blue'
                       } ${
                         emailError ? 'text-red-500' : '' 
@@ -120,13 +158,28 @@ function RegisterPage() {
                     onChange={(newPhoneNumber) => setPhoneNumber(newPhoneNumber)}
                     />
                     
-                    <input className='shadow-md pl-2 font-interReg w-full h-12 mt-5 rounded-lg border-2 border-club-header-blue' placeholder='Password' type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
-                    <input className='shadow-md pl-2 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue' placeholder='Confirm Password' type="password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} />
-                    {isPasswordMatch ? null : 
-                        <p className='text-[10px] font-interReg leading-none text-[#ff0000d3] font-bold'>Passwords do not match!</p>
-                    }
+                    <input
+                        className={`shadow-md pl-2 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue
+                        ${!isPasswordMatch ? 'border-red-500' : 'border-club-header-blue'}
+                        ${!isPasswordMatch? 'text-red-500' : ''}`}
+                        placeholder='Password'
+                        type="password"
+                        value={password}
+                        onChange={handlePasswordChange}
+                        onBlur={handlePasswordBlur}
+                    />
+                    <input
+                        className={`shadow-md pl-2 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue
+                        ${!isPasswordMatch ? 'border-red-500' : 'border-club-header-blue'}
+                        ${!isPasswordMatch? 'text-red-500' : ''}`}
+                        placeholder='Confirm Password'
+                        type="password"
+                        value={confirmPassword}
+                        onChange={handleConfirmPasswordChange}
+                        onBlur={handleConfirmPasswordBlur}
+                    />
 
-                    <select className='shadow-md pl-2 font-interReg text-lf-dark-gray text-[12px] w-full h-9 mt-5 rounded-lg border-2 border-club-header-blue' value={role} onChange={(event) => setRole(event.target.value)}>
+                    <select className='shadow-md pl-2 font-interReg text-lf-dark-gray text-[12px] w-full h-9 mt-5 rounded-lg border-2 ' value={role} onChange={(event) => setRole(event.target.value)}>
                         <option className='font-interReg' value="0">Choose role</option>
                         <option className='font-interReg' value='1'>Coach</option>
                         <option className='font-interReg' value="2">Player</option>
