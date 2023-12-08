@@ -191,13 +191,13 @@ export const AboutClubPage = () => {
     }
   return (
     
-    <form  onSubmit={submitChanges} className='bg-sn-bg-light-blue flex flex-col justify-center align-center px-8 h-screen gap-5 text-game-blue'>
+    <form  onSubmit={submitChanges} className='bg-sn-bg-light-blue flex flex-col justify-center align-center px-8 h-screen gap-5 text-club-header-blue'>
         <div className='flex flex-col justify-center gap-0'>
             <h5 className='font-russoOne text-5xl  text-center leading-none'>ABOUT</h5>
             <h5 className='font-russoOne text-5xl  text-center leading-none'>YOUR CLUB</h5>
         </div>
         <div>
-        <input onChange={handleClubNameInputChange} className="text-black border-2 border-game-blue pl-2 w-[50vw] ml-[20%] align-center rounded-10px h-12" type="text" placeholder='Club name'/>
+        <input onChange={handleClubNameInputChange} className="text-black border-2 border-club-header-blue pl-2 w-[50vw] ml-[20%] align-center rounded-10px h-12" type="text" placeholder='Club name'/>
         </div >
         <div className='flex flex-row gap-[20px] align-center'>
             <span className='font-russoOne text-[20px]'>Logo</span>
@@ -214,20 +214,20 @@ export const AboutClubPage = () => {
             <p className='font-russoOne text-[20px] '>Contact details</p>
             <div className='input-container'>
                 <img className="input-icon" src={process.env.PUBLIC_URL + "/images/envelope.svg"}/>
-                <input onChange={handleClubEmailInputChange} type="email" placeholder='info@youremail.com' className="text-black border-2 pl-8 border-game-blue rounded-10px min-w-full h-12 m-auto"/>
+                <input onChange={handleClubEmailInputChange} type="email" placeholder='info@youremail.com' className="text-black border-2 pl-8 border-club-header-blue rounded-10px min-w-full h-12 m-auto"/>
             </div>
             <div className='input-container'>
                 <img className="input-icon" src={process.env.PUBLIC_URL + "/images/phone-call.svg"}/>
-                <input onChange={handleClubPhoneInputChange} type="text" placeholder='Phone number' className="text-black border-2 pl-8 border-game-blue rounded-10px min-w-full h-12 m-auto"/>
+                <input onChange={handleClubPhoneInputChange} type="text" placeholder='Phone number' className="text-black border-2 pl-8 border-club-header-blue rounded-10px min-w-full h-12 m-auto"/>
             </div>
             <div className='input-container'>
                 <img className="input-icon" src={process.env.PUBLIC_URL + "/images/map-pin.svg"}/>
-                <input onChange={handleLocationInputChange} type="text" placeholder='Enter location' className="text-black border-2 pl-8 border-game-blue rounded-10px min-w-full h-12 m-auto"/>
+                <input onChange={handleLocationInputChange} type="text" placeholder='Enter location' className="text-black border-2 pl-8 border-club-header-blue rounded-10px min-w-full h-12 m-auto"/>
             </div>
         </div>
         <div className='flex flex-col gap-2 justify-center align-center'>
             <p className='font-russoOne text-[20px] '>Description</p>
-            <textarea onChange={handleClubDescriptionInputChange} className='rounded-10px pt-2 pl-2 min-w-full m-auto border-2 border-game-blue text-black' name="description" id="description" placeholder="(Optional)"cols="30" rows="5"></textarea>
+            <textarea onChange={handleClubDescriptionInputChange} className='rounded-10px pt-2 pl-2 min-w-full m-auto border-2 border-club-header-blue text-black' name="description" id="description" placeholder="(Optional)"cols="30" rows="5"></textarea>
         </div>
         <button type='submit' className="font-interReg bg-sn-main-orange ml-[20%] align-center rounded-10px h-12 w-[50vw] text-white">
             SAVE

@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 const GameSettings = () => {
   const [roles, setRoles] = useState([]);
   const navigate = useNavigate();
+  const [user, setUser] = useState(null); // Example test data
 
   const addRole = (roleName) => {
     // Assuming roles only have names and no additional data for now
@@ -24,7 +25,6 @@ const GameSettings = () => {
 
   const saveData = () => {
     try {
-      // Save data to database
       toast.success('Game settings saved!', { position: "top-center" });
       setTimeout(() => {
         console.log("redirecting")
@@ -41,24 +41,23 @@ const GameSettings = () => {
 
     <div>
         <div className='text-center flex flex-col justify-center items-center'>
-            <h1 className="pt-20 text-5xl text-game-blue">
+            <h1 className="pt-20 text-5xl text-club-header-blue">
             GAME
             </h1>
-            <h1 className="text-5xl text-game-blue">
+            <h1 className="text-5xl text-club-header-blue">
             SETTINGS
             </h1>
-            
-            <h3 className="pb-7 mt-3 text-2xl font-interELight text-game-blue p-1 bg-white rounded-10px shadow-md h-[6vh] w-[70vw] ">
+            <h3 className="pb-7 mt-3 text-2xl font-interELight text-club-header-blue p-1 bg-white rounded-10px shadow-md h-[6vh] w-[70vw] ">
             Team 1
             </h3>
         </div>
 
         <div className='pl-5'>
-            <h1 className="pt-7 text-3xl text-game-blue">
+            <h1 className="pt-7 text-3xl text-club-header-blue">
                 Add roles
             </h1>
-            <h3 className="pb-7 font-interELight text-game-blue">
-            These roles are positions, distinct from players, that require someone to fill them during every game of the team.
+            <h3 className="pb-7 font-interELight text-club-header-blue">
+              These roles are positions, distinct from players, that require someone to fill them during every game of the team.
             </h3>
             
             {roles.map((role, index) => (
@@ -74,7 +73,7 @@ const GameSettings = () => {
           SAVE
         </button>
 
-        <Link className=" text-game-blue pt-10 underline underline-offset- font-interElight p-2 rounded-10px w-[70vw] h-12 pb-10 ">
+        <Link className=" text-club-header-blue pt-10 underline underline-offset- font-interElight p-2 rounded-10px w-[70vw] h-12 pb-10 ">
           skip this step
         </Link>
       </div>

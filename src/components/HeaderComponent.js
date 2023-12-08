@@ -9,6 +9,7 @@ const HeaderComponent = ({ setRightIsOpen , rightIsOpen }) => {
   const [clubData, setClubData] = useState({}); // [club_id, club_name]
   const [loading, setLoading] = useState(true); // Add a loading state
   const [notificationCount, setNotificationCount] = useState(3); // Example test data
+  const [userRole, setUserRole] = useState(1); // Example test data 
 
   // navigate
   const navigate = useNavigate();
@@ -107,8 +108,6 @@ const HeaderComponent = ({ setRightIsOpen , rightIsOpen }) => {
                 <Link to="/team-management/">
                   <img className='cursor-pointer border-2 border-white object-cover overflow-hidden w-[45px] h-[45px] rounded-10px' src={clubData.picture} alt="team-profile" />
                 </Link>
-
-
                 ) : (
                 <Link to="no-team/" className='flex flex-col items-center justify-center'>
                     <img className='bg-white cursor-pointer border-2 border-white object-cover overflow-hidden w-[50px] h-[50px] rounded-10px' src={process.env.PUBLIC_URL + "/images/Teams-1.svg"} alt="profile" />
