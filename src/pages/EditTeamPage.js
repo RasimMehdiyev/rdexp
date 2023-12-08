@@ -232,7 +232,7 @@ const EditTeamPage = () => {
                                 <div className="justify-start items-start gap-2.5 inline-flex">
                                     <label className="text-blue-600 text-xl font-russoOne">Team Name</label>
                                 </div>
-                                <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-blue-600  justify-start items-center gap-2.5 inline-flex">
+                                <div className="w-[322px] h-8 pl-1 pr-4 py-3 bg-white rounded-md border border-blue-600  justify-start items-center gap-2.5 inline-flex">
                                     <div className="w-full h-auto basis-0 justify-start items-center flex"></div>
                                         <input
                                             name="teamName"
@@ -258,7 +258,7 @@ const EditTeamPage = () => {
 
                                  {/* Email Section */}
 
-                                <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-blue-600  justify-start items-center gap-2.5 inline-flex">
+                                <div className="w-[322px] h-8 pl-3 pr-4 py-3 bg-white rounded-md border border-blue-600  justify-start items-center gap-2.5 inline-flex">
                                     <EnvelopeIcon className="h-5 w-5 text-neutral-500"></EnvelopeIcon>
                                     <div className="w-full h-auto basis-0 justify-start items-center flex">
                                         <input
@@ -275,7 +275,7 @@ const EditTeamPage = () => {
 
                                 {/* Phone Section */}
 
-                                <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-blue-600 justify-start items-center gap-2.5 inline-flex">
+                                <div className="w-[322px] h-8 pl-3 pr-4 py-3 bg-white rounded-md border border-blue-600 justify-start items-center gap-2.5 inline-flex">
                                     <PhoneIcon className="h-5 w-5 text-neutral-500"></PhoneIcon>
                                     <div className="w-full h-auto basis-0 justify-start items-center flex">                            
                                         <input
@@ -303,7 +303,7 @@ const EditTeamPage = () => {
 
                                 {/* Location Section */}
 
-                                <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-blue-600 justify-start items-center gap-2.5 inline-flex">
+                                <div className="w-[322px] h-8 pl-3 pr-4 py-3 bg-white rounded-md border border-blue-600 justify-start items-center gap-2.5 inline-flex">
                                     <MapPinIcon className="h-5 w-5 text-neutral-500"></MapPinIcon>
                                     <div className="w-full h-auto basis-0 justify-start items-center flex">                            
                                     <input
@@ -319,7 +319,7 @@ const EditTeamPage = () => {
 
                                 {/* Stadium Section */}
 
-                                <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-blue-600 justify-start items-center gap-2.5 inline-flex">
+                                <div className="w-[322px] h-8 pl-3 pr-4 py-3 bg-white rounded-md border border-blue-600 justify-start items-center gap-2.5 inline-flex">
                                     <MapPinIcon className="h-5 w-5 text-neutral-500"></MapPinIcon>
                                     <div className="w-full h-auto basis-0 justify-start items-center flex">                            
                                     <input
@@ -347,7 +347,7 @@ const EditTeamPage = () => {
 
                                  {/* Facebook Section */}
 
-                                <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-blue-600  justify-start items-center gap-2.5 inline-flex">
+                                <div className="w-[322px] h-8 pl-3 pr-4 py-3 bg-white rounded-md border border-blue-600  justify-start items-center gap-2.5 inline-flex">
                                     <img src={`${process.env.PUBLIC_URL}/images/facebook.svg`} alt='facebook' />
                                     <div className="w-full h-auto basis-0 justify-start items-center flex">
                                         <input
@@ -363,7 +363,7 @@ const EditTeamPage = () => {
 
                                 {/* Instagram Section */}
 
-                                <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-blue-600 justify-start items-center gap-2.5 inline-flex">
+                                <div className="w-[322px] h-8 pl-3 pr-4 py-3 bg-white rounded-md border border-blue-600 justify-start items-center gap-2.5 inline-flex">
                                     <img src={`${process.env.PUBLIC_URL}/images/instagram.svg`} alt='instagram' />
                                     <div className="w-full h-auto basis-0 justify-start items-center flex">                            
                                         <input
@@ -379,7 +379,7 @@ const EditTeamPage = () => {
 
                                 {/* X Section */}
 
-                                <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-blue-600 justify-start items-center gap-2.5 inline-flex">
+                                <div className="w-[322px] h-8 pl-3 pr-4 py-3 bg-white rounded-md border border-blue-600 justify-start items-center gap-2.5 inline-flex">
                                     <img src={`${process.env.PUBLIC_URL}/images/twitter.svg`} alt='twitter' />
                                     <div className="w-full h-auto basis-0 justify-start items-center flex">                            
                                         <input
@@ -405,7 +405,7 @@ const EditTeamPage = () => {
                                         name="bio"
                                         value={formValues.bio}
                                         onChange={handleInputChange}
-                                        className="form-textarea"
+                                        className="form-textarea pl-2 pt-1 h-[100px] "
                                         placeholder="Enter bio"
                                     />
                                 </div>
