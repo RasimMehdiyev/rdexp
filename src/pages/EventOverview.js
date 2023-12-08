@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import EditGameComponent from '../components/EditGameComponent';
+import React, { useState, useEffect, useRef } from 'react';
+import GameOverviewComponent from '../components/GameOverviewComponent';
 import NewPracticeTBComponent from '../components/NewPracticeTBComponent';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../lib/helper/supabaseClient';
-import StickySubheaderEventCreateComponent from '../components/StickySubheaderEventCreateComponent';
+import StickySubheaderGameOverviewComponent from '../components/StickySubheaderGameOverviewComponent';
 import LoadingPage from './LoadingPage';
 
 const EventOverview = () => {
-    const { eventId } = useParams(); // Retrieve eventId from the URL
+    const { eventId } = useParams(); 
     const navigate = useNavigate();
 
     const [eventData, setEventData] = useState(null);
@@ -19,153 +19,17 @@ const EventOverview = () => {
     const [selectedExtras, setSelectedExtras] = useState([]);
     const [selectedTeam, setSelectedTeam] = useState([]);
     const [inputCheck, setInputCheck] = useState(true);
-    
-    
 
+    const hasFetched = useRef(false);
 
     const handleOnChange = async () => {
+                const eventId = generalInfo.eventid;
+                navigate(`/event-overview/edit/${eventId}`);
+            }
+            
+            
         
-        if (selectedOption == "game" | selectedOption == "") {
-            setLoading(true);
-            console.log("event title", eventTitle);
-            console.log("selected option", selectedOption);
-            console.log("general info", generalInfo);
-            console.log("players", selectedPlayers);
-            console.log("extras", selectedExtras);
-            console.log("team", selectedTeam);
-
-            const timestamp = `${generalInfo.date} ${generalInfo.time}:00+00`;
-            console.log("timestamp", timestamp);
-
-            const toUploadPlayers = selectedPlayers.map((p) => ({ user_id: p.id, position_id: p.position_id }));
-            const toUploadExtras = selectedExtras.map((ex) => ({ user_id: ex.id, extrarole_id: ex.extraRole_id }));
-
-            console.log("to upload players", toUploadPlayers);
-            console.log("to upload extras", toUploadExtras);
-
-            if (checkInput()) setInputCheck(true);
-            else {
-                setInputCheck(false);
-                setLoading(false);
-                return;
-            }
-
-            try {
-                const userResponse = await supabase.auth.getUser();
-                console.log("User:", userResponse);
-                const user = userResponse.data.user;
-                if (user) {
-                    // Update general info => inserting column in event table
-                    if (!generalInfo.date || !generalInfo.time || !generalInfo.location || !eventTitle || !selectedTeam) {
-                    const { eventData, errorEventData } = await supabase
-                        .from('event')
-                        .insert([
-                            { title: eventTitle, team: selectedTeam, datetime: timestamp, location: generalInfo.location, type: selectedOption },
-                        ])
-                        .select()
-                    if (errorEventData) throw errorEventData;
-                      }
-                    let { data: eventDataID, errorEventDataID } = await supabase
-                        .from('event')
-                        .select('*')
-                        .order('id', { ascending: false }) // Sort by id in descending order
-                        .limit(1); // Limit the result to 1 row
-                    if (errorEventDataID) console.error('Error fetching latest event:', errorEventDataID)
-                    else {
-                        console.log("event data is", eventDataID);
-                        const event_id = eventDataID[0].id;
-                        const finalUploadPlayers = toUploadPlayers.map((p) => ({ ...p, event_id: event_id, is_attending: "Pending" }));
-                        console.log("finalUploadPlayers: ", finalUploadPlayers);
-                        const finalUploadExtras = toUploadExtras.map((ex) => ({ ...ex, event_id: event_id, is_attending: "Pending" }));
-                        console.log("finalUploadExtras: ", finalUploadExtras);
-
-                        const { playersData, errorPlayersData } = await supabase
-                            .from('event_users')
-                            .insert(finalUploadPlayers)
-                            .select()
-                        if (errorPlayersData) throw errorPlayersData;
-                        
-
-                        const { extrasData, errorExtrasData } = await supabase
-                            .from('event_users')
-                            .insert(finalUploadExtras)
-                            .select()
-                        if (errorExtrasData) throw errorExtrasData;
-                    };                            
-                }                    
-                            
-            } catch (error) {
-                console.error("Error uploading data", error);
-            } finally {
-                setLoading(false);
-                navigate('/');
-
-            }
-        } else {
-            setLoading(true);
-            if (checkInput()) setInputCheck(true);
-            else {
-                setInputCheck(false);
-                setLoading(false);
-                return;
-            }
-            console.log("event title", eventTitle);
-            console.log("selected option", selectedOption);
-            console.log("general info", generalInfo);
-            console.log("players", selectedPlayers);
-            console.log("team", selectedTeam);
-
-            const timestamp = `${generalInfo.date} ${generalInfo.time}:00+00`;
-            console.log("timestamp", timestamp);
-
-            const toUploadPlayers = selectedPlayers.map((p) => ({ user_id: p.id }));
-
-            console.log("to upload players", toUploadPlayers);
-            try {
-                const userResponse = await supabase.auth.getUser();
-                console.log("User:", userResponse);
-                const user = userResponse.data.user;
-                if (user) {
-                    // Update general info => inserting column in event table
-                    if (!generalInfo.date || !generalInfo.time || !generalInfo.location || !eventTitle || !selectedTeam) {
-                    const { eventData, errorEventData } = await supabase
-                        .from('event')
-                        .insert([
-                            { title: eventTitle, team: selectedTeam, datetime: timestamp, location: generalInfo.location, type: selectedOption },
-                        ])
-                        .select()
-                    if (errorEventData) throw errorEventData;
-                      }
-                      if (!generalInfo.date || !generalInfo.time || !generalInfo.location || !eventTitle || !selectedTeam) {
-                    let { data: eventDataID, errorEventDataID } = await supabase
-                        .from('event')
-                        .select('*')
-                        .order('id', { ascending: false }) // Sort by id in descending order
-                        .limit(1); // Limit the result to 1 row
-                    if (errorEventDataID) console.error('Error fetching latest event:', errorEventDataID)}
-                    else {
-                        console.log("event data is", eventDataID);
-                        const event_id = eventDataID[0].id;
-                        const finalUploadPlayers = toUploadPlayers.map((p) => ({ ...p, event_id: event_id, is_attending: "Pending" }));
-                        console.log("finalUploadPlayers: ", finalUploadPlayers);                        
-
-                        const { playersData, errorPlayersData } = await supabase
-                            .from('event_users')
-                            .insert(finalUploadPlayers)
-                            .select()
-                        if (errorPlayersData) throw errorPlayersData;    
-                    };                            
-                }                  
-            } catch (error) {
-                console.error("Error uploading data", error);
-            } finally {
-                setLoading(false);
-                navigate('/');
-            }
-            
-            
-        }
-    }
+    
 
     const checkInput = () => {
         if (!generalInfo.date | !generalInfo.location | !generalInfo.time | !eventTitle | !selectedTeam) {
@@ -209,47 +73,47 @@ const EventOverview = () => {
     useEffect(() => {
       const fetchEventDetails = async () => {
           setLoading(true);
-          console.log('Starting to fetch details for event with hardcoded ID: 1');
-      
+          
+          
           try {
               const { data: event, error } = await supabase
                   .from('event')
-                  .select('title, datetime, location, team')
-                  .eq('id', 1) // Hardcoded event ID
+                  .select('id, title, datetime, location, team')
+                  .eq('id', eventId) 
                   .single();
-  
+    
               if (error) {
                   console.error('Error fetching event:', error);
                   throw error;
               }
-  
+    
               console.log('Fetched event data:', event);
               if (event) {
-                  // Update eventTitle and generalInfo only if they are not already set
-                  if (!eventTitle) setEventTitle(event.title);
-                  if (!generalInfo.date || !generalInfo.time || !generalInfo.location) {
-                      setGeneralInfo({
-                          date: event.datetime.slice(0, 10),
-                          time: event.datetime.slice(11, 16),
-                          location: event.location,
-                      });
+                  const newGeneralInfo = {
+                      date: event.datetime.slice(0, 10),
+                      time: event.datetime.slice(11, 16),
+                      location: event.location,
+                      gameName: event.title,
+                      eventid: event.id
+                  };
+                  setEventTitle(event.title);
+                  // Fetch the team name
+                  const { data: teamData, error: teamError } = await supabase
+                      .from('team')
+                      .select('team_name')
+                      .eq('id', event.team)
+                      .single();
+    
+                  if (teamError) {
+                      console.error('Error fetching team name:', teamError);
+                  } else {
+                      // Append the team name and ID to the newGeneralInfo object
+                      newGeneralInfo.teamName = teamData.team_name;
+                      newGeneralInfo.teamId = event.team;
                   }
-  
-                  // Fetch and update selectedTeam only if it's not already set
-                  if (!selectedTeam.team_name) {
-                      const { data: teamData, error: teamError } = await supabase
-                          .from('team')
-                          .select('team_name')
-                          .eq('id', event.team)
-                          .single();
-  
-                      if (teamError) {
-                          console.error('Error fetching team name:', teamError);
-                      } else {
-                          setSelectedTeam({ id: event.team, team_name: teamData.team_name });
-                      }
-                  }
-                  console.log("new selected team", selectedTeam);
+                   
+                  // Now, set the generalInfo state with the newGeneralInfo object
+                  setGeneralInfo(newGeneralInfo);
               }
           } catch (error) {
               console.error('Caught an error while fetching event details:', error);
@@ -257,9 +121,11 @@ const EventOverview = () => {
               setLoading(false);
           }
       };
-  
+    
       fetchEventDetails();
-  }, []);
+    }, []);
+    
+    
     
     useEffect(() => {
       console.log("Selected Team in Parent:", selectedTeam);
@@ -274,7 +140,7 @@ const EventOverview = () => {
 
       return (
         <div>
-            <StickySubheaderEventCreateComponent onSave={handleOnChange} />
+            <StickySubheaderGameOverviewComponent onSave={handleOnChange} />
             <div className="pt-6 h-screen bg-sn-bg-light-blue flex flex-col px-5">
                 <h1 className="font-russoOne text-sn-main-blue text-2xl">New Game</h1>
                 {inputCheck ? (
@@ -284,15 +150,16 @@ const EventOverview = () => {
                 )}
 
                 <input
-                    value={eventTitle}
+                    value={eventTitle} // Use the gameName from generalInfo
                     onChange={(e) => setEventTitle(e.target.value)}
                     type="text"
                     placeholder="Title"
+                    disabled="true"
                     className="h-10 px-2 rounded-md border-sn-light-orange border-[1.5px] font-russoOne"
                 />
 
                 {/* Render EditGameComponent */}
-                <EditGameComponent
+                <GameOverviewComponent
                     eventTitle={eventTitle}
                     generalInfo={generalInfo}
                     selectedTeam={selectedTeam}

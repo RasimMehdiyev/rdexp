@@ -6,8 +6,9 @@ import { supabase } from '../lib/helper/supabaseClient';
 import StickySubheaderEventCreateComponent from '../components/StickySubheaderEventCreateComponent';
 import LoadingPage from './LoadingPage';
 
-const EventOverview = () => {
-    const { eventId } = useParams(); // Retrieve eventId from the URL
+const EventOverviewEdit = () => {
+    
+    const { eventId } = useParams(); 
     const navigate = useNavigate();
 
     const [eventData, setEventData] = useState(null);
@@ -21,6 +22,23 @@ const EventOverview = () => {
     const [inputCheck, setInputCheck] = useState(true);
 
     const hasFetched = useRef(false);
+
+    const handleOnDelete= async () => {
+            if(generalInfo.eventid)
+            {
+                try {
+                    const { error } = await supabase
+                    .from('event')
+                    .delete()
+                    .eq('id', generalInfo.eventid)
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+            navigate('/');
+
+
+    }
 
     const handleOnChange = async () => {
         
@@ -288,10 +306,11 @@ const EventOverview = () => {
           console.log('Starting to fetch details for event with hardcoded ID: 1');
           
           try {
+              
               const { data: event, error } = await supabase
                   .from('event')
                   .select('id, title, datetime, location, team')
-                  .eq('id', 1) // Hardcoded event ID
+                  .eq('id', eventId) 
                   .single();
     
               if (error) {
@@ -352,7 +371,7 @@ const EventOverview = () => {
 
       return (
         <div>
-            <StickySubheaderEventCreateComponent onSave={handleOnChange} />
+            <StickySubheaderEventCreateComponent onSave={handleOnChange} onDelete={handleOnDelete}/>
             <div className="pt-6 h-screen bg-sn-bg-light-blue flex flex-col px-5">
                 <h1 className="font-russoOne text-sn-main-blue text-2xl">New Game</h1>
                 {inputCheck ? (
@@ -366,6 +385,7 @@ const EventOverview = () => {
                     onChange={(e) => setEventTitle(e.target.value)}
                     type="text"
                     placeholder="Title"
+                    
                     className="h-10 px-2 rounded-md border-sn-light-orange border-[1.5px] font-russoOne"
                 />
 
@@ -385,4 +405,4 @@ const EventOverview = () => {
 }
 }
 
-export default EventOverview;
+export default EventOverviewEdit;
