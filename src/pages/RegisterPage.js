@@ -11,7 +11,7 @@ function RegisterPage() {
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('+32');
-    const [role, setRole] = useState('0');
+    const [role, setRole] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -118,11 +118,11 @@ function RegisterPage() {
     const isDisabled = !fullName || !email || !role || !password || !confirmPassword || password !== confirmPassword;
     const isPasswordMatch = password === confirmPassword;
     return (
-        <div className='min-h-screen pt-10 pb-10 bg-sn-bg-light-blue flex flex-col gap-8 justify-center items-center'>
+        <div className='min-h-screen  pt-10 pb-10 bg-sn-bg-light-blue flex flex-col gap-8 justify-center items-center'>
             <SynthleteLogo />
             <form className='text-center gap-2 w-80 items-center flex flex-col justify-center' onSubmit={handleSubmit}>
                     <input
-                        className='shadow-md text-[12px] pl-2 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue'
+                        className='shadow-md placeholder-text text-[16px] pl-2 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue'
                         placeholder='Full Name'
                         type="text"
                         value={fullName}
@@ -137,7 +137,7 @@ function RegisterPage() {
                     />
                     
                     <input
-                    className={`shadow-md text-[12px] pl-2 font-interReg w-full h-12 rounded-lg border-2 
+                    className={`shadow-md placeholder-text text-[16px] pl-2 font-interReg w-full h-12 rounded-lg border-2 
                     ${
                         emailError ? 'border-red-500' : 'border-club-header-blue'
                       } ${
@@ -161,7 +161,7 @@ function RegisterPage() {
                     />
                     
                     <input
-                        className={`shadow-md pl-2 mt-7 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue
+                        className={`shadow-md placeholder-text text-[16px] pl-2 mt-7 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue
                         ${!isPasswordMatch || passwordLengthError ? 'border-red-500' : 'border-club-header-blue'}
                         ${!isPasswordMatch || passwordLengthError ? 'text-red-500' : ''}`}
                         placeholder='Password'
@@ -171,7 +171,7 @@ function RegisterPage() {
                         onBlur={handlePasswordBlur}
                     />
                     <input
-                        className={`shadow-md pl-2 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue
+                        className={`shadow-md placeholder-text text-[16px] pl-2 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue
                         ${!isPasswordMatch || passwordLengthError  ? 'border-red-500' : 'border-club-header-blue'}
                         ${!isPasswordMatch || passwordLengthError ? 'text-red-500' : ''}`}
                         placeholder='Confirm Password'
@@ -181,10 +181,10 @@ function RegisterPage() {
                         onBlur={handleConfirmPasswordBlur}
                     />
                     {passwordLengthError && (
-                        <p className='text-[10px] text-sm mb-7 font-interReg leading-none text-red-500 font-bold'>Password must be at least 8 characters.</p>
+                        <p className='text-[10px] text-sm font-interReg leading-none text-red-500 font-bold'>Password must be at least 8 characters.</p>
                     )}
 
-                    <select className='shadow-md pl-2 font-interReg border-club-header-blue text-lf-dark-gray text-[12px] w-full h-9 rounded-lg border-2 appearance-none focus:outline-none ' value={role} onChange={(event) => setRole(event.target.value)}>
+                    <select className='shadow-md placeholder-text text-[16px] pl-2 mt-7 font-interReg border-club-header-blue text-lf-dark-gray w-full h-12 rounded-lg border-2 appearance-none focus:outline-none ' value={role} onChange={(event) => setRole(event.target.value)}>
                         <option className='font-interReg' value="" disabled selected>Choose role</option>
                         <option className='font-interReg' value='1'>Coach</option>
                         <option className='font-interReg' value="2">Player</option>
