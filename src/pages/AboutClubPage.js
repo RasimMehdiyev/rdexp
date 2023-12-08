@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import {supabase} from '../lib/helper/supabaseClient';
 import {useNavigate} from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import PhoneInput from "react-phone-input-2";
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -15,7 +16,7 @@ export const AboutClubPage = () => {
     const [file64, setFile64] = useState(''); // file64 state for storing base64 string of image
     const [clubName, setClubName] = useState(''); // club name
     const [clubEmail, setClubEmail] = useState(''); // club email
-    const [clubPhone, setClubPhone] = useState(''); // club phone
+    const [clubPhone, setClubPhone] =  React.useState('+32');; // club phone
     const [clubLocation, setClubLocation] = useState(''); // club location
     const [clubDescription, setClubDescription] = useState(''); // club description
     const [userID, setUserID] = useState(''); // user id
@@ -185,7 +186,7 @@ export const AboutClubPage = () => {
         draggable: false,
         progress: undefined,
         theme: 'light',
-      });
+    });
   
       // Delay the navigation after 5 seconds
       setTimeout(() => {
@@ -220,8 +221,14 @@ export const AboutClubPage = () => {
                 <input onChange={handleClubEmailInputChange} type="email" placeholder='info@youremail.com' className="text-black border-2 pl-8 border-game-blue rounded-10px min-w-full h-12 m-auto"/>
             </div>
             <div className='input-container'>
-                <img className="input-icon" src={process.env.PUBLIC_URL + "/images/phone-call.svg"}/>
-                <input onChange={handleClubPhoneInputChange} type="text" placeholder='Phone number' className="text-black border-2 pl-8 border-game-blue rounded-10px min-w-full h-12 m-auto"/>
+                <PhoneInput
+                    style={{ height: '3rem' }}
+                    inputStyle={{ height: '100%', width:'100%',borderRadius:'10px'}}
+                    className="text-black border-2 border-game-blue rounded-10px min-w-full h-12 m-auto"
+                    placeholder='Enter phone number'
+                    value={clubPhone}
+                    onChange={(clubPhone) => setClubPhone(clubPhone)}
+                    />
             </div>
             <div className='input-container'>
                 <img className="input-icon" src={process.env.PUBLIC_URL + "/images/map-pin.svg"}/>

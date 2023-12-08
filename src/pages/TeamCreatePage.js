@@ -11,18 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const TeamCreatePage = () => {
   const navigate = useNavigate();
   
-  toast.success('Successful team creation! 🎉 Redirecting...', {
-    position: 'top-center',
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: false,
-    pauseOnHover: true,
-    draggable: false,
-    progress: undefined,
-    theme: 'light',
-  });
-  
-  
+
 
   const [teamName, setTeamName] = useState('');
   const [players, setPlayers] = useState([]);
@@ -138,7 +127,26 @@ const TeamCreatePage = () => {
     // If player insertions are successful, proceed to add extras
 
     // redirect to game settings
-    navigate('/club/create/settings');
+    //navigate('/club/create/settings');
+
+    toast.success('Successful team registration! 🎉 Redirecting...', {
+      position: 'top-center',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: false,
+      progress: undefined,
+      theme: 'light',
+    });
+
+    console.log("test");
+  
+    // Delay the navigation after 5 seconds
+    setTimeout(() => {
+      navigate('/club/create/settings');
+    }, 5000); 
+  
    
   };
   
