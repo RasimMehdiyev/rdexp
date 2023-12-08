@@ -26,8 +26,7 @@ const UserInput = ({ onAdd, users }) => {
   const handleAddClick = () => {
     if (inputValue.name.trim()) {
       onAdd(inputValue);
-      setInputValue({ name: '', id: null });
-      setSuggestions([]);
+      setInputValue(''); // Reset input field after adding
     }
   };
 

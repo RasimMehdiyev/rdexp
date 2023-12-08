@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import SynthleteLogo from '../components/SynthleteLogo';
 import { supabase } from "../lib/helper/supabaseClient";
 import IsChrome from "../hooks/IsChrome";
+import { ToastContainer, toast } from 'react-toastify';
 
 
 const LoginPage = () => {
@@ -10,26 +11,23 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
-    const isChromeBrowser = IsChrome();
     const inputRef = useRef(null);
     const handleLogin = async (e) => {
         e.preventDefault();
         try{
             const { error } = await supabase.auth.signInWithPassword({ email, password });
             if (error) throw error;
-            navigate('/')
+            toast.success('Login successful! Redirecting...', { position: "top-center" });
+            setTimeout(() => {
+              navigate('/');
+            }, 3000);
         }catch(error){
-            alert(error.error_description || error.message);
+          toast.error(error.error_description || error.message, { position: "top-center" });
         }
     };
-    useEffect(() => {
-        console.log("Is Chrome: ", isChromeBrowser)
-        if (isChromeBrowser) {
-            inputRef.current.focus();
-            inputRef.current.setSelectionRange(15,15);
-            console.log("Chrome")
-        }
 
+
+    useEffect(() => {
         const session = supabase.auth.getSession();
         setUser(session?.user ?? null);
         console.log(session)
@@ -49,6 +47,7 @@ const LoginPage = () => {
                 <button className={`${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} text-white mt-5 w-64 h-16 bg-sn-main-orange font-russoOne rounded-10px`} type="submit">LOG IN</button>
                 <p className='py-2 text-xs font-[Arial] text-sn-main-blue'>Do not have an account yet? <Link className='font-[Arial] font-bold underline text-sn-main-blue' to="/register">Register</Link></p>
             </form>
+            <ToastContainer />
         </div>
     );
 };

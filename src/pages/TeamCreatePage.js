@@ -12,7 +12,6 @@ const TeamCreatePage = () => {
   const navigate = useNavigate();
   
 
-
   const [teamName, setTeamName] = useState('');
   const [players, setPlayers] = useState([]);
   const [extras, setExtras] = useState([]);
@@ -87,8 +86,7 @@ const TeamCreatePage = () => {
         .eq('id', teamID);
   
       if (updateError) throw updateError;
-      console.log('Team update successful:', updateData);
-  
+
 
       // add coach (authorized user to the team)
       const { data: coachData, error: coachError } = await supabase
@@ -120,33 +118,15 @@ const TeamCreatePage = () => {
           console.log('Insertion successful:', data);
         }
       });
+
+      toast.success('Team created successfully! Redirecting...', { position: "top-center", zIndex: 50});
+      setTimeout(() => {
+          console.log("redirecting")
+        navigate('/club/create/settings');
+      }, 3000); 
     } catch (error) {
-      console.error('An error occurred:', error);
+      toast.error(error.error_description || error.message, { position: "top-center" });
     }
-
-    // If player insertions are successful, proceed to add extras
-
-    // redirect to game settings
-    //navigate('/club/create/settings');
-
-    toast.success('Successful team registration! 🎉 Redirecting...', {
-      position: 'top-center',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: false,
-      progress: undefined,
-      theme: 'light',
-    });
-
-    console.log("test");
-  
-    // Delay the navigation after 5 seconds
-    setTimeout(() => {
-      navigate('/club/create/settings');
-    }, 5000); 
-  
    
   };
   
@@ -209,11 +189,7 @@ const TeamCreatePage = () => {
           skip this step
         </Link>
       </div>
-
       <ToastContainer/>
-
-      
-
     </div>
   )
 }
