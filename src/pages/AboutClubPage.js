@@ -1,8 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {supabase} from '../lib/helper/supabaseClient';
 import {useNavigate} from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import PhoneInput from "react-phone-input-2";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export const AboutClubPage = () => {
+    
+
 
     const [fileName, setFileName] = useState('Choose Image');
     const fileInputRef = useRef(null);
@@ -10,10 +16,14 @@ export const AboutClubPage = () => {
     const [file64, setFile64] = useState(''); // file64 state for storing base64 string of image
     const [clubName, setClubName] = useState(''); // club name
     const [clubEmail, setClubEmail] = useState(''); // club email
-    const [clubPhone, setClubPhone] = useState(''); // club phone
+    const [clubPhone, setClubPhone] =  React.useState('+32');; // club phone
     const [clubLocation, setClubLocation] = useState(''); // club location
     const [clubDescription, setClubDescription] = useState(''); // club description
+    const [userID, setUserID] = useState(''); // user id
+    const [userData, setUserData] = useState({}); // user data
     const navigate = useNavigate();
+
+    
 
     const base64String = (file) => {
         // use setFile64 to set the base64 string
@@ -61,6 +71,36 @@ export const AboutClubPage = () => {
 
 
 
+    useEffect(() => {
+       const fetchUserID = async () => {
+        try {
+            const userResponse = await supabase.auth.getUser();
+            const user = userResponse.data.user;
+            console.log("User:", user);
+            if (user) {
+              // Initially, we don't know the user's role, so fetch from both tables.
+              const { data: user_data, error: userError } = await supabase
+                .from('users')
+                .select('id')
+                .eq('user_id', user.id)
+                .single(); // Use single to get a single record or null   
+              if (userError) throw userError;
+              console.log("User data:", user_data);     
+              setUserData(user_data);   
+              localStorage.setItem('userID', user_data.id);  
+            }
+            else{
+                navigate('/auth');
+            }
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }     
+       }  
+         fetchUserID();
+    },[])
+
+    // set user ID from supabase in localstorage
+    
 
     useEffect(() => {
         // console.log('file', file);
@@ -72,6 +112,10 @@ export const AboutClubPage = () => {
         // console.log('club description', clubDescription);
     },[file, clubName, clubEmail, clubPhone, clubLocation, clubDescription])
 
+
+    // useEffect(() => {
+
+    // },[navigate])
 
     const submitChanges = async (event) =>{
         // do not reload page
@@ -97,7 +141,7 @@ export const AboutClubPage = () => {
         console.log('club id', clubID.id);
 
         // insert team into teams table
-    
+           
         
         const { data: teamData, error: teamError } = await supabase
         .from('team')
@@ -128,20 +172,33 @@ export const AboutClubPage = () => {
         .single()
         if (clubTeamError) console.log(clubTeamError);    
         console.log('club id', clubTeamData.id);
-        
-        // add team id into local storage
         localStorage.setItem('teamID', teamData.id);
-        navigate('/club/create/settings');
-    }    
 
+        toast.success('Successful club registration! 🎉 Redirecting...', {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+            theme: 'light',
+        });
+  
+      // Delay the navigation after 5 seconds
+      setTimeout(() => {
+        navigate('/team/create');
+      }, 5000); 
+    }
   return (
-    <form  onSubmit={submitChanges} className='bg-sn-bg-light-blue flex flex-col justify-center align-center px-8 h-screen gap-5 text-game-blue'>
+    
+    <form  onSubmit={submitChanges} className='bg-sn-bg-light-blue flex flex-col justify-center align-center px-8 h-screen gap-5 text-club-header-blue'>
         <div className='flex flex-col justify-center gap-0'>
-            <h5 className='font-russoOne text-[40px] mx-[32px] text-center leading-none'>ABOUT</h5>
-            <h5 className='font-russoOne text-[40px] mx-[32px] text-center leading-none'>YOUR CLUB</h5>
+            <h5 className='font-russoOne text-5xl  text-center leading-none'>ABOUT</h5>
+            <h5 className='font-russoOne text-5xl  text-center leading-none'>YOUR CLUB</h5>
         </div>
         <div>
-            <input onChange={handleClubNameInputChange} className="text-lf-dark-gray border-[1px] border-game-blue pl-2 w-[50vw] ml-[20%] align-center rounded-10px h-10 " type="text" placeholder='Club name'/>
+        <input onChange={handleClubNameInputChange} className="text-black border-2 border-club-header-blue pl-2 w-[50vw] ml-[20%] align-center rounded-10px h-12" type="text" placeholder='Club name'/>
         </div >
         <div className='flex flex-row gap-[20px] align-center'>
             <span className='font-russoOne text-[20px]'>Logo</span>
@@ -158,24 +215,31 @@ export const AboutClubPage = () => {
             <p className='font-russoOne text-[20px] '>Contact details</p>
             <div className='input-container'>
                 <img className="input-icon" src={process.env.PUBLIC_URL + "/images/envelope.svg"}/>
-                <input onChange={handleClubEmailInputChange} type="email" placeholder='info@youremail.com' className="text-lf-dark-gray border-[1px] pl-7 border-game-blue rounded-10px min-w-full h-10 m-auto"/>
+                <input onChange={handleClubEmailInputChange} type="email" placeholder='info@youremail.com' className="text-black border-2 pl-8 border-club-header-blue rounded-10px min-w-full h-12 m-auto"/>
             </div>
             <div className='input-container'>
-                <img className="input-icon" src={process.env.PUBLIC_URL + "/images/phone-call.svg"}/>
-                <input onChange={handleClubPhoneInputChange} type="text" placeholder='Phone number' className="text-lf-dark-gray border-[1px] pl-7 border-game-blue rounded-10px min-w-full h-10 m-auto"/>
+                <PhoneInput
+                    style={{ height: '3rem' }}
+                    inputStyle={{ height: '100%', width:'100%',borderRadius:'10px'}}
+                    className="text-black border-2 border-club-header-blue rounded-10px min-w-full h-12 m-auto"
+                    placeholder='Enter phone number'
+                    value={clubPhone}
+                    onChange={(clubPhone) => setClubPhone(clubPhone)}
+                    />
             </div>
             <div className='input-container'>
                 <img className="input-icon" src={process.env.PUBLIC_URL + "/images/map-pin.svg"}/>
-                <input onChange={handleLocationInputChange} type="text" placeholder='Enter location' className="text-lf-dark-gray border-[1px] pl-7 border-game-blue rounded-10px min-w-full h-10 m-auto"/>
+                <input onChange={handleLocationInputChange} type="text" placeholder='Enter location' className="text-black border-2 pl-8 border-club-header-blue rounded-10px min-w-full h-12 m-auto"/>
             </div>
         </div>
         <div className='flex flex-col gap-2 justify-center align-center'>
             <p className='font-russoOne text-[20px] '>Description</p>
-            <textarea onChange={handleClubDescriptionInputChange} className='rounded-10px pt-2 pl-2 min-w-full m-auto border-[1px] border-game-blue text-lf-dark-gray' name="description" id="description" placeholder="(Optional)"cols="30" rows="5"></textarea>
+            <textarea onChange={handleClubDescriptionInputChange} className='rounded-10px pt-2 pl-2 min-w-full m-auto border-2 border-club-header-blue text-black' name="description" id="description" placeholder="(Optional)"cols="30" rows="5"></textarea>
         </div>
         <button type='submit' className="font-interReg bg-sn-main-orange ml-[20%] align-center rounded-10px h-12 w-[50vw] text-white">
             SAVE
         </button>
-    </form>
+        <ToastContainer/>
+    </form> 
   )
 }

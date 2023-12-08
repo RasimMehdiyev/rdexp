@@ -1,46 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SynthleteLogo from '../components/SynthleteLogo';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from "../lib/helper/supabaseClient";
-import axios from 'axios';
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function RegisterPage() {
-    const [userID, setUserID] = useState('');
-    const [userData, setUserData] = useState({})
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = React.useState('+32');
-    const [role, setRole] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('+32');
+    const [role, setRole] = useState('0');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const navigate = useNavigate();
 
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        if (role === '0') {
+            toast.error('Please select a valid role.');
+            return;
+        }
+
         try {
             const { error } = await supabase.auth.signUp({ email, password });
+            if (error) throw error;
             let user = await supabase.auth.getUser();
             user = user.data.user
-            if (error) throw error;
-            console.log(user)
-            if (user) {
-                const { error: errorUsers } = await supabase
-                    .from('users')
-                    .insert([{ email: email, full_name: fullName, phone_number: phoneNumber, role_id: role, user_id: user.id }])
-                    .select();
-                if (errorUsers) throw errorUsers;
-                navigate('/');
-            }
+
+            const { error: errorUsers } = await supabase
+                .from('users')
+                .insert([{ email:email, full_name: fullName, phone_number: phoneNumber, role_id: role, user_id: user.id }]);
+
+            if (errorUsers) throw errorUsers;
+
+            toast.success('Registration successful! Redirecting...', { position: "top-center" });
+            setTimeout(() => {
+                if (role === '1') {
+                    navigate('/club/create/');
+                } else {
+                    navigate('/');
+                }
+            }, 3000);
         } catch (error) {
-            alert(error.error_description || error.message);
+            toast.error(error.error_description || error.message, { position: "top-center" });
         }
-        
-        
-     };""
-    // if one of the necessary fields is empty, disable the submit button
+    };
     const isDisabled = !fullName || !email || !role || !password || !confirmPassword || password !== confirmPassword;
     const isPasswordMatch = password === confirmPassword;
     return (
@@ -73,6 +81,7 @@ function RegisterPage() {
                 <button className={`${(isDisabled) ? 'cursor-not-allowed' : 'cursor-pointer'} text-white w-full h-16 mt-10 bg-sn-main-orange font-russoOne rounded-10px`}  type="submit">SIGN UP</button>
                 <p className='py-2 text-xs text-sn-main-blue font-interReg'>Already have an account? <Link className='font-interReg font-bold text-sn-main-blue underline hover:text-[gray]' to="/login">Log in</Link></p>
             </form>
+            <ToastContainer />
         </div>
     );
 }

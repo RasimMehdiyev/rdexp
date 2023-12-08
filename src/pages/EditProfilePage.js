@@ -5,6 +5,8 @@ import { PencilIcon } from '@heroicons/react/24/solid'
 import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/24/outline'
 import { Link, useNavigate } from 'react-router-dom';
 import StickyEditProfileComponent from "../components/StickyEditProfileComponent";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EditProfilePage = () => {
     const [userData, setUserData] = useState({});
@@ -93,8 +95,7 @@ const EditProfilePage = () => {
     };
     
     const onSave = async (event) => {
-        console.log("handling save in edit prof page");
-        setLoading(true);
+       // setLoading(true);
         event.preventDefault();
         
         if (!validateEmail(newEmail) | !validatePhoneNumber(newPhoneNumber)) {
@@ -112,13 +113,7 @@ const EditProfilePage = () => {
             setLoading(false)
             return;
         }
-        
-
-        console.log("submit handled");
-        console.log("bio: ", newBio);
-        console.log("email: ", newEmail);
-        console.log("phone number: ", newPhoneNumber);
-        console.log("new image:", previewImage);
+    
 
         try {
             const userResponse = await supabase.auth.getUser();
@@ -137,23 +132,21 @@ const EditProfilePage = () => {
                     .eq('user_id', user.id)
                     .single();
                 if (userError) throw userError;
-                console.log("User data:", user_data);
-                setUserData(user_data);
-            }                       
-                
-                        
+                toast.success('Profile updated successfully! Redirecting...', { position: "top-center", zIndex: 50});
+                setTimeout(() => {
+                    console.log("redirecting")
+                  navigate('/profile');
+                }, 3000); 
+            }     
+    
         } catch (error) {
-            console.error("Error fetching data:", error);
-        } finally {
-            setLoading(false);
-            navigate('/profile');
+            toast.error(error.error_description || error.message, { position: "top-center" });
         }
 
     };
 
     
     if (loading) {
-        return <LoadingPage />; // You can replace this with any loading spinner or indicator
     } else {
         return (
             <div>
@@ -244,8 +237,8 @@ const EditProfilePage = () => {
                     </div>        
                 </div>
                 
-                
                 </div>
+                <ToastContainer />
             </div>  
             
     );

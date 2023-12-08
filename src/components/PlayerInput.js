@@ -17,9 +17,9 @@ const PlayerInput = ({ onInputChange, errorMessage, isPlayer}) => {
           onChange={(e) => onInputChange(e.target.value)}
         />
         <div className="absolute left-3 top-2 pt-1">
-          <FontAwesomeIcon icon={faUser} className="text-game-blue h-[3vh]" />
+          <FontAwesomeIcon icon={faUser} className="text-club-header-blue h-[3vh]" />
         </div>
-        {errorMessage && <div className="font-russoOne text-2xl leading-6 mt-2 text-red-500 text-sm">{errorMessage}</div>}
+        {errorMessage && <div className="font-russoOne leading-6 mt-2 text-red-500 text-sm">{errorMessage}</div>}
       </div>
     </div>
 
