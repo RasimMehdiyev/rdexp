@@ -176,7 +176,6 @@ const useTeamData = (teamId, clubId) => {
     
     const findUserIdByName = async (userName) => {
         try {
-            console.log("User:", userName)
             const { data, error } = await supabase
                 .from('users')
                 .select('id')
@@ -266,7 +265,6 @@ const useTeamData = (teamId, clubId) => {
                     fetchTeamPlayers(teamId),
                     fetchExtras(teamId)
                 ]);
-                console.log("teamSocialsData", teamSocialsData)
 
                 setTeamSocialsData(teamSocialsData);
                 setRoles(roles);
@@ -286,7 +284,7 @@ const useTeamData = (teamId, clubId) => {
         fetchData();
     }, [teamId, clubId]);
 
-    return {userData, setUserData, teamData, setTeamData, clubData, setClubData, coach, setCoach, teamSocialsData, setTeamSocialsData, roles, setRoles, players, setPlayers, extras, setExtras, isCoach, userTeamIds, loading, error, findUserIdByName, findUserNumberById, findUserRoleById};
+    return {userData, setUserData, teamData, setTeamData, clubData, setClubData, coach, setCoach, teamSocialsData, setTeamSocialsData, roles, setRoles, players, setPlayers, extras, setExtras, isCoach, setIsCoach, userTeamIds, loading, setLoading, error, findUserIdByName, findUserNumberById, findUserRoleById};
 };
 
 export default useTeamData;
