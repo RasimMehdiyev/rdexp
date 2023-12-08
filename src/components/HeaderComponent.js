@@ -53,6 +53,7 @@ const HeaderComponent = ({ setRightIsOpen , rightIsOpen }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true); // Start loading
         const userResponse = await supabase.auth.getUser();
         const user = userResponse.data.user;
         if (user) {
@@ -91,22 +92,26 @@ const HeaderComponent = ({ setRightIsOpen , rightIsOpen }) => {
 
 
   if (loading) {
-    return null; // You can replace this with any loading spinner or indicator
-  }
+    return(  
+    <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-20'> {/* Ensure z-index is high enough */}
+      <Link className="flex justify-center ml-[39%] items-center" to="/">
+        <SynthleteSmallLogo />
+      </Link>
+    </header> 
+    )
+    }
   return (
     <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-20'> {/* Ensure z-index is high enough */}
             {
               clubData.picture ? (
                 <Link to="/team-management/">
-                  <img className='cursor-pointer border-2 border-white object-cover overflow-hidden w-[45px] h-[45px] rounded-10px' src={clubData.picture} alt="profile" />
-                  {/* <p className="text-[8px] text-white font-russoOne font-400">My teams</p> */}
+                  <img className='cursor-pointer border-2 border-white object-cover overflow-hidden w-[45px] h-[45px] rounded-10px' src={clubData.picture} alt="team-profile" />
                 </Link>
 
 
                 ) : (
                 <Link to="no-team/" className='flex flex-col items-center justify-center'>
-                    <img className='bg-white cursor-pointer border-2 border-white object-cover overflow-hidden w-[50px] h-[50px] rounded-10px' src={process.env.PUBLIC_URL + "/images/no-team.png"} alt="profile" />
-                    {/* <p className="text-[8px] text-white font-russoOne font-400">No team</p> */}
+                    <img className='bg-white cursor-pointer border-2 border-white object-cover overflow-hidden w-[50px] h-[50px] rounded-10px' src={process.env.PUBLIC_URL + "/images/Teams-1.svg"} alt="profile" />
                 </Link>
                 )
               }
@@ -114,6 +119,7 @@ const HeaderComponent = ({ setRightIsOpen , rightIsOpen }) => {
           <Link className="flex justify-center items-center" to="/">
             <SynthleteSmallLogo />
           </Link>
+
           <Link className='flex flex-col justify-center items-center'>
           <button onClick={rightSideBarOpen} className="rounded-full w-[50px] h-[50px] p-0 overflow-hidden">
           {
@@ -124,7 +130,6 @@ const HeaderComponent = ({ setRightIsOpen , rightIsOpen }) => {
               )
           }
           </button> 
-              {/* Notification Indicator */}
           {notificationCount > 0 && (
             <div className="absolute bottom-2 right-3 w-5 h-5 bg-red-700 text-white text-xs rounded-full flex items-center justify-center" style={{ transform: 'translate(-25%, 25%)' }}>
               {notificationCount}
