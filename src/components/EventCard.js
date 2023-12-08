@@ -35,7 +35,7 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
   const typeImage = getTypeImage();
 
   return (
-    <div className={`w-[372px] p-4 rounded-[10px] mt-1 mb-4 ml-2 mr-2 flex-col justify-start items-start gap-[10px] inline-flex drop-shadow-[0_5px_5px_rgba(0,0,0,0.15)] ${getBackgroundColor()}`}>
+    <div className={`w-[360px] p-4 rounded-[10px] mt-1 mb-4 ml-2 mr-2 flex-col justify-start items-start gap-[10px]  drop-shadow-[0_5px_5px_rgba(0,0,0,0.15)] ${getBackgroundColor()}`}>
       {/* Event Name Section */}
       <div className="title justify-start items-end">
         <div className="team-name text-eventcard-text text-xl font-bold font-['Inter']">

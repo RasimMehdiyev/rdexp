@@ -14,7 +14,9 @@ const HomePage = () => {
   const [fetchedEvents, setFetchedEvents] = useState([]);
   const [currentMonth, setCurrentMonth] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
+  const [isCoach, setIsCoach] = useState(false);
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -40,29 +42,45 @@ const HomePage = () => {
 
 
   const getEvents = async (uuid) => {
-    let { data: userTableIdAndRole, error: tableIdError } = await supabase
-      .from('users')
-      .select('id, role_id')
-      .eq("user_id", uuid)
-      .single();
+    try {
+      let { data: userTableIdAndRole, error: tableIdError } = await supabase
+        .from('users')
+        .select('id, role_id')
+        .eq("user_id", uuid)
+        .single();
   
-    console.log("This is the user table id and role");
-    console.log(userTableIdAndRole);
+      console.log("This is the user table id and role");
+      console.log(userTableIdAndRole);
   
-    // Fetch team ID
-    let { data: teamData, error: teamError } = await supabase
-      .from('team_users')
-      .select('team_id')
-      .eq("user_id", userTableIdAndRole.id);
+      if (tableIdError) {
+        console.error(tableIdError);
+        return; // Stop execution if there's an error
+      }
   
-    console.log("this is the team of the user");
-    console.log(teamData);
+      if (!userTableIdAndRole) {
+        console.warn("User table ID and role not available.");
+        setFetchedEvents([]);
+        return; // Stop execution if userTableIdAndRole is not defined
+      }
   
-    if (tableIdError || teamError) {
-      console.error(tableIdError);
-      console.error(teamError);
-    } else {
-      if (userTableIdAndRole.role_id == 1) {
+      // Fetch team ID
+      let { data: teamData, error: teamError } = await supabase
+        .from('team_users')
+        .select('team_id')
+        .eq("user_id", userTableIdAndRole.id);
+  
+      console.log("this is the team of the user");
+      console.log(teamData);
+  
+      if (teamError) {
+        console.error(teamError);
+        return; // Stop execution if there's an error
+      }
+
+      // Set isCoach based on user's role
+      setIsCoach(userTableIdAndRole.role_id === 1);
+      
+      if (userTableIdAndRole.role_id === 1) {
         if (Array.isArray(teamData) && teamData.length > 0) {
           let { data, error } = await supabase
             .rpc('get_event_attendees_team', {
@@ -86,8 +104,11 @@ const HomePage = () => {
         else console.log("event data: ", data);
         setFetchedEvents(data);
       }
+    } catch (error) {
+      console.error(error);
     }
   };
+  
   
 
   useEffect(() => {
@@ -127,32 +148,6 @@ const HomePage = () => {
   }, [navigate]);
   console.log("fetched events", fetchedEvents);
 
-  // Check if fetchedEvents is empty
-  if (fetchedEvents === undefined || fetchedEvents === null) {
-    return (
-      <div className="mt-[-80px]">
-        <div className="flex flex-col justify-center items-center h-screen font-Inter text-sn-main-orange">
-          <p className="text-3xl font-bold mb-1">You haven&apos;t</p>
-          <p className="text-3xl font-bold mb-1">added any events yet.</p>
-          <p className="text-xl mt-2">When you do, they will</p>
-          <p className="text-xl">be displayed here.</p>
-        </div>
-        
-        {/* Button Container */}
-        <div className="fixed top-20 right-7">
-          {/* Plus Button */}
-          <button
-            className="bg-sn-light-orange text-white rounded-10px p-4 text-3xl shadow-md border-[3px] border-white flex items-center justify-center"
-            style={{ width: '60px', height: '60px' }}  
-            onClick={() => console.log('Button clicked')}
-          >
-            +
-          </button>
-        </div>
-      </div>
-
-    )
-  }
 
   const transformedEvents = fetchedEvents.map(event => {
     // Extracting date and time from the dateTime string
@@ -199,10 +194,48 @@ const handleFilterChange = (newFilter) => {
   setFilter(newFilter);
   setShowFilterOptions(false); // Hide the filter options after selecting an option
 };
+  if (loading) {
+    return <LoadingPage />;
+  } else
+  // Check if fetchedEvents is empty
+  if (fetchedEvents.length == 0) {
+    return (
+      
+      <div className="mt-[-80px]">
+        {isCoach && ( 
+          <div className="flex flex-col justify-center items-center h-screen font-Inter text-sn-main-orange">
+            <p className="text-3xl font-bold mb-1">You haven&apos;t</p>
+            <p className="text-3xl font-bold mb-1">added any events yet.</p>
+            <p className="text-xl mt-2">When you do, they will</p>
+            <p className="text-xl">be displayed here.</p>
 
-if (loading) {
-  return <LoadingPage />;
-} else {
+            {/* Plus Button */}
+            <div className="mt-5">
+              <button
+                className="bg-sn-light-orange text-white rounded-10px  text-3xl shadow-sm flex items-center justify-center"
+                style={{ width: '60px', height: '60px' }}  
+                onClick={() => navigate('/game/create')}
+              >
+                +
+              </button>
+            </div>   
+          </div>
+        )}
+        {!isCoach &&(
+          <div className="flex flex-col justify-center items-center h-screen font-Inter text-sn-main-orange">
+            <p className="text-3xl font-bold mb-1">There are no</p>
+            <p className="text-3xl font-bold mb-1">events yet.</p>
+            <p className="text-xl mt-2">When your coach adds events</p>
+            <p className="text-xl">be displayed here.</p>
+          </div>
+        )}
+      </div>
+
+
+    )
+  }
+
+else {
   return (
     <div className="flex flex-col justify-center items-center bg-almostwhite">
       {/* Upcoming Events */}
@@ -239,17 +272,23 @@ if (loading) {
           ))}
         </div>
       ))}
-      
+
+        
         {/* Plus Button */}
-        <div className="fixed top-[69px] right-[65px] z-20">
-          <button
-            className="bg-sn-light-orange text-white rounded-10px  text-3xl shadow-sm flex items-center justify-center"
-            style={{ width: '36px', height: '36px' }}  
-            onClick={() => console.log('Button clicked')}
-          >
-            +
-          </button>
-        </div>
+        
+        {isCoach && (
+          <div className="fixed top-[69px] right-[65px] z-20">
+            <button
+              className="bg-sn-light-orange text-white rounded-10px  text-3xl shadow-sm flex items-center justify-center"
+              style={{ width: '36px', height: '36px' }}  
+              onClick={() => navigate('/game/create')}
+            >
+              +
+            </button>
+          </div>
+        )}
+
+        
 
         {/* Filter Button */}
         <div className="fixed top-[69px] right-[20px] z-20">
