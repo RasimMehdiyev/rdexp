@@ -17,9 +17,11 @@ import EventOverviewEdit from './pages/EventOverviewEdit';
 import TeamCreatePage from './pages/TeamCreatePage.js';
 import GameSettings from './pages/GameSettings.js';
 import { AboutClubPage } from './pages/AboutClubPage.js';
-import StickyEditProfileComponent from './components/StickyEditProfileComponent.js';
 import TeamProfilePage from './pages/TeamProfilePage.js';
 import StickySubheaderProfileComponent from './components/StickySubheaderProfileComponent.js';
+import NoTeamPage from './pages/NoTeamPage.js';
+import { useEffect } from 'react';
+import NotificationPage from './pages/NotificationPage.js';
 
 LogRocket.init('u7ityk/synthlete');
 
@@ -28,7 +30,9 @@ const App = () => {
    const [rightIsOpen, setRightIsOpen] = useState(false);
    const location = useLocation();
 
-   if (location.pathname==='/club/create/settings' || location.pathname==='/club/create/settings/'  || location.pathname === '/team/create'  || location.pathname === '/team/create/' || location.pathname === '/club/create' || location.pathname === '/club/create/' || location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth' || location.pathname === '/login/' || location.pathname === '/register/' || location.pathname === '/auth/'){
+     // Close sidebar on route change
+
+   if ( location.pathname==='/club/create/settings' || location.pathname==='/club/create/settings/'  || location.pathname === '/team/create'  || location.pathname === '/team/create/' || location.pathname === '/club/create' || location.pathname === '/club/create/' || location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth' || location.pathname === '/login/' || location.pathname === '/register/' || location.pathname === '/auth/'){
       return (
          <>
             <Routes>
@@ -46,7 +50,7 @@ const App = () => {
       return (
          <>
          {  location.pathname !== '/team/create' || location.pathname !== '/team/create/' || location.pathname !== '/club/create' || location.pathname !== '/club/create/' ?
-            <HeaderComponent isOpen={isOpen} toggleSidebar={setIsOpen} rightIsOpen={rightIsOpen} setRightIsOpen={setRightIsOpen}/>
+            <HeaderComponent rightIsOpen={rightIsOpen} setRightIsOpen={setRightIsOpen}/>
             :
             <div style={{display:'none'}}></div>
          }
@@ -72,14 +76,21 @@ const App = () => {
                <Route path="/profile" element={<ProfilePage />} />
                <Route path="/editProfile" element={<EditProfilePage />} />
                <Route path="/game/create" element={<NewGamePage />} />
+
                <Route path="/event-overview/:eventId" element={<EventOverview />} />
                <Route path="/event-overview/edit/:eventId" element={<EventOverviewEdit />} />
+
                <Route path="/team/create" element={<TeamCreatePage/>} />
                <Route path="/club/create" element={<AboutClubPage/>} />
                <Route path="/club/create/settings" element={<GameSettings/>} />
                <Route path="/team-profile/:clubId/:teamId" element={<TeamProfilePage />} />
+
+               <Route path="/team-profile/edit/:clubId/:teamId" element={<EditTeamPage/>} />
+               <Route path="/no-team" element={<NoTeamPage/>} />
+               <Route path="/notification" element={<NotificationPage />} />
+
             </Routes>
-            <RightSideBarComponent rightIsOpen={rightIsOpen}/>
+            <RightSideBarComponent rightIsOpen={rightIsOpen} setRightIsOpen={setRightIsOpen} />
          </>
       );
    }

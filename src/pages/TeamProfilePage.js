@@ -12,16 +12,23 @@ const TeamProfilePage = () => {
     const { clubId, teamId } = useParams();
     const navigate = useNavigate()
     const { 
-        teamData, clubData, coach, teamSocialsData, roles, players, 
+        userData, teamData, clubData, coach, teamSocialsData, roles, players, 
         extras, isCoach, userTeamIds, loading, setRoles, setExtras, 
         setPlayers, findUserIdByName, findUserRoleById, findUserNumberById
     } = useTeamData(teamId, clubId);
     const [tab, setTab] = useState(0);
 
     useEffect(() => {
-        if (!loading && (!userTeamIds.includes(Number(teamId)))) {
-            navigate('/'); 
+        if(!loading){
+            if(userData){
+                if (!loading && (!userTeamIds.includes(Number(teamId)))) {
+                    navigate('/'); 
+                }
+            } else {
+                navigate('/auth');
+            }
         }
+
     }, [loading, userTeamIds, navigate]);
 
     // Helper function to render social media icons

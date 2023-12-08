@@ -260,3 +260,7 @@ textarea:focus {
 .placeholder-text::placeholder {
     font-size: 16px;
 }
+
+.Toastify__close-button {
+    display: none !important;
+}

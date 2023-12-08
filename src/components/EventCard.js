@@ -2,13 +2,15 @@ import React from 'react';
 
 const EventCard = ({ type, eventName, teamName, eventTime, location, attendance, number_invitation, date}) => {
   // Define a function to determine the background color based on the type
+
+  
   const getBackgroundColor = () => {
     switch (type) {
       case 'practice':
         return 'bg-practice-orange';
       case 'game':
         return 'bg-game-blue'; // Replace with the desired color for type2
-      case 'teambuilding':
+      case 'team building':
         return 'bg-teambuilding-green'; // Replace with the desired color for type3
       default:
         return 'bg-practice-orange'; // Default color if type is not recognized
@@ -22,7 +24,7 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
         return 'practice.svg';
       case 'game':
         return 'game.svg';
-      case 'teambuilding':
+      case 'team building':
         return 'teambuilding.svg';
       default:
         return 'practice.svg'; // Replace with the default image if type is not recognized
@@ -33,15 +35,15 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
   const typeImage = getTypeImage();
 
   return (
-    <div className={`w-[368px] p-4 rounded-[10px] mt-1 mb-4 flex-col justify-start items-start gap-[10px] inline-flex drop-shadow-[0_5px_8px_rgba(0,0,0,0.3)] ${getBackgroundColor()}`}>
+    <div className={`w-[360px] p-4 rounded-[10px] mt-1 mb-4 ml-2 mr-2 flex-col justify-start items-start gap-[10px]  drop-shadow-[0_5px_5px_rgba(0,0,0,0.15)] ${getBackgroundColor()}`}>
       {/* Event Name Section */}
       <div className="title justify-start items-end">
-        <div className="team-name text-white text-xl font-bold font-['Inter']">
+        <div className="team-name text-eventcard-text text-xl font-bold font-['Inter']">
           <img
             className="w-[25px] h-[26px] relative mr-4 inline-block"
             src={process.env.PUBLIC_URL + `/images/${typeImage}`}
             alt={type}
-            style={{ filter: 'brightness(0) invert(1)', top: '-2px' }} // Add this style for white color
+            //style={{ filter: 'brightness(0) invert(1)', top: '-2px' }} // Add this style for white color
           />
           {eventName}
         </div>
@@ -55,10 +57,10 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
             <img
               className="w-[22px] h-[23px] relative mb-2"
               src={process.env.PUBLIC_URL + "/images/pin.svg"}
-              style={{left:'-1px'}}
+              style={{ filter: 'brightness(0) invert(0)', left:'-1px', top: '2px'}}
             />
           </div>
-          <div className="location text-white text-[15px] font-extralight font-['Inter']">{location}</div>
+          <div className="location text-eventcard-text text-[15px] font-extralight font-['Inter']">{location}</div>
         </div>
 
         {/* Time and Attendees Section */}
@@ -68,8 +70,9 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
               <img
                 className="w-[22px] h-[23px] relative mb-2"
                 src={process.env.PUBLIC_URL + "/images/clock.svg "}
+                style={{top: '2px', filter: 'brightness(0) invert(0)'}}
               />
-              <div className="event-time text-white text-[15px] font-extralight font-['Inter'] whitespace-nowrap">
+              <div className="event-time text-eventcard-text text-[15px] font-extralight font-['Inter'] whitespace-nowrap">
                 {eventTime}
               </div>
             </div>
@@ -78,10 +81,10 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
             <img
               className="w-[22px] h-[23px] relative mb-2"
               src={process.env.PUBLIC_URL + "/images/user-check.svg"}
-              style={{left:'1px'}}
+              style={{left:'2px', filter: 'brightness(0) invert(0)'}}
             />
-            <div className="teamname text-white text-[15px]  font-['Inter'] whitespace-nowrap font-bold">{teamName}: </div>
-            <div className="attendence text-white text-[15px] font-extralight font-['Inter'] whitespace-nowrap">
+            <div className="teamname text-eventcard-text text-[15px]  font-['Inter'] whitespace-nowrap font-bold">{teamName}: </div>
+            <div className="attendence text-eventcard-text text-[15px] font-extralight font-['Inter'] whitespace-nowrap">
               {attendance}/{number_invitation}
             </div>
           </div>

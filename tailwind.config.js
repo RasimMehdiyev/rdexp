@@ -44,6 +44,7 @@ module.exports = {
             'primary': '#80C9D9',
             'lf-dark-gray':"#949a9c",
             'lf-light-gray':"#D9D9D9",
+            'almostwhite':"#F2F3F8",
             'indigo': {
                 '100':'#E1E8FF'
             },
@@ -65,9 +66,11 @@ module.exports = {
             'sn-lighter-orange':'#FBD5C0',
             'sn-bg-light-blue': '#E1E8FF',
             'sn-subheader-blue':"#4665D0",
-            'teambuilding-green':"#6BC54B",
-            'game-blue':"#2D68F8",
-            'practice-orange':"#F27430",
+            'teambuilding-green':"#A4E6BE",
+            'eventcard-text':"#020617",
+            'game-blue':"#CCDBFF",
+            'practice-orange':"#FFE1D1",
+            'club-header-blue':'#2D68F8',
             'neutral':{
                 '900':"#333333",
                 '600': "#4F4F4F",
@@ -92,10 +95,13 @@ module.exports = {
                 '100':"#DEF7EC",
             },
             'red':{
-                '700':"#EB5757",
-                '500':"#EB5757",
+                '700':"#b91c1c",
+                '600':"#dc2626",
+                '500':"#ef4444",
+                '400':"#F87171",
                 '300':"#F2994A",
-                '100':"#F2C94C",
+                '200':'#FECACA',
+                '100':"#FEE2E2",
             },
             'orange':{
                 '700':"#F27430",
@@ -135,7 +141,12 @@ module.exports = {
         extend: {
             borderRadius:{
                 '10px': '10px'
-            }
+            },
+            letterSpacing: {
+                tighter: '-0.05em',  // You can adjust this value as needed
+                evenTighter: '-0.1em', // You can adjust this value as needed
+                evenMoreTighter: '-0.2em' // You can adjust this value as needed
+            },
         },
     },
 

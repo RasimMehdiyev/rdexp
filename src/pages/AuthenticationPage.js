@@ -1,8 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import SynthleteLogo from '../components/SynthleteLogo';
+import { supabase } from "../lib/helper/supabaseClient";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AuthenticationPage = () => {
+    const navigate = useNavigate();
+
+    // useEffect(() => {
+    //     let user = supabase.auth.getUser();
+    //     if (user) {
+    //         navigate('/');
+    //     }
+    // },[]);
+
     return (
         <div className='gap-36 min-h-screen bg-sn-main-blue flex flex-col justify-center items-center'>
             <SynthleteLogo />
