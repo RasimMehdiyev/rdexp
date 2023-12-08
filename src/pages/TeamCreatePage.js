@@ -143,14 +143,14 @@ const TeamCreatePage = () => {
     <div className="h-screen flex flex-col justify-between bg-sn-bg-light-blue">
       <div>
       <div className='text-center'>
-          <h1 className="pt-20 text-5xl text-game-blue">
+          <h1 className="pt-20 text-5xl text-club-header-blue">
             CREATE 
           </h1>
-          <h1 className="pt-2 text-5xl text-game-blue">
+          <h1 className="pt-2 text-5xl text-club-header-blue">
             YOUR TEAM
           </h1>
           <input
-            className="mt-5 h-[5vh] pl-2 w-[70vw] rounded-10px border-2 border-game-blue font-interReg placeholder-text"
+            className="mt-5 h-[5vh] pl-2 w-[70vw] rounded-10px border-2 border-club-header-blue font-interReg placeholder-text"
             placeholder="Team name"
             value={teamName}
             onChange={handleTeamNameChange}
@@ -158,7 +158,7 @@ const TeamCreatePage = () => {
         </div>
 
         <div className='pl-5'>
-          <h1 className="pt-7 pb-4 text-3xl text-game-blue">
+          <h1 className="pt-7 pb-4 text-3xl text-club-header-blue">
               Add players
           </h1>
 
@@ -167,7 +167,7 @@ const TeamCreatePage = () => {
           ))}
 
           <UserInput onAdd={addPlayer} users={users} />
-          <h1 className="pt-7 pb-4 text-3xl text-game-blue">
+          <h1 className="pt-7 pb-4 text-3xl text-club-header-blue">
               Add extras
           </h1>
 
@@ -185,7 +185,7 @@ const TeamCreatePage = () => {
           SAVE
         </button>
 
-        <Link to="/club/create/settings" className=" text-game-blue pt-10 underline underline-offset- font-interElight p-2 rounded-10px w-[70vw] h-12 pb-10 ">
+        <Link to="/club/create/settings" className=" text-club-header-blue pt-10 underline underline-offset- font-interElight p-2 rounded-10px w-[70vw] h-12 pb-10 ">
           skip this step
         </Link>
       </div>

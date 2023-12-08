@@ -70,6 +70,7 @@ module.exports = {
             'eventcard-text':"#020617",
             'game-blue':"#CCDBFF",
             'practice-orange':"#FFE1D1",
+            'club-header-blue':'#2D68F8',
             'neutral':{
                 '900':"#333333",
                 '600': "#4F4F4F",
