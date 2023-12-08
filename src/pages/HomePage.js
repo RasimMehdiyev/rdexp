@@ -209,7 +209,7 @@ const handleFilterChange = (newFilter) => {
   if (fetchedEvents.length == 0) {
     return (
       
-      <div className="mt-[-80px]">
+      <div className="mt-[-80px] bg-almostwhite">
         {isCoach && ( 
           <div className="flex flex-col justify-center items-center h-screen font-Inter text-sn-main-orange">
             <p className="text-3xl font-bold mb-1">You haven&apos;t</p>
@@ -245,7 +245,7 @@ const handleFilterChange = (newFilter) => {
 
 else {
   return (
-    <div className="flex flex-col justify-center items-center bg-almostwhite">
+    <div className="flex flex-col  items-center bg-almostwhite h-screen">
       {/* Upcoming Events */}
       {Object.entries(organizedEvents).map(([month, days]) => (
         <div key={month} className="font-russoOne text-sn-main-blue month-section">

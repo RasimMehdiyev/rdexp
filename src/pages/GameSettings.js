@@ -11,7 +11,7 @@ import {supabase} from '../lib/helper/supabaseClient';
 const GameSettings = () => {
   const [roles, setRoles] = useState([]);
   const navigate = useNavigate();
-  const [teamID, setTeamID] = useState(3);
+  const [teamID, setTeamID] = localStorage.getItem('teamID');
   const [loading, setLoading] = useState(true); // Add a loading state
    // [team_id, team_name]
   const [teamName, setTeamName] = useState({}); // [team_id, team_name]
@@ -33,9 +33,9 @@ const GameSettings = () => {
       const { data: team, error: teamError } = await supabase
       .from('team')
       .select('team_name')
-      .eq('id', teamID)
+      .eq('id', localStorage.getItem('teamID'))
       if (teamError) throw teamError;
-      setTeamName({'id':teamID, 'team_name':team[0].team_name})
+      setTeamName({'id':localStorage.getItem('teamID'), 'team_name':team[0].team_name})
       console.log("team id:", team[0].id);
     }
     catch (error) {
