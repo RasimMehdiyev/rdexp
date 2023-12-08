@@ -48,6 +48,7 @@ const NewGamePage = () => {
             }
 
             try {
+                setLoading(true);
                 const userResponse = await supabase.auth.getUser();
                 console.log("User:", userResponse);
                 const user = userResponse.data.user;
@@ -73,7 +74,6 @@ const NewGamePage = () => {
                         const finalUploadPlayers = toUploadPlayers.map((p) => ({ ...p, event_id: event_id, is_attending: "Pending" }));
                         // console.log("finalUploadPlayers: ", finalUploadPlayers);
                         const finalUploadExtras = toUploadExtras.map((ex) => ({ ...ex, event_id: event_id, is_attending: "Pending" }));
-                        // console.log("finalUploadExtras: ", finalUploadExtras);
 
                         const { playersData, errorPlayersData } = await supabase
                             .from('event_users')
@@ -99,6 +99,9 @@ const NewGamePage = () => {
             } catch (error) {
                 toast.error(error.error_description || error.message, { position: "top-center" });
             }
+            finally {
+                setLoading(false);
+            }
         } else {
             setLoading(true);
             if (checkInput()) setInputCheck(true);
@@ -109,11 +112,11 @@ const NewGamePage = () => {
             }
 
             const timestamp = `${generalInfo.date} ${generalInfo.time}:00+00`;
-            console.log("timestamp", timestamp);
+            // console.log("timestamp", timestamp);
 
             const toUploadPlayers = selectedPlayers.map((p) => ({ user_id: p.id }));
 
-            console.log("to upload players", toUploadPlayers);
+            // console.log("to upload players", toUploadPlayers);
             try {
                 const userResponse = await supabase.auth.getUser();
                 console.log("User:", userResponse);
@@ -199,15 +202,21 @@ const NewGamePage = () => {
     }, [])
     
     if (loading) {
-        // return (<LoadingPage></LoadingPage>)
+        return (<LoadingPage></LoadingPage>)
     } else {
 
         return (
             <div>
-                <StickySubheaderEventCreateComponent onSave={handleOnChange} />
+                {
+                    loading ? <div></div> :
+                        <StickySubheaderEventCreateComponent onSave={handleOnChange} />
+                }
                 <div className="pt-6 h-screen bg-sn-bg-light-blue flex flex-col px-5">
                     <h1>New {selectedOption ? selectedOption : "game"}</h1>
-                    {inputCheck? (<div/>):(<div className='text-sm text-red-500'>Please insure that title event, date, time, team, and location are filled/selected</div>)}
+                    {inputCheck? (<div/>):
+                    (
+                        toast.error('Please ensure that title event, date, time, team, and location are filled/selected', { position: "top-center" })
+                    )}
                     
                     <input value={eventTitle} onChange={(e) => setEventTitle(e.target.value)} type="text" placeholder="Title" className="h-10 px-2 rounded-md border-sn-light-orange border-[1.5px] " />
                     <div className="flex flex-row justify-between gap-4 pt-2">
