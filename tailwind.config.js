@@ -69,6 +69,7 @@ module.exports = {
             'teambuilding-green':"#A4E6BE",
             'eventcard-text':"#020617",
             'game-blue':"#CCDBFF",
+            'blue-button-disabled': "#C3CEF6",
             'practice-orange':"#FFE1D1",
             'club-header-blue':'#2D68F8',
             'neutral':{

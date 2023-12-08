@@ -18,6 +18,11 @@ function RegisterPage() {
 
     const navigate = useNavigate();
 
+    const [allFieldsFilled, setAllFieldsFilled] = useState(false);
+    useEffect(() => {
+        setAllFieldsFilled(!!fullName && !!email && !!phoneNumber && !!role && !!password && !!confirmPassword);
+    }, [fullName, email, phoneNumber, role, password, confirmPassword]);
+
     const [passwordEdited, setPasswordEdited] = useState(false);
     const [confirmPasswordEdited, setConfirmPasswordEdited] = useState(false);
     const [passwordLengthError, setPasswordLengthError] = useState(false);
@@ -190,7 +195,14 @@ function RegisterPage() {
                         <option className='font-interReg' value="2">Player</option>
                         <option className='font-interReg' value="3">Volunteer</option>
                     </select>
-                <button className={`${(isDisabled) ? 'cursor-not-allowed' : 'cursor-pointer'} text-white w-full h-16 mt-10 bg-club-header-blue font-russoOne rounded-10px`}  type="submit">SIGN UP</button>
+                    <button
+                         className={`text-white w-full h-16 mt-10 rounded-10px ${
+                            allFieldsFilled ? 'bg-club-header-blue cursor-pointer' : 'bg-blue-button-disabled cursor-not-allowed'
+                        }`}
+                        type="submit"
+                        disabled={!allFieldsFilled}>
+                        SAVE
+                    </button>
                 <p className='py-2 text-xs text-sn-main-blue font-interReg'>Already have an account? <Link className='font-interReg font-bold text-sn-main-blue underline hover:text-[gray]' to="/login">Log in</Link></p>
             </form>
             <ToastContainer />
