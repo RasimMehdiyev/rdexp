@@ -6,6 +6,8 @@ import NewPracticeTBComponent from '../components/NewPracticeTBComponent';
 import { supabase } from '../lib/helper/supabaseClient';
 import StickySubheaderEventCreateComponent from '../components/StickySubheaderEventCreateComponent';
 import LoadingPage from './LoadingPage';
+import { toast, ToastContainer } from 'react-toastify';
+
 
 const NewGamePage = () => {
     const [eventTitle, setEventTitle] = useState('');
@@ -21,7 +23,7 @@ const NewGamePage = () => {
     const handleOnChange = async () => {
         
         if (selectedOption == "game" | selectedOption == "") {
-            setLoading(true);
+            //setLoading(true);
             console.log("event title", eventTitle);
             console.log("selected option", selectedOption);
             console.log("general info", generalInfo);
@@ -30,13 +32,13 @@ const NewGamePage = () => {
             console.log("team", selectedTeam);
 
             const timestamp = `${generalInfo.date} ${generalInfo.time}:00+00`;
-            console.log("timestamp", timestamp);
+            // console.log("timestamp", timestamp);
 
             const toUploadPlayers = selectedPlayers.map((p) => ({ user_id: p.id, position_id: p.position_id }));
             const toUploadExtras = selectedExtras.map((ex) => ({ user_id: ex.id, extrarole_id: ex.extraRole_id }));
 
-            console.log("to upload players", toUploadPlayers);
-            console.log("to upload extras", toUploadExtras);
+            // console.log("to upload players", toUploadPlayers);
+            // console.log("to upload extras", toUploadExtras);
 
             if (checkInput()) setInputCheck(true);
             else {
@@ -66,12 +68,12 @@ const NewGamePage = () => {
                         .limit(1); // Limit the result to 1 row
                     if (errorEventDataID) console.error('Error fetching latest event:', errorEventDataID)
                     else {
-                        console.log("event data is", eventDataID);
+                        // console.log("event data is", eventDataID);
                         const event_id = eventDataID[0].id;
                         const finalUploadPlayers = toUploadPlayers.map((p) => ({ ...p, event_id: event_id, is_attending: "Pending" }));
-                        console.log("finalUploadPlayers: ", finalUploadPlayers);
+                        // console.log("finalUploadPlayers: ", finalUploadPlayers);
                         const finalUploadExtras = toUploadExtras.map((ex) => ({ ...ex, event_id: event_id, is_attending: "Pending" }));
-                        console.log("finalUploadExtras: ", finalUploadExtras);
+                        // console.log("finalUploadExtras: ", finalUploadExtras);
 
                         const { playersData, errorPlayersData } = await supabase
                             .from('event_users')
@@ -85,15 +87,17 @@ const NewGamePage = () => {
                             .insert(finalUploadExtras)
                             .select()
                         if (errorExtrasData) throw errorExtrasData;
+
+
+                        toast.success('Event created successfully! Redirecting...', { position: "top-center", zIndex: 50});
+                        setTimeout(() => {
+                          navigate('/');
+                        }, 3000); 
                     };                            
                 }                    
                             
             } catch (error) {
-                console.error("Error uploading data", error);
-            } finally {
-                setLoading(false);
-                navigate('/');
-
+                toast.error(error.error_description || error.message, { position: "top-center" });
             }
         } else {
             setLoading(true);
@@ -103,11 +107,6 @@ const NewGamePage = () => {
                 setLoading(false);
                 return;
             }
-            console.log("event title", eventTitle);
-            console.log("selected option", selectedOption);
-            console.log("general info", generalInfo);
-            console.log("players", selectedPlayers);
-            console.log("team", selectedTeam);
 
             const timestamp = `${generalInfo.date} ${generalInfo.time}:00+00`;
             console.log("timestamp", timestamp);
@@ -152,7 +151,10 @@ const NewGamePage = () => {
                 console.error("Error uploading data", error);
             } finally {
                 setLoading(false);
-                navigate('/');
+                toast.success('Event created successfully! Redirecting...', { position: "top-center", zIndex: 50});
+                setTimeout(() => {
+                  navigate('/');
+                }, 3000); 
             }
             
             
@@ -197,7 +199,7 @@ const NewGamePage = () => {
     }, [])
     
     if (loading) {
-        return (<LoadingPage></LoadingPage>)
+        // return (<LoadingPage></LoadingPage>)
     } else {
 
         return (
@@ -267,6 +269,7 @@ const NewGamePage = () => {
                             onTeamChanges={setSelectedTeam}
                         />}
                 </div>
+                <ToastContainer/>
             </div>
         );
     }
