@@ -324,7 +324,7 @@ else {
                 className={`cursor-pointer ${filter === 'practice' ? 'text-sn-light-orange font-bold' : ''}`}
                 onClick={() => handleFilterChange('practice')}
               >
-                practice
+                Practice
               </p>
               <p
                 className={`cursor-pointer ${filter === 'game' ? 'text-sn-light-orange font-bold' : ''}`}
