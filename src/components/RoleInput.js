@@ -21,14 +21,14 @@ const RoleInput = ({ value, onAdd }) => {
     <div className="flex flex-row gap-1 justify-start items-center w-[90vw]">
       <div className="relative">
         <input
-          className="h-[6vh] w-[80vw] pl-5 rounded-10px border-2 border-game-blue font-interReg placeholder-text"
+          className="h-[6vh] w-[80vw] pl-5 rounded-10px border-2 border-club-header-blue font-interReg placeholder-text"
           placeholder="Enter new role"
           value={roleName}
           onChange={handleInputChange}
         />
       </div>
 
-      <button onClick={handleAddClick} className="bg-game-blue p-2 pl-3 pr-3 rounded-10px ml-auto">
+      <button onClick={handleAddClick} className="bg-club-header-blue p-2 pl-3 pr-3 rounded-10px ml-auto">
         <FontAwesomeIcon icon={faPlus} className="text-white" />
       </button>
     </div>

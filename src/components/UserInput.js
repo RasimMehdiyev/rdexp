@@ -60,15 +60,15 @@ const UserInput = ({ onAdd, users }) => {
     <div className="relative flex flex-col gap-1 items-start w-[90vw]">
       <div className="flex flex-row items-center" ref={inputRef}>
         <input
-          className="h-[6vh] pl-10 w-[80vw] rounded-10px border-2 border-game-blue font-interReg"
+          className="h-[6vh] pl-10 w-[80vw] rounded-10px border-2 border-club-header-blue font-interReg"
           placeholder="Enter user's name"
           value={inputValue.name}
           onChange={handleInputChange}
         />
         <div className="absolute left-3 top-2 pt-1">
-          <FontAwesomeIcon icon={faUser} className="text-game-blue h-[3vh]" />
+          <FontAwesomeIcon icon={faUser} className="text-club-header-blue h-[3vh]" />
         </div>
-        <button onClick={handleAddClick} className="bg-game-blue p-2 pl-3 pr-3 rounded-10px ml-auto">
+        <button onClick={handleAddClick} className="bg-club-header-blue p-2 pl-3 pr-3 rounded-10px ml-auto">
           <FontAwesomeIcon icon={faPlus} className="text-white" />
         </button>
       </div>
