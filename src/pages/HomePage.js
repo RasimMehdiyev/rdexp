@@ -110,6 +110,13 @@ const HomePage = () => {
   };
   
   
+  const openCard = (index,event) =>{
+    event.preventDefault();
+    console.log("open card");
+    console.log(index);
+    navigate('/game-overview/' + index);
+  }
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -162,6 +169,7 @@ const HomePage = () => {
       teamName: event.team_name,
       eventTime: time,
       location: event.location,
+      id: event.event_id,
       attendance: event.total_attendees.toString(), // Assuming total_attendees is a number
       number_invitation: "20", // You can set this value as needed
       date: date,
@@ -255,7 +263,7 @@ else {
                   .filter((event) => filter === 'all' || event.type === filter)
                   .sort((a, b) => (a.dateTime != null && b.dateTime != null ? a.dateTime.localeCompare(b.dateTime) : 0))
                   .map((event, index) => (
-                    <div key={index} className="event-card">
+                    <div key={index} onClick={(e) => openCard(event.id , e)} className="event-card">
                       <EventCard
                         type={event.type}
                         eventName={event.eventName}

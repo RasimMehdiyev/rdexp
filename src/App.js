@@ -78,7 +78,7 @@ const App = () => {
                <Route path="/profile" element={<ProfilePage />} />
                <Route path="/profile/edit" element={<EditProfilePage />} />
                <Route path="/game/create" element={<NewGamePage />} />
-               <Route path="/game-overview" element={<GameOverview />} />
+               <Route path="/game-overview/:teamId" element={<GameOverview />} />
                <Route path="/team/create" element={<TeamCreatePage/>} />
                <Route path="/club/create" element={<AboutClubPage/>} />
                <Route path="/club/create/settings" element={<GameSettings/>} />
