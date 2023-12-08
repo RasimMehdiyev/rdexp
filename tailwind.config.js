@@ -44,6 +44,7 @@ module.exports = {
             'primary': '#80C9D9',
             'lf-dark-gray':"#949a9c",
             'lf-light-gray':"#D9D9D9",
+            'almostwhite':"#F2F3F8",
             'indigo': {
                 '100':'#E1E8FF'
             },
@@ -65,9 +66,10 @@ module.exports = {
             'sn-lighter-orange':'#FBD5C0',
             'sn-bg-light-blue': '#E1E8FF',
             'sn-subheader-blue':"#4665D0",
-            'teambuilding-green':"#6BC54B",
-            'game-blue':"#2D68F8",
-            'practice-orange':"#F27430",
+            'teambuilding-green':"#A4E6BE",
+            'eventcard-text':"#020617",
+            'game-blue':"#CCDBFF",
+            'practice-orange':"#FFE1D1",
             'neutral':{
                 '900':"#333333",
                 '600': "#4F4F4F",

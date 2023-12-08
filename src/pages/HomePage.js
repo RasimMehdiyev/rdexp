@@ -200,53 +200,48 @@ const handleFilterChange = (newFilter) => {
   setShowFilterOptions(false); // Hide the filter options after selecting an option
 };
 
-  if (loading) {
-    return <LoadingPage />; // You can replace this with any loading spinner or indicator
-  } else {
-    return (
-      
-      <div className="flex flex-col justify-center items-center">
-        {/* Upcoming Events */}
-        {Object.entries(organizedEvents).map(([month, days]) => (
-          <div key={month} className="font-russoOne text-sn-main-blue month-section">
-            <div></div>
-            <StickyMonthHeader currentMonth={new Date(month).toLocaleString('en-US', { month: 'long' })} />
-            {/* <h2 className="text-4xl font-bold">{new Date(month).toLocaleString('default', { month: 'long' })}</h2> */}
-            {Object.entries(days).map(([day, dayEvents]) => (
-              <div key={day}>
+if (loading) {
+  return <LoadingPage />;
+} else {
+  return (
+    <div className="flex flex-col justify-center items-center bg-almostwhite">
+      {/* Upcoming Events */}
+      {Object.entries(organizedEvents).map(([month, days]) => (
+        <div key={month} className="font-russoOne text-sn-main-blue month-section">
+          <div></div>
+          <StickyMonthHeader currentMonth={new Date(month).toLocaleString('en-US', { month: 'long' })} />
+          {Object.entries(days).map(([day, dayEvents]) => (
+            <div key={day}>
+              {/* Check if there are events for this day based on the filter */}
+              {dayEvents.some((event) => filter === 'all' || event.type === filter) && (
+              
                 <p className="text-md font-interBold text-gray-700 ml-2">{`${new Date(`${month}-${day}`).toLocaleString('en-US', { weekday: 'long' })} ${day}`}</p>
-                <div className="event-container">
-                  {
-                    dayEvents
-                    .filter((event) => filter === 'all' || event.type === filter) // Filter events based on selectedFilter
-                      .sort((a, b) => {
-                        if (a.dateTime != null && b.dateTime != null) {
-                          a.dateTime.localeCompare(b.dateTime)                        
-                        }
-                      }) // Sort events by dateTime
-                      .map((event, index) => (
-                        <div key={index} className="event-card">
-                          {/* Render your EventCard component here */}
-                          <EventCard
-                            type={event.type}
-                            eventName={event.eventName}
-                            teamName={event.teamName}
-                            eventTime={event.eventTime}
-                            location={event.location}
-                            attendance={event.attendance}
-                            number_invitation={event.number_invitation}
-                          />
-                        </div>
-                      ))
-                    }
-                </div>
+              )}
+              <div className="event-container">
+                {dayEvents
+                  .filter((event) => filter === 'all' || event.type === filter)
+                  .sort((a, b) => (a.dateTime != null && b.dateTime != null ? a.dateTime.localeCompare(b.dateTime) : 0))
+                  .map((event, index) => (
+                    <div key={index} className="event-card">
+                      <EventCard
+                        type={event.type}
+                        eventName={event.eventName}
+                        teamName={event.teamName}
+                        eventTime={event.eventTime}
+                        location={event.location}
+                        attendance={event.attendance}
+                        number_invitation={event.number_invitation}
+                      />
+                    </div>
+                  ))}
               </div>
-            ))}
-          </div>
-        ))}
-
+            </div>
+          ))}
+        </div>
+      ))}
+      
         {/* Plus Button */}
-        <div className="fixed top-[72px] right-[65px] z-20">
+        <div className="fixed top-[69px] right-[65px] z-20">
           <button
             className="bg-sn-light-orange text-white rounded-10px  text-3xl shadow-sm flex items-center justify-center"
             style={{ width: '36px', height: '36px' }}  
@@ -257,7 +252,7 @@ const handleFilterChange = (newFilter) => {
         </div>
 
         {/* Filter Button */}
-        <div className="fixed top-[72px] right-[20px] z-20">
+        <div className="fixed top-[69px] right-[20px] z-20">
           <button
             className="bg-sn-light-orange text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center justify-center"
             style={{ width: '36px', height: '36px' }}
@@ -271,7 +266,7 @@ const handleFilterChange = (newFilter) => {
           </button>
           {/* Filter Options */}
           {showFilterOptions && (
-            <div className="absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD]">
+            <div className="absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
               <p
                 className={`cursor-pointer ${filter === 'all' ? 'text-sn-light-orange font-bold' : ''}`}
                 onClick={() => handleFilterChange('all')}
@@ -279,10 +274,10 @@ const handleFilterChange = (newFilter) => {
                 All
               </p>
               <p
-                className={`cursor-pointer ${filter === 'training' ? 'text-sn-light-orange font-bold' : ''}`}
-                onClick={() => handleFilterChange('training')}
+                className={`cursor-pointer ${filter === 'practice' ? 'text-sn-light-orange font-bold' : ''}`}
+                onClick={() => handleFilterChange('practice')}
               >
-                Training
+                practice
               </p>
               <p
                 className={`cursor-pointer ${filter === 'game' ? 'text-sn-light-orange font-bold' : ''}`}
@@ -291,10 +286,10 @@ const handleFilterChange = (newFilter) => {
                 Game
               </p>
               <p
-                className={`cursor-pointer ${filter === 'teambuilding' ? 'text-sn-light-orange font-bold' : ''}`}
-                onClick={() => handleFilterChange('teambuilding')}
+                className={`cursor-pointer ${filter === 'team building' ? 'text-sn-light-orange font-bold' : ''}`}
+                onClick={() => handleFilterChange('team building')}
               >
-                Teambuilding
+                Team building
               </p>
 
             </div>
