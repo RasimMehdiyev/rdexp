@@ -221,7 +221,7 @@ export const AboutClubPage = () => {
                 <PhoneInput
                     style={{ height: '3rem' }}
                     inputStyle={{ height: '100%', width:'100%',borderRadius:'10px'}}
-                    className="text-black border-2 border-game-blue rounded-10px min-w-full h-12 m-auto"
+                    className="text-black border-2 border-club-header-blue rounded-10px min-w-full h-12 m-auto"
                     placeholder='Enter phone number'
                     value={clubPhone}
                     onChange={(clubPhone) => setClubPhone(clubPhone)}
