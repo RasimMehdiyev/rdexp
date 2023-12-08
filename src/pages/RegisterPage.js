@@ -139,6 +139,7 @@ function RegisterPage() {
 
                             setFullName(capitalizedFullName);
                         }}
+                        maxLength={100} 
                     />
                     
                     <input
@@ -153,6 +154,7 @@ function RegisterPage() {
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     onBlur={handleBlur}
+                    maxLength={254} 
                     />
                     
 
@@ -174,6 +176,7 @@ function RegisterPage() {
                         value={password}
                         onChange={handlePasswordChange}
                         onBlur={handlePasswordBlur}
+                        maxLength={16} 
                     />
                     <input
                         className={`shadow-md placeholder-text text-[16px] pl-2 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue
@@ -184,6 +187,7 @@ function RegisterPage() {
                         value={confirmPassword}
                         onChange={handleConfirmPasswordChange}
                         onBlur={handleConfirmPasswordBlur}
+                        maxLength={16} 
                     />
                     {passwordLengthError && (
                         <p className='text-[10px] text-sm font-interReg leading-none text-red-500 font-bold'>Password must be at least 8 characters.</p>
