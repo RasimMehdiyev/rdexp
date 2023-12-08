@@ -22,6 +22,7 @@ import StickySubheaderProfileComponent from './components/StickySubheaderProfile
 import NoTeamPage from './pages/NoTeamPage.js';
 import { useEffect } from 'react';
 import NotificationPage from './pages/NotificationPage.js';
+import EditTeamPage from './pages/EditTeamPage.js';
 
 LogRocket.init('u7ityk/synthlete');
 
