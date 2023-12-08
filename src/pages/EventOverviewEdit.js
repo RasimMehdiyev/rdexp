@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import EditGameComponent from '../components/EditGameComponent';
 import NewPracticeTBComponent from '../components/NewPracticeTBComponent';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { supabase } from '../lib/helper/supabaseClient';
 import StickySubheaderEventCreateComponent from '../components/StickySubheaderEventCreateComponent';
 import LoadingPage from './LoadingPage';
 
-const EditGamePage = () => {
+const EventOverview = () => {
     const { eventId } = useParams(); // Retrieve eventId from the URL
     const navigate = useNavigate();
 
@@ -19,9 +19,8 @@ const EditGamePage = () => {
     const [selectedExtras, setSelectedExtras] = useState([]);
     const [selectedTeam, setSelectedTeam] = useState([]);
     const [inputCheck, setInputCheck] = useState(true);
-    
-    
 
+    const hasFetched = useRef(false);
 
     const handleOnChange = async () => {
         
@@ -217,12 +216,12 @@ const EditGamePage = () => {
                   .select('title, datetime, location, team')
                   .eq('id', 1) // Hardcoded event ID
                   .single();
-  
+    
               if (error) {
                   console.error('Error fetching event:', error);
                   throw error;
               }
-  
+    
               console.log('Fetched event data:', event);
               if (event) {
                   // Update eventTitle and generalInfo only if they are not already set
@@ -234,22 +233,21 @@ const EditGamePage = () => {
                           location: event.location,
                       });
                   }
-  
+    
                   // Fetch and update selectedTeam only if it's not already set
-                  if (!selectedTeam.team_name) {
+                  if (!selectedTeam || !selectedTeam.team_name) {
                       const { data: teamData, error: teamError } = await supabase
                           .from('team')
                           .select('team_name')
                           .eq('id', event.team)
                           .single();
-  
+    
                       if (teamError) {
                           console.error('Error fetching team name:', teamError);
                       } else {
                           setSelectedTeam({ id: event.team, team_name: teamData.team_name });
                       }
                   }
-                  console.log("new selected team", selectedTeam);
               }
           } catch (error) {
               console.error('Caught an error while fetching event details:', error);
@@ -257,9 +255,10 @@ const EditGamePage = () => {
               setLoading(false);
           }
       };
-  
+    
       fetchEventDetails();
-  }, []);
+    }, []);
+    
     
     useEffect(() => {
       console.log("Selected Team in Parent:", selectedTeam);
@@ -269,6 +268,8 @@ const EditGamePage = () => {
     if (loading) {
         return (<LoadingPage></LoadingPage>)
     } else {
+
+      
 
       return (
         <div>
@@ -305,4 +306,4 @@ const EditGamePage = () => {
 }
 }
 
-export default EditGamePage;
+export default EventOverview;

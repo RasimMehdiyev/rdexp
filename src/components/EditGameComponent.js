@@ -15,9 +15,9 @@ const EditGameComponent = ({
 }) => {
     // const [title, setTitle] = useState(eventTitle);
     const [selectedOption, setSelectedOption] = useState("Game");
-    const [date, setDate] = useState('');
-    const [time, setTime] = useState('');
-    const [location, setLocation] = useState('');
+    const [date, setDate] = useState(generalInfo?.date || '');
+    const [time, setTime] = useState(generalInfo?.time || '');
+    const [location, setLocation] = useState(generalInfo?.location || '');
     const [teamNames, setTeamNames] = useState([]);
     const [teamPlayers, setTeamPlayers] = useState([]);
     const [selectedID, setSelectedID] = useState('');
@@ -32,6 +32,10 @@ const EditGameComponent = ({
     const [selectedExtras, setSelectedExtras] = useState([])
     const [optionExtras, setOptionExtras] = useState([]);
     const [preSubstitutePlayers, setPreSubstitutePlayers] = useState([]);
+
+    const [teamName, setTeamName] = useState(selectedTeam?.team_name || '');
+    const [teamId, setTeamId] = useState(selectedTeam?.id || '');
+
 
     
 
@@ -174,9 +178,7 @@ const EditGameComponent = ({
         onTeamChanges(selectedID);
     }, [selectedID]);
 
-    useEffect(() => {
-        onGeneralInfoChanges({date:date, time:time, location:location});
-    }, [date, time, location]);
+  
 
     const submitEvent = () => {
 
