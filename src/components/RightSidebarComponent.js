@@ -42,7 +42,7 @@ const RightSideBarComponent = ({ rightIsOpen , setRightIsOpen}) => {
         <Link onClick={closeSidebar} to='/profile'>
             <li className='w-[120px] items-center m-auto py-[4px] text-right pr-6 hover:bg-sn-light-blue h-[30px]'>My Profile</li>
         </Link >
-        <Link onClick={closeSidebar} to='/profile/edit'>
+        <Link onClick={closeSidebar} to='/notification'>
             <li className='w-[120px] items-center m-auto py-[4px] text-right pr-6 hover:bg-sn-light-blue h-[30px]'>Notifications</li>
         </Link>
         <Link onClick={closeSidebar} to='/auth'>
