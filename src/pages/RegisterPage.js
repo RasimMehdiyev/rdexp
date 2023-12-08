@@ -197,10 +197,10 @@ function RegisterPage() {
                     </select>
                     <button
                          className={`text-white w-full h-16 mt-10 rounded-10px ${
-                            allFieldsFilled ? 'bg-club-header-blue cursor-pointer' : 'bg-blue-button-disabled cursor-not-allowed'
+                            allFieldsFilled && isPasswordMatch && !emailError? 'bg-club-header-blue cursor-pointer' : 'bg-blue-button-disabled cursor-not-allowed'
                         }`}
                         type="submit"
-                        disabled={!allFieldsFilled}>
+                        disabled={!allFieldsFilled || !isPasswordMatch || emailError}>
                         SAVE
                     </button>
                 <p className='py-2 text-xs text-sn-main-blue font-interReg'>Already have an account? <Link className='font-interReg font-bold text-sn-main-blue underline hover:text-[gray]' to="/login">Log in</Link></p>
