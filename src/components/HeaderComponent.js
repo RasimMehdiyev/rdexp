@@ -106,11 +106,11 @@ const HeaderComponent = ({ setRightIsOpen , rightIsOpen }) => {
             {
               clubData.picture ? (
                 <Link to="/team-management/">
-                  <img className='cursor-pointer border-2 border-white object-cover overflow-hidden w-[45px] h-[45px] rounded-10px' src={clubData.picture} alt="team-profile" />
+                  <img className='cursor-pointer border-2 border-white object-cover overflow-hidden w-[40px] h-[40px] rounded-10px' src={clubData.picture} alt="team-profile" />
                 </Link>
                 ) : (
                 <Link to="no-team/" className='flex flex-col items-center justify-center'>
-                    <img className='bg-white cursor-pointer border-2 border-white object-cover overflow-hidden w-[50px] h-[50px] rounded-10px' src={process.env.PUBLIC_URL + "/images/Teams-1.svg"} alt="profile" />
+                    <img className='bg-white cursor-pointer border-2 border-white object-cover overflow-hidden w-[40px] h-[40px] rounded-10px' src={process.env.PUBLIC_URL + "/images/Teams-1.svg"} alt="profile" />
                 </Link>
                 )
               }
@@ -120,17 +120,17 @@ const HeaderComponent = ({ setRightIsOpen , rightIsOpen }) => {
           </Link>
 
           <Link className='flex flex-col justify-center items-center'>
-          <button onClick={rightSideBarOpen} className="rounded-full w-[50px] h-[50px] p-0 overflow-hidden">
+          <button onClick={rightSideBarOpen} className="rounded-full items-center w-[35px] h-[35px] p-0 overflow-hidden">
           {
             userData.profile_picture ? (
-              <img className='object-cover overflow-hidden border-2 rounded-full  border-white w-[50px] h-[50px]' src={userData.profile_picture} alt="profile" />
+              <img className='object-cover overflow-hidden border-2 rounded-full  border-white w-[35px] h-[35px]' src={userData.profile_picture} alt="profile" />
               ) : (
-              <img className='object-cover overflow-hidden border-2 rounded-full  border-white w-[50px] h-[50px]' src={process.env.PUBLIC_URL + "/images/no_user.png"} alt="profile" />
+              <img className='object-cover overflow-hidden border-2 rounded-full  border-white w-[35px] h-[35px]' src={process.env.PUBLIC_URL + "/images/no_user.png"} alt="profile" />
               )
           }
           </button> 
           {notificationCount > 0 && (
-            <div className="absolute bottom-2 right-3 w-5 h-5 bg-red-700 text-white text-xs rounded-full flex items-center justify-center" style={{ transform: 'translate(-25%, 25%)' }}>
+            <div className="absolute bottom-2 right-3 w-5 h-5 bg-red-700 text-center items-center pt-[2px] pr-[1px] text-white text-xs rounded-full  font-interEBold" style={{ transform: 'translate(-25%, 25%)' }}>
               {notificationCount}
             </div>
           )}        
