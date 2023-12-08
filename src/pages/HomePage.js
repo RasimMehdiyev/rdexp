@@ -114,7 +114,7 @@ const HomePage = () => {
     event.preventDefault();
     console.log("open card");
     console.log(index);
-    navigate('/game-overview/' + index);
+    navigate('/event-overview/' + index);
   }
 
 

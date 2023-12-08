@@ -66,7 +66,7 @@ export default function PlayerAdditionModal({ isOpen, closeModal, onSave, isPlay
                       {isPlayer ? 'ADD PLAYER' : 'ADD EXTRA'}
                     </Dialog.Title>
                       <div className="mt-4">
-                      <PlayerInput onInputChange={handleInputChange} errorMessage={error} />
+                      <PlayerInput onInputChange={handleInputChange} errorMessage={error} isPlayer={isPlayer}/>
                       </div>
                     </div>
                   </div>

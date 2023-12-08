@@ -10,9 +10,13 @@ const TeamManagementComponent = ({ teamData, coach, players, extras, isCoach, se
     const [addingPlayer, setAddingPlayer] = useState(false);
     const [isAdditionModalOpen, setAdditionModalOpen] = useState(false);
     
-    console.log("players", players)
     const addUserToTeam = async (name, isPlayer) => {
+        if (!name.trim()) {
+            return isPlayer ? "Please enter a player's name" : 'Please enter a name';
+        }
+        
         try {
+            
             const userId = await findUserIdByName(name);
             if (!userId) {
                 // Condition 3: Player wasn't found
@@ -42,10 +46,11 @@ const TeamManagementComponent = ({ teamData, coach, players, extras, isCoach, se
             const newMember = {
                 team_id: teamData.id,
                 user_id: userId,
+                accepted: false
             };
 
             const { data, error } = await supabase
-                .from('team_users')
+                .from('team_user_invite')
                 .insert([newMember]);
 
             if(isPlayer){
@@ -66,7 +71,7 @@ const TeamManagementComponent = ({ teamData, coach, players, extras, isCoach, se
             }
         } catch (error) {
             console.error('Error in adding user:', error);
-            return "An error occurred while adding the player.";
+            return "An error occurred while adding the player";
         }
         return ""; // No error
     };
