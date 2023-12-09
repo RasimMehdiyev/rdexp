@@ -4,6 +4,7 @@ import {useNavigate} from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import PhoneInput from "react-phone-input-2";
 import 'react-toastify/dist/ReactToastify.css';
+import LocationInput from '../components/LocationInput.js';
 
 
 export const AboutClubPage = () => {
@@ -34,7 +35,11 @@ export const AboutClubPage = () => {
         };
     }
     
+    const handleLocationInputChange = (selectedAddress) => {
+        console.log('Location changed:', selectedAddress);
+      };
     
+
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -64,10 +69,7 @@ export const AboutClubPage = () => {
         // set the state values
         setClubPhone(e.target.value);
     }
-    const handleLocationInputChange = (e) => {
-        // set the state values
-        setClubLocation(e.target.value);
-    }
+    
 
 
 
@@ -197,9 +199,15 @@ export const AboutClubPage = () => {
             <h5 className='font-russoOne text-5xl  text-center leading-none'>ABOUT</h5>
             <h5 className='font-russoOne text-5xl  text-center leading-none'>YOUR CLUB</h5>
         </div>
-        <div>
-        <input onChange={handleClubNameInputChange} className="text-black border-2 border-club-header-blue pl-2 w-[50vw] ml-[20%] align-center rounded-10px h-12" type="text" placeholder='Club name'/>
-        </div >
+        <div className="flex flex-col justify-center">
+            <input
+                onChange={handleClubNameInputChange}
+                className="text-black border-2 border-club-header-blue pl-2 w-[60vw] mx-auto rounded-10px h-12"
+                type="text"
+                placeholder="Club name"
+                maxLength={30}
+            />
+        </div>
         <div className='flex flex-row gap-[20px] align-center'>
             <span className='font-russoOne text-[20px]'>Logo</span>
             <input type="file" id="fileInput" ref={fileInputRef} 
@@ -215,7 +223,7 @@ export const AboutClubPage = () => {
             <p className='font-russoOne text-[20px] '>Contact details</p>
             <div className='input-container'>
                 <img className="input-icon" src={process.env.PUBLIC_URL + "/images/envelope.svg"}/>
-                <input onChange={handleClubEmailInputChange} type="email" placeholder='info@youremail.com' className="text-black border-2 pl-8 border-club-header-blue rounded-10px min-w-full h-12 m-auto"/>
+                <input onChange={handleClubEmailInputChange} type="email" placeholder='Email' className="text-black border-2 pl-8 border-club-header-blue rounded-10px min-w-full h-12 m-auto"/>
             </div>
             <div className='input-container'>
                 <PhoneInput
@@ -227,18 +235,31 @@ export const AboutClubPage = () => {
                     onChange={(clubPhone) => setClubPhone(clubPhone)}
                     />
             </div>
+            
+            <LocationInput onChange={handleLocationInputChange}/>
+
+            {/*
             <div className='input-container'>
                 <img className="input-icon" src={process.env.PUBLIC_URL + "/images/map-pin.svg"}/>
-                <input onChange={handleLocationInputChange} type="text" placeholder='Enter location' className="text-black border-2 pl-8 border-club-header-blue rounded-10px min-w-full h-12 m-auto"/>
-            </div>
+                <input onChange={handleLocationInputChange} type="text" placeholder='Location' className="text-black border-2 pl-8 border-club-header-blue rounded-10px min-w-full h-12 m-auto" maxLength={255}/>
+             </div>*/}
+
         </div>
         <div className='flex flex-col gap-2 justify-center align-center'>
             <p className='font-russoOne text-[20px] '>Description</p>
-            <textarea onChange={handleClubDescriptionInputChange} className='rounded-10px pt-2 pl-2 min-w-full m-auto border-2 border-club-header-blue text-black' name="description" id="description" placeholder="(Optional)"cols="30" rows="5"></textarea>
+            <textarea onChange={handleClubDescriptionInputChange} className='rounded-10px pt-2 pl-2 min-w-full m-auto border-2 border-club-header-blue text-black' name="description" id="description" cols="30" rows="5"></textarea>
         </div>
-        <button type='submit' className="font-interReg bg-sn-main-orange ml-[20%] align-center rounded-10px h-12 w-[50vw] text-white">
+        
+
+        <button
+            className={`font-russoOne text-white ml-[20%] align-center rounded-10px h-12 w-[50vw]  ${
+                clubName.length === 0 ? 'bg-sn-lighter-orange cursor-not-allowed' : 'bg-sn-main-orange cursor-pointer'
+            }`}
+            type="submit"
+            disabled={clubName.length === 0}>
             SAVE
         </button>
+
         <ToastContainer/>
     </form> 
   )
