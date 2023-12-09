@@ -43,12 +43,12 @@ const LocationInput = ({ handleLocationInputChange }) => {
     <div className='input-container'>
       
         <div className="realtive w-full">
-            <img className="input-icon pt-1" src={process.env.PUBLIC_URL + "/images/map-pin.svg"} />
+            <img className="input-icon pt-4" src={process.env.PUBLIC_URL + "/images/map-pin.svg"} />
             <textarea
             {...getInputProps()}
             type="text"
             placeholder='Location'
-            className="text-black border-2 pl-8 border-club-header-blue h-30 rounded-10px min-w-full m-auto"
+            className="text-black p-3 border-2 pl-8 border-club-header-blue h-30 rounded-10px min-w-full m-auto"
             maxLength={255}
             rows={4}
             />
