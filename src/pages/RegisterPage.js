@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PasswordInput from '../components/PasswordInput.js';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 function RegisterPage() {
     const [fullName, setFullName] = useState('');
@@ -212,13 +213,30 @@ function RegisterPage() {
                     {passwordLengthError && (
                         <p className='text-[10px] text-sm font-interReg leading-none text-red-500 font-bold'>Password must be at least 8 characters.</p>
                     )}
+                    
+                    <div className="relative w-full">
+                        <select
+                            className="text-black appearance-none mt-7 w-full h-12 px-4  border-2 border-club-header-blue rounded-lg bg-white cursor-pointer pr-8"
+                            value={role}
+                            onChange={(event) => setRole(event.target.value)}>
+                                <option style={{ color: 'gray' }} className="font-interReg " value="" disabled selected>
+                                Choose role
+                                </option>
+                                <option className="font-interReg" value="1">
+                                Coach
+                                </option>
+                                <option className="font-interReg" value="2">
+                                Player
+                                </option>
+                                <option className="font-interReg" value="3">
+                                Volunteer
+                                </option>
+                        </select>
+                        <div className="absolute right-2 top-11 flex items-center pr-2 pointer-events-none">
+                            <FontAwesomeIcon icon={faChevronDown} className=" text-club-header-blue" />
+                        </div>
+                    </div>
 
-                    <select className='shadow-md placeholder-text pl-5 mt-7 font-interReg border-club-header-blue text-lf-dark-gray w-full h-12 rounded-lg border-2 appearance-none focus:outline-none ' value={role} onChange={(event) => setRole(event.target.value)}>
-                        <option className='font-interReg' value="" disabled selected>Choose role</option>
-                        <option className='font-interReg' value='1'>Coach</option>
-                        <option className='font-interReg' value="2">Player</option>
-                        <option className='font-interReg' value="3">Volunteer</option>
-                    </select>
                     <button
                          className={`text-white w-full h-16 mt-10 rounded-10px ${
                             allFieldsFilled && isPasswordMatch && !emailError? 'bg-club-header-blue cursor-pointer' : 'bg-blue-button-disabled cursor-not-allowed'
