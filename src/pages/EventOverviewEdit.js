@@ -369,39 +369,42 @@ const EventOverviewEdit = () => {
 
       
 
-      return (
-        <div>
-            <StickySubheaderEventCreateComponent onSave={handleOnChange} onDelete={handleOnDelete}/>
-            <div className="pt-6 h-screen bg-sn-bg-light-blue flex flex-col px-5">
-                <h1 className="font-russoOne text-sn-main-blue text-2xl">New Game</h1>
+        return (
+            <div className="flex flex-col min-h-screen bg-sn-bg-light-blue font-interReg">
+              <StickySubheaderEventCreateComponent onSave={handleOnChange} onDelete={handleOnDelete}/>
+          
+              <div className="p-4">
                 {inputCheck ? (
-                    <div />
+                  <div />
                 ) : (
-                    <div className='text-sm text-red-500'>Please ensure that title event, date, time, team, and location are filled/selected</div>
+                  <div className='text-sm text-red-500'>Please ensure that title event, date, time, team, and location are filled/selected</div>
                 )}
-
+          
+          <div className="flex justify-center mb-4">
                 <input
                     value={eventTitle} // Use the gameName from generalInfo
                     onChange={(e) => setEventTitle(e.target.value)}
                     type="text"
                     placeholder="Title"
-                    
-                    className="h-10 px-2 rounded-md border-sn-light-orange border-[1.5px] font-russoOne"
-                />
-
-                {/* Render EditGameComponent */}
-                <EditGameComponent
-                    eventTitle={eventTitle}
-                    generalInfo={generalInfo}
-                    selectedTeam={selectedTeam}
-                    onGeneralInfoChanges={setGeneralInfo}
-                    onSelectedPlayerChanges={setSelectedPlayers}
-                    onSelectedExtraChanges={setSelectedExtras}
-                    onTeamChanges={setSelectedTeam}
+                    className="text-3xl font-bold text-center text-blue bg-white border border-blue-500 rounded-lg py-2 px-4 w-full max-w-md font-russoOne" // Adjusted font, size, and width
                 />
             </div>
-        </div>
-    );
+          
+                {/* Render EditGameComponent with updated styling */}
+                <EditGameComponent
+                  eventTitle={eventTitle}
+                  generalInfo={generalInfo}
+                  selectedTeam={selectedTeam}
+                  onGeneralInfoChanges={setGeneralInfo}
+                  onSelectedPlayerChanges={setSelectedPlayers}
+                  onSelectedExtraChanges={setSelectedExtras}
+                  onTeamChanges={setSelectedTeam}
+                  className="bg-white border border-gray-300 rounded-lg p-4"
+                />
+              </div>
+            </div>
+          );
+          
 }
 }
 
