@@ -4,7 +4,7 @@ import SynthleteLogo from '../components/SynthleteLogo';
 import { supabase } from "../lib/helper/supabaseClient";
 import IsChrome from "../hooks/IsChrome";
 import { ToastContainer, toast } from 'react-toastify';
-
+import PasswordInput from '../components/PasswordInput.js';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -26,6 +26,24 @@ const LoginPage = () => {
         }
     };
 
+    const [showPassword, setShowPassword] = useState(false);
+    const [passwordLengthError, setPasswordLengthError] = useState(false);
+    const [passwordEdited, setPasswordEdited] = useState(false);
+
+    const checkPasswordMatch = () => {
+       
+    };
+    
+    
+      const handlePasswordChange = (event) => {
+        setPasswordEdited(true);
+        setPassword(event.target.value);
+      };
+    
+    
+      const handlePasswordBlur = () => {
+        checkPasswordMatch();
+      };
 
     useEffect(() => {
         const session = supabase.auth.getSession();
@@ -43,7 +61,18 @@ const LoginPage = () => {
             <SynthleteLogo />
             <form className='text-center gap-2 items-center flex flex-col justify-center' onSubmit={handleLogin}>
                 <input ref={inputRef}  placeholder='Email' className='shadow-md text-[12px] pl-2 font-interReg  w-64 h-12 rounded-lg border-2 border-sn-main-orange' type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                <input ref={inputRef} placeholder="Password" className='shadow-md text-[12px]  pl-2 font-interReg  w-64 h-12 rounded-lg border-2 border-sn-main-orange' type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                <PasswordInput
+                        isPasswordMatch={true}
+                        passwordLengthError={passwordLengthError}
+                        showPassword={showPassword}
+                        handlePasswordChange={handlePasswordChange}
+                        handlePasswordBlur={handlePasswordBlur}
+                        togglePasswordVisibility={() => setShowPassword(!showPassword)}
+                        password={password}
+                        placeholder="Password"
+                        placeholderColor="sn-main-orange"
+                    />
+                {/*<input ref={inputRef} placeholder="Password" className='shadow-md text-[12px]  pl-2 font-interReg  w-64 h-12 rounded-lg border-2 border-sn-main-orange' type="password" value={password} onChange={(e) => setPassword(e.target.value)} />*/}
                 <button className={`${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} text-white mt-5 w-64 h-16 bg-sn-main-orange font-russoOne rounded-10px`} type="submit">LOG IN</button>
                 <p className='py-2 text-xs font-[Arial] text-sn-main-blue'>Do not have an account yet? <Link className='font-[Arial] font-bold underline text-sn-main-blue' to="/register">Register</Link></p>
             </form>
