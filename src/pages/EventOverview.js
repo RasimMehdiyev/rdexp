@@ -142,21 +142,31 @@ const EventOverview = () => {
         <div>
             <StickySubheaderGameOverviewComponent onSave={handleOnChange} />
             <div className="pt-6 h-screen bg-sn-bg-light-blue flex flex-col px-5">
-                <h1 className="font-russoOne text-sn-main-blue text-2xl">New Game</h1>
-                {inputCheck ? (
-                    <div />
-                ) : (
-                    <div className='text-sm text-red-500'>Please ensure that title event, date, time, team, and location are filled/selected</div>
-                )}
+                
+                
+            <div className="flex justify-center mb-4">
+    <input
+        value={eventTitle}
+        disabled={true}
+        type="text"
+        style={{
+            fontSize: '1.875rem', // equivalent to text-3xl
+            fontWeight: 'bold',
+            textAlign: 'center',
+            color: '#007bff', // Replace with the exact hex code for 'text-sn-main-blue'
+            backgroundColor: 'transparent',
+            border: 'none',
+            borderRadius: '.5rem', // equivalent to rounded-lg
+            padding: '.5rem 1rem', // equivalent to py-2 px-4
+            width: '100%',
+            maxWidth: '28rem', // equivalent to max-w-md
+            fontFamily: '"Russo One", sans-serif' // Ensure Russo One font is loaded
+        }}
+    />
+</div>
 
-                <input
-                    value={eventTitle} // Use the gameName from generalInfo
-                    onChange={(e) => setEventTitle(e.target.value)}
-                    type="text"
-                    placeholder="Title"
-                    disabled="true"
-                    className="h-10 px-2 rounded-md border-sn-light-orange border-[1.5px] font-russoOne"
-                />
+
+
 
                 {/* Render EditGameComponent */}
                 <GameOverviewComponent
