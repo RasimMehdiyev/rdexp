@@ -49,6 +49,9 @@ const LocationInput = ({ handleLocationInputChange }) => {
             type="text"
             placeholder='Location'
             className="text-black p-3 border-2 pl-8 border-club-header-blue h-30 rounded-10px min-w-full m-auto"
+            onChange={(e) => {
+                // Handle location input change here
+                onChange(e.target.value);}}
             maxLength={255}
             rows={4}
             />
