@@ -155,8 +155,11 @@ const HomePage = () => {
   }, [navigate]);
   console.log("fetched events", fetchedEvents);
 
+  const currentDate = new Date();
+  const transformedEvents = fetchedEvents
+  .filter((event) => new Date(event.datetime) > currentDate)
+  .map(event => {
 
-  const transformedEvents = fetchedEvents.map(event => {
     // Extracting date and time from the dateTime string
     const eventDateTime = new Date(event.datetime);
     const date = eventDateTime.toISOString().split('T')[0];
@@ -197,6 +200,24 @@ const organizedEvents = transformedEvents.reduce((acc, event) => {
 
 const [filter, setFilter] = useState('all'); // Default filter is 'all'
 const [showFilterOptions, setShowFilterOptions] = useState(false);
+useEffect(() => {
+  const handleOutsideClick = (event) => {
+    const filterButton = document.getElementById('filter-button'); // Add an ID to your filter button
+
+    if (filterButton && !filterButton.contains(event.target)) {
+      // Click outside the filter button, close filter options
+      setShowFilterOptions(false);
+    }
+  };
+
+  // Add click event listener to the document body
+  document.body.addEventListener('click', handleOutsideClick);
+
+  // Clean up event listener on component unmount
+  return () => {
+    document.body.removeEventListener('click', handleOutsideClick);
+  };
+}, [setShowFilterOptions]);
 
 const handleFilterChange = (newFilter) => {
   setFilter(newFilter);
@@ -245,7 +266,8 @@ const handleFilterChange = (newFilter) => {
 
 else {
   return (
-    <div className="flex flex-col justify-center items-center bg-almostwhite">
+    <div className="flex flex-col justify-top  items-center bg-almostwhite min-h-screen">
+      
       {/* Upcoming Events */}
       {Object.entries(organizedEvents).map(([month, days]) => (
         <div key={month} className="font-russoOne text-sn-main-blue month-section">
@@ -301,6 +323,7 @@ else {
         {/* Filter Button */}
         <div className="fixed top-[69px] right-[20px] z-20">
           <button
+            id="filter-button"
             className="bg-sn-light-orange text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center justify-center"
             style={{ width: '36px', height: '36px' }}
             onClick={() => setShowFilterOptions(!showFilterOptions)}
@@ -324,7 +347,7 @@ else {
                 className={`cursor-pointer ${filter === 'practice' ? 'text-sn-light-orange font-bold' : ''}`}
                 onClick={() => handleFilterChange('practice')}
               >
-                practice
+                Practice
               </p>
               <p
                 className={`cursor-pointer ${filter === 'game' ? 'text-sn-light-orange font-bold' : ''}`}
