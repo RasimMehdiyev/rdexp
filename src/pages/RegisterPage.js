@@ -174,16 +174,15 @@ function RegisterPage() {
                     maxLength={254} 
                     />
                     
-
+                    
                     <PhoneInput
                     style={{ height: '3rem', marginBottom: '30px' }}
                     inputStyle={{ height: '100%', width:'100%' }}
                     className='phone-input border-2 rounded-lg border-club-header-blue'
                     placeholder='Enter phone number'
+                    dropdownStyle={{ textAlign: 'left' }} 
                     value={phoneNumber}
-                    onChange={(newPhoneNumber) => setPhoneNumber(newPhoneNumber)}
-                    
-                    />
+                    onChange={(newPhoneNumber) => setPhoneNumber(newPhoneNumber)}/>
 
                     <PasswordInput
                             isPasswordMatch={isPasswordMatch}
