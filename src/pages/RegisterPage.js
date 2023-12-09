@@ -6,6 +6,9 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PasswordInput from '../components/PasswordInput.js';
 
 function RegisterPage() {
     const [fullName, setFullName] = useState('');
@@ -65,7 +68,20 @@ function RegisterPage() {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailPattern.test(inputEmail);
       };
-    
+
+      
+        const [showPassword, setShowPassword] = useState(false);
+        const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+        const togglePasswordVisibility = () => {
+            setShowPassword(!showPassword);
+        };
+
+        const toggleConfirmPasswordVisibility = () => {
+            setShowConfirmPassword(!showConfirmPassword);
+        };
+            
+            
       const handleBlur = () => {
         if (email.trim() === '') {
           setEmailError('');
@@ -159,36 +175,38 @@ function RegisterPage() {
                     
 
                     <PhoneInput
-                    style={{ height: '3rem' }}
+                    style={{ height: '3rem', marginBottom: '30px' }}
                     inputStyle={{ height: '100%', width:'100%' }}
                     className='phone-input border-2 rounded-lg border-club-header-blue'
                     placeholder='Enter phone number'
                     value={phoneNumber}
                     onChange={(newPhoneNumber) => setPhoneNumber(newPhoneNumber)}
-                    />
                     
-                    <input
-                        className={`shadow-md placeholder-text text-[16px] pl-2 mt-7 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue
-                        ${!isPasswordMatch || passwordLengthError ? 'border-red-500' : 'border-club-header-blue'}
-                        ${!isPasswordMatch || passwordLengthError ? 'text-red-500' : ''}`}
-                        placeholder='Password'
-                        type="password"
-                        value={password}
-                        onChange={handlePasswordChange}
-                        onBlur={handlePasswordBlur}
-                        maxLength={16} 
                     />
-                    <input
-                        className={`shadow-md placeholder-text text-[16px] pl-2 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue
-                        ${!isPasswordMatch || passwordLengthError  ? 'border-red-500' : 'border-club-header-blue'}
-                        ${!isPasswordMatch || passwordLengthError ? 'text-red-500' : ''}`}
-                        placeholder='Confirm Password'
-                        type="password"
-                        value={confirmPassword}
-                        onChange={handleConfirmPasswordChange}
-                        onBlur={handleConfirmPasswordBlur}
-                        maxLength={16} 
+
+                    <PasswordInput
+                            isPasswordMatch={isPasswordMatch}
+                            passwordLengthError={passwordLengthError}
+                            showPassword={showPassword}
+                            handlePasswordChange={handlePasswordChange}
+                            handlePasswordBlur={handlePasswordBlur}
+                            togglePasswordVisibility={() => setShowPassword(!showPassword)}
+                            password={password}
+                            placeholder="Password"
                     />
+
+                    <PasswordInput
+                        isPasswordMatch={isPasswordMatch}
+                        passwordLengthError={passwordLengthError}
+                        showPassword={showConfirmPassword}
+                        handlePasswordChange={handleConfirmPasswordChange}
+                        handlePasswordBlur={handleConfirmPasswordBlur}
+                        togglePasswordVisibility={() => setShowConfirmPassword(!showConfirmPassword)}
+                        password={confirmPassword}
+                        placeholder="Confirm Password"
+                    />
+
+
                     {passwordLengthError && (
                         <p className='text-[10px] text-sm font-interReg leading-none text-red-500 font-bold'>Password must be at least 8 characters.</p>
                     )}
