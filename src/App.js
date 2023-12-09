@@ -20,16 +20,20 @@ import { AboutClubPage } from './pages/AboutClubPage.js';
 import TeamProfilePage from './pages/TeamProfilePage.js';
 import StickySubheaderProfileComponent from './components/StickySubheaderProfileComponent.js';
 import NoTeamPage from './pages/NoTeamPage.js';
-import { useEffect } from 'react';
+import { useRef } from 'react';
 import NotificationPage from './pages/NotificationPage.js';
 
 
 LogRocket.init('u7ityk/synthlete');
 
 const App = () => {
-   const [isOpen, setIsOpen] = useState(false);
    const [rightIsOpen, setRightIsOpen] = useState(false);
    const location = useLocation();
+
+   const toggleSidebar = () => {
+      console.log("Toggling sidebar. Current state:", rightIsOpen);
+      setRightIsOpen(!rightIsOpen);
+    };
 
      // Close sidebar on route change
 
@@ -52,7 +56,10 @@ const App = () => {
       return (
          <>
          {  location.pathname !== '/team/create' || location.pathname !== '/team/create/' || location.pathname !== '/club/create' || location.pathname !== '/club/create/' ?
-            <HeaderComponent rightIsOpen={rightIsOpen} setRightIsOpen={setRightIsOpen}/>
+            <>
+               <HeaderComponent toggleSidebar={toggleSidebar} />
+               {rightIsOpen && <RightSideBarComponent toggleSidebar={toggleSidebar} />}
+            </>
             :
             <div style={{display:'none'}}></div>
          }
@@ -87,7 +94,6 @@ const App = () => {
                <Route path="/no-team" element={<NoTeamPage/>} />
                <Route path="/notification" element={<NotificationPage />} />
             </Routes>
-            <RightSideBarComponent rightIsOpen={rightIsOpen} setRightIsOpen={setRightIsOpen} />
          </>
       );
    }
