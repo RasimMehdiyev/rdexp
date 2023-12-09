@@ -69,7 +69,37 @@ export const AboutClubPage = () => {
         // set the state values
         setClubPhone(e.target.value);
     }
+
+    const [emailBorderColor, setEmailBorderColor] = useState('border-club-header-blue');
+    const [emailError, setEmailError] = useState('');
     
+    const handleBlur = () => {
+        if (clubEmail.trim() === '') {
+            setEmailError('');
+            setEmailBorderColor('border-club-header-blue'); 
+        } else if (!validateEmail(clubEmail)) {
+            setEmailError('Please enter a valid email address');
+            setEmailBorderColor('border-red-500'); 
+            toast.error("Please enter a valid email address.", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        } else {
+            setEmailError('');
+            setEmailBorderColor('border-club-header-blue'); 
+        }
+    };
+
+    const validateEmail = (inputEmail) => {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(inputEmail);
+    };
 
 
 
@@ -221,10 +251,26 @@ export const AboutClubPage = () => {
         </div>
         <div className='flex flex-col justify-center align-center gap-2'>
             <p className='font-russoOne text-[20px] '>Contact details</p>
-            <div className='input-container'>
+
+            <input
+                    className={`shadow-md placeholder-text pl-2 font-interReg w-full h-12 rounded-lg border-2 
+                        ${emailBorderColor} ${
+                    emailError ? 'text-red-500' : 'text-black'
+                }`}
+                    placeholder='Email'
+                    type="email"
+                    value={clubEmail}
+                    onChange={handleClubEmailInputChange}
+                    onBlur={handleBlur}
+                    maxLength={254}
+                />
+
+                
+            {/*<div className='input-container'>
                 <img className="input-icon" src={process.env.PUBLIC_URL + "/images/envelope.svg"}/>
                 <input onChange={handleClubEmailInputChange} type="email" placeholder='Email' className="text-black border-2 pl-8 border-club-header-blue rounded-10px min-w-full h-12 m-auto"/>
-            </div>
+            </div>*/}
+
             <div className='input-container'>
                 <PhoneInput
                     style={{ height: '3rem' }}
@@ -238,16 +284,12 @@ export const AboutClubPage = () => {
             
             <LocationInput onChange={handleLocationInputChange}/>
 
-            {/*
-            <div className='input-container'>
-                <img className="input-icon" src={process.env.PUBLIC_URL + "/images/map-pin.svg"}/>
-                <input onChange={handleLocationInputChange} type="text" placeholder='Location' className="text-black border-2 pl-8 border-club-header-blue rounded-10px min-w-full h-12 m-auto" maxLength={255}/>
-             </div>*/}
+            
 
         </div>
         <div className='flex flex-col gap-2 justify-center align-center'>
             <p className='font-russoOne text-[20px] '>Description</p>
-            <textarea onChange={handleClubDescriptionInputChange} className='rounded-10px pt-2 pl-2 min-w-full m-auto border-2 border-club-header-blue text-black' name="description" id="description" cols="30" rows="5"></textarea>
+            <textarea onChange={handleClubDescriptionInputChange} className='rounded-10px pt-2 pl-2 min-w-full m-auto border-2 border-club-header-blue text-black' name="description" id="description" cols="30" rows="5" maxLength={255}></textarea>
         </div>
         
 
