@@ -54,7 +54,7 @@ const LoginPage = () => {
         // Your existing useEffect logic
     }, [])
 
-    const isDisabled = !email || !password;
+    {/*const isDisabled = !email || !password;*/}
 
     const validateEmail = (inputEmail) => {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -84,6 +84,11 @@ const LoginPage = () => {
         }
     };
 
+    const [allFieldsFilled, setAllFieldsFilled] = useState(false);
+    useEffect(() => {
+        setAllFieldsFilled(!!email && !!password );
+    }, [email, password]);
+
     return (
         <div className='min-h-screen bg-sn-bg-light-blue flex flex-col gap-12 justify-center items-center'>
             <SynthleteLogo />
@@ -111,7 +116,16 @@ const LoginPage = () => {
                     placeholder="Password"
                     placeholderColor={passwordColor}
                 />
-                <button className={`${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} text-white mt-5 w-64 h-16 bg-sn-main-orange font-russoOne rounded-10px`} type="submit">LOG IN</button>
+                <button
+                       
+                        className={`text-white mt-5 w-64 h-16 font-russoOne rounded-10px ${
+                            !allFieldsFilled || emailError ? 'bg-sn-lighter-orange cursor-not-allowed' : 'bg-sn-main-orange cursor-pointer'
+                        }`}
+                        type="submit"
+                        disabled={!allFieldsFilled || emailError}>
+                        LOG IN
+                    </button>
+                {/*<button className={`${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'} text-white mt-5 w-64 h-16 bg-sn-main-orange font-russoOne rounded-10px`} type="submit">LOG IN</button>*/}
                 <p className='py-2 text-xs font-[Arial] text-sn-main-blue'>Do not have an account yet? <Link className='font-[Arial] font-bold underline text-sn-main-blue' to="/register">Register</Link></p>
             </form>
             <ToastContainer />
