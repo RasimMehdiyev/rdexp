@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PersonTag from '../components/PersonTag.js';
 import RoleInput from '../components/RoleInput.js';
 import {Link} from 'react-router-dom'
@@ -6,10 +6,15 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {supabase} from '../lib/helper/supabaseClient';
 
 const GameSettings = () => {
   const [roles, setRoles] = useState([]);
   const navigate = useNavigate();
+  const [teamID, setTeamID] = localStorage.getItem('teamID');
+  const [loading, setLoading] = useState(true); // Add a loading state
+   // [team_id, team_name]
+  const [teamName, setTeamName] = useState({}); // [team_id, team_name]
   const [user, setUser] = useState(null); // Example test data
 
   const addRole = (roleName) => {
@@ -23,11 +28,47 @@ const GameSettings = () => {
     setRoles([...roles, newRole]);
   };
 
+  const getTeam = async () => {
+    try{
+      const { data: team, error: teamError } = await supabase
+      .from('team')
+      .select('team_name')
+      .eq('id', localStorage.getItem('teamID'))
+      if (teamError) throw teamError;
+      setTeamName({'id':localStorage.getItem('teamID'), 'team_name':team[0].team_name})
+      console.log("team id:", team[0].id);
+    }
+    catch (error) {
+      toast.error('Error getting team!', { position: "top-center" });
+    }
+    finally{
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+      // get team from the database
+      getTeam();
+  },[])
+
   const saveData = () => {
     try {
+      if (roles.length === 0) {
+        toast.warning('Please add at least one role!', { position: "top-center" });
+        return;
+      }
+      // Save data to database
+      roles.map((role) => {
+        supabase
+        .from('team_extraroles')
+        .insert([
+        { role_title: role.name, team_id: teamID},
+        ])
+        .then(console.log)
+        .catch(console.error)
+      })
       toast.success('Game settings saved!', { position: "top-center" });
       setTimeout(() => {
-        console.log("redirecting")
       navigate('/');
     }, 3000); 
     }
@@ -47,8 +88,17 @@ const GameSettings = () => {
             <h1 className="text-5xl text-club-header-blue">
             SETTINGS
             </h1>
-            <h3 className="pb-7 mt-3 text-2xl font-interELight text-club-header-blue p-1 bg-white rounded-10px shadow-md h-[6vh] w-[70vw] ">
-            Team 1
+            <h3 className="flex flex-row justify-center pb-7 mt-3 text-2xl font-interELight text-club-header-blue p-1 bg-white rounded-10px shadow-md h-[6vh] w-[70vw] ">
+              {
+                loading ? (
+                        <p className="spinner-club mt-[10px] items-center"></p>
+                        )
+                        :
+                        (
+                          <p>{teamName.team_name}</p>
+                        )
+              }
+              
             </h3>
         </div>
 

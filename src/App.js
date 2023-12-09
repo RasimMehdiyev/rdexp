@@ -9,11 +9,11 @@ import TeamManagementPage from './pages/TeamManagementPage';
 import RightSideBarComponent from './components/RightSidebarComponent';
 import ProfilePage from './pages/ProfilePage';
 import EditProfilePage from "./pages/EditProfilePage.js";
-import EditTeamPage from './pages/EditTeamPage.js';
 import NewGamePage from "./pages/NewEventPage.js";
 import StickySubheaderComponent from "./components/StickySubheaderComponent.js";
 import LogRocket from 'logrocket'
-import GameOverview from './pages/GameOverview'; // Import GameOverview component
+import EventOverview from './pages/EventOverview';
+import EventOverviewEdit from './pages/EventOverviewEdit';
 import TeamCreatePage from './pages/TeamCreatePage.js';
 import GameSettings from './pages/GameSettings.js';
 import { AboutClubPage } from './pages/AboutClubPage.js';
@@ -22,7 +22,7 @@ import StickySubheaderProfileComponent from './components/StickySubheaderProfile
 import NoTeamPage from './pages/NoTeamPage.js';
 import { useRef } from 'react';
 import NotificationPage from './pages/NotificationPage.js';
-
+import EditTeamPage from './pages/EditTeamPage.js';
 
 LogRocket.init('u7ityk/synthlete');
 
@@ -45,7 +45,6 @@ const App = () => {
                <Route path="/login" element={<LoginPage/>} />
                <Route path="/register" element={<RegisterPage/>} />
                <Route path="/auth" element={<AuthenticationPage/>} />
-               <Route path="/game-overview" element={<GameOverview />} />
                <Route path="/team/create" element={<TeamCreatePage/>} />
                <Route path="/club/create" element={<AboutClubPage/>} />
                <Route path="/club/create/settings" element={<GameSettings/>} />
@@ -83,20 +82,25 @@ const App = () => {
                <Route path="/auth" element={<AuthenticationPage />} />
                <Route path="/team-management" element={<TeamManagementPage />} />
                <Route path="/profile" element={<ProfilePage />} />
-               <Route path="/profile/edit" element={<EditProfilePage />} />
+               <Route path="/editProfile" element={<EditProfilePage />} />
                <Route path="/game/create" element={<NewGamePage />} />
-               <Route path="/game-overview/:teamId" element={<GameOverview />} />
+
+               <Route path="/event-overview/:eventId" element={<EventOverview />} />
+               <Route path="/event-overview/edit/:eventId" element={<EventOverviewEdit />} />
+
                <Route path="/team/create" element={<TeamCreatePage/>} />
                <Route path="/club/create" element={<AboutClubPage/>} />
                <Route path="/club/create/settings" element={<GameSettings/>} />
                <Route path="/team-profile/:clubId/:teamId" element={<TeamProfilePage />} />
+
                <Route path="/team-profile/edit/:clubId/:teamId" element={<EditTeamPage/>} />
                <Route path="/no-team" element={<NoTeamPage/>} />
                <Route path="/notification" element={<NotificationPage />} />
+
             </Routes>
          </>
       );
    }
-}
+}   
 
 export default App;

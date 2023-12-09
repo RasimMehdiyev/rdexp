@@ -17,3 +17,12 @@
     height: 50px;
     animation: spin 1s linear infinite;
 }
+
+.spinner-club {
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #09f;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    animation: spin 1s linear infinite;
+}
