@@ -25,8 +25,16 @@ function RegisterPage() {
 
     const [allFieldsFilled, setAllFieldsFilled] = useState(false);
     useEffect(() => {
-        setAllFieldsFilled(!!fullName && !!email && !!phoneNumber && !!role && !!password && !!confirmPassword);
-    }, [fullName, email, phoneNumber, role, password, confirmPassword]);
+        setAllFieldsFilled(
+            !!fullName &&
+            !!email &&
+            !!phoneNumber &&
+            !!role &&
+            !!password &&
+            !!confirmPassword &&
+            (role !== '2' || (!!playerNumber && /^\d{1,2}$/.test(playerNumber)))
+        );
+    }, [fullName, email, phoneNumber, role, password, confirmPassword, playerNumber]);
 
     const [passwordEdited, setPasswordEdited] = useState(false);
     const [confirmPasswordEdited, setConfirmPasswordEdited] = useState(false);
