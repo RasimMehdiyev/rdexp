@@ -180,7 +180,7 @@ export const AboutClubPage = () => {
 
   return (
     <form onSubmit={submitChanges} className='bg-sn-bg-light-blue flex flex-col justify-center align-center px-8 h-screen gap-5 text-club-header-blue'>
-      <div className='flex flex-col justify-center gap-0'>
+      <div className='flex flex-col mt-7 justify-center gap-0'>
         <h5 className='font-russoOne text-5xl  text-center leading-none'>ABOUT</h5>
         <h5 className='font-russoOne text-5xl  text-center leading-none'>YOUR CLUB</h5>
       </div>
@@ -250,14 +250,15 @@ export const AboutClubPage = () => {
       </div>
 
       <button
-        className={`font-russoOne text-white ml-[20%] align-center rounded-10px h-12 w-[50vw]  ${
-          clubName.length === 0 || emailError ? 'bg-sn-lighter-orange cursor-not-allowed' : 'bg-sn-main-orange cursor-pointer'
+        className={`font-interBold text-white bg-sn-main-orange mx-auto my-auto text-xl rounded-10px w-[70vw] h-16 ${
+          clubName.length === 0 || emailError
+            ? ' cursor-not-allowed opacity-50'
+            : 'cursor-pointer'
         }`}
         type="submit"
         disabled={clubName.length === 0 || emailError}>
         SAVE
       </button>
-
       <ToastContainer />
     </form>
   );

@@ -150,7 +150,7 @@ const TeamCreatePage = () => {
             YOUR TEAM
           </h1>
           <input
-            className="mt-5 h-[5vh] pl-2 w-[60vw] rounded-10px border-2 border-club-header-blue font-interReg placeholder-text"
+            className="mt-5 h-12 pl-2 w-[60vw] rounded-10px border-2 border-club-header-blue font-interReg placeholder-text"
             placeholder="Team name"
             value={teamName}
             onChange={handleTeamNameChange}
@@ -159,9 +159,12 @@ const TeamCreatePage = () => {
         </div>
 
         <div className='pl-5'>
-          <h1 className="pt-7 pb-4 text-3xl text-club-header-blue">
+          <h1 className="pt-7 text-3xl text-club-header-blue">
               Add players
           </h1>
+          <h3 className="pb-4 text-sm font-interELight text-club-header-blue">
+              Build your team by adding at least one player.
+            </h3>
 
           {players.map((player, index) => (
             <PersonTag key={index} {...player} onDelete={deletePlayer} />        
@@ -181,12 +184,17 @@ const TeamCreatePage = () => {
       </div>
 
 
-      <div className="bg-sn-bg-light-blue flex flex-col justify-center align-items text-center pt-14 pl-[15%]">
-        <button onClick={handleSubmit} className="bg-sn-main-orange text-white font-interBold text-xl p-2 rounded-10px w-[70vw] h-16 ">
-          SAVE
+      <div className="bg-sn-bg-light-blue flex flex-col justify-end align-items text-center pt-14 pl-[15%]">
+          <button
+            onClick={handleSubmit}
+            className={`bg-sn-main-orange text-white font-interBold text-xl p-2 rounded-10px w-[70vw] h-16 ${
+              (teamName.length === 0 || players.length === 0) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
+            }`}
+            disabled={teamName.length === 0 || players.length === 0}>
+            SAVE
         </button>
 
-        <Link to="/club/create/settings" className=" text-club-header-blue pt-5 underline underline-offset- font-interElight p-2 rounded-10px w-[70vw] h-12 pb-10 ">
+        <Link to="/club/create/settings" className=" text-club-header-blue pt-5 underline underline-offset- font-interElight p-2 rounded-10px w-[70vw] h-12 ">
           skip this step
         </Link>
       </div>
