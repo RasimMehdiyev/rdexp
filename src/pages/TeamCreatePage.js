@@ -150,7 +150,7 @@ const TeamCreatePage = () => {
             YOUR TEAM
           </h1>
           <input
-            className="mt-5 h-12 pl-2 w-[60vw] rounded-10px border-2 border-club-header-blue font-interReg placeholder-text"
+            className="mt-5 h-12 p-2 w-[60vw] rounded-10px border-2 border-club-header-blue font-interReg placeholder-text"
             placeholder="Team name"
             value={teamName}
             onChange={handleTeamNameChange}

@@ -52,7 +52,7 @@ const LocationInput = ({ onLocationChange }) => {
           {...getInputProps()}
           type="text"
           placeholder='Location'
-          className="text-black p-3 border-2 pl-8 border-club-header-blue h-30 rounded-10px min-w-full m-auto"
+          className="text-black p-2 border-2 pl-8 border-club-header-blue h-30 rounded-10px min-w-full m-auto"
           maxLength={255}
           rows={4}
         />

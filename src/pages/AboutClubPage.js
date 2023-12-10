@@ -218,7 +218,7 @@ export const AboutClubPage = () => {
       <div className="flex flex-col justify-center">
         <input
           onChange={handleClubNameInputChange}
-          className={`border-2 ${clubBorderColor} ${clubError ? 'text-red-500' : 'text-black'} pl-2 w-[60vw] mx-auto rounded-10px h-12`}
+          className={`border-2 ${clubBorderColor} ${clubError ? 'text-red-500' : 'text-black'} p-2 w-[60vw] mx-auto rounded-10px h-12`}
           type="text"
           placeholder="Club name"
           maxLength={30}
@@ -250,7 +250,7 @@ export const AboutClubPage = () => {
         <p className='font-russoOne text-[20px] '>Contact details</p>
 
         <input
-          className={`shadow-md placeholder-text pl-2 font-interReg w-full h-12 rounded-lg border-2 
+          className={`shadow-md placeholder-text p-2 font-interReg w-full h-12 rounded-lg border-2 
                         ${emailBorderColor} ${
             emailError ? 'text-red-500' : 'text-black'
           }`}
@@ -278,7 +278,7 @@ export const AboutClubPage = () => {
       </div>
       <div className='flex flex-col gap-2 justify-center align-center'>
         <p className='font-russoOne text-[20px] '>Description</p>
-        <textarea onChange={handleClubDescriptionInputChange} className='rounded-10px pt-2 pl-2 min-w-full m-auto border-2 border-club-header-blue text-black' name="description" id="description" cols="30" rows="5" maxLength={255}></textarea>
+        <textarea onChange={handleClubDescriptionInputChange} className='rounded-10px p-2 min-w-full m-auto border-2 border-club-header-blue text-black' name="description" id="description" cols="30" rows="5" maxLength={255}></textarea>
       </div>
 
       <button
