@@ -11,13 +11,17 @@ import {supabase} from '../lib/helper/supabaseClient';
 const GameSettings = () => {
   const [roles, setRoles] = useState([]);
   const navigate = useNavigate();
-  const [teamID, setTeamID] = localStorage.getItem('teamID');
-  const [loading, setLoading] = useState(true); // Add a loading state
-   // [team_id, team_name]
-  const [teamName, setTeamName] = useState({}); // [team_id, team_name]
-  const [user, setUser] = useState(null); // Example test data
+  const [teamID, setTeamID] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [teamName, setTeamName] = useState({});
 
   const addRole = (roleName) => {
+    // Check for duplicates
+    if (roles.some(role => role.name === roleName)) {
+      toast.warning('Role already exists!', { position: "top-center" });
+      return;
+    }
+
     const newRole = {
       name: roleName,
       number: "null",
@@ -28,54 +32,49 @@ const GameSettings = () => {
   };
 
   const getTeam = async () => {
-    try{
+    try {
+      const teamID = localStorage.getItem('teamID');
+      setTeamID(teamID);
       const { data: team, error: teamError } = await supabase
-      .from('team')
-      .select('team_name')
-      .eq('id', localStorage.getItem('teamID'))
+        .from('team')
+        .select('team_name')
+        .eq('id', teamID);
       if (teamError) throw teamError;
-      setTeamName({'id':localStorage.getItem('teamID'), 'team_name':team[0].team_name})
-      console.log("team id:", team[0].id);
-    }
-    catch (error) {
+      setTeamName({'id': teamID, 'team_name': team[0].team_name});
+    } catch (error) {
       toast.error('Error getting team!', { position: "top-center" });
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-      // get team from the database
-      getTeam();
-  },[])
+    getTeam();
+  }, []);
 
-  const saveData = () => {
+  const saveData = async () => {
     try {
       if (roles.length === 0) {
         toast.warning('Please add at least one role!', { position: "top-center" });
         return;
       }
+
       // Save data to database
-      roles.map((role) => {
-        supabase
-        .from('team_extraroles')
-        .insert([
-        { role_title: role.name, team_id: teamID},
-        ])
-        .then(console.log)
-        .catch(console.error)
-      })
+      const insertPromises = roles.map(role => {
+        return supabase
+          .from('team_extraroles')
+          .insert([{ role_title: role.name, team_id: teamID }])
+      });
+
+      await Promise.all(insertPromises);
       toast.success('Game settings saved!', { position: "top-center" });
       setTimeout(() => {
-        console.log("redirecting")
         navigate('/');
-      }, 3000);
+      }, 3000); 
     } catch (error) {
       toast.error('Error saving game settings!', { position: "top-center" });
     }
-  }
-
+  };
   return (
     <div className="flex flex-col min-h-screen bg-sn-bg-light-blue">
 

@@ -150,6 +150,16 @@ const GameOverviewComponent = ({
             param_role_id: 2, 
             param_team_id: parseInt(teamID, 8)
         })
+        console.log(data.length)
+        if (data.length == 0) {
+            const { data: sup_players, error: playersError } = await supabase
+            .from('team_users')
+            .select('user_id, team_id')
+            .eq('team_id', teamID);
+            if (playersError) throw playersError;
+            console.log("sup players", sup_players);
+            data = sup_players;
+        }
         if (error) console.error(error)
         else console.log("team players: ", data)
         setTeamPlayers(data);
