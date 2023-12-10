@@ -6,8 +6,6 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 const PlayerInput = ({ onInputChange, errorMessage, isPlayer}) => {
 
-
-
   return (
     <div className="flex flex-row gap-1 justify-start items-center w-[90vw]">
       <div className="relative">

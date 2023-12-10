@@ -6,6 +6,10 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PasswordInput from '../components/PasswordInput.js';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 function RegisterPage() {
     const [fullName, setFullName] = useState('');
@@ -15,12 +19,27 @@ function RegisterPage() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [emailError, setEmailError] = useState('');
+    const [playerNumber, setPlayerNumber] = useState('');
 
     const navigate = useNavigate();
+
+    const [allFieldsFilled, setAllFieldsFilled] = useState(false);
+    useEffect(() => {
+        setAllFieldsFilled(
+            !!fullName &&
+            !!email &&
+            !!phoneNumber &&
+            !!role &&
+            !!password &&
+            !!confirmPassword &&
+            (role !== '2' || (!!playerNumber && /^\d{1,2}$/.test(playerNumber)))
+        );
+    }, [fullName, email, phoneNumber, role, password, confirmPassword, playerNumber]);
 
     const [passwordEdited, setPasswordEdited] = useState(false);
     const [confirmPasswordEdited, setConfirmPasswordEdited] = useState(false);
     const [passwordLengthError, setPasswordLengthError] = useState(false);
+    const [passwordColor, setPasswordColor] = useState("club-header-blue");
 
     const checkPasswordMatch = () => {
         if (passwordEdited && confirmPasswordEdited && password !== confirmPassword) {
@@ -34,7 +53,9 @@ function RegisterPage() {
             progress: undefined,
             theme: "light",
         });
+
         }
+        
     };
 
     const handlePasswordChange = (event) => {
@@ -60,7 +81,20 @@ function RegisterPage() {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailPattern.test(inputEmail);
       };
-    
+
+      
+        const [showPassword, setShowPassword] = useState(false);
+        const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+        const togglePasswordVisibility = () => {
+            setShowPassword(!showPassword);
+        };
+
+        const toggleConfirmPasswordVisibility = () => {
+            setShowConfirmPassword(!showConfirmPassword);
+        };
+            
+            
       const handleBlur = () => {
         if (email.trim() === '') {
           setEmailError('');
@@ -76,12 +110,32 @@ function RegisterPage() {
                 progress: undefined,
                 theme: "light",
                 });
+
         } else {
           setEmailError('');
         }
       };
 
-
+      const renderPlayerSpecificField = () => {
+        if (role === '2') { 
+            return (
+                <input
+                    className='shadow-md placeholder-text ml-2 mt-5 pl-2 font-interReg w-16 h-12 rounded-lg border-2 border-club-header-blue'
+                    placeholder='Nr'
+                    type="text"
+                    pattern="\d{1,2}"
+                    value={playerNumber}
+                    onChange={(event) => {
+                        const input = event.target.value;
+                        if (/^\d{0,2}$/.test(input)) {
+                            setPlayerNumber(input);
+                        }
+                    }}
+                />
+            );
+        }
+        return null;
+    };
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -122,7 +176,7 @@ function RegisterPage() {
             <SynthleteLogo />
             <form className='text-center gap-2 w-80 items-center flex flex-col justify-center' onSubmit={handleSubmit}>
                     <input
-                        className='shadow-md placeholder-text text-[16px] pl-2 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue'
+                        className='shadow-md placeholder-text p-2 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue'
                         placeholder='Full Name'
                         type="text"
                         value={fullName}
@@ -134,10 +188,11 @@ function RegisterPage() {
 
                             setFullName(capitalizedFullName);
                         }}
+                        maxLength={100} 
                     />
                     
                     <input
-                    className={`shadow-md placeholder-text text-[16px] pl-2 font-interReg w-full h-12 rounded-lg border-2 
+                    className={`shadow-md placeholder-text p-2 font-interReg w-full h-12 rounded-lg border-2 
                     ${
                         emailError ? 'border-red-500' : 'border-club-header-blue'
                       } ${
@@ -148,49 +203,82 @@ function RegisterPage() {
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     onBlur={handleBlur}
+                    maxLength={254} 
                     />
                     
-
+                    
                     <PhoneInput
-                    style={{ height: '3rem' }}
+                    style={{ height: '3rem', marginBottom: '30px' }}
                     inputStyle={{ height: '100%', width:'100%' }}
                     className='phone-input border-2 rounded-lg border-club-header-blue'
                     placeholder='Enter phone number'
+                    dropdownStyle={{ textAlign: 'left' }} 
                     value={phoneNumber}
-                    onChange={(newPhoneNumber) => setPhoneNumber(newPhoneNumber)}
+                    onChange={(newPhoneNumber) => setPhoneNumber(newPhoneNumber)}/>
+
+                    <PasswordInput
+                            isPasswordMatch={isPasswordMatch}
+                            passwordLengthError={passwordLengthError}
+                            showPassword={showPassword}
+                            handlePasswordChange={handlePasswordChange}
+                            handlePasswordBlur={handlePasswordBlur}
+                            togglePasswordVisibility={() => setShowPassword(!showPassword)}
+                            password={password}
+                            placeholder="Password"
+                            placeholderColor={passwordColor}
                     />
-                    
-                    <input
-                        className={`shadow-md placeholder-text text-[16px] pl-2 mt-7 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue
-                        ${!isPasswordMatch || passwordLengthError ? 'border-red-500' : 'border-club-header-blue'}
-                        ${!isPasswordMatch || passwordLengthError ? 'text-red-500' : ''}`}
-                        placeholder='Password'
-                        type="password"
-                        value={password}
-                        onChange={handlePasswordChange}
-                        onBlur={handlePasswordBlur}
+
+                    <PasswordInput
+                        isPasswordMatch={isPasswordMatch}
+                        passwordLengthError={passwordLengthError}
+                        showPassword={showConfirmPassword}
+                        handlePasswordChange={handleConfirmPasswordChange}
+                        handlePasswordBlur={handleConfirmPasswordBlur}
+                        togglePasswordVisibility={() => setShowConfirmPassword(!showConfirmPassword)}
+                        password={confirmPassword}
+                        placeholder="Confirm Password"
+                        placeholderColor={passwordColor}
                     />
-                    <input
-                        className={`shadow-md placeholder-text text-[16px] pl-2 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue
-                        ${!isPasswordMatch || passwordLengthError  ? 'border-red-500' : 'border-club-header-blue'}
-                        ${!isPasswordMatch || passwordLengthError ? 'text-red-500' : ''}`}
-                        placeholder='Confirm Password'
-                        type="password"
-                        value={confirmPassword}
-                        onChange={handleConfirmPasswordChange}
-                        onBlur={handleConfirmPasswordBlur}
-                    />
+
+
                     {passwordLengthError && (
                         <p className='text-[10px] text-sm font-interReg leading-none text-red-500 font-bold'>Password must be at least 8 characters.</p>
                     )}
-
-                    <select className='shadow-md placeholder-text text-[16px] pl-2 mt-7 font-interReg border-club-header-blue text-lf-dark-gray w-full h-12 rounded-lg border-2 appearance-none focus:outline-none ' value={role} onChange={(event) => setRole(event.target.value)}>
-                        <option className='font-interReg' value="" disabled selected>Choose role</option>
-                        <option className='font-interReg' value='1'>Coach</option>
-                        <option className='font-interReg' value="2">Player</option>
-                        <option className='font-interReg' value="3">Volunteer</option>
-                    </select>
-                <button className={`${(isDisabled) ? 'cursor-not-allowed' : 'cursor-pointer'} text-white w-full h-16 mt-10 bg-club-header-blue font-russoOne rounded-10px`}  type="submit">SIGN UP</button>
+                                    
+                    <div className="flex items-center justify-start w-full">
+                    <div className="relative w-full">
+                        <select
+                            className="text-black appearance-none mt-7 w-full h-12 px-4 mb-2 border-2 border-club-header-blue rounded-lg bg-white cursor-pointer pr-8"
+                            value={role}
+                            onChange={(event) => setRole(event.target.value)}
+                        >
+                            <option style={{ color: 'gray' }} className="font-interReg " value="" disabled selected>
+                                Choose role
+                            </option>
+                            <option className="font-interReg" value="1">
+                                Coach
+                            </option>
+                            <option className="font-interReg" value="2">
+                                Player
+                            </option>
+                            <option className="font-interReg" value="3">
+                                Volunteer
+                            </option>
+                        </select>
+                        <div className="absolute right-2 top-1/2  flex items-center pr-2 pointer-events-none">
+                            <FontAwesomeIcon icon={faChevronDown} className="text-club-header-blue" />
+                        </div>
+                    </div>
+                    {renderPlayerSpecificField()}
+                    </div>
+                    <button
+                         className={`text-white bg-club-header-blue  font-interBold text-xl w-[70vw] h-16 mt-16 rounded-10px ${
+                            allFieldsFilled && isPasswordMatch && !emailError? 'cursor-pointer' : 'opacity-50 cursor-not-allowed'
+                        }`}
+                        type="submit"
+                        disabled={!allFieldsFilled || !isPasswordMatch || emailError}>
+                        SAVE
+                    </button>
                 <p className='py-2 text-xs text-sn-main-blue font-interReg'>Already have an account? <Link className='font-interReg font-bold text-sn-main-blue underline hover:text-[gray]' to="/login">Log in</Link></p>
             </form>
             <ToastContainer />
