@@ -153,7 +153,7 @@ function RegisterPage() {
 
             const { error: errorUsers } = await supabase
                 .from('users')
-                .insert([{ email:email, full_name: fullName, phone_number: phoneNumber, role_id: role, user_id: user.id }]);
+                .insert([{ email:email, full_name: fullName, phone_number: phoneNumber, role_id: role, user_id: user.id , number: playerNumber}]);
 
             if (errorUsers) throw errorUsers;
 
