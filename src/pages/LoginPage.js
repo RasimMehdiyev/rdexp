@@ -90,7 +90,7 @@ const LoginPage = () => {
             <SynthleteLogo />
             <form className='text-center gap-2 items-center flex flex-col justify-center' onSubmit={handleLogin}>
                 <input
-                    className={`shadow-md placeholder-text pl-2 font-interReg w-full h-12 rounded-lg border-2 
+                    className={`shadow-md placeholder-text p-2 font-interReg w-full h-12 rounded-lg border-2 
                          ${emailError || credentialError ? 'border-red-500' : 'border-sn-main-orange'} ${
                             emailError || credentialError ? 'text-red-500' : ''
                         }`}
