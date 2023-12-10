@@ -65,7 +65,11 @@ const GameSettings = () => {
       </div>
 
         <div className="flex-shrink-0 text-center mb-10 flex flex-col items-center">
-          <button onClick={saveData} className="bg-sn-main-orange text-xl mt-16 text-white font-interBold p-2 rounded-10px w-[70vw] h-16 mb-3">
+          <button onClick={saveData} 
+          className={`bg-sn-main-orange text-xl mt-16 text-white font-interBold p-2 rounded-10px w-[70vw] h-16 mb-3 ${
+            roles.length === 0 ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
+          }`}
+          disabled={roles.length === 0}>
             SAVE
           </button>
 

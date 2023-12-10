@@ -31,7 +31,7 @@ const RoleInput = ({ value, onAdd }) => {
 
       <button
         onClick={handleAddClick}
-        className={`bg-club-header-blue p-2 pl-3 pr-3 rounded-10px ml-auto ${
+        className={`bg-club-header-blue p-2 pl-3 pr-3 rounded-10px ml-2 ${
           roleName === '' ? 'opacity-50 cursor-not-allowed' : ''
         }`}
         disabled={roleName === ''}

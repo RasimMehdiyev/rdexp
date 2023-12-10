@@ -140,8 +140,8 @@ const TeamCreatePage = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col justify-between bg-sn-bg-light-blue">
-      <div>
+    <div className="flex flex-col min-h-screen bg-sn-bg-light-blue">
+      <div className="flex-grow">
       <div className='text-center'>
           <h1 className="pt-20 text-5xl text-club-header-blue">
             CREATE 
@@ -184,10 +184,10 @@ const TeamCreatePage = () => {
       </div>
 
 
-      <div className="bg-sn-bg-light-blue flex flex-col justify-end align-items text-center pt-14 pl-[15%]">
+      <div className="flex-shrink-0 text-center mb-10 flex flex-col items-center">
           <button
             onClick={handleSubmit}
-            className={`bg-sn-main-orange text-white font-interBold text-xl p-2 rounded-10px w-[70vw] h-16 ${
+            className={`bg-sn-main-orange text-white mt-16 font-interBold text-xl p-2 rounded-10px w-[70vw] h-16 ${
               (teamName.length === 0 || players.length === 0) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
             }`}
             disabled={teamName.length === 0 || players.length === 0}>
