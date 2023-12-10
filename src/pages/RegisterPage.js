@@ -19,13 +19,22 @@ function RegisterPage() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [emailError, setEmailError] = useState('');
+    const [playerNumber, setPlayerNumber] = useState('');
 
     const navigate = useNavigate();
 
     const [allFieldsFilled, setAllFieldsFilled] = useState(false);
     useEffect(() => {
-        setAllFieldsFilled(!!fullName && !!email && !!phoneNumber && !!role && !!password && !!confirmPassword);
-    }, [fullName, email, phoneNumber, role, password, confirmPassword]);
+        setAllFieldsFilled(
+            !!fullName &&
+            !!email &&
+            !!phoneNumber &&
+            !!role &&
+            !!password &&
+            !!confirmPassword &&
+            (role !== '2' || (!!playerNumber && /^\d{1,2}$/.test(playerNumber)))
+        );
+    }, [fullName, email, phoneNumber, role, password, confirmPassword, playerNumber]);
 
     const [passwordEdited, setPasswordEdited] = useState(false);
     const [confirmPasswordEdited, setConfirmPasswordEdited] = useState(false);
@@ -103,7 +112,26 @@ function RegisterPage() {
         }
       };
 
-
+      const renderPlayerSpecificField = () => {
+        if (role === '2') { 
+            return (
+                <input
+                    className='shadow-md placeholder-text ml-2 mt-5 pl-2 font-interReg w-16 h-12 rounded-lg border-2 border-club-header-blue'
+                    placeholder='Nr'
+                    type="text"
+                    pattern="\d{1,2}"
+                    value={playerNumber}
+                    onChange={(event) => {
+                        const input = event.target.value;
+                        if (/^\d{0,2}$/.test(input)) {
+                            setPlayerNumber(input);
+                        }
+                    }}
+                />
+            );
+        }
+        return null;
+    };
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -212,33 +240,36 @@ function RegisterPage() {
                     {passwordLengthError && (
                         <p className='text-[10px] text-sm font-interReg leading-none text-red-500 font-bold'>Password must be at least 8 characters.</p>
                     )}
-                    
+                                    
+                    <div className="flex items-center justify-start w-full">
                     <div className="relative w-full">
                         <select
-                            className="text-black appearance-none mt-7 w-full h-12 px-4  border-2 border-club-header-blue rounded-lg bg-white cursor-pointer pr-8"
+                            className="text-black appearance-none mt-7 w-full h-12 px-4 mb-2 border-2 border-club-header-blue rounded-lg bg-white cursor-pointer pr-8"
                             value={role}
-                            onChange={(event) => setRole(event.target.value)}>
-                                <option style={{ color: 'gray' }} className="font-interReg " value="" disabled selected>
+                            onChange={(event) => setRole(event.target.value)}
+                        >
+                            <option style={{ color: 'gray' }} className="font-interReg " value="" disabled selected>
                                 Choose role
-                                </option>
-                                <option className="font-interReg" value="1">
+                            </option>
+                            <option className="font-interReg" value="1">
                                 Coach
-                                </option>
-                                <option className="font-interReg" value="2">
+                            </option>
+                            <option className="font-interReg" value="2">
                                 Player
-                                </option>
-                                <option className="font-interReg" value="3">
+                            </option>
+                            <option className="font-interReg" value="3">
                                 Volunteer
-                                </option>
+                            </option>
                         </select>
-                        <div className="absolute right-2 top-11 flex items-center pr-2 pointer-events-none">
-                            <FontAwesomeIcon icon={faChevronDown} className=" text-club-header-blue" />
+                        <div className="absolute right-2 top-1/2  flex items-center pr-2 pointer-events-none">
+                            <FontAwesomeIcon icon={faChevronDown} className="text-club-header-blue" />
                         </div>
                     </div>
-
+                    {renderPlayerSpecificField()}
+                    </div>
                     <button
-                         className={`text-white w-full h-16 mt-10 rounded-10px ${
-                            allFieldsFilled && isPasswordMatch && !emailError? 'bg-club-header-blue cursor-pointer' : 'bg-blue-button-disabled cursor-not-allowed'
+                         className={`text-white bg-club-header-blue  font-interBold text-xl w-[70vw] h-16 mt-16 rounded-10px ${
+                            allFieldsFilled && isPasswordMatch && !emailError? 'cursor-pointer' : 'opacity-50 cursor-not-allowed'
                         }`}
                         type="submit"
                         disabled={!allFieldsFilled || !isPasswordMatch || emailError}>
