@@ -89,6 +89,8 @@ export const AboutClubPage = () => {
     return emailPattern.test(inputEmail);
   };
 
+ 
+
   useEffect(() => {
     const fetchUserID = async () => {
       try {
