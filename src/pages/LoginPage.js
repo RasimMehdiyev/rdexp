@@ -114,8 +114,8 @@ const LoginPage = () => {
                 />
                 <button
                        
-                        className={`text-white mt-5 w-64 h-16 font-russoOne rounded-10px ${
-                            !allFieldsFilled || emailError ? 'bg-sn-lighter-orange cursor-not-allowed' : 'bg-sn-main-orange cursor-pointer'
+                        className={`text-white bg-sn-main-orange mt-5 w-64 h-16 font-russoOne rounded-10px ${
+                            !allFieldsFilled || emailError ? 'opacity-50 cursor-not-allowed' : ' cursor-pointer'
                         }`}
                         type="submit"
                         disabled={!allFieldsFilled || emailError}>
