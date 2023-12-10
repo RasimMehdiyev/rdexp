@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useCombobox } from 'downshift';
 
-const LocationInput = ({ handleLocationInputChange }) => {
+const LocationInput = ({ onLocationChange }) => {
   const [inputItems, setInputItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -19,6 +19,11 @@ const LocationInput = ({ handleLocationInputChange }) => {
       fetchAddresses(inputValue).then((addresses) => {
         setInputItems(addresses);
         setLoading(false);
+
+        // Call the onLocationChange prop with the selected location
+        if (onLocationChange && addresses.length > 0) {
+          onLocationChange(addresses[0]);
+        }
       });
     },
   });
@@ -41,21 +46,17 @@ const LocationInput = ({ handleLocationInputChange }) => {
 
   return (
     <div className='input-container'>
-      
-        <div className="realtive w-full">
-            <img className="input-icon pt-4" src={process.env.PUBLIC_URL + "/images/map-pin.svg"} />
-            <textarea
-            {...getInputProps()}
-            type="text"
-            placeholder='Location'
-            className="text-black p-3 border-2 pl-8 border-club-header-blue h-30 rounded-10px min-w-full m-auto"
-            onChange={(e) => {
-                // Handle location input change here
-                onChange(e.target.value);}}
-            maxLength={255}
-            rows={4}
-            />
-        </div>
+      <div className="relative w-full">
+        <img className="input-icon pt-4" src={process.env.PUBLIC_URL + "/images/map-pin.svg"} alt="map-pin" />
+        <textarea
+          {...getInputProps()}
+          type="text"
+          placeholder='Location'
+          className="text-black p-3 border-2 pl-8 border-club-header-blue h-30 rounded-10px min-w-full m-auto"
+          maxLength={255}
+          rows={4}
+        />
+      </div>
       <ul
         {...getMenuProps()}
         style={{

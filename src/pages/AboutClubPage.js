@@ -57,8 +57,8 @@ export const AboutClubPage = () => {
     setClubPhone(e.target.value);
   };
 
-  const handleLocationInputChange = (e) => {
-    setClubLocation(e.target.value);
+  const handleLocationInputChange = (value) => {
+    setClubLocation(value);
   };
 
   const handleBlur = () => {
@@ -239,7 +239,8 @@ export const AboutClubPage = () => {
           />
         </div>
 
-        <LocationInput onChange={handleLocationInputChange} />
+        <LocationInput onLocationChange={handleLocationInputChange} />
+
       </div>
       <div className='flex flex-col gap-2 justify-center align-center'>
         <p className='font-russoOne text-[20px] '>Description</p>
