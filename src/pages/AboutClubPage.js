@@ -20,7 +20,9 @@ export const AboutClubPage = () => {
   const [userID, setUserID] = useState('');
   const [userData, setUserData] = useState({});
   const [emailBorderColor, setEmailBorderColor] = useState('border-club-header-blue');
+  const [clubBorderColor, setClubBorderColor] = useState('border-club-header-blue'); 
   const [emailError, setEmailError] = useState('');
+  const [clubError, setClubError] = useState('');
   const navigate = useNavigate();
 
   const base64String = (file) => {
@@ -60,6 +62,36 @@ export const AboutClubPage = () => {
   const handleLocationInputChange = (value) => {
     setClubLocation(value);
   };
+
+  const clubExists = async (club_name) =>{
+    let { data, error } = await supabase
+      .rpc('does_club_exist', {
+        club_name: club_name
+      })
+    if (error) 
+    {
+        console.error(error)
+    }
+    else if (data) {
+        setClubBorderColor('border-red-500');
+        setClubError('Club already exists!');
+        toast.error('Club already exists!', {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          });
+    }
+    else{
+        setClubBorderColor('border-club-header-blue');
+        setClubError('');
+    }
+  }
+  
 
   const handleBlur = () => {
     if (clubEmail.trim() === '') {
@@ -187,10 +219,11 @@ export const AboutClubPage = () => {
       <div className="flex flex-col justify-center">
         <input
           onChange={handleClubNameInputChange}
-          className="text-black border-2 border-club-header-blue pl-2 w-[60vw] mx-auto rounded-10px h-12"
+          className={`border-2 ${clubBorderColor} ${clubError ? 'text-red-500' : 'text-black'} pl-2 w-[60vw] mx-auto rounded-10px h-12`}
           type="text"
           placeholder="Club name"
           maxLength={30}
+          onBlur={(e) => {clubExists(e.target.value)}}
         />
       </div>
       <div className='flex flex-row gap-[20px] align-center'>
