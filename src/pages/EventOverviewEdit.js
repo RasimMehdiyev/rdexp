@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import EditGameComponent from '../components/EditGameComponent';
-import NewPracticeTBComponent from '../components/NewPracticeTBComponent';
+import EditPracticeTBComponent from '../components/EditPracticeTBComponent';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../lib/helper/supabaseClient';
 import StickySubheaderEventCreateComponent from '../components/StickySubheaderEventCreateComponent';
@@ -21,7 +21,6 @@ const EventOverviewEdit = () => {
     const [selectedTeam, setSelectedTeam] = useState([]);
     const [inputCheck, setInputCheck] = useState(true);
 
-    const hasFetched = useRef(false);
 
     const handleOnDelete= async () => {
             if(generalInfo.eventid)
@@ -303,13 +302,13 @@ const EventOverviewEdit = () => {
     useEffect(() => {
       const fetchEventDetails = async () => {
           setLoading(true);
-          console.log('Starting to fetch details for event with hardcoded ID: 1');
+          
           
           try {
               
               const { data: event, error } = await supabase
                   .from('event')
-                  .select('id, title, datetime, location, team')
+                  .select('id, title, datetime, location, team, type')
                   .eq('id', eventId) 
                   .single();
     
@@ -325,7 +324,8 @@ const EventOverviewEdit = () => {
                       time: event.datetime.slice(11, 16),
                       location: event.location,
                       gameName: event.title,
-                      eventid: event.id
+                      eventid: event.id,
+                      type: event.type
                   };
                   setEventTitle(event.title);
                   // Fetch the team name
@@ -390,20 +390,32 @@ const EventOverviewEdit = () => {
                 />
             </div>
           
-                {/* Render EditGameComponent with updated styling */}
+            {generalInfo.type === 'game' ? (
                 <EditGameComponent
-                  eventTitle={eventTitle}
-                  generalInfo={generalInfo}
-                  selectedTeam={selectedTeam}
-                  onGeneralInfoChanges={setGeneralInfo}
-                  onSelectedPlayerChanges={setSelectedPlayers}
-                  onSelectedExtraChanges={setSelectedExtras}
-                  onTeamChanges={setSelectedTeam}
-                  className="bg-white border border-gray-300 rounded-lg p-4"
+                    eventTitle={eventTitle}
+                    generalInfo={generalInfo}
+                    selectedTeam={selectedTeam}
+                    onGeneralInfoChanges={setGeneralInfo}
+                    onSelectedPlayerChanges={setSelectedPlayers}
+                    onSelectedExtraChanges={setSelectedExtras}
+                    onTeamChanges={setSelectedTeam}
+                    className="bg-white border border-gray-300 rounded-lg p-4"
                 />
-              </div>
-            </div>
-          );
+            ) : (
+                <EditPracticeTBComponent
+                eventTitle={eventTitle}
+                generalInfo={generalInfo}
+                selectedTeam={selectedTeam}
+                onGeneralInfoChanges={setGeneralInfo}
+                onSelectedPlayerChanges={setSelectedPlayers}
+                onSelectedExtraChanges={setSelectedExtras}
+                onTeamChanges={setSelectedTeam}
+                className="bg-white border border-gray-300 rounded-lg p-4"
+                />
+            )}
+        </div>
+    </div>
+);
           
 }
 }

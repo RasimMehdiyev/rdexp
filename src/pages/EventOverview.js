@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import GameOverviewComponent from '../components/GameOverviewComponent';
-import NewPracticeTBComponent from '../components/NewPracticeTBComponent';
+import GameOverviewComponent from '../components/OverviewGameComponent';
+import OverviewPracticeTBComponent from '../components/OverviewPracticeTBComponent';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../lib/helper/supabaseClient';
 import StickySubheaderGameOverviewComponent from '../components/StickySubheaderGameOverviewComponent';
@@ -168,7 +168,7 @@ const EventOverview = () => {
 
 
 
-                {/* Render EditGameComponent */}
+            {generalInfo.type === 'game' ? (
                 <GameOverviewComponent
                     eventTitle={eventTitle}
                     generalInfo={generalInfo}
@@ -177,7 +177,20 @@ const EventOverview = () => {
                     onSelectedPlayerChanges={setSelectedPlayers}
                     onSelectedExtraChanges={setSelectedExtras}
                     onTeamChanges={setSelectedTeam}
+                    className="bg-white border border-gray-300 rounded-lg p-4"
                 />
+            ) : (
+                <OverviewPracticeTBComponent
+                eventTitle={eventTitle}
+                generalInfo={generalInfo}
+                selectedTeam={selectedTeam}
+                onGeneralInfoChanges={setGeneralInfo}
+                onSelectedPlayerChanges={setSelectedPlayers}
+                onSelectedExtraChanges={setSelectedExtras}
+                onTeamChanges={setSelectedTeam}
+                className="bg-white border border-gray-300 rounded-lg p-4"
+                />
+            )}
             </div>
         </div>
     );

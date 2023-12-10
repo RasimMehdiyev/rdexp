@@ -223,49 +223,54 @@ const NewGamePage = () => {
                 onChange={(e) => setEventTitle(e.target.value)}
                 type="text"
                 placeholder="Title"
-                className="h-10 px-2 rounded-md border-sn-light-orange border-[1.5px] font-russoOne"
+                className="text-3xl font-bold text-center text-blue bg-transparent border-0 rounded-lg py-2 px-4 w-full max-w-md font-russoOne"
             />
-            <div className="flex flex-row justify-between gap-4 pt-2">
-                <div className="flex flex-row justify-between gap-2">
-                    <input
-                        type="radio"
-                        id="Game"
-                        name="activity"
-                        value="game"
-                        checked={selectedOption === "game"}
-                        onChange={handleRadioChange}
-                    />
-                    <label className="text-[14px] font-russoOne text-sn-main-blue" htmlFor="game">
-                        Game
-                    </label>
-                </div>
-                <div className="flex flex-row justify-between gap-2">
-                    <input
-                        type="radio"
-                        id="Practice"
-                        name="activity"
-                        value="practice"
-                        checked={selectedOption === "practice"}
-                        onChange={handleRadioChange}
-                    />
-                    <label className="text-[14px] font-russoOne text-sn-main-blue" htmlFor="practice">
-                        Practice
-                    </label>
-                </div>
-                <div className="flex flex-row justify-between gap-2">
-                    <input
-                        type="radio"
-                        id="Team Building"
-                        name="activity"
-                        value="team building"
-                        checked={selectedOption === "team building"}
-                        onChange={handleRadioChange}
-                    />
-                    <label className="text-[14px] font-russoOne text-sn-main-blue" htmlFor="team building">
-                        Team Building
-                    </label>
-                </div>
-            </div>
+
+<div className="flex flex-row justify-between gap-4 pt-2 pb-4">
+    <div className="flex flex-row items-center gap-2">
+        <input
+            type="radio"
+            id="Game"
+            name="activity"
+            value="game"
+            checked={selectedOption === "game"}
+            onChange={handleRadioChange}
+            className="form-radio h-5 w-5 text-sn-main-blue"
+        />
+        <label className="text-lg font-russoOne text-sn-main-blue" htmlFor="game">
+            Game
+        </label>
+    </div>
+    <div className="flex flex-row items-center gap-2">
+        <input
+            type="radio"
+            id="Practice"
+            name="activity"
+            value="practice"
+            checked={selectedOption === "practice"}
+            onChange={handleRadioChange}
+            className="form-radio h-5 w-5 text-sn-main-blue"
+        />
+        <label className="text-lg font-russoOne text-sn-main-blue" htmlFor="practice">
+            Practice
+        </label>
+    </div>
+    <div className="flex flex-row items-center gap-2">
+        <input
+            type="radio"
+            id="Team Building"
+            name="activity"
+            value="team building"
+            checked={selectedOption === "team building"}
+            onChange={handleRadioChange}
+            className="form-radio h-5 w-5 text-sn-main-blue"
+        />
+        <label className="text-lg font-russoOne text-sn-main-blue" htmlFor="team building">
+            Team Building
+        </label>
+    </div>
+</div>
+
 
                
                 
