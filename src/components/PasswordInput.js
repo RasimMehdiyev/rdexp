@@ -23,9 +23,9 @@ const PasswordInput = ({
   return (
     <div className="relative w-full flex items-center">
       <input
-        className={`flex-1 shadow-md placeholder-text text-[16px] pl-2 font-interReg h-12 rounded-lg border-2
+        className={`flex-1 shadow-md placeholder-text text-[16px]  pl-2 font-interReg h-12 rounded-lg border-2
           ${borderClass}
-          ${!isPasswordMatch || passwordLengthError ? 'text-red-500' : `text-${placeholderColor}`}
+          ${!isPasswordMatch || passwordLengthError ? 'text-red-500' : `text-black`}
           placeholder-${placeholderColor}`}
         placeholder={placeholder}
         type={showPassword ? 'text' : 'password'}
