@@ -9,10 +9,10 @@ const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [emailError, setEmailError] = useState('');
-    const [emailBorderColor, setEmailBorderColor] = useState('border-sn-main-orange');
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const inputRef = useRef(null);
+    const [credentialError, setCredentialError] = useState('');
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -24,8 +24,7 @@ const LoginPage = () => {
                 navigate('/');
             }, 3000);
         } catch (error) {
-            setEmailBorderColor('border-red-500'); 
-            setPasswordColor('red-500');
+            setCredentialError(true);
             toast.error(error.error_description || error.message, { position: "top-center" });
         }
     };
@@ -64,10 +63,8 @@ const LoginPage = () => {
     const handleBlur = () => {
         if (email.trim() === '') {
             setEmailError('');
-            setEmailBorderColor('border-sn-main-orange'); // Reset email border color on blur
         } else if (!validateEmail(email)) {
             setEmailError('Please enter a valid email address');
-            setEmailBorderColor('border-red-500'); // Set email border color to red on error
             toast.error("Please enter a valid email address.", {
                 position: "top-center",
                 autoClose: 5000,
@@ -80,7 +77,6 @@ const LoginPage = () => {
             });
         } else {
             setEmailError('');
-            setEmailBorderColor('border-sn-main-orange'); 
         }
     };
 
@@ -95,9 +91,9 @@ const LoginPage = () => {
             <form className='text-center gap-2 items-center flex flex-col justify-center' onSubmit={handleLogin}>
                 <input
                     className={`shadow-md placeholder-text pl-2 font-interReg w-full h-12 rounded-lg border-2 
-                        ${emailBorderColor} ${
-                    emailError ? 'text-red-500' : ''
-                }`}
+                         ${emailError || credentialError ? 'border-red-500' : 'border-sn-main-orange'} ${
+                            emailError || credentialError ? 'text-red-500' : ''
+                        }`}
                     placeholder='Email'
                     type="email"
                     value={email}
@@ -114,7 +110,7 @@ const LoginPage = () => {
                     togglePasswordVisibility={() => setShowPassword(!showPassword)}
                     password={password}
                     placeholder="Password"
-                    placeholderColor={passwordColor}
+                    placeholderColor={credentialError ? 'red-500' : 'sn-main-orange'}
                 />
                 <button
                        

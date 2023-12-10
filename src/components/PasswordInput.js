@@ -15,6 +15,7 @@ const PasswordInput = ({
 }) => {
   const isPasswordEmpty = password.trim() === '';
 
+  
   const borderClass = !isPasswordMatch || passwordLengthError
     ? 'border-red-500'
     : `border-${placeholderColor}`;
@@ -24,7 +25,7 @@ const PasswordInput = ({
       <input
         className={`flex-1 shadow-md placeholder-text text-[16px] pl-2 font-interReg h-12 rounded-lg border-2
           ${borderClass}
-          ${!isPasswordMatch || passwordLengthError ? 'text-red-500' : ''}
+          ${!isPasswordMatch || passwordLengthError ? 'text-red-500' : `text-${placeholderColor}`}
           placeholder-${placeholderColor}`}
         placeholder={placeholder}
         type={showPassword ? 'text' : 'password'}
@@ -39,7 +40,10 @@ const PasswordInput = ({
           className="password-toggle-button absolute right-2 top-3"
           onClick={togglePasswordVisibility}
         >
-          <FontAwesomeIcon className={`text-${placeholderColor}`} icon={showPassword ? faEye : faEyeSlash} />
+          <FontAwesomeIcon
+            className={`${!isPasswordMatch || passwordLengthError ? 'text-red-500' : `text-${placeholderColor}`}`}
+            icon={showPassword ? faEye : faEyeSlash}
+          />
         </button>
       )}
     </div>

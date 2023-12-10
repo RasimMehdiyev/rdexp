@@ -39,6 +39,7 @@ function RegisterPage() {
     const [passwordEdited, setPasswordEdited] = useState(false);
     const [confirmPasswordEdited, setConfirmPasswordEdited] = useState(false);
     const [passwordLengthError, setPasswordLengthError] = useState(false);
+    const [passwordColor, setPasswordColor] = useState("club-header-blue");
 
     const checkPasswordMatch = () => {
         if (passwordEdited && confirmPasswordEdited && password !== confirmPassword) {
@@ -52,7 +53,9 @@ function RegisterPage() {
             progress: undefined,
             theme: "light",
         });
+
         }
+        
     };
 
     const handlePasswordChange = (event) => {
@@ -107,6 +110,7 @@ function RegisterPage() {
                 progress: undefined,
                 theme: "light",
                 });
+
         } else {
           setEmailError('');
         }
@@ -221,7 +225,7 @@ function RegisterPage() {
                             togglePasswordVisibility={() => setShowPassword(!showPassword)}
                             password={password}
                             placeholder="Password"
-                            placeholderColor="club-header-blue"
+                            placeholderColor={passwordColor}
                     />
 
                     <PasswordInput
@@ -233,7 +237,7 @@ function RegisterPage() {
                         togglePasswordVisibility={() => setShowConfirmPassword(!showConfirmPassword)}
                         password={confirmPassword}
                         placeholder="Confirm Password"
-                        placeholderColor="club-header-blue"
+                        placeholderColor={passwordColor}
                     />
 
 
