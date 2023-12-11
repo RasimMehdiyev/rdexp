@@ -52,7 +52,8 @@ const GameOverviewComponent = ({
             .filter(user => user.role_id === 2 && user.position_id === 6)
             .map(user => ({
                 full_name: user.full_name,
-                id: user.user_tableid
+                id: user.user_tableid,
+                is_attending: user.is_attending
             }));
             console.log("substitutes array:", substitutes);
 
@@ -63,7 +64,8 @@ const GameOverviewComponent = ({
                 full_name: user.full_name,
                 id: user.user_tableid,
                 position_name: user.extra_role_name || 'Player',
-                position_id: user.position_id
+                position_id: user.position_id,
+                is_attending: user.is_attending
             }));
 
             console.log("Players array:", players);
@@ -75,7 +77,8 @@ const GameOverviewComponent = ({
             full_name: user.full_name,
             id: user.user_tableid,
             extra_role_name: user.extra_role_name,
-            extraRole_id: user.extra_role_id
+            extraRole_id: user.extra_role_id,
+            is_attending: user.is_attending
         }));
 
         console.log("extras array:", extras);       
@@ -179,7 +182,12 @@ const GameOverviewComponent = ({
                                     {/* Placeholder for dropdown icon */}
                                 </div>
                             </div>
+                            <div>
+                                {selectedPlayers.find(player => player.position_id === position.id) ?
+                                    selectedPlayers.find(player => player.position_id === position.id).is_attending : ''}
+                            </div>
                         </div>
+                        
                     ))}
                 </div>
                 <div id='substitutes' className="flex flex-col mt-4">
@@ -202,6 +210,7 @@ const GameOverviewComponent = ({
                                             {preSubstitutePlayers[index].full_name || 'No Selection'}
                                         </option>
                                     </select>
+                                    <div>{preSubstitutePlayers[index].is_attending || ''}</div>
                                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                         {/* Placeholder for dropdown icon */}
                                     </div>
@@ -229,6 +238,10 @@ const GameOverviewComponent = ({
                                 </select>
                                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                     {/* Placeholder for dropdown icon */}
+                                </div>
+                                <div>
+                                    {selectedExtras.find(extra => extra.extraRole_id === extraRole.id) ?
+                                            selectedExtras.find(extra => extra.extraRole_id === extraRole.id).is_attending : ''}
                                 </div>
                             </div>
                         </div>
