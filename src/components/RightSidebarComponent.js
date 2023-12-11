@@ -19,6 +19,8 @@ const RightSideBarComponent = ({ toggleSidebar }) => {
     toggleSidebar(); // Close sidebar after logging out
   };
 
+  
+
   return (
     <div
       ref={sidebarRef}

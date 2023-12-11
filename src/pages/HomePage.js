@@ -13,9 +13,12 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [fetchedEvents, setFetchedEvents] = useState([]);
   const [fetchedTeams, setFetchedTeams] = useState([]);
-  const [currentMonth, setCurrentMonth] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('all');
   const [isCoach, setIsCoach] = useState(false);
+  const [currentMonth, setCurrentMonth] = useState('');
+
+  const [filter, setFilter] = useState('all'); 
+  const [team, setTeam] = useState(-1); 
+  const [openDropdown, setOpenDropdown] = useState(null);
   const navigate = useNavigate();
   
 
@@ -192,29 +195,23 @@ const HomePage = () => {
     };
   });
 
-  const [filter, setFilter] = useState('all'); // Default filter is 'all'
-  const [showFilterOptions, setShowFilterOptions] = useState(false);
+
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      const filterButton = document.getElementById('filter-button'); // Add an ID to your filter button
-  
-      if (filterButton && !filterButton.contains(event.target)) {
-        // Click outside the filter button, close filter options
-        setShowFilterOptions(false);
+      if (!event.target.closest('.filter-dropdown') && !event.target.closest('.team-dropdown')) {
+        setOpenDropdown(null);
       }
     };
   
-    // Add click event listener to the document body
     document.body.addEventListener('click', handleOutsideClick);
-  
-    // Clean up event listener on component unmount
+
     return () => {
       document.body.removeEventListener('click', handleOutsideClick);
     };
-  }, [setShowFilterOptions]);
+  }, []);
 
  // Organize events by month and then by day, considering the filter
-const organizedEvents = transformedEvents
+  const organizedEvents = transformedEvents
 .filter((event) => filter === 'all' || event.type === filter)
 .reduce((acc, event) => {
   // Check if the event has a valid dateTime property
@@ -235,17 +232,30 @@ const organizedEvents = transformedEvents
 }, {});
 
 
+
+
+
 const handleFilterChange = (newFilter) => {
   setFilter(newFilter);
-  setShowFilterOptions(false); // Hide the filter options after selecting an option
+  toggleFilterDropdown();
 };
 
-const [team, setTeam] = useState(-1); // Default team is 'all'
-const [showTeamOptions, setShowTeamOptions] = useState(false);
 
 const handleTeamChange = (newTeam) => {
   setTeam(newTeam);
-  setShowTeamOptions(false); // Hide the filter options after selecting an option
+  toggleTeamDropdown();
+};
+
+
+const toggleFilterDropdown = () => {
+  console.log("toggle filter dropdown", openDropdown);
+  setOpenDropdown(openDropdown === 'filter' ? null : 'filter');
+};
+
+const toggleTeamDropdown = () => {
+  console.log("toggle team dropdown before", openDropdown);
+  setOpenDropdown(openDropdown === 'team' ? null : 'team');
+  console.log("toggle team dropdown after", openDropdown);
 };
 
 
@@ -353,11 +363,11 @@ else {
         <div className="fixed top-[69px] right-[65px] z-20">
           <button
             id="filter-button"
-            className={`text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2  border-sn-light-orange  justify-center ${
+            className={`filter-dropdown text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2  border-sn-light-orange  justify-center ${
               filter === 'all' ? 'bg-white ' : 'bg-sn-light-orange'
             }`}
             style={{ width: '36px', height: '36px' }}
-            onClick={() => setShowFilterOptions(!showFilterOptions)}
+            onClick={toggleFilterDropdown}
           >
             {/* Conditionally render the filter icon based on the selected filter */}
             {filter === 'all' ? (
@@ -373,8 +383,8 @@ else {
             )}
           </button>
           {/* Filter Options */}
-          {showFilterOptions && (
-            <div className="absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
+          {openDropdown === 'filter' && (
+            <div className=" absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
               <p
                 className={`cursor-pointer ${filter === 'all' ? 'text-sn-light-orange font-bold' : ''}`}
                 onClick={() => handleFilterChange('all')}
@@ -405,10 +415,9 @@ else {
         {/* Team Button */}
         <div className="fixed top-[69px] right-[25px] z-20">
           <button
-            className="bg-sn-light-orange text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center justify-center"
+            className="team-dropdown bg-sn-light-orange text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center justify-center"
             style={{ width: '36px', height: '36px' }}
-            onClick={() => {
-              setShowTeamOptions(!showTeamOptions)}}
+            onClick={toggleTeamDropdown}
           >
             <img
               src={process.env.PUBLIC_URL + "/images/teams.svg"}
@@ -417,7 +426,7 @@ else {
             />
           </button>
           {/* Team Options */}
-          {showTeamOptions && (
+          {openDropdown === 'team' && (
             <div className="absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
               <p
                 className={`cursor-pointer ${team === -1 ? 'text-sn-light-orange font-bold' : ''}`}

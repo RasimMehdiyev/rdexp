@@ -89,7 +89,6 @@ const HeaderComponent = ({ toggleSidebar }) => {
     fetchData();
   }, []);
 
-
   if (loading) {
     return(  
     <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-20'> {/* Ensure z-index is high enough */}
@@ -120,10 +119,9 @@ const HeaderComponent = ({ toggleSidebar }) => {
           <Link className='flex flex-col justify-center items-center relative'>
             <button 
               onClick={() => {
-                console.log("Profile picture clicked.");
                 toggleSidebar();
               }}
-              className="rounded-full w-[50px] h-[50px] p-0 overflow-hidden">
+              className="profile-dropdown rounded-full w-[50px] h-[50px] p-0 overflow-hidden">
               {
                 userData.profile_picture ? (
                   <img className='object-cover overflow-hidden border-2 rounded-full border-white w-[50px] h-[50px]' src={userData.profile_picture} alt="profile" />

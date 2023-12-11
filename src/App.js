@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -31,9 +31,23 @@ const App = () => {
    const location = useLocation();
 
    const toggleSidebar = () => {
-      console.log("Toggling sidebar. Current state:", rightIsOpen);
       setRightIsOpen(!rightIsOpen);
     };
+
+    useEffect(() => {
+      const handleOutsideClick = (event) => {
+        if (!event.target.closest('.profile-dropdown')) {
+         setRightIsOpen(false);
+        }
+      };
+    
+      document.body.addEventListener('click', handleOutsideClick);
+    
+      return () => {
+        document.body.removeEventListener('click', handleOutsideClick);
+      };
+    }, []);
+  
 
      // Close sidebar on route change
 
