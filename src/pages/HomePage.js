@@ -96,12 +96,14 @@ const HomePage = () => {
         }
       } else {
         let { data, error } = await supabase
-          .rpc('get_event_attendees', {
-            user_uuid: uuid
+          .rpc('get_user_assigned_events', {
+            user_uuid: uuid,
           });
-        console.log("Events: ");
         if (error) console.error(error);
         else console.log("event data: ", data);
+        if (data.length === 0) {
+          data = []
+        }
         setFetchedEvents(data);
       }
     } catch (error) {
