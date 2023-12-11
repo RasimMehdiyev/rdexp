@@ -157,8 +157,8 @@ const HomePage = () => {
 
   const currentDate = new Date();
   const transformedEvents = fetchedEvents
-  .filter((event) => new Date(event.datetime) > currentDate)
-  .map(event => {
+    .filter((event) => event.datetime && new Date(event.datetime) > currentDate)
+    .map((event) => {
 
     // Extracting date and time from the dateTime string
     const eventDateTime = new Date(event.datetime);
@@ -179,8 +179,38 @@ const HomePage = () => {
     };
   });
 
-  // Organize events by month and then by day
-const organizedEvents = transformedEvents.reduce((acc, event) => {
+  const [filter, setFilter] = useState('all'); // Default filter is 'all'
+  const [showFilterOptions, setShowFilterOptions] = useState(false);
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      const filterButton = document.getElementById('filter-button'); // Add an ID to your filter button
+  
+      if (filterButton && !filterButton.contains(event.target)) {
+        // Click outside the filter button, close filter options
+        setShowFilterOptions(false);
+      }
+    };
+  
+    // Add click event listener to the document body
+    document.body.addEventListener('click', handleOutsideClick);
+  
+    // Clean up event listener on component unmount
+    return () => {
+      document.body.removeEventListener('click', handleOutsideClick);
+    };
+  }, [setShowFilterOptions]);
+  
+  
+  
+  const handleFilterChange = (newFilter) => {
+    setFilter(newFilter);
+    setShowFilterOptions(false); // Hide the filter options after selecting an option
+  };
+
+ // Organize events by month and then by day, considering the filter
+const organizedEvents = transformedEvents
+.filter((event) => filter === 'all' || event.type === filter)
+.reduce((acc, event) => {
   // Check if the event has a valid dateTime property
   const month = event.date.slice(0, 7); // Extracting yyyy-mm to represent a month
   const day = event.date.slice(8, 10); // Extracting dd to represent a day
@@ -198,31 +228,7 @@ const organizedEvents = transformedEvents.reduce((acc, event) => {
   return acc;
 }, {});
 
-const [filter, setFilter] = useState('all'); // Default filter is 'all'
-const [showFilterOptions, setShowFilterOptions] = useState(false);
-useEffect(() => {
-  const handleOutsideClick = (event) => {
-    const filterButton = document.getElementById('filter-button'); // Add an ID to your filter button
 
-    if (filterButton && !filterButton.contains(event.target)) {
-      // Click outside the filter button, close filter options
-      setShowFilterOptions(false);
-    }
-  };
-
-  // Add click event listener to the document body
-  document.body.addEventListener('click', handleOutsideClick);
-
-  // Clean up event listener on component unmount
-  return () => {
-    document.body.removeEventListener('click', handleOutsideClick);
-  };
-}, [setShowFilterOptions]);
-
-const handleFilterChange = (newFilter) => {
-  setFilter(newFilter);
-  setShowFilterOptions(false); // Hide the filter options after selecting an option
-};
   if (loading) {
     return <LoadingPage />;
   } else
@@ -263,6 +269,8 @@ const handleFilterChange = (newFilter) => {
 
     )
   }
+
+  
 
 else {
   return (
@@ -324,15 +332,24 @@ else {
         <div className="fixed top-[69px] right-[20px] z-20">
           <button
             id="filter-button"
-            className="bg-sn-light-orange text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center justify-center"
+            className={`text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2  border-sn-light-orange  justify-center ${
+              filter === 'all' ? 'bg-white ' : 'bg-sn-light-orange'
+            }`}
             style={{ width: '36px', height: '36px' }}
             onClick={() => setShowFilterOptions(!showFilterOptions)}
           >
-            <img
-              src={process.env.PUBLIC_URL + "/images/filter.svg"}
-              alt="Filter Icon"
-              style={{filter: 'brightness(0) invert(1)' }}
-            />
+            {/* Conditionally render the filter icon based on the selected filter */}
+            {filter === 'all' ? (
+              <img
+                src={process.env.PUBLIC_URL + "/images/filter_toggle.svg"}
+                alt="Filter Icon"
+              />
+            ) : (
+              <img
+                src={process.env.PUBLIC_URL + "/images/filter.svg"}
+                alt="Filter Icon"
+              />
+            )}
           </button>
           {/* Filter Options */}
           {showFilterOptions && (
@@ -361,7 +378,6 @@ else {
               >
                 Team building
               </p>
-
             </div>
           )}
         </div>
