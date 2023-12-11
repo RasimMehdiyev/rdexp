@@ -62,7 +62,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
         setLoading(false);
     }, [])
 
-    const handleChange = async (event) => { //happens when team is selected
+    const handleTeamChange = async (event) => { //happens when team is selected
         // Update the state with the selected option's id
         if (event.target.value != "No Selection") {
             setLoading(true);
@@ -113,7 +113,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
         let { data, error } = await supabase
         .rpc('get_team_users_by_role', {
             param_role_id: 2, 
-            param_team_id: parseInt(teamID, 8)
+            param_team_id: teamID
         })
         if (error) console.error(error)
         else console.log("team players: ", data)
@@ -124,7 +124,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
     const getPositionsOfTeam = async (teamID) => {
         let { data, error } = await supabase
             .rpc('get_positions_for_team', {
-                param_team_id: parseInt(teamID, 8)
+                param_team_id: teamID
         })
         if (error) console.error(error)
         else console.log("positions", data)
@@ -283,7 +283,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
 
         return (
             <form className="flex bg-sn-bg-light-blue flex-col justify-center gap-2">
-                <select onChange={handleChange} className="h-7 mt-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="teams" id="teams" placeholder="Choose team">
+                <select onChange={handleTeamChange} className="h-7 mt-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="teams" id="teams" placeholder="Choose team">
                     <option className="h-7 w-[210px] bg-white rounded-md">{ selectedID ? teamNames.find(team => team.id == selectedID).team_name : 'No Selection'}</option>
                     {
                         teamNames.map((team) => (
