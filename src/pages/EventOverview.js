@@ -19,7 +19,7 @@ const EventOverview = () => {
     const [selectedExtras, setSelectedExtras] = useState([]);
     const [selectedTeam, setSelectedTeam] = useState([]);
     const [inputCheck, setInputCheck] = useState(true);
-
+    const [userCheck, setUserCheck] = useState(true);
     const hasFetched = useRef(false);
 
     const handleOnChange = async () => {
@@ -39,9 +39,8 @@ const EventOverview = () => {
     }, [])
     
     useEffect(() => {
-      const fetchEventDetails = async () => {
-          setLoading(true);
-                    
+        const fetchEventDetails = async () => {
+          setLoading(true);                    
           try {
               const { data: event, error } = await supabase
                   .from('event')
@@ -82,21 +81,106 @@ const EventOverview = () => {
                    
                   // Now, set the generalInfo state with the newGeneralInfo object
                   setGeneralInfo(newGeneralInfo);
+                  checkUser(newGeneralInfo.teamId, newGeneralInfo.eventid);
               }
           } catch (error) {
               console.error('Caught an error while fetching event details:', error);
           } finally {
               setLoading(false);
           }
-      };
+        };
+
+        const isUserCoachOfTeam = async (teamId, userId) => {
+            try {
+            // Retrieve the team from the database based on teamId
+            const { data, error } = await supabase
+                .from('team')
+                .select('coach_id')
+                .eq('id', teamId)
+                .single();
+
+            if (error) {
+                console.error('Error fetching team:', error.message);
+                setUserCheck(false);
+            }
+
+            // Check if the coach of the team is equal to the provided userId
+            if (data && data.coach_id == userId) {
+                setUserCheck(true);
+            } else {
+                setUserCheck(false);
+            }
+            } catch (error) {
+            console.error('Error:', error.message);
+            setUserCheck(false);
+            }
+        };  
+
+        const isUserInEvent = async (eventId, userId) => {
+            try {
+                // Retrieve the event_user row from the database based on eventId and userId
+                const { data, error } = await supabase
+                .from('event_users')
+                .select('user_id')
+                .eq('event_id', eventId)
+                .eq('user_id', userId)
+                .single();
+
+                if (error) {
+                console.error('Error fetching event user:', error.message);
+                setUserCheck(false); // or throw an error
+                }
+
+                // Check if the user is associated with the event
+                if (data !== null) {
+                    setUserCheck(true);
+                } else {
+                    setUserCheck(false);
+                }
+            } catch (error) {
+                console.error('Error:', error.message);
+                setUserCheck(false);
+            }
+        };
+
+        const checkUser = async (teamId, eventId) => {          
+            try {
+                const userResponse = await supabase.auth.getUser();
+                const user = userResponse.data.user;
+                console.log("User:", user);
+                if (user) {
+                    // Initially, we don't know the user's role, so fetch from both tables.
+                    const { data: user_data, error: userError } = await supabase
+                        .from('users')
+                        .select('*')
+                        .eq('user_id', user.id)
+                        .single(); // Use single to get a single record or null   
+                    if (userError) throw userError;
+                    console.log("User data:", user_data);
+
+                    if (user_data.role_id == 1) { //if he is a coach
+                        isUserCoachOfTeam(teamId, user_data.id) 
+                    } else {
+                        isUserInEvent(eventId, user_data.id)
+                    }
+
+                }
+            } catch (error) {
+                console.error(error)
+                setUserCheck(false)
+            }
+        }
+
+        fetchEventDetails();
+    }, []);   
     
-      fetchEventDetails();
-    }, []);    
+    useEffect(() => {
+        console.log("user check has been set to", userCheck)
+    }, [userCheck])
 
     if (loading) {
         return (<LoadingPage></LoadingPage>)
-    } else {     
-
+    } else if (userCheck) {    
       return (
         <div>
             <StickySubheaderGameOverviewComponent onSave={handleOnChange} />
@@ -124,14 +208,8 @@ const EventOverview = () => {
             />
         </div>
             {generalInfo.type == 'game' ? (
-                <GameOverviewComponent
-                    eventTitle={eventTitle}
+                <GameOverviewComponent                    
                     generalInfo={generalInfo}
-                    selectedTeam={selectedTeam}
-                    onGeneralInfoChanges={setGeneralInfo}
-                    onSelectedPlayerChanges={setSelectedPlayers}
-                    onSelectedExtraChanges={setSelectedExtras}
-                    onTeamChanges={setSelectedTeam}
                     className="bg-white border border-gray-300 rounded-lg p-4"
                 />
             ) : (
@@ -148,8 +226,10 @@ const EventOverview = () => {
             )}
             </div>
         </div>
-    );
-}
+        );
+    } else {
+        return (<div>You do not have access to this page</div>)
+    }
 }
 
 export default EventOverview;
