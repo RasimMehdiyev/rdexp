@@ -20,6 +20,7 @@ const EventOverviewEdit = () => {
     const [selectedExtras, setSelectedExtras] = useState([]);
     const [selectedTeam, setSelectedTeam] = useState([]);
     const [inputCheck, setInputCheck] = useState(true);
+    const [userCheck, setUserCheck] = useState(true);
 
 
     const handleOnDelete= async () => {
@@ -264,14 +265,7 @@ const EventOverviewEdit = () => {
         if (!generalInfo.date | !generalInfo.location | !generalInfo.time | !eventTitle | !selectedTeam) {
             return false;
         } else return true;
-    }
-
-    
-  
-
-    const handleRadioChange = (event) => {
-        setSelectedOption(event.target.value);
-    };
+    }     
 
     useEffect(() => {
         console.log("new general info", generalInfo);
@@ -284,8 +278,6 @@ const EventOverviewEdit = () => {
     useEffect(() => {
         console.log("new selected players in parent", selectedPlayers);
     }, [selectedPlayers]);
-
-
 
     useEffect(() => {
         const isLoggedIn = async () => {
@@ -300,60 +292,112 @@ const EventOverviewEdit = () => {
     
 
     useEffect(() => {
-      const fetchEventDetails = async () => {
-          setLoading(true);
-          
-          
-          try {
-              
-              const { data: event, error } = await supabase
-                  .from('event')
-                  .select('id, title, datetime, location, team, type')
-                  .eq('id', eventId) 
-                  .single();
-    
-              if (error) {
-                  console.error('Error fetching event:', error);
-                  throw error;
-              }
-    
-              console.log('Fetched event data:', event);
-              if (event) {
-                  const newGeneralInfo = {
-                      date: event.datetime.slice(0, 10),
-                      time: event.datetime.slice(11, 16),
-                      location: event.location,
-                      gameName: event.title,
-                      eventid: event.id,
-                      type: event.type
-                  };
-                  setEventTitle(event.title);
-                  // Fetch the team name
-                  const { data: teamData, error: teamError } = await supabase
-                      .from('team')
-                      .select('team_name')
-                      .eq('id', event.team)
-                      .single();
-    
-                  if (teamError) {
-                      console.error('Error fetching team name:', teamError);
-                  } else {
-                      // Append the team name and ID to the newGeneralInfo object
-                      newGeneralInfo.teamName = teamData.team_name;
-                      newGeneralInfo.teamId = event.team;
-                  }
-                   
-                  // Now, set the generalInfo state with the newGeneralInfo object
-                  setGeneralInfo(newGeneralInfo);
-              }
-          } catch (error) {
-              console.error('Caught an error while fetching event details:', error);
-          } finally {
-              setLoading(false);
-          }
-      };
-    
-      fetchEventDetails();
+        const fetchEventDetails = async () => {
+            setLoading(true);                    
+            try {
+                const { data: event, error } = await supabase
+                    .from('event')
+                    .select('id, title, datetime, location, team, type')
+                    .eq('id', eventId) 
+                    .single();
+
+                if (error) {
+                    console.error('Error fetching event:', error);
+                    throw error;
+                }
+
+                console.log('Fetched event data:', event);
+                if (event) {
+                    const newGeneralInfo = {
+                        date: event.datetime.slice(0, 10),
+                        time: event.datetime.slice(11, 16),
+                        location: event.location,
+                        gameName: event.title,
+                        eventid: event.id,
+                        type: event.type
+                    };
+                    setEventTitle(event.title);
+                    // Fetch the team name
+                    const { data: teamData, error: teamError } = await supabase
+                        .from('team')
+                        .select('team_name')
+                        .eq('id', event.team)
+                        .single();
+
+                    if (teamError) {
+                        console.error('Error fetching team name:', teamError);
+                    } else {
+                        // Append the team name and ID to the newGeneralInfo object
+                        newGeneralInfo.teamName = teamData.team_name;
+                        newGeneralInfo.teamId = event.team;
+                    }
+                    
+                    // Now, set the generalInfo state with the newGeneralInfo object
+                    setGeneralInfo(newGeneralInfo);
+                    checkUser(newGeneralInfo.teamId, newGeneralInfo.eventid);
+                }
+            } catch (error) {
+                console.error('Caught an error while fetching event details:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        const isUserCoachOfTeam = async (teamId, userId) => {
+            try {
+            // Retrieve the team from the database based on teamId
+            const { data, error } = await supabase
+                .from('team')
+                .select('coach_id')
+                .eq('id', teamId)
+                .single();
+
+            if (error) {
+                console.error('Error fetching team:', error.message);
+                setUserCheck(false);
+            }
+
+            // Check if the coach of the team is equal to the provided userId
+            if (data && data.coach_id == userId) {
+                setUserCheck(true);
+            } else {
+                setUserCheck(false);
+            }
+            } catch (error) {
+            console.error('Error:', error.message);
+            setUserCheck(false);
+            }
+        };  
+
+        const checkUser = async (teamId, eventId) => {          
+            try {
+                const userResponse = await supabase.auth.getUser();
+                const user = userResponse.data.user;
+                console.log("User:", user);
+                if (user) {
+                    // Initially, we don't know the user's role, so fetch from both tables.
+                    const { data: user_data, error: userError } = await supabase
+                        .from('users')
+                        .select('*')
+                        .eq('user_id', user.id)
+                        .single(); // Use single to get a single record or null   
+                    if (userError) throw userError;
+                    console.log("User data:", user_data);
+
+                    if (user_data.role_id == 1) { //if he is a coach
+                        isUserCoachOfTeam(teamId, user_data.id) 
+                    } else {
+                        setUserCheck(false);
+                    }
+
+                }
+            } catch (error) {
+                console.error(error)
+                setUserCheck(false)
+            }
+        }
+
+        fetchEventDetails();
     }, []);
     
     
@@ -365,33 +409,41 @@ const EventOverviewEdit = () => {
 
     if (loading) {
         return (<LoadingPage></LoadingPage>)
-    } else {
-
-      
-
+    } else if (userCheck){    
         return (
             <div className="flex flex-col min-h-screen bg-sn-bg-light-blue font-interReg">
               <StickySubheaderEventCreateComponent onSave={handleOnChange} onDelete={handleOnDelete}/>
           
-              <div className="p-4">
+                <div className="p-4">
                 {inputCheck ? (
                   <div />
                 ) : (
                   <div className='text-sm text-red-500'>Please ensure that title event, date, time, team, and location are filled/selected</div>
                 )}
           
-          <div className="flex justify-center mb-4">
-                <input
-                    value={eventTitle} // Use the gameName from generalInfo
-                    onChange={(e) => setEventTitle(e.target.value)}
-                    type="text"
-                    placeholder="Title"
-                    className="text-3xl font-bold text-center text-blue bg-white border border-blue-500 rounded-lg py-2 px-4 w-full max-w-md font-russoOne" // Adjusted font, size, and width
-                />
-            </div>
+                <div className="flex justify-center mb-4">
+                        <input
+                            value={eventTitle} // Use the gameName from generalInfo
+                            onChange={(e) => setEventTitle(e.target.value)}
+                            type="text"
+                            placeholder="Title"
+                            className="text-3xl font-bold text-center text-blue bg-white border border-blue-500 rounded-lg py-2 px-4 w-full max-w-md font-russoOne" // Adjusted font, size, and width
+                        />
+                    </div>
           
-            {generalInfo.type === 'game' ? (
-                <EditGameComponent
+                {generalInfo.type === 'game' ? (
+                    <EditGameComponent
+                        eventTitle={eventTitle}
+                        generalInfo={generalInfo}
+                        selectedTeam={selectedTeam}
+                        onGeneralInfoChanges={setGeneralInfo}
+                        onSelectedPlayerChanges={setSelectedPlayers}
+                        onSelectedExtraChanges={setSelectedExtras}
+                        onTeamChanges={setSelectedTeam}
+                        className="bg-white border border-gray-300 rounded-lg p-4"
+                    />
+                ) : (
+                    <EditPracticeTBComponent
                     eventTitle={eventTitle}
                     generalInfo={generalInfo}
                     selectedTeam={selectedTeam}
@@ -400,24 +452,14 @@ const EventOverviewEdit = () => {
                     onSelectedExtraChanges={setSelectedExtras}
                     onTeamChanges={setSelectedTeam}
                     className="bg-white border border-gray-300 rounded-lg p-4"
-                />
-            ) : (
-                <EditPracticeTBComponent
-                eventTitle={eventTitle}
-                generalInfo={generalInfo}
-                selectedTeam={selectedTeam}
-                onGeneralInfoChanges={setGeneralInfo}
-                onSelectedPlayerChanges={setSelectedPlayers}
-                onSelectedExtraChanges={setSelectedExtras}
-                onTeamChanges={setSelectedTeam}
-                className="bg-white border border-gray-300 rounded-lg p-4"
-                />
-            )}
-        </div>
-    </div>
-);
-          
-}
+                    />
+                )}
+                </div>
+            </div>
+        );            
+    } else {
+        return (<div>You have no access</div>)
+    }
 }
 
 export default EventOverviewEdit;
