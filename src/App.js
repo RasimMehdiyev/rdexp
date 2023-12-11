@@ -82,7 +82,7 @@ const App = () => {
                <Route path="/auth" element={<AuthenticationPage />} />
                <Route path="/team-management" element={<TeamManagementPage />} />
                <Route path="/profile" element={<ProfilePage />} />
-               <Route path="/editProfile" element={<EditProfilePage />} />
+               <Route path="/profile/edit" element={<EditProfilePage />} />
                <Route path="/game/create" element={<NewGamePage />} />
 
                <Route path="/event-overview/:eventId" element={<EventOverview />} />
