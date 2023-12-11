@@ -281,142 +281,124 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
     if (loading) {
         return <LoadingPage />; // You can replace this with any loading spinner or indicator
     } else {
-
         return (
-            <form className="flex bg-sn-bg-light-blue flex-col justify-center gap-2">
-                
+            <form className="flex bg-sn-bg-light-blue flex-col justify-center gap-2">                
                 <div className="mb-2 flex items-center">
-    <MdGroup className="text-sn-main-orange mr-3" size={32} />
-    <select onChange={handleChange} className="h-7 mt-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="teams" id="teams" placeholder="Choose team">
-                    <option className="h-7 w-[210px] bg-white rounded-md">{ selectedID ? teamNames.find(team => team.id == selectedID).team_name : 'No Selection'}</option>
-                    {
-                        teamNames.map((team) => (
-                            <option key={team.id} value={team.id} className="h-7 w-[210px] bg-white rounded-md">
-                                {team.team_name}
-                            </option>
-                        ))
-                    }
-                </select>
-</div>
-
-
-    <div className="mb-2 flex items-center">
-        <MdDateRange className="text-sn-main-orange mr-3" size={32} />
-        <input value={date} onChange={(e) => setDate(e.target.value)} type="date" className="form-input border border-blue-500 rounded-lg text-black" style={{ width: '150px', height: '40px', fontSize: '1rem' }} />
-    </div>
-
-    <div className="mb-2 flex items-center">
-        <MdAccessTime className="text-sn-main-orange mr-3" size={32} />
-        <input value={time} onChange={(e) => setTime(e.target.value)} type="time" className="form-input border border-blue-500 rounded-lg text-black" style={{ width: '110px', height: '40px', fontSize: '1rem' }} />
-    </div>
-
-    <div className="mb-2 flex items-center">
-        <MdLocationOn className="text-sn-main-orange mr-3" size={32} />
-        <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location" type="text" className="form-input border max-w-xs border-blue-500 rounded-lg text-black w-full px-2 py-2 text-lg" />
-    </div>
-
-               
-    <div id='players' className="flex flex-col gap-1 mt-4">
-    <h5 className="text-2xl font-bold text-left text-sn-main-blue font-russoOne mb-2">Initial Line-up</h5>
-    {positions.map((position) => (
-        <div className="flex flex-row items-center mb-1" key={position.position_abbreviation}>
-            <div className="bg-position-blue text-white font-bold p-1 rounded text-center w-12 mr-3">
-                {position.position_abbreviation} {/* Assuming you want to display position name here */}
-            </div>
-            <div className="flex-grow">
-                <select
-                    id={`player_select_${position.id}`}
-                    onChange={(event) => handlePlayerChange(event, position)}
-                    className="form-select w-full px-2 py-2 bg-white rounded-lg border border-blue-500 text-black"
-                    disabled={!selectedID}
-                >
-                    <option value="">
-                        {selectedPlayers.find(player => player.position_id === position.id) ?
-                            selectedPlayers.find(player => player.position_id === position.id).full_name : 'No Selection'}
-                    </option>
-                    <option value={-1}>No Selection</option>
-                    {optionPlayers.map((player) => (
-                        <option key={player.id} value={player.id}>
-                            {player.full_name}
-                        </option>
-                    ))}
-                </select>
-            </div>
-        </div>
-    ))}
-</div>
-
-<div id='substitutes' className="flex flex-col mt-4">
-    <div className="flex items-center mb-2 gap-2">
-        <h5 className="text-2xl font-bold text-sn-main-blue font-russoOne">Substitutes</h5>
-        <span onClick={handleAddSubstitute} className="cursor-pointer">
-            <img src={process.env.PUBLIC_URL + "/images/small-plus.svg"} alt="" className="w-6 h-6"/>
-        </span>
-    </div>
-    
-    <div className="flex flex-col gap-2 justify-center items-start">
-        {preSubstitutePlayers.map((substitute, index) => (
-            <div key={index} className="flex gap-4 items-start w-full">
-                <div className="bg-position-blue text-white font-bold p-1 rounded text-center w-12 mr-3">
-                    SUB
+                    <MdGroup className="text-sn-main-orange mr-3" size={32} />
+                    <select onChange={handleTeamChange} className="h-7 mt-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="teams" id="teams" placeholder="Choose team">
+                        <option className="h-7 w-[210px] bg-white rounded-md">{ selectedID ? teamNames.find(team => team.id == selectedID).team_name : 'No Selection'}</option>
+                        {
+                            teamNames.map((team) => (
+                                <option key={team.id} value={team.id} className="h-7 w-[210px] bg-white rounded-md">
+                                    {team.team_name}
+                                </option>
+                            ))
+                        }
+                    </select>
                 </div>
-                <select
-                    className="form-select w-full px-2 py-2 bg-white rounded-lg border border-blue-500 text-black"
-                    name={`substituteSelect_${index}`}
-                    id={`substituteSelect_${index}`}
-                    value={substitute.id}
-                    onChange={(e) => handleSubstituteChange(index, e.target.value)}
-                >
-                    <option value="">
-                        {preSubstitutePlayers[index].full_name || 'No Selection'}
-                    </option>
-                    <option value={-1}>No Selection</option>
-                    {optionPlayers.map((player) => (
-                        <option key={player.id} value={player.id}>
-                            {player.full_name}
-                        </option>
+                <div className="mb-2 flex items-center">
+                    <MdDateRange className="text-sn-main-orange mr-3" size={32} />
+                    <input value={date} onChange={(e) => setDate(e.target.value)} type="date" className="form-input border border-blue-500 rounded-lg text-black" style={{ width: '150px', height: '40px', fontSize: '1rem' }} />
+                </div>
+                <div className="mb-2 flex items-center">
+                    <MdAccessTime className="text-sn-main-orange mr-3" size={32} />
+                    <input value={time} onChange={(e) => setTime(e.target.value)} type="time" className="form-input border border-blue-500 rounded-lg text-black" style={{ width: '110px', height: '40px', fontSize: '1rem' }} />
+                </div>
+                <div className="mb-2 flex items-center">
+                    <MdLocationOn className="text-sn-main-orange mr-3" size={32} />
+                    <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location" type="text" className="form-input border max-w-xs border-blue-500 rounded-lg text-black w-full px-2 py-2 text-lg" />
+                </div>               
+                <div id='players' className="flex flex-col gap-1 mt-4">
+                    <h5 className="text-2xl font-bold text-left text-sn-main-blue font-russoOne mb-2">Initial Line-up</h5>
+                    {positions.map((position) => (
+                        <div className="flex flex-row items-center mb-1" key={position.position_abbreviation}>
+                            <div className="bg-position-blue text-white font-bold p-1 rounded text-center w-12 mr-3">
+                                {position.position_abbreviation} {/* Assuming you want to display position name here */}
+                            </div>
+                            <div className="flex-grow">
+                                <select
+                                    id={`player_select_${position.id}`}
+                                    onChange={(event) => handlePlayerChange(event, position)}
+                                    className="form-select w-full px-2 py-2 bg-white rounded-lg border border-blue-500 text-black"
+                                    disabled={!selectedID}
+                                >
+                                    <option value="">
+                                        {selectedPlayers.find(player => player.position_id === position.id) ?
+                                            selectedPlayers.find(player => player.position_id === position.id).full_name : 'No Selection'}
+                                    </option>
+                                    <option value={-1}>No Selection</option>
+                                    {optionPlayers.map((player) => (
+                                        <option key={player.id} value={player.id}>
+                                            {player.full_name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
                     ))}
-                </select>
-                <XMarkIcon className="w-6 h-6 text-neutral-300 cursor-pointer"
-                    onClick={() => handleRemoveSubstitute(index)}></XMarkIcon>
-            </div>
-        ))}
-    </div>
-</div>
-
-
-
-
-<div id='extra-roles' className="flex flex-col gap-1 mt-4 bg-sn-bg-light-blue">
-    <h5 className="text-2xl font-bold text-left text-sn-main-blue font-russoOne mb-2">Extra Roles</h5>
-    {extraRoles.map((extraRole) => (
-        <div key={extraRole.id} className="flex items-center mb-1">
-            <span className="text-black mr-3" style={{ width: '128px', color: '#007bff', fontFamily: 'Russo One' }}>{extraRole.role_title}</span>
-            <select
-                className="form-select px-2 py-2 bg-white rounded-lg border border-blue-500 text-black flex-grow"
-                name="" 
-                id="" 
-                disabled={!selectedID}
-                onChange={(event) => handleExtraChange(event, extraRole)}
-            >
-                <option value="">
-                    {selectedExtras.find(extra => extra.extraRole_id === extraRole.id) ?
-                        selectedExtras.find(extra => extra.extraRole_id === extraRole.id).full_name : 'No Selection'}
-                </option>
-                <option value={-1}>No Selection</option>
-                {optionExtras.map((volunteer) => (
-                    <option key={volunteer.id} value={volunteer.id}>
-                        {volunteer.full_name}
-                    </option>
-                ))}
-            </select>
-        </div>
-    ))}
-</div>
-
-
-
-                {/* <button onClick={submitEvent}  className="h-[40px] w-[150px] m-auto mt-5 bg-sn-main-blue rounded-md text-white font-russoOne">Save</button> */}
+                </div>
+                <div id='substitutes' className="flex flex-col mt-4">
+                    <div className="flex items-center mb-2 gap-2">
+                        <h5 className="text-2xl font-bold text-sn-main-blue font-russoOne">Substitutes</h5>
+                        <span onClick={handleAddSubstitute} className="cursor-pointer">
+                            <img src={process.env.PUBLIC_URL + "/images/small-plus.svg"} alt="" className="w-6 h-6"/>
+                        </span>
+                    </div>                    
+                    <div className="flex flex-col gap-2 justify-center items-start">
+                        {preSubstitutePlayers.map((substitute, index) => (
+                            <div key={index} className="flex gap-4 items-start w-full">
+                                <div className="bg-position-blue text-white font-bold p-1 rounded text-center w-12 mr-3">
+                                    SUB
+                                </div>
+                                <select
+                                    className="form-select w-full px-2 py-2 bg-white rounded-lg border border-blue-500 text-black"
+                                    name={`substituteSelect_${index}`}
+                                    id={`substituteSelect_${index}`}
+                                    value={substitute.id}
+                                    onChange={(e) => handleSubstituteChange(index, e.target.value)}
+                                >
+                                    <option value="">
+                                        {preSubstitutePlayers[index].full_name || 'No Selection'}
+                                    </option>
+                                    <option value={-1}>No Selection</option>
+                                    {optionPlayers.map((player) => (
+                                        <option key={player.id} value={player.id}>
+                                            {player.full_name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <XMarkIcon className="w-6 h-6 text-neutral-300 cursor-pointer"
+                                    onClick={() => handleRemoveSubstitute(index)}></XMarkIcon>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div id='extra-roles' className="flex flex-col gap-1 mt-4 bg-sn-bg-light-blue">
+                    <h5 className="text-2xl font-bold text-left text-sn-main-blue font-russoOne mb-2">Extra Roles</h5>
+                    {extraRoles.map((extraRole) => (
+                        <div key={extraRole.id} className="flex items-center mb-1">
+                            <span className="text-black mr-3" style={{ width: '128px', color: '#007bff', fontFamily: 'Russo One' }}>{extraRole.role_title}</span>
+                            <select
+                                className="form-select px-2 py-2 bg-white rounded-lg border border-blue-500 text-black flex-grow"
+                                name="" 
+                                id="" 
+                                disabled={!selectedID}
+                                onChange={(event) => handleExtraChange(event, extraRole)}
+                            >
+                                <option value="">
+                                    {selectedExtras.find(extra => extra.extraRole_id === extraRole.id) ?
+                                        selectedExtras.find(extra => extra.extraRole_id === extraRole.id).full_name : 'No Selection'}
+                                </option>
+                                <option value={-1}>No Selection</option>
+                                {optionExtras.map((volunteer) => (
+                                    <option key={volunteer.id} value={volunteer.id}>
+                                        {volunteer.full_name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    ))}
+                </div>               
                 {selectedID && <p className="hidden">Selected ID: {selectedID}</p>}
             </form>
 

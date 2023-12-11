@@ -19,6 +19,7 @@ const NewGamePage = () => {
     const [selectedExtras, setSelectedExtras] = useState([]);
     const [selectedTeam, setSelectedTeam] = useState([]);
     const [inputCheck, setInputCheck] = useState(true);
+    const [userCheck, setUserCheck] = useState(true);
     const navigate = useNavigate();
 
     const handleOnChange = async () => {
@@ -199,81 +200,104 @@ const NewGamePage = () => {
                 navigate('/auth');
             }
         }
+
+        const checkUser = async () => {          
+            try {
+                const userResponse = await supabase.auth.getUser();
+                const user = userResponse.data.user;
+                console.log("User:", user);
+                if (user) {
+                    // Initially, we don't know the user's role, so fetch from both tables.
+                    const { data: user_data, error: userError } = await supabase
+                        .from('users')
+                        .select('*')
+                        .eq('user_id', user.id)
+                        .single(); // Use single to get a single record or null   
+                    if (userError) throw userError;
+                    console.log("User data:", user_data);
+
+                    if (user_data.role_id == 1) { //if he is a coach
+                        setUserCheck(true); 
+                    } else {
+                        setUserCheck(false);
+                    }
+
+                }
+            } catch (error) {
+                console.error(error)
+                setUserCheck(false)
+            }
+        }
         isLoggedIn();
+        checkUser();
+        
     }, [])
     
     if (loading) {
         return (<LoadingPage></LoadingPage>)
-    } else {
-
+    } else if (userCheck) {
         return (
             <div>
+                <StickySubheaderEventCreateComponent onSave={handleOnChange} />
+                <div className="pt-6 h-screen bg-sn-bg-light-blue flex flex-col px-5">
+                    <h1 className="font-russoOne text-sn-main-blue text-2xl">New {selectedOption ? selectedOption : "game"}</h1>
+                    {inputCheck ? (
+                        <div />
+                    ) : (
+                        <div className='text-sm text-red-500'>Please ensure that title event, date, time, team, and location are filled/selected</div>
+                    )}
 
-        <StickySubheaderEventCreateComponent onSave={handleOnChange} />
-        <div className="pt-6 h-screen bg-sn-bg-light-blue flex flex-col px-5">
-            <h1 className="font-russoOne text-sn-main-blue text-2xl">New {selectedOption ? selectedOption : "game"}</h1>
-            {inputCheck ? (
-                <div />
-            ) : (
-                <div className='text-sm text-red-500'>Please ensure that title event, date, time, team, and location are filled/selected</div>
-            )}
-
-            <input
-                value={eventTitle}
-                onChange={(e) => setEventTitle(e.target.value)}
-                type="text"
-                placeholder="Title"
-                className="text-3xl font-bold text-center text-blue bg-transparent border-0 rounded-lg py-2 px-4 w-full max-w-md font-russoOne"
-            />
-
-<div className="flex flex-row justify-between gap-4 pt-2 pb-4">
-    <div className="flex flex-row items-center gap-2">
-        <input
-            type="radio"
-            id="Game"
-            name="activity"
-            value="game"
-            checked={selectedOption === "game"}
-            onChange={handleRadioChange}
-            className="form-radio h-5 w-5 text-sn-main-blue"
-        />
-        <label className="text-lg font-russoOne text-sn-main-blue" htmlFor="game">
-            Game
-        </label>
-    </div>
-    <div className="flex flex-row items-center gap-2">
-        <input
-            type="radio"
-            id="Practice"
-            name="activity"
-            value="practice"
-            checked={selectedOption === "practice"}
-            onChange={handleRadioChange}
-            className="form-radio h-5 w-5 text-sn-main-blue"
-        />
-        <label className="text-lg font-russoOne text-sn-main-blue" htmlFor="practice">
-            Practice
-        </label>
-    </div>
-    <div className="flex flex-row items-center gap-2">
-        <input
-            type="radio"
-            id="Team Building"
-            name="activity"
-            value="team building"
-            checked={selectedOption === "team building"}
-            onChange={handleRadioChange}
-            className="form-radio h-5 w-5 text-sn-main-blue"
-        />
-        <label className="text-lg font-russoOne text-sn-main-blue" htmlFor="team building">
-            Team Building
-        </label>
-    </div>
-</div>
-
-
-               
-                
+                    <input
+                        value={eventTitle}
+                        onChange={(e) => setEventTitle(e.target.value)}
+                        type="text"
+                        placeholder="Title"
+                        className="text-3xl font-bold text-center text-blue bg-transparent border-0 rounded-lg py-2 px-4 w-full max-w-md font-russoOne"
+                    />
+                    <div className="flex flex-row justify-between gap-4 pt-2 pb-4">
+                        <div className="flex flex-row items-center gap-2">
+                            <input
+                                type="radio"
+                                id="Game"
+                                name="activity"
+                                value="game"
+                                checked={selectedOption === "game"}
+                                onChange={handleRadioChange}
+                                className="form-radio h-5 w-5 text-sn-main-blue"
+                            />
+                            <label className="text-lg font-russoOne text-sn-main-blue" htmlFor="game">
+                                Game
+                            </label>
+                        </div>
+                        <div className="flex flex-row items-center gap-2">
+                            <input
+                                type="radio"
+                                id="Practice"
+                                name="activity"
+                                value="practice"
+                                checked={selectedOption === "practice"}
+                                onChange={handleRadioChange}
+                                className="form-radio h-5 w-5 text-sn-main-blue"
+                            />
+                            <label className="text-lg font-russoOne text-sn-main-blue" htmlFor="practice">
+                                Practice
+                            </label>
+                        </div>
+                        <div className="flex flex-row items-center gap-2">
+                            <input
+                                type="radio"
+                                id="Team Building"
+                                name="activity"
+                                value="team building"
+                                checked={selectedOption === "team building"}
+                                onChange={handleRadioChange}
+                                className="form-radio h-5 w-5 text-sn-main-blue"
+                            />
+                            <label className="text-lg font-russoOne text-sn-main-blue" htmlFor="team building">
+                                Team Building
+                            </label>
+                        </div>
+                    </div>              
                     {(selectedOption === 'game' || selectedOption === '') &&
                         <NewGamePageComponent
                             eventTitle={eventTitle}
@@ -300,6 +324,8 @@ const NewGamePage = () => {
                 <ToastContainer/>
             </div>
         );
+    } else {
+        return (<div>You do not have access to this page</div>)
     }
 }
 
