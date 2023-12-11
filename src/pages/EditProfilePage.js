@@ -118,12 +118,7 @@ const EditProfilePage = () => {
             const userResponse = await supabase.auth.getUser();
             console.log("User line 122:", userResponse);
             const user = userResponse.data.user;
-            console.log("All new data")
-            console.log(newBio)
-            console.log(newEmail)
-            console.log(newPhoneNumber)
-            console.log(previewImage)
-            console.log(newNumber)
+
 
             if (user) {
                 // Update the user's profile
