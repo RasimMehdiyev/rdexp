@@ -4,86 +4,121 @@ import LoadingPage from "../pages/LoadingPage";
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
 
-const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlayerChanges, onSelectedExtraChanges, onTeamChanges }) => {
+const EditGameComponent = ({
+    eventTitle,
+    onGeneralInfoChanges,
+    onSelectedPlayerChanges,
+    onSelectedExtraChanges,
+    onTeamChanges,
+    generalInfo,
+    selectedTeam
+}) => {
     // const [title, setTitle] = useState(eventTitle);
     const [selectedOption, setSelectedOption] = useState("Game");
-    const [date, setDate] = useState('');
-    const [time, setTime] = useState('');
-    const [location, setLocation] = useState('');
+    const [date, setDate] = useState(generalInfo?.date || '');
+    const [time, setTime] = useState(generalInfo?.time || '');
+    const [location, setLocation] = useState(generalInfo?.location || '');
     const [teamNames, setTeamNames] = useState([]);
     const [teamPlayers, setTeamPlayers] = useState([]);
     const [selectedID, setSelectedID] = useState('');
+    //const [selectedID, setSelectedID] = useState(selectedTeam);
     const [volunteers, setVolunteers] = useState([]);
     const [extraRoles, setExtraRoles] = useState([]); // Use state for extraRoles    
     const [loading, setLoading] = useState(true);
     const [positions, setPositions] = useState([]);
-
+    
     const [selectedPlayers, setSelectedPlayers] = useState([]);
     const [optionPlayers, setOptionPlayers] = useState([]);
     const [selectedExtras, setSelectedExtras] = useState([])
     const [optionExtras, setOptionExtras] = useState([]);
     const [preSubstitutePlayers, setPreSubstitutePlayers] = useState([]);
+    const [userEvents, setUserEvents] = useState([]);
+
+
+    const teamName = generalInfo?.teamName || 'No team selected';
+    const teamId = generalInfo?.teamId || '';
+         
+
 
     useEffect(() => { // first thing that happens
-        const getTeams = async () => {
-            let user = await supabase.auth.getUser();
-            let userID = user.data.user.id;
-            const { data: user_data, error: userError } = await supabase
-                .from('users')
-                .select('*')
-                .eq('user_id', userID)
-                .single();
-    
-            if (userError) throw userError;
-
-            const { data: teams_list, error: teamsError } = await supabase
-                .from('team_users')
-                .select('*')
-                .eq('user_id', user_data.id)
-    
-            if (teamsError) throw teamsError;
-            let team_n = []
-            for (const team of teams_list) {
-                const { data: team_data, error: teamError } = await supabase
-                    .from('team')
-                    .select('*')
-                    .eq('id', team.team_id)
-                    .single();
-                // getExtraRoles(team.team_id);
-                if (teamError) throw teamError;
-                let team_info = {}
-                team_info['team_name'] = team_data.team_name;
-                team_info['id'] = team_data.id;
-                team_n.push(team_info);
-            }
-            setTeamNames(team_n);
-        }
-        getTeams();
+        handleChange(generalInfo.teamId);
         setLoading(false);
     }, [])
 
-    const handleTeamChange = async (event) => { //happens when team is selected
+
+    const handleChange = async (selectedTeam) => { //happens when team is selected
         // Update the state with the selected option's id
-        if (event.target.value != "No Selection") {
+        if (selectedTeam) {
             setLoading(true);
-            setSelectedID(event.target.value);
-            await getPlayerOfTeam(event.target.value);
-            await getExtraRoles(event.target.value);
-            await getPositionsOfTeam(event.target.value);
-            await getVolunteers(event.target.value);
+            setSelectedID(selectedTeam);
+            await getPlayerOfTeam(selectedTeam);
+            await getExtraRoles(selectedTeam);
+            await getPositionsOfTeam(selectedTeam);
+            await getVolunteers(selectedTeam);
+            await getSelectedUsers();
             console.log('extraRoles:', extraRoles);
             console.log('positions:', positions);
-            setPreSubstitutePlayers([]);
-            setSelectedExtras([]);
-            setSelectedPlayers([]);
             setLoading(false);
         } else {
             setSelectedID('');
             setTeamPlayers([]);
             setExtraRoles([]);
-            setSelectedTeamName('');
-        }        
+            
+        }   
+        
+        
     };
+
+    const getSelectedUsers = async () => { //getting extra roles depending on team
+        let { data, error } = await supabase
+        .rpc('get_event_users', {
+            param_event_id: generalInfo.eventid
+        })
+        if (error) console.error(error)
+        else console.log("user events rpc", data)
+      
+
+        const substitutes = data
+            .filter(user => user.role_id === 2 && user.position_id === 6)
+            .map(user => ({
+                full_name: user.full_name,
+                id: user.user_tableid
+            }));
+            console.log("substitutes array:", substitutes);
+
+
+        const players = data
+            .filter(user => user.role_id === 2 && user.position_id !== null && user.position_id !== 6)
+            .map(user => ({
+                full_name: user.full_name,
+                id: user.user_tableid,
+                position_name: user.extra_role_name || 'Player',
+                position_id: user.position_id
+            }));
+
+            console.log("Players array:", players);
+
+            // Filter and map the extra roles
+        const extras = data
+        .filter(user => user.role_id === 3)
+        .map(user => ({
+            full_name: user.full_name,
+            id: user.user_tableid,
+            extra_role_name: user.extra_role_name,
+            extraRole_id: user.extra_role_id
+        }));
+
+        console.log("extras array:", extras);
+
+        
+            
+
+
+        setPreSubstitutePlayers(substitutes);
+        setSelectedExtras(extras);
+        setSelectedPlayers(players);
+    };
+    
 
     const getExtraRoles = async (teamID) => { //getting extra roles depending on team
         console.log("team id", teamID);
@@ -115,8 +150,18 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
             param_role_id: 2, 
             param_team_id: teamID
         })
+        console.log(data.length)
+        if (data.length == 0) {
+            const { data: sup_players, error: playersError } = await supabase
+            .from('team_users')
+            .select('user_id, team_id')
+            .eq('team_id', teamID);
+            if (playersError) throw playersError;
+            console.log("sup players", sup_players);
+            data = sup_players;
+        }
         if (error) console.error(error)
-        else console.log("team players: ", data)
+        else console.log("team players in game edit: ", data)
         setTeamPlayers(data);
         setOptionPlayers(data);
     }
@@ -213,27 +258,11 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
         setOptionExtras(updatedOptionExtras);
     }, [selectedExtras]);
 
-    useEffect(() => {
-        onTeamChanges(selectedID);
-    }, [selectedID]);
-
-    useEffect(() => {
-        onGeneralInfoChanges({date:date, time:time, location:location});
-    }, [date, time, location]);
-
-    const submitEvent = () => {
-
-        console.log("Title:", eventTitle);
-        console.log("Type:", selectedOption);
-        console.log("Team:", selectedID);
-        console.log("Date:", date);
-        console.log("Time:", time);
-        console.log("Location:", location);
-        console.log("Team Names:", teamNames);
-        console.log("Team Players:", teamPlayers);
-        console.log("Selected ID:", selectedID);
-    }  
     
+
+  
+
+   
 
     const handleAddSubstitute = () => {
         setPreSubstitutePlayers(prev => [...prev, { full_name: "No Selection", id: -1 }]);
@@ -277,22 +306,64 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
         
     };
 
+    useEffect(() => {
+        // Log the props to confirm they're being received correctly
+        console.log('Props received in EditGameComponent:', { eventTitle, generalInfo, selectedTeam });
+      
+        setDate(generalInfo.date);
+        setTime(generalInfo.time);
+        setLocation(generalInfo.location);
+        
+}, [generalInfo, selectedTeam]);
+
+
+    //   useEffect(() => {
+    //     // Fetch the team name based on the selectedID
+    //     const fetchTeamName = async () => {
+    //       const { data, error } = await supabase
+    //         .from('team')
+    //         .select('team_name')
+    //         .eq('id', selectedID)
+    //         .single();
+      
+    //       if (error) {
+    //         console.error('Error fetching team name:', error);
+    //       } else {
+    //         setSelectedTeam({ ...selectedTeam, team_name: data.team_name });
+    //       }
+    //     };
+      
+    //     if (selectedID) {
+    //       fetchTeamName();
+    //     }
+    //   }, []);
+      
+    //   useEffect(() => {
+    //     console.log('Received selectedTeam in EditGameComponent:', selectedTeam);
+    //   }, [selectedTeam]);
+      useEffect(() => {
+        onGeneralInfoChanges(prevState => {
+            return { ...prevState, date:date, time:time, location:location };
+          });
+      }, [date, time, location]);
+    
+
     if (loading) {
         return <LoadingPage />; // You can replace this with any loading spinner or indicator
     } else {
 
         return (
             <form className="flex bg-sn-bg-light-blue flex-col justify-center gap-2">
-                <select onChange={handleTeamChange} className="h-7 mt-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="teams" id="teams" placeholder="Choose team">
-                    <option className="h-7 w-[210px] bg-white rounded-md">{ selectedID ? teamNames.find(team => team.id == selectedID).team_name : 'No Selection'}</option>
-                    {
-                        teamNames.map((team) => (
-                            <option key={team.id} value={team.id} className="h-7 w-[210px] bg-white rounded-md">
-                                {team.team_name}
-                            </option>
-                        ))
-                    }
-                </select>
+                <div className="team-info">
+                <label className="block text-sm font-medium text-gray-700">Team</label>
+                <input
+                    type="text"
+                    readOnly
+                    value={generalInfo?.teamName || 'No team selected'} // Use the teamName from generalInfo
+                    className="mt-1 block w-full pl-3 pr-3 sm:text-sm border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                />
+                </div>
+
 
                 <div className="flex-row flex justify-between ">
                     <span><input value={date} onChange={(e) => setDate(e.target.value)} type="date" className="h-7 px-2 rounded-md border-sn-light-orange border-[1.5px]" /></span>
@@ -399,4 +470,4 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
     }
 }
 
-export default NewGamePageComponent;
+export default EditGameComponent;

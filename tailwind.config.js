@@ -66,10 +66,11 @@ module.exports = {
             'sn-lighter-orange':'#FBD5C0',
             'sn-bg-light-blue': '#E1E8FF',
             'sn-subheader-blue':"#4665D0",
-            'teambuilding-green':"#43AC6D",
-            'eventcard-text':"#485687",
-            'game-blue':"#4A66C8",
-            'practice-orange':"#E8834C",
+            'teambuilding-green':"#A4E6BE",
+            'eventcard-text':"#020617",
+            'game-blue':"#CCDBFF",
+            'blue-button-disabled': "#C3CEF6",
+            'practice-orange':"#FFE1D1",
             'club-header-blue':'#2D68F8',
             'neutral':{
                 '900':"#333333",
@@ -132,6 +133,10 @@ module.exports = {
                 '50':"rgb(238, 242, 255);",
 
             },
+            'status-pending': '#ffc107', 
+                'status-accepted': '#28a745', 
+                'status-declined': '#dc3545', 
+                'position-blue': '#007bff', 
           },
 
         extend: {

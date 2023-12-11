@@ -218,7 +218,7 @@ input:focus {
 
 .text-small-logo {
     font-family: 'Russo One';
-    font-size: 32px;
+    font-size: 24px;
     font-weight: 900;
     color: #1C3FB7;
     transform: scale(1.2, 1.12);
@@ -248,18 +248,20 @@ input[type="file"] {
 .input-icon {
     position: absolute;
     left: 10px;
-    /* Adjust as needed */
     fill: #ccc;
-    /* Color of the SVG */
 }
 
 textarea:focus {
     outline: none;
 }
 
-.placeholder-text::placeholder {
+input::placeholder, textarea::placeholder {
     font-size: 16px;
 }
+
+input {
+    font-size: 16px !important;
+  }
 
 .Toastify__close-button {
     display: none !important;

@@ -1,69 +1,73 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from "../lib/helper/supabaseClient";
 import SynthleteSmallLogo from './SynthleteSmallLogo';
 
-const HeaderComponent = ({ setRightIsOpen , rightIsOpen }) => {
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+
+const HeaderComponent = ({ toggleSidebar }) => {
   const [userData, setUserData] = useState({});
-  const [teamData, setTeamData] = useState({}); // [team_id, team_name]
-  const [clubData, setClubData] = useState({}); // [club_id, club_name]
-  const [loading, setLoading] = useState(true); // Add a loading state
-  const [notificationCount, setNotificationCount] = useState(3); // Example test data
-  const [userRole, setUserRole] = useState(1); // Example test data 
+  const [teamData, setTeamData] = useState({}); 
+  const [clubData, setClubData] = useState({}); 
+  const [loading, setLoading] = useState(true); 
+  const profilePicRef = useRef(null);
 
   // navigate
   const navigate = useNavigate();
 
-    // get the club from team from user
-    const getClub = async (userID) => {
-      console.log("user id:", userID);
-      const { data: team, error: teamError } = await supabase
-      .from('team_users')
-      .select('team_id')
-      .eq('user_id', userID)
-      if (teamError) throw teamError;      
-      // console.log("team data:", team[0].team_id);     
+  const getClub = async (userID) => {
+    try {
+        const { data: team, error: teamError } = await supabase
+            .from('team_users')
+            .select('team_id')
+            .eq('user_id', userID);
 
-
-      console.log(team)
-      // console.log("team data:", team[0].team_id);     
-    if (team[0] !== undefined){
-
-          const { data: club, error: clubError } = await supabase
-          .from('club_teams')
-          .select('club_id')
-          .eq('team_id', team[0].team_id)
-          .single(); // Use single to get a single record or null
-          if (clubError) throw clubError;
-          // console.log("club data:", club);
-          
-      
-          const { data: clubData, error: clubNameError } = await supabase
-          .from('club')
-          .select('name, picture')
-          .eq('id', club.club_id)
-          .single(); // Use single to get a single record or null
-          if (clubNameError) throw clubNameError;
-          // console.log("club picture:", clubData);
-          setClubData(clubData);
-          setTeamData(team);}
+        if (teamError) throw teamError;
+        if (team.length === 0) {
+            console.error('No team found for user:', userID);
+            return; // Exit the function if no team is found
         }
+
+        const { data: club, error: clubError } = await supabase
+            .from('club_teams')
+            .select('club_id')
+            .eq('team_id', team[0].team_id)
+            .single(); // Use single to get a single record or null
+
+        if (clubError) throw clubError;
+
+        const { data: clubData, error: clubNameError } = await supabase
+            .from('club')
+            .select('id, name, picture')
+            .eq('id', club.club_id)
+            .single(); // Use single to get a single record or null
+
+        if (clubNameError) throw clubNameError;
+        setClubData(clubData);
+        setTeamData(team[0]); // Update to set the first element of team array
+    } catch (error) {
+        console.error("Error in getClub:", error);
+    }
+};
 
 
   // Fetch user data
   useEffect(() => {
     const fetchData = async () => {
+      // console.log("Fetching data");
       try {
-        setLoading(true); // Start loading
         const userResponse = await supabase.auth.getUser();
         const user = userResponse.data.user;
         if (user) {
+          // Initially, we don't know the user's role, so fetch from both tables.
           const { data: user_data, error: userError } = await supabase
             .from('users')
             .select('*')
             .eq('user_id', user.id)
             .single(); // Use single to get a single record or null   
           if (userError) throw userError;
+          // console.log("User data:", user_data);     
           setUserData(user_data);  
 
           
@@ -86,12 +90,6 @@ const HeaderComponent = ({ setRightIsOpen , rightIsOpen }) => {
   }, []);
 
 
-  const rightSideBarOpen = () => {
-    setRightIsOpen(!rightIsOpen);
-    console.log("rightIsOpen: ", rightIsOpen);
-  }
-
-
   if (loading) {
     return(  
     <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-20'> {/* Ensure z-index is high enough */}
@@ -105,7 +103,7 @@ const HeaderComponent = ({ setRightIsOpen , rightIsOpen }) => {
     <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-20'> {/* Ensure z-index is high enough */}
             {
               clubData.picture ? (
-                <Link to="/team-management/">
+                <Link to={`/team-profile/${clubData.id}/${teamData.team_id}`} className='flex flex-col items-center justify-center'>
                   <img className='cursor-pointer border-2 border-white object-cover overflow-hidden w-[45px] h-[45px] rounded-10px' src={clubData.picture} alt="team-profile" />
                 </Link>
                 ) : (
@@ -119,21 +117,26 @@ const HeaderComponent = ({ setRightIsOpen , rightIsOpen }) => {
             <SynthleteSmallLogo />
           </Link>
 
-          <Link className='flex flex-col justify-center items-center'>
-          <button onClick={rightSideBarOpen} className="rounded-full w-[50px] h-[50px] p-0 overflow-hidden">
-          {
-            userData.profile_picture ? (
-              <img className='object-cover overflow-hidden border-2 rounded-full  border-white w-[50px] h-[50px]' src={userData.profile_picture} alt="profile" />
-              ) : (
-              <img className='object-cover overflow-hidden border-2 rounded-full  border-white w-[50px] h-[50px]' src={process.env.PUBLIC_URL + "/images/no_user.png"} alt="profile" />
-              )
-          }
-          </button> 
-          {notificationCount > 0 && (
-            <div className="absolute bottom-2 right-3 w-5 h-5 bg-red-700 text-white text-xs rounded-full flex items-center justify-center" style={{ transform: 'translate(-25%, 25%)' }}>
-              {notificationCount}
-            </div>
-          )}        
+          <Link className='flex flex-col justify-center items-center relative'>
+            <button 
+              onClick={() => {
+                console.log("Profile picture clicked.");
+                toggleSidebar();
+              }}
+              className="rounded-full w-[50px] h-[50px] p-0 overflow-hidden">
+              {
+                userData.profile_picture ? (
+                  <img className='object-cover overflow-hidden border-2 rounded-full border-white w-[50px] h-[50px]' src={userData.profile_picture} alt="profile" />
+                ) : (
+                  <img className='object-cover overflow-hidden border-2 rounded-full border-white w-[50px] h-[50px]' src={process.env.PUBLIC_URL + "/images/no_user.png"} alt="profile" />
+                )
+              }
+            </button> 
+            
+            <div className="absolute bottom-0 right-0 w-4 h-4 bg-lf-light-gray text-white text-xs rounded-full flex items-center justify-center border-2 border-white" 
+                style={{ transform: 'translate(50%, 50%) translateX(-8px) translateY(-10px)' }}> {/* Adjusted transformation here */}
+              <FontAwesomeIcon icon={faChevronDown} className="h-2 w-2 text-white" />
+            </div>   
           </Link>
     </header>
   );
