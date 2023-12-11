@@ -20,6 +20,7 @@ const EventOverview = () => {
     const [selectedTeam, setSelectedTeam] = useState([]);
     const [inputCheck, setInputCheck] = useState(true);
     const [userCheck, setUserCheck] = useState(true);
+    const [role, setRole] = useState('');
     const hasFetched = useRef(false);
 
     const handleOnChange = async () => {
@@ -34,9 +35,20 @@ const EventOverview = () => {
             if (!user.data.user) {
                 navigate('/auth');
             }
+            else{
+                let { data: userTableIdAndRole, error: tableIdError } = await supabase
+                .from('users')
+                .select('role_id')
+                .eq("user_id", user.data.user.id)
+                .single();
+          
+                console.log("This is the user table id and role");
+                console.log(userTableIdAndRole);
+                setRole(userTableIdAndRole.role_id);
+            }
         }
         isLoggedIn();
-    }, [])
+    }, [role])
     
     useEffect(() => {
         const fetchEventDetails = async () => {
@@ -183,7 +195,11 @@ const EventOverview = () => {
     } else if (userCheck) {    
       return (
         <div>
-            <StickySubheaderGameOverviewComponent onSave={handleOnChange} />
+            {
+                role === 1 ? <StickySubheaderGameOverviewComponent onSave={handleOnChange} />
+                : <div></div>
+
+            }
             <div className="pt-6 h-screen bg-sn-bg-light-blue flex flex-col px-5">
                 
                 

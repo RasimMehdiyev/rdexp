@@ -42,20 +42,20 @@ const EditPracticeTBComponent = ({
 
 
     useEffect(() => { // first thing that happens
-        handleChange(generalInfo.teamId);
+        firstFetches(generalInfo.teamId);
         setLoading(false);
     }, [])
 
 
-    const handleChange = async (selectedTeam) => { //happens when team is selected
+    const firstFetches = async (teamId) => { //happens when team is selected
         // Update the state with the selected option's id
-        if (selectedTeam) {
+        if (teamId) {
             setLoading(true);
-            setSelectedID(selectedTeam);
-            await getPlayerOfTeam(selectedTeam);
-            await getExtraRoles(selectedTeam);
-            await getPositionsOfTeam(selectedTeam);
-            await getVolunteers(selectedTeam);
+            setSelectedID(teamId);
+            await getPlayerOfTeam(teamId);
+            await getExtraRoles(teamId);
+            await getPositionsOfTeam(teamId);
+            await getVolunteers(teamId);
             await getSelectedUsers();
             console.log('extraRoles:', extraRoles);
             console.log('positions:', positions);
@@ -149,8 +149,18 @@ const EditPracticeTBComponent = ({
         let { data, error } = await supabase
         .rpc('get_team_users_by_role', {
             param_role_id: 2, 
-            param_team_id: parseInt(teamID, 8)
+            param_team_id: teamID
         })
+        console.log(data.length)
+        if (data.length == 0) {
+            const { data: sup_players, error: playersError } = await supabase
+            .from('team_users')
+            .select('user_id, team_id')
+            .eq('team_id', teamID);
+            if (playersError) throw playersError;
+            console.log("sup players", sup_players);
+            data = sup_players;
+        }
         if (error) console.error(error)
         else console.log("team players: ", data)
         setTeamPlayers(data);
@@ -160,7 +170,7 @@ const EditPracticeTBComponent = ({
     const getPositionsOfTeam = async (teamID) => {
         let { data, error } = await supabase
             .rpc('get_positions_for_team', {
-                param_team_id: parseInt(teamID, 8)
+                param_team_id: teamID
         })
         if (error) console.error(error)
         else console.log("positions", data)
