@@ -6,68 +6,37 @@ import { MdDateRange, MdAccessTime, MdLocationOn, MdGroup } from 'react-icons/md
 
 
 const GameOverviewComponent = ({
-    eventTitle,
-    onGeneralInfoChanges,
-    onSelectedPlayerChanges,
-    onSelectedExtraChanges,
-    onTeamChanges,
-    generalInfo,
-    selectedTeam
+    generalInfo    
 }) => {
-    // const [title, setTitle] = useState(eventTitle);
-    const [selectedOption, setSelectedOption] = useState("Game");
     const [date, setDate] = useState(generalInfo?.date || '');
     const [time, setTime] = useState(generalInfo?.time || '');
     const [location, setLocation] = useState(generalInfo?.location || '');
-    const [teamNames, setTeamNames] = useState([]);
-    const [teamPlayers, setTeamPlayers] = useState([]);
-    const [selectedID, setSelectedID] = useState('');
-    //const [selectedID, setSelectedID] = useState(selectedTeam);
-    const [volunteers, setVolunteers] = useState([]);
     const [extraRoles, setExtraRoles] = useState([]); // Use state for extraRoles    
     const [loading, setLoading] = useState(true);
     const [positions, setPositions] = useState([]);
     
     const [selectedPlayers, setSelectedPlayers] = useState([]);
-    const [optionPlayers, setOptionPlayers] = useState([]);
     const [selectedExtras, setSelectedExtras] = useState([])
-    const [optionExtras, setOptionExtras] = useState([]);
     const [preSubstitutePlayers, setPreSubstitutePlayers] = useState([]);
-    const [userEvents, setUserEvents] = useState([]);
-
-
-    const teamName = generalInfo?.teamName || 'No team selected';
-    const teamId = generalInfo?.teamId || '';
-         
-
-
+        
     useEffect(() => { // first thing that happens
-        handleChange(generalInfo.teamId);
+        firstFetches(generalInfo.teamId);
         setLoading(false);
     }, [])
 
-
-    const handleChange = async (selectedTeam) => { //happens when team is selected
+    const firstFetches = async (teamId) => { //happens when team is selected
         // Update the state with the selected option's id
-        if (selectedTeam) {
-            setLoading(true);
-            setSelectedID(selectedTeam);
-            await getPlayerOfTeam(selectedTeam);
-            await getExtraRoles(selectedTeam);
-            await getPositionsOfTeam(selectedTeam);
-            await getVolunteers(selectedTeam);
+        if (teamId) {
+            setLoading(true);           
+            await getExtraRoles(teamId);
+            await getPositionsOfTeam(teamId);            
             await getSelectedUsers();
             console.log('extraRoles:', extraRoles);
             console.log('positions:', positions);
             setLoading(false);
         } else {
-            setSelectedID('');
-            setTeamPlayers([]);
-            setExtraRoles([]);
-            
-        }   
-        
-        
+            setExtraRoles([]);            
+        }         
     };
 
     const getSelectedUsers = async () => { //getting extra roles depending on team
@@ -109,236 +78,34 @@ const GameOverviewComponent = ({
             extraRole_id: user.extra_role_id
         }));
 
-        console.log("extras array:", extras);
-
-        
+        console.log("extras array:", extras);       
             
-
-
         setPreSubstitutePlayers(substitutes);
         setSelectedExtras(extras);
         setSelectedPlayers(players);
-    };
-    
+    };    
 
-    const getExtraRoles = async (teamID) => { //getting extra roles depending on team
-        console.log("team id", teamID);
+    const getExtraRoles = async (teamId) => { //getting extra roles depending on team
+        console.log("team id", teamId);
         const { data: sup_extraRoles, error: extraRolesError } = await supabase
             .from('team_extraroles')
             .select('role_title,id')
-            .eq('team_id', teamID);
+            .eq('team_id', teamId);
 
         if (extraRolesError) throw extraRolesError;
         setExtraRoles(sup_extraRoles); // Set state here
     };
 
-    const getVolunteers = async (teamID) => { //getting volunteer depending on team
-        let { data, error } = await supabase
-        .rpc('get_team_users_by_role', {
-            param_role_id: 3, 
-            param_team_id: teamID,
-        })
-        if (error) console.error(error)
-        else console.log("extras: ", data);
-        setVolunteers(data);
-        setOptionExtras(data);
-    }
-
-    const getPlayerOfTeam = async (teamID) => {
-        
-        let { data, error } = await supabase
-        .rpc('get_team_users_by_role', {
-            param_role_id: 2, 
-            param_team_id: parseInt(teamID, 8)
-        })
-        if (error) console.error(error)
-        else console.log("team players: ", data)
-        setTeamPlayers(data);
-        setOptionPlayers(data);
-    }
-
-    const getPositionsOfTeam = async (teamID) => {
+    const getPositionsOfTeam = async (teamId) => {
         let { data, error } = await supabase
             .rpc('get_positions_for_team', {
-                param_team_id: parseInt(teamID, 8)
+                param_team_id: teamId
         })
         if (error) console.error(error)
         else console.log("positions", data)
         setPositions(data);
-    }   
-
-    const handlePlayerChange = (event, position) => {
-        const playerId = event.target.value;
-
-        
-        if (playerId == -1) {
-        // Find the existing player for the current position
-            const existingPlayerIndex = selectedPlayers.findIndex((player) => player.position_id == position.id);
-            
-            if (existingPlayerIndex != -1) {
-                // Remove the existing player if "No Selection" is chosen
-                const updatedPlayers = [...selectedPlayers];
-                updatedPlayers.splice(existingPlayerIndex, 1);
-                
-                setSelectedPlayers(updatedPlayers);
-            }
-            // If "No Selection" is chosen and the position is empty, nothing happens
-        } else {            
-            const selectedPlayer = teamPlayers.find((player) => player.id == playerId);            
-            const playerWithPosition = { ...selectedPlayer, position_name: position.position_name, position_id:position.id };            
-            const existingPlayerIndex = selectedPlayers.findIndex((player) => player.position_id == position.id);
-            
-            if (existingPlayerIndex !== -1) {                
-                const updatedPlayers = [...selectedPlayers];
-                updatedPlayers[existingPlayerIndex] = playerWithPosition;                
-                setSelectedPlayers(updatedPlayers);
-            } else {
-                setSelectedPlayers((prevSelectedPlayers) => [...prevSelectedPlayers, playerWithPosition]);
-            }
-        }
-    };
-
-    const handleExtraChange = (event, extraRole) => {
-        const extraId = event.target.value;
-
-        
-        if (extraId == -1) {
-        // Find the existing player for the current position
-            const existingExtraIndex = selectedExtras.findIndex((extra) => extra.extraRole_id == extraRole.id);
-            
-            if (existingExtraIndex != -1) {
-                // Remove the existing player if "No Selection" is chosen
-                const updatedExtras = [...selectedExtras];
-                updatedExtras.splice(existingExtraIndex, 1);
-                
-                setSelectedExtras(updatedExtras);
-            }
-            // If "No Selection" is chosen and the position is empty, nothing happens
-        } else {            
-            const selectedExtra = volunteers.find((extra) => extra.id == extraId);            
-            const extraWithRole = { ...selectedExtra, extraRole_id: extraRole.id, extraRole: extraRole.role_title };            
-            const existingExtraIndex = selectedExtras.findIndex((extra) => extra.extraRole_id == extraRole.id);
-            
-            if (existingExtraIndex !== -1) {                
-                const updatedExtras = [...selectedExtras];
-                updatedExtras[existingExtraIndex] = extraWithRole;                
-                setSelectedExtras(updatedExtras);
-            } else {
-                setSelectedExtras((prevSelectedExtras) => [...prevSelectedExtras, extraWithRole]);
-            }
-        }
-    };
-
-    useEffect(() => {
-        // Update optionPlayers whenever selectedPlayers change
-        console.log("selected players: ", selectedPlayers);
-        onSelectedPlayerChanges(selectedPlayers);
-        const selectedPlayerNoPosition = selectedPlayers.map((player) => player.id)       
-        
-        const updatedOptionPlayers = teamPlayers.filter(player => !selectedPlayerNoPosition.includes(player.id));        
-        setOptionPlayers(updatedOptionPlayers);
-    }, [selectedPlayers]);
-
-    useEffect(() => {
-        // Update optionPlayers whenever selectedPlayers change
-        console.log("selected extras: ", selectedExtras);
-        onSelectedExtraChanges(selectedExtras);
-        const selectedExtraNoRole = selectedExtras.map((extra) => extra.id)      
-        
-        const updatedOptionExtras = volunteers.filter(extra => !selectedExtraNoRole.includes(extra.id));
-        setOptionExtras(updatedOptionExtras);
-    }, [selectedExtras]);
-
-    
-
-  
-
+    }  
    
-
-    const handleAddSubstitute = () => {
-        setPreSubstitutePlayers(prev => [...prev, { full_name: "No Selection", id: -1 }]);
-    };
-
-    
-    
-    const handleSubstituteChange = (index, playerId) => {
-        let selectedPlayer = { full_name: "No Selection", id: -1 };
-        if (playerId != -1) {
-            selectedPlayer = teamPlayers.find((player) => player.id == playerId);
-        }
-        const updatedSubstitute = [...preSubstitutePlayers];
-        updatedSubstitute[index] = { full_name: selectedPlayer.full_name, id: selectedPlayer.id };
-        
-        setPreSubstitutePlayers(updatedSubstitute);        
-        
-    };
-    
-    useEffect(() => {
-        // Update selectedPlayer whenever preSubstitutePlayer change
-        setSelectedPlayers((prevSelected) => {
-            // Remove players with position "substitute"
-            const updatedSelected = prevSelected.filter(
-            (player) => player.position !== "substitute"
-            );
-
-            // Add players from preSubstitutePlayer with id not equal to -1
-            preSubstitutePlayers.forEach((substitute) => {
-            if (substitute.id !== -1) {
-                updatedSelected.push({ ...substitute, position: "substitute", position_id: 6 });
-            }
-            });
-
-            return updatedSelected;
-        });
-    }, [preSubstitutePlayers]);
-
-    const handleRemoveSubstitute = (indexToRemove) => {        
-        setPreSubstitutePlayers((prev) => prev.filter((_, index) => index !== indexToRemove));
-        
-    };
-
-    useEffect(() => {
-        // Log the props to confirm they're being received correctly
-        console.log('Props received in EditGameComponent:', { eventTitle, generalInfo, selectedTeam });
-      
-        setDate(generalInfo.date);
-        setTime(generalInfo.time);
-        setLocation(generalInfo.location);
-        
-}, [generalInfo, selectedTeam]);
-
-
-    //   useEffect(() => {
-    //     // Fetch the team name based on the selectedID
-    //     const fetchTeamName = async () => {
-    //       const { data, error } = await supabase
-    //         .from('team')
-    //         .select('team_name')
-    //         .eq('id', selectedID)
-    //         .single();
-      
-    //       if (error) {
-    //         console.error('Error fetching team name:', error);
-    //       } else {
-    //         setSelectedTeam({ ...selectedTeam, team_name: data.team_name });
-    //       }
-    //     };
-      
-    //     if (selectedID) {
-    //       fetchTeamName();
-    //     }
-    //   }, []);
-      
-    //   useEffect(() => {
-    //     console.log('Received selectedTeam in EditGameComponent:', selectedTeam);
-    //   }, [selectedTeam]);
-      useEffect(() => {
-        onGeneralInfoChanges(prevState => {
-            return { ...prevState, date:date, time:time, location:location };
-          });
-      }, [date, time, location]);
-    
-
     if (loading) {
         return <LoadingPage />; // You can replace this with any loading spinner or indicator
     } else {
@@ -346,146 +113,128 @@ const GameOverviewComponent = ({
         return (
             <form className="flex bg-sn-bg-light-blue flex-col justify-center gap-2">
                 <div className="mb-2 flex items-center">
-    <MdGroup className="text-sn-main-orange mr-3" size={32} />
-    <input
-        type="text"
-        readOnly
-        value={generalInfo?.teamName || 'No team selected'}
-        style={{ height: '40px' }}
-        className="form-input block w-full max-w-xs pl-3 pr-3 text-lg border border-blue-500 rounded-lg text-gray-500 bg-white"
-        disabled={true}
-    />
-</div>
+                    <MdGroup className="text-sn-main-orange mr-3" size={32} />
+                    <input
+                        type="text"
+                        readOnly
+                        value={generalInfo?.teamName || 'No team selected'}
+                        style={{ height: '40px' }}
+                        className="form-input block w-full max-w-xs pl-3 pr-3 text-lg border border-blue-500 rounded-lg text-gray-500 bg-white"
+                        disabled={true}
+                    />
+                </div>
 
-<div className="mb-2 flex items-center">
-    <MdDateRange className="text-sn-main-orange mr-3" size={32} />
-    <input 
-        value={date}
-        type="date"
-        className="form-input border border-blue-500 rounded-lg text-gray-500 bg-white"
-        style={{ width: '130px', height: '40px', fontSize: '1rem' }}
-        disabled={true}
-    />
-</div>
+                <div className="mb-2 flex items-center">
+                    <MdDateRange className="text-sn-main-orange mr-3" size={32} />
+                    <input 
+                        value={date}
+                        type="date"
+                        className="form-input border border-blue-500 rounded-lg text-gray-500 bg-white"
+                        style={{ width: '130px', height: '40px', fontSize: '1rem' }}
+                        disabled={true}
+                    />
+                </div>
 
-<div className="mb-2 flex items-center">
-    <MdAccessTime className="text-sn-main-orange mr-3" size={32} />
-    <input 
-        value={time}
-        type="time"
-        className="form-input border border-blue-500 rounded-lg text-gray-500 bg-white"
-        style={{ width: '110px', height: '40px', fontSize: '1rem' }}
-        disabled={true}
-    />
-</div>
+                <div className="mb-2 flex items-center">
+                    <MdAccessTime className="text-sn-main-orange mr-3" size={32} />
+                    <input 
+                        value={time}
+                        type="time"
+                        className="form-input border border-blue-500 rounded-lg text-gray-500 bg-white"
+                        style={{ width: '110px', height: '40px', fontSize: '1rem' }}
+                        disabled={true}
+                    />
+                </div>
 
-<div className="mb-2 flex items-center">
-    <MdLocationOn className="text-sn-main-orange mr-3" size={32} />
-    <input 
-        value={location}
-        type="text"
-        placeholder="Location"
-        className="form-input border max-w-xs border-blue-500 rounded-lg text-gray-500 bg-white w-full pl-3 pr-3"
-        style={{ height: '40px', fontSize: '1rem' }}
-        disabled={true}
-    />
-</div>
-
-
+                <div className="mb-2 flex items-center">
+                    <MdLocationOn className="text-sn-main-orange mr-3" size={32} />
+                    <input 
+                        value={location}
+                        type="text"
+                        placeholder="Location"
+                        className="form-input border max-w-xs border-blue-500 rounded-lg text-gray-500 bg-white w-full pl-3 pr-3"
+                        style={{ height: '40px', fontSize: '1rem' }}
+                        disabled={true}
+                    />
+                </div>                              
+                    <div id='players' className="flex flex-col gap-1 mt-4">
+                    <h5 className="text-2xl font-bold text-left text-sn-main-blue font-russoOne mb-2">Initial Line-up</h5>
+                    {positions.map((position) => (
+                        <div className="flex flex-row items-center mb-1" key={position.position_abbreviation}>
+                            <div className="bg-position-blue text-white font-bold p-1 rounded text-center w-12 mr-3">
+                                {position.position_abbreviation}
+                            </div>
+                            <div className="flex-grow relative">
+                                <select
+                                    id={`player_select_${position.id}`}
+                                    className="form-select w-full px-2 py-2 bg-white rounded-lg border border-blue-500 text-gray-500 appearance-none"
+                                    disabled={true}
+                                >
+                                    <option value="">
+                                        {selectedPlayers.find(player => player.position_id === position.id) ?
+                                            selectedPlayers.find(player => player.position_id === position.id).full_name : 'No Selection'}
+                                    </option>
+                                </select>
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    {/* Placeholder for dropdown icon */}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <div id='substitutes' className="flex flex-col mt-4">
+                    <h5 className="text-2xl font-bold text-sn-main-blue font-russoOne mb-2">Substitutes</h5>
+                    <div className="flex flex-col gap-2 justify-center items-start">
+                        {preSubstitutePlayers.map((substitute, index) => (
+                            <div key={index} className="flex gap-4 items-start w-full">
+                                <div className="bg-position-blue text-white font-bold p-1 rounded text-center w-12 mr-3">
+                                    SUB
+                                </div>
+                                <div className="flex-grow relative">
+                                    <select
+                                        className="form-select w-full px-2 py-2 bg-white rounded-lg border border-blue-500 text-gray-500 appearance-none"
+                                        name={`substituteSelect_${index}`}
+                                        disabled={true}
+                                        id={`substituteSelect_${index}`}
+                                        value={substitute.id}
+                                    >
+                                        <option value="">
+                                            {preSubstitutePlayers[index].full_name || 'No Selection'}
+                                        </option>
+                                    </select>
+                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                        {/* Placeholder for dropdown icon */}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div id='extra-roles' className="flex flex-col gap-1 mt-4 bg-sn-bg-light-blue">
+                    <h5 className="text-2xl font-bold text-left text-sn-main-blue font-russoOne mb-2">Extra Roles</h5>
+                    {extraRoles.map((extraRole) => (
+                        <div key={extraRole.id} className="flex items-center mb-1">
+                            <span className="text-black mr-3" style={{ width: '128px', color: '#007bff', fontFamily: 'Russo One' }}>{extraRole.role_title}</span>
+                            <div className="flex-grow relative">
+                                <select
+                                    className="form-select w-full px-2 py-2 bg-white rounded-lg border border-blue-500 text-gray-500 appearance-none"
+                                    name="" 
+                                    id="" 
+                                    disabled={true}
+                                >
+                                    <option value="">
+                                        {selectedExtras.find(extra => extra.extraRole_id === extraRole.id) ?
+                                            selectedExtras.find(extra => extra.extraRole_id === extraRole.id).full_name : 'No Selection'}
+                                    </option>
+                                </select>
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    {/* Placeholder for dropdown icon */}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
                 
-                
-<div id='players' className="flex flex-col gap-1 mt-4">
-    <h5 className="text-2xl font-bold text-left text-sn-main-blue font-russoOne mb-2">Initial Line-up</h5>
-    {positions.map((position) => (
-        <div className="flex flex-row items-center mb-1" key={position.position_abbreviation}>
-            <div className="bg-position-blue text-white font-bold p-1 rounded text-center w-12 mr-3">
-                {position.position_abbreviation}
-            </div>
-            <div className="flex-grow relative">
-                <select
-                    id={`player_select_${position.id}`}
-                    className="form-select w-full px-2 py-2 bg-white rounded-lg border border-blue-500 text-gray-500 appearance-none"
-                    disabled={true}
-                >
-                    <option value="">
-                        {selectedPlayers.find(player => player.position_id === position.id) ?
-                            selectedPlayers.find(player => player.position_id === position.id).full_name : 'No Selection'}
-                    </option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    {/* Placeholder for dropdown icon */}
-                </div>
-            </div>
-        </div>
-    ))}
-</div>
-
-
-
-<div id='substitutes' className="flex flex-col mt-4">
-    <h5 className="text-2xl font-bold text-sn-main-blue font-russoOne mb-2">Substitutes</h5>
-
-    <div className="flex flex-col gap-2 justify-center items-start">
-    {preSubstitutePlayers.map((substitute, index) => (
-        <div key={index} className="flex gap-4 items-start w-full">
-            <div className="bg-position-blue text-white font-bold p-1 rounded text-center w-12 mr-3">
-                SUB
-            </div>
-            <div className="flex-grow relative">
-                <select
-                    className="form-select w-full px-2 py-2 bg-white rounded-lg border border-blue-500 text-gray-500 appearance-none"
-                    name={`substituteSelect_${index}`}
-                    disabled={true}
-                    id={`substituteSelect_${index}`}
-                    value={substitute.id}
-                >
-                    <option value="">
-                        {preSubstitutePlayers[index].full_name || 'No Selection'}
-                    </option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    {/* Placeholder for dropdown icon */}
-                </div>
-            </div>
-        </div>
-    ))}
-</div>
-
-</div>
-
-
-
-
-<div id='extra-roles' className="flex flex-col gap-1 mt-4 bg-sn-bg-light-blue">
-    <h5 className="text-2xl font-bold text-left text-sn-main-blue font-russoOne mb-2">Extra Roles</h5>
-    {extraRoles.map((extraRole) => (
-        <div key={extraRole.id} className="flex items-center mb-1">
-            <span className="text-black mr-3" style={{ width: '128px', color: '#007bff', fontFamily: 'Russo One' }}>{extraRole.role_title}</span>
-            <div className="flex-grow relative">
-                <select
-                    className="form-select w-full px-2 py-2 bg-white rounded-lg border border-blue-500 text-gray-500 appearance-none"
-                    name="" 
-                    id="" 
-                    disabled={true}
-                >
-                    <option value="">
-                        {selectedExtras.find(extra => extra.extraRole_id === extraRole.id) ?
-                            selectedExtras.find(extra => extra.extraRole_id === extraRole.id).full_name : 'No Selection'}
-                    </option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    {/* Placeholder for dropdown icon */}
-                </div>
-            </div>
-        </div>
-    ))}
-</div>
-
-
-
-
-                {/* <button onClick={submitEvent}  className="h-[40px] w-[150px] m-auto mt-5 bg-sn-main-blue rounded-md text-white font-russoOne">Save</button> */}
-                {selectedID && <p className="hidden">Selected ID: {selectedID}</p>}
             </form>
 
         );

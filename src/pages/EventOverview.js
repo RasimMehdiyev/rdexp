@@ -23,40 +23,9 @@ const EventOverview = () => {
     const hasFetched = useRef(false);
 
     const handleOnChange = async () => {
-                const eventId = generalInfo.eventid;
-                navigate(`/event-overview/edit/${eventId}`);
-            }
-            
-            
-        
-    
-
-    const checkInput = () => {
-        if (!generalInfo.date | !generalInfo.location | !generalInfo.time | !eventTitle | !selectedTeam) {
-            return false;
-        } else return true;
-    }
-
-    
-  
-
-    const handleRadioChange = (event) => {
-        setSelectedOption(event.target.value);
-    };
-
-    useEffect(() => {
-        console.log("new general info", generalInfo);
-    }, [generalInfo]);
-
-    useEffect(() => {
-        console.log("new selected extras in parent", selectedExtras);
-    }, [selectedExtras]);
-
-    useEffect(() => {
-        console.log("new selected players in parent", selectedPlayers);
-    }, [selectedPlayers]);
-
-
+        const eventId = generalInfo.eventid;
+        navigate(`/event-overview/edit/${eventId}`);
+    }   
 
     useEffect(() => {
         const isLoggedIn = async () => {
@@ -69,16 +38,14 @@ const EventOverview = () => {
         isLoggedIn();
     }, [])
     
-
     useEffect(() => {
       const fetchEventDetails = async () => {
           setLoading(true);
-          
-          
+                    
           try {
               const { data: event, error } = await supabase
                   .from('event')
-                  .select('id, title, datetime, location, team')
+                  .select('id, title, datetime, location, team, type')
                   .eq('id', eventId) 
                   .single();
     
@@ -94,7 +61,8 @@ const EventOverview = () => {
                       time: event.datetime.slice(11, 16),
                       location: event.location,
                       gameName: event.title,
-                      eventid: event.id
+                      eventid: event.id,
+                      type: event.type
                   };
                   setEventTitle(event.title);
                   // Fetch the team name
@@ -123,20 +91,11 @@ const EventOverview = () => {
       };
     
       fetchEventDetails();
-    }, []);
-    
-    
-    
-    useEffect(() => {
-      console.log("Selected Team in Parent:", selectedTeam);
-    }, [selectedTeam]);
-    
+    }, []);    
 
     if (loading) {
         return (<LoadingPage></LoadingPage>)
-    } else {
-
-      
+    } else {     
 
       return (
         <div>
@@ -145,30 +104,26 @@ const EventOverview = () => {
                 
                 
             <div className="flex justify-center mb-4">
-    <input
-        value={eventTitle}
-        disabled={true}
-        type="text"
-        style={{
-            fontSize: '1.875rem', // equivalent to text-3xl
-            fontWeight: 'bold',
-            textAlign: 'center',
-            color: '#007bff', // Replace with the exact hex code for 'text-sn-main-blue'
-            backgroundColor: 'transparent',
-            border: 'none',
-            borderRadius: '.5rem', // equivalent to rounded-lg
-            padding: '.5rem 1rem', // equivalent to py-2 px-4
-            width: '100%',
-            maxWidth: '28rem', // equivalent to max-w-md
-            fontFamily: '"Russo One", sans-serif' // Ensure Russo One font is loaded
-        }}
-    />
-</div>
-
-
-
-
-            {generalInfo.type === 'game' ? (
+            <input
+                value={eventTitle}
+                disabled={true}
+                type="text"
+                style={{
+                    fontSize: '1.875rem', // equivalent to text-3xl
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                    color: '#007bff', // Replace with the exact hex code for 'text-sn-main-blue'
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    borderRadius: '.5rem', // equivalent to rounded-lg
+                    padding: '.5rem 1rem', // equivalent to py-2 px-4
+                    width: '100%',
+                    maxWidth: '28rem', // equivalent to max-w-md
+                    fontFamily: '"Russo One", sans-serif' // Ensure Russo One font is loaded
+                }}
+            />
+        </div>
+            {generalInfo.type == 'game' ? (
                 <GameOverviewComponent
                     eventTitle={eventTitle}
                     generalInfo={generalInfo}
