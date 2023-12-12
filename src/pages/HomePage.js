@@ -7,14 +7,19 @@ import EventCard from "../components/EventCard";
 import React from 'react';
 import LoadingPage from './LoadingPage';
 import StickyMonthHeader from '../components/StickyMonthComponent';
+import { PlusIcon } from '@heroicons/react/24/solid';
 
 const HomePage = () => {
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
   const [fetchedEvents, setFetchedEvents] = useState([]);
-  const [currentMonth, setCurrentMonth] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('all');
+  const [fetchedTeams, setFetchedTeams] = useState([]);
   const [isCoach, setIsCoach] = useState(false);
+  const [currentMonth, setCurrentMonth] = useState('');
+
+  const [filter, setFilter] = useState('all'); 
+  const [team, setTeam] = useState(-1); 
+  const [openDropdown, setOpenDropdown] = useState(null);
   const navigate = useNavigate();
   
 
@@ -68,14 +73,24 @@ const HomePage = () => {
         .from('team_users')
         .select('team_id')
         .eq("user_id", userTableIdAndRole.id);
-  
-      console.log("this is the team of the user");
-      console.log(teamData);
-  
+
       if (teamError) {
         console.error(teamError);
         return; // Stop execution if there's an error
       }
+      
+      // Get all teams with the team IDs from teamData
+      let { data: teams, error: teamsError } = await supabase
+        .from('team')
+        .select('*')
+        .in('id', teamData.map(team => team.team_id));
+
+      if (teamsError) {
+        console.error(teamsError);
+        return; // Stop execution if there's an error
+      }
+    
+      setFetchedTeams(teams);
 
       // Set isCoach based on user's role
       setIsCoach(userTableIdAndRole.role_id === 1);
@@ -157,8 +172,11 @@ const HomePage = () => {
   }, [navigate]);
   console.log("fetched events", fetchedEvents);
 
+  const currentDate = new Date();
+  const transformedEvents = fetchedEvents
+    .filter((event) => event.datetime && new Date(event.datetime) > currentDate)
+    .map((event) => {
 
-  const transformedEvents = fetchedEvents.map(event => {
     // Extracting date and time from the dateTime string
     const eventDateTime = new Date(event.datetime);
     const date = eventDateTime.toISOString().split('T')[0];
@@ -178,8 +196,25 @@ const HomePage = () => {
     };
   });
 
-  // Organize events by month and then by day
-const organizedEvents = transformedEvents.reduce((acc, event) => {
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (!event.target.closest('.filter-dropdown') && !event.target.closest('.team-dropdown')) {
+        setOpenDropdown(null);
+      }
+    };
+  
+    document.body.addEventListener('click', handleOutsideClick);
+
+    return () => {
+      document.body.removeEventListener('click', handleOutsideClick);
+    };
+  }, []);
+
+ // Organize events by month and then by day, considering the filter
+  const organizedEvents = transformedEvents
+.filter((event) => filter === 'all' || event.type === filter)
+.reduce((acc, event) => {
   // Check if the event has a valid dateTime property
   const month = event.date.slice(0, 7); // Extracting yyyy-mm to represent a month
   const day = event.date.slice(8, 10); // Extracting dd to represent a day
@@ -197,13 +232,34 @@ const organizedEvents = transformedEvents.reduce((acc, event) => {
   return acc;
 }, {});
 
-const [filter, setFilter] = useState('all'); // Default filter is 'all'
-const [showFilterOptions, setShowFilterOptions] = useState(false);
+
+
+
 
 const handleFilterChange = (newFilter) => {
   setFilter(newFilter);
-  setShowFilterOptions(false); // Hide the filter options after selecting an option
+  toggleFilterDropdown();
 };
+
+
+const handleTeamChange = (newTeam) => {
+  setTeam(newTeam);
+  toggleTeamDropdown();
+};
+
+
+const toggleFilterDropdown = () => {
+  console.log("toggle filter dropdown", openDropdown);
+  setOpenDropdown(openDropdown === 'filter' ? null : 'filter');
+};
+
+const toggleTeamDropdown = () => {
+  console.log("toggle team dropdown before", openDropdown);
+  setOpenDropdown(openDropdown === 'team' ? null : 'team');
+  console.log("toggle team dropdown after", openDropdown);
+};
+
+
   if (loading) {
     return <LoadingPage />;
   } else
@@ -245,9 +301,12 @@ const handleFilterChange = (newFilter) => {
     )
   }
 
+  
+
 else {
   return (
-    <div className="flex flex-col  items-center bg-almostwhite h-screen">
+    <div className="flex flex-col justify-top  items-center bg-almostwhite min-h-screen">
+      
       {/* Upcoming Events */}
       {Object.entries(organizedEvents).map(([month, days]) => (
         <div key={month} className="font-russoOne text-sn-main-blue month-section">
@@ -262,6 +321,7 @@ else {
               )}
               <div className="event-container">
                 {dayEvents
+                  //.filter(event => team === -1 || event.teamId === team)
                   .filter((event) => filter === 'all' || event.type === filter)
                   .sort((a, b) => (a.dateTime != null && b.dateTime != null ? a.dateTime.localeCompare(b.dateTime) : 0))
                   .map((event, index) => (
@@ -269,7 +329,7 @@ else {
                       <EventCard
                         type={event.type}
                         eventName={event.eventName}
-                        teamName={event.teamName}
+                        teamName={event.teamId}
                         eventTime={event.eventTime}
                         location={event.location}
                         attendance={event.attendance}
@@ -283,66 +343,120 @@ else {
         </div>
       ))}
 
-        
-        {/* Plus Button */}
-        
-        {isCoach && (
-          <div className="fixed top-[69px] right-[65px] z-20">
-            <button
-              className="bg-sn-light-orange text-white rounded-10px  text-3xl shadow-sm flex items-center justify-center"
-              style={{ width: '36px', height: '36px' }}  
-              onClick={() => navigate('/game/create')}
-            >
-              +
-            </button>
-          </div>
-        )}
-
-        
-
-        {/* Filter Button */}
-        <div className="fixed top-[69px] right-[20px] z-20">
-          <button
-            className="bg-sn-light-orange text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center justify-center"
-            style={{ width: '36px', height: '36px' }}
-            onClick={() => setShowFilterOptions(!showFilterOptions)}
-          >
-            <img
-              src={process.env.PUBLIC_URL + "/images/filter.svg"}
-              alt="Filter Icon"
-              style={{filter: 'brightness(0) invert(1)' }}
-            />
-          </button>
-          {/* Filter Options */}
-          {showFilterOptions && (
-            <div className="absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
-              <p
-                className={`cursor-pointer ${filter === 'all' ? 'text-sn-light-orange font-bold' : ''}`}
-                onClick={() => handleFilterChange('all')}
+        <div>
+          {/* Plus Button */}
+          
+          {isCoach && (
+            <div className="fixed top-[69px] right-[105px] z-20">
+              <button
+                className="bg-sn-light-orange text-white rounded-10px  text-3xl shadow-sm flex items-center justify-center"
+                style={{ width: '36px', height: '36px' }}  
+                onClick={() => navigate('/game/create')}
               >
-                All
-              </p>
-              <p
-                className={`cursor-pointer ${filter === 'practice' ? 'text-sn-light-orange font-bold' : ''}`}
-                onClick={() => handleFilterChange('practice')}
-              >
-                Practice
-              </p>
-              <p
-                className={`cursor-pointer ${filter === 'game' ? 'text-sn-light-orange font-bold' : ''}`}
-                onClick={() => handleFilterChange('game')}
-              >
-                Game
-              </p>
-              <p
-                className={`cursor-pointer ${filter === 'team building' ? 'text-sn-light-orange font-bold' : ''}`}
-                onClick={() => handleFilterChange('team building')}
-              >
-                Team building
-              </p>
-
+                <img src={`${process.env.PUBLIC_URL}/images/plus-square.svg`} alt="Add event" />
+              </button>
             </div>
           )}
+
+          {/* Filter Button */}
+          <div className="fixed top-[69px] right-[65px] z-20">
+            <button
+              id="filter-button"
+              className={`filter-dropdown text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2  border-sn-light-orange  justify-center ${
+                filter === 'all' ? 'bg-white ' : 'bg-sn-light-orange'
+              }`}
+              style={{ width: '36px', height: '36px' }}
+              onClick={toggleFilterDropdown}
+            >
+              {/* Conditionally render the filter icon based on the selected filter */}
+              {filter === 'all' ? (
+                <img
+                  src={process.env.PUBLIC_URL + "/images/filter_toggle.svg"}
+                  alt="Filter Icon"
+                />
+              ) : (
+                <img
+                  src={process.env.PUBLIC_URL + "/images/filter.svg"}
+                  alt="Filter Icon"
+                />
+              )}
+            </button>
+            {/* Filter Options */}
+            {openDropdown === 'filter' && (
+              <div className=" absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
+                <p
+                  className={`cursor-pointer ${filter === 'all' ? 'text-sn-light-orange font-bold' : ''}`}
+                  onClick={() => handleFilterChange('all')}
+                >
+                  All
+                </p>
+                <p
+                  className={`cursor-pointer ${filter === 'practice' ? 'text-sn-light-orange font-bold' : ''}`}
+                  onClick={() => handleFilterChange('practice')}
+                >
+                  Practice
+                </p>
+                <p
+                  className={`cursor-pointer ${filter === 'game' ? 'text-sn-light-orange font-bold' : ''}`}
+                  onClick={() => handleFilterChange('game')}
+                >
+                  Game
+                </p>
+                <p
+                  className={`cursor-pointer ${filter === 'team building' ? 'text-sn-light-orange font-bold' : ''}`}
+                  onClick={() => handleFilterChange('team building')}
+                >
+                  Team building
+                </p>
+              </div>
+            )}
+          </div>
+          {/* Team Button */}
+          <div className="fixed top-[69px] right-[25px] z-20">
+            <button
+              id="team-button"
+              className={`team-dropdown text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2  border-sn-light-orange  justify-center ${
+                team === -1 ? 'bg-white ' : 'bg-sn-light-orange'
+              }`}
+              style={{ width: '36px', height: '36px' }}
+              onClick={toggleTeamDropdown}
+            >
+              {/* Conditionally render the team icon based on the selected team */}
+              {team === -1 ? (
+                <img
+                  src={process.env.PUBLIC_URL + "/images/team_card_orange.svg"}
+                  alt="Team Icon"
+                />
+              ) : (
+                <img
+                  src={process.env.PUBLIC_URL + "/images/team_card_white.svg"}
+                  alt="Team Icon"
+                />
+              )}
+            </button>
+            {/* Team Options */}
+            {openDropdown === 'team' && (
+              <div className="absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
+                <p
+                  className={`cursor-pointer ${team === -1 ? 'text-sn-light-orange font-bold' : ''}`}
+                  onClick={() => handleTeamChange(-1)}
+                >
+                  All
+                </p>
+                {fetchedTeams.map((fetchedTeam) => (
+                  <p
+                    key={fetchedTeam.team_id}
+                    className={`cursor-pointer ${fetchedTeam.id === team ? 'text-sn-light-orange font-bold' : ''}`}
+                    onClick={() => handleTeamChange(fetchedTeam.id)}
+                  >
+                    {fetchedTeam.team_name}
+                  </p>
+                ))}
+
+              </div>
+            )}
+
+          </div>
         </div>
 
 
