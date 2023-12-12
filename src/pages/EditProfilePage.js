@@ -143,10 +143,10 @@ const EditProfilePage = () => {
         setButtonOpacity( allFieldsFilled && !emailError ? 1 : 0.5);
     };
 
-    /*
+    
     useEffect(() => {
         updateButtonState();
-      }, [newPhoneNumber, updateButtonState]);*/
+      }, [newPhoneNumber, newEmail, newBio]);
     
     const onSave = async (event) => {
        // setLoading(true);
@@ -233,7 +233,7 @@ const EditProfilePage = () => {
                             style={{ display: 'none' }}
                             onChange={() => {
                                 handleImageChange();
-                                updateButtonState();
+                                //updateButtonState();
                             }}
                             
                         />
@@ -263,7 +263,7 @@ const EditProfilePage = () => {
                                     onChange={(event) => {
                                         setNewEmail(event.target.value);
                                         //setEmailError('');
-                                        updateButtonState();
+                                        //updateButtonState();
                                         
                                     }} 
                                     onBlur={handleBlur}
@@ -284,7 +284,7 @@ const EditProfilePage = () => {
                                 if (typeof updateButtonState === 'function') {
                                 updateButtonState(); // Update the state of the button
                                 }*/
-                                updateButtonState();
+                                //updateButtonState();
                             }}
                             onBlur={handlePhoneBlur}
                         />
@@ -320,7 +320,7 @@ const EditProfilePage = () => {
                                     value={newBio}
                                     onChange={(event) => {
                                         setNewBio(event.target.value);
-                                        updateButtonState();
+                                        //updateButtonState();
                                     }}
                                     className={`text-${bioTextColor} grow basis-0  font-normal font-interReg"`} cols="30" rows="5" maxLength={255}
                                     placeholder={placeholderBio}
