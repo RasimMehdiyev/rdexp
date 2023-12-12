@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import StickyEditProfileComponent from "../components/StickyEditProfileComponent";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PhoneInput from 'react-phone-input-2'
 
 const EditProfilePage = () => {
     const [userData, setUserData] = useState({});
@@ -21,6 +22,23 @@ const EditProfilePage = () => {
     const [previewImage, setPreviewImage] = useState(null);
     const [loading, setLoading] = useState(true); // Add a loading state
     const [showNumber, setShowNumber] = useState(false);
+
+    const [emailTextColor, setEmailTextColor] = useState('neutral-500');
+    const [phoneTextColor, setPhoneTextColor] = useState('neutral-500');
+    const [bioTextColor, setBioTextColor] = useState('neutral-500');
+
+    const [placeholderPhoneNumber, setPlaceholderPhoneNumber] = useState('Phone');
+    const [placeholderBio, setPlaceholderBio] = useState('Bio');
+    
+
+    // Set initial button state to disabled
+    const [buttonEnabled, setButtonEnabled] = useState(false);
+    const [buttonOpacity, setButtonOpacity] = useState('0.5');
+
+    const [hasUserMadeChanges, setHasUserMadeChanges] = useState(false);
+
+    
+
     // navigate
     const navigate = useNavigate();
     
@@ -35,37 +53,59 @@ const EditProfilePage = () => {
     }, []);
   
     const handleProfileClick = () => {
-        // SET NUMBER OF CLICKS
         setClickNumber(clickNumber + 1);
         if (clickNumber  % 3 == 0) {
             setShowNumber(false);
         } else {
             setShowNumber(true);
         }
-        console.log("click number is:", clickNumber);
     };
+
+    const handleInputChange = (e) => {
+        setNewEmail(e.target.value);
+        setHasUserMadeChanges(true);
+    };
+    // Similar for other input fields
+    
 
     const handleImageChange = (e) => {
         e.preventDefault();
         const file = e.target.files[0];
-        //console.log("handling img change, file is:", file);
         if (file) {
         const reader = new FileReader();
         reader.onloadend = () => {
-            //console.log("image", reader.result)
             setPreviewImage(reader.result);
-           
         };
         reader.readAsDataURL(file);
         }
     };
+
+    const updateButtonState = () => {
+        const isValidEmail = newEmail ? validateEmail(newEmail) : false;
+
+        if (!isValidEmail) {
+            setEmailError(true);
+        }
+        else {
+            setEmailError(false);
+        }
+
+        const allFieldsFilled = newEmail.trim() !== '' && newPhoneNumber.trim() !== '' && newNumber.trim() !== '';
+    
+        setButtonEnabled(isValidEmail && allFieldsFilled && hasUserMadeChanges);
+        setButtonOpacity(isValidEmail && allFieldsFilled && hasUserMadeChanges ? 1 : 0.5);
+    };
+    
+
+    useEffect(() => {
+        updateButtonState();
+    }, [newEmail, newPhoneNumber, newBio, newNumber]);
 
     useEffect(() => {
         const fetchData = async () => {
           console.log("Fetching data");
           try {
             const userResponse = await supabase.auth.getUser();
-            console.log("User:", userResponse);
             const user = userResponse.data.user;
             
             if (user) {
@@ -75,14 +115,14 @@ const EditProfilePage = () => {
                 .eq('user_id', user.id)
                 .single();
                 if (userError) throw userError;
-                console.log("User data:", userData);
                 setUserData(userData);
                 setRole(userData.role);
-                setNewNumber(userData.number);
-                setNewBio(userData.bio);
-                setNewEmail(userData.email);
-                setNewPhoneNumber(userData.phone_number);
+                setNewEmail(userData.email || '');
+                setNewPhoneNumber(userData.phone_number || '');
+                setNewNumber(userData.number || '');
+                setNewBio(userData.bio || '');
                 setPreviewImage(userData.profile_picture);
+                setHasUserMadeChanges(false); // Reset user change tracking
             }
             else{
                 navigate('/auth');
@@ -91,7 +131,8 @@ const EditProfilePage = () => {
             console.error("Error fetching data:", error);
           }
           finally {
-            setLoading(false); // Stop loading regardless of the outcome
+            setLoading(false); 
+            // setButtonEnabled(false);
           }
         };
     
@@ -157,7 +198,7 @@ const EditProfilePage = () => {
                     .eq('user_id', user.id)
                     .single();
                 if (userError) throw userError;
-                toast.success('Profile updated successfully! Redirecting...', { position: "top-center", zIndex: 50});
+                toast.success('Profile updated successfully! Redirecting...', { position: "bottom-center", zIndex: 50});
                 setTimeout(() => {
                     console.log("redirecting")
                   navigate('/profile');
@@ -165,18 +206,49 @@ const EditProfilePage = () => {
             }     
     
         } catch (error) {
-            toast.error(error.error_description || error.message, { position: "top-center" });
+            toast.error(error.error_description || error.message, { position: "bottom-center" });
         }
 
     };
 
+
+    const handleBlur = () => {
+        setEmailTextColor('black');
+
+        if (emailError){
+            toast.error("Please enter a valid email address.", {
+                position: "bottom-center",
+                zIndex: 50,
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "light"
+            });
+        }
+    }
+
+    const handlePhoneBlur = () => {
+        setPhoneTextColor('black');
+        setPlaceholderPhoneNumber('Phone')
+    }
+
+    const handleBioBlur = () => {
+        setBioTextColor('black');
+        setPlaceholderBio('Bio')
+    }
 
     
     if (loading) {
     } else {
         return (
             <div>
-            <StickyEditProfileComponent onSave={onSave}/>
+            <StickyEditProfileComponent 
+                onSave={onSave}                 
+                isButtonEnabled={buttonEnabled}
+                buttonOpacity={buttonOpacity}
+            />
             <div className="grow flex bg-indigo-100 flex-col items-center justify-start h-screen">
                 <div className="grow p-4 flex-col justify-start items-center gap-4 inline-flex">
                     <div className={`profile-flipper ${showNumber ? 'show-number' : ''}`} onClick={handleProfileClick}>
@@ -210,7 +282,12 @@ const EditProfilePage = () => {
                                             className="text-white placeholder:text-5xl w-full placeholder:text-white border-none font-russoOne font-normal bg-sn-main-orange leading-normal text-center !text-5xl  rounded-full"
                                             placeholder={userData.number || 'Nr.'}
                                             value={newNumber}
-                                            onChange={(e) => setNewNumber(e.target.value)}
+                                            onChange={(e) => 
+                                                {
+                                                    setNewNumber(e.target.value);                                        
+                                                    setHasUserMadeChanges(true);
+                                            }
+                                            }
                                         />
                                         :
                                 <div></div>
@@ -224,35 +301,40 @@ const EditProfilePage = () => {
                         <div className="px-4 justify-start items-start gap-2.5 inline-flex">
                             <div className="text-blue-600 text-xl font-russoOne">Contact details</div>
                         </div>
-                        <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-blue-600  justify-start items-center gap-2.5 inline-flex">
-                            <EnvelopeIcon className="h-5 w-5 text-neutral-500"></EnvelopeIcon>
+                        <div className={`w-[322px] h-12 pl-2 pr-4 py-3 mb-3 bg-white rounded-lg border-2 ${emailError ? 'border-red-500':'border-club-header-blue'}  justify-start items-center gap-2.5 inline-flex`}>
+                            <EnvelopeIcon className={`h-5 w-5 text-club-header-blue ${emailError ? 'text-red-500' : ''}`}></EnvelopeIcon>
                             <div className="w-full h-auto basis-0 justify-start items-center flex">
                                 <input
-                                    className='text-neutral-500 text-base font-normal font-interReg leading-normal'
+                                    className={`text-base text-${emailTextColor} ${emailError ? 'text-red-500' : 'text-black'} font-normal font-interReg leading-normal`}
                                     placeholder={userData.email}
                                     type="email"
                                     value={newEmail}
                                         onChange={(event) => {
                                             setNewEmail(event.target.value);
-                                            setEmailError(''); }
-                                    } />
+                                            setEmailError(''); 
+                                            setHasUserMadeChanges(true);
+                                        }
+                                    } 
+                                    onBlur={handleBlur}
+
+                                    />
                             </div>
                         </div>
-                        {(emailError != '') ? <div className="text-red-500">{emailError}</div>:<div></div>}
-                        <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-blue-600 justify-start items-center gap-2.5 inline-flex">
-                            <PhoneIcon className="h-5 w-5 text-neutral-500"></PhoneIcon>
-                            <div className="w-full h-auto basis-0 justify-start items-center flex">                            
-                                <input
-                                    className="text-neutral-500 text-base font-normal font-interReg leading-normal"
-                                    placeholder={userData.phone_number}
-                                    type="tel"
-                                    value={newPhoneNumber}
-                                            onChange={(event) => {
-                                                setNewPhoneNumber(event.target.value);
-                                                setPhoneNumberError('');
-                                            }} />
-                            </div>
-                        </div>
+                        <PhoneInput
+                            style={{ height: '3rem', marginBottom: '30px' }}
+                            inputStyle={{ height: '100%', width:'100%' }}
+                            className={`text-${phoneTextColor} phone-input border-2 rounded-lg border-club-header-blue`}
+                            placeholder={placeholderPhoneNumber}
+                            dropdownStyle={{ textAlign: 'left' }} 
+                            value={newPhoneNumber}
+                            onChange={(newPhoneNumber) => {
+                                setNewPhoneNumber(newPhoneNumber);
+                                setPhoneNumberError('');
+                                setHasUserMadeChanges(true);
+                            }}
+                            onBlur={handlePhoneBlur}
+                        />
+                        
                         {(phoneNumberError != '') ? <div className="text-red-500">{phoneNumberError}</div>:<div></div>}        
                         
                     </div>                                          
@@ -262,13 +344,18 @@ const EditProfilePage = () => {
                         <div className="w-[178px] px-4 justify-start items-start gap-2.5 inline-flex">
                             <div className="text-blue-600 text-xl font-russoOne">About player</div>
                         </div>
-                        <div className="w-[322px] px-4 py-1 bg-white rounded-md border border-blue-600  justify-start items-center inline-flex">
+                        <div className="w-[322px] px-4 py-1 bg-white rounded-lg border-2 border-club-header-blue  justify-start items-center inline-flex">
                             <div className="grow h-auto basis-0 justify-start items-center flex">
                                 <textarea
                                     value={newBio}
-                                    onChange={(event) => setNewBio(event.target.value)}
-                                    className="grow basis-0 text-neutral-500 text-sm font-normal font-interReg"
-                                    placeholder={userData.bio ? userData.bio : 'Information about yourself...'}
+                                    onChange={(event) => {setNewBio(event.target.value);                                                
+                                        setHasUserMadeChanges(true);
+                                    }}
+                                    className={`text-${bioTextColor} font-normal font-interReg basis-0 grow`}
+                                    // cols='30'
+                                    rows='5'
+                                    placeholder={placeholderBio}
+                                    onBlur={handleBioBlur}
                                     />
                             </div>
                         </div>
