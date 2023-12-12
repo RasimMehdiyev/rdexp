@@ -354,16 +354,10 @@ const EditPracticeTBComponent = ({
     } else {
 
         return (
-            <form className="flex bg-sn-bg-light-blue flex-col justify-center gap-2">
-                <div className="mb-2 flex items-center"> 
-                    <MdGroup className="text-sn-main-orange mr-3" size={32} /> 
-                    <input
-                        type="text"
-                        readOnly
-                        value={generalInfo?.teamName || 'No team selected'} 
-                        style={{ height: '40px' }} 
-                        className="form-input block w-full max-w-xs pl-3 pr-3 text-lg border border-blue-500 rounded-lg text-black" 
-                    />
+            <form className="flex flex-col justify-center gap-2">
+                <div className="mb-2 flex items-center">
+                        <MdGroup className="text-sn-main-orange mr-3" size={32} />
+                        <div className="form-input w-full pl-3 pr-3 text-lg">{generalInfo?.teamName || 'No team selected'}</div>
                     </div>
 
                     <div className="mb-2 flex items-center"> 
@@ -372,8 +366,8 @@ const EditPracticeTBComponent = ({
                         value={date} 
                         onChange={(e) => setDate(e.target.value)} 
                         type="date" 
-                        className="form-input border border-blue-500 rounded-lg text-black" 
-                        style={{ width: '150px', height: '40px', fontSize: '1rem' }} 
+                        className="form-input border border-blue-500 pl-3 pr-3 rounded-lg text-black h-[40px] w-[150px]" 
+                        
                     />
                     </div>
 
@@ -383,31 +377,22 @@ const EditPracticeTBComponent = ({
                         value={time} 
                         onChange={(e) => setTime(e.target.value)} 
                         type="time" 
-                        className="form-input border border-blue-500 rounded-lg text-black" 
-                        style={{ width: '110px', height: '40px', fontSize: '1rem' }} 
+                        className="form-input border border-blue-500 rounded-lg pl-3 pr-3 text-black h-[40px] w-[150px]" 
+                        
                     />
                     </div>
 
                     <div className="mb-2 flex items-center"> 
-                    <MdLocationOn className="text-sn-main-orange mr-3" size={32} /> 
+                    <MdLocationOn className="text-sn-main-orange mr-3 w-[32px] h-[32px]" /> 
                     <input 
                         value={location} 
                         onChange={(e) => setLocation(e.target.value)} 
                         placeholder="Location" 
                         type="text" 
-                        className="form-input border max-w-xs border-blue-500 rounded-lg text-black w-full pl-3 pr-3" 
+                        className="form-input border border-blue-500 rounded-lg text-black w-full pl-3 pr-3" 
                         style={{ height: '40px', fontSize: '1rem' }} 
                     />
-                    </div>
-
-                
-                
-
-
-
-
-                {/* <button onClick={submitEvent}  className="h-[40px] w-[150px] m-auto mt-5 bg-sn-main-blue rounded-md text-white font-russoOne">Save</button> */}
-                {selectedID && <p className="hidden">Selected ID: {selectedID}</p>}
+                    </div> 
             </form>
 
         );

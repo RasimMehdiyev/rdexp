@@ -411,7 +411,7 @@ const EventOverviewEdit = () => {
         return (<LoadingPage></LoadingPage>)
     } else if (userCheck){    
         return (
-            <div className="flex flex-col min-h-screen bg-sn-bg-light-blue font-interReg">
+            <div className="flex flex-col min-h-screen bg-almostwhite font-interReg">
               <StickySubheaderEventCreateComponent onSave={handleOnChange} onDelete={handleOnDelete}/>
           
                 <div className="p-4">
@@ -422,14 +422,14 @@ const EventOverviewEdit = () => {
                 )}
           
                 <div className="flex justify-center mb-4">
-                        <input
-                            value={eventTitle} // Use the gameName from generalInfo
-                            onChange={(e) => setEventTitle(e.target.value)}
-                            type="text"
-                            placeholder="Title"
-                            className="text-3xl font-bold text-center text-blue bg-white border border-blue-500 rounded-lg py-2 px-4 w-full max-w-md font-russoOne" // Adjusted font, size, and width
-                        />
-                    </div>
+                    <input
+                        value={eventTitle} // Use the gameName from generalInfo
+                        onChange={(e) => setEventTitle(e.target.value)}
+                        type="text"
+                        placeholder="Title"
+                        className="text-2xl bg-white border border-blue-500 rounded-lg py-2 px-2 w-full max-w-md font-interReg h-[40px]" // Adjusted font, size, and width
+                    />
+                </div>
           
                 {generalInfo.type === 'game' ? (
                     <EditGameComponent
