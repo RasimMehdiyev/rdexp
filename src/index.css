@@ -255,14 +255,58 @@ textarea:focus {
     outline: none;
 }
 
-input::placeholder, textarea::placeholder {
+input::placeholder,
+textarea::placeholder {
     font-size: 16px;
 }
 
 input {
     font-size: 16px !important;
-  }
+}
 
 .Toastify__close-button {
     display: none !important;
+}
+
+.profile-flipper {
+    perspective: 1000px;
+    width: 142px;
+    /* Adjust the size as needed */
+    height: 142px;
+    position: relative;
+    cursor: pointer;
+}
+
+.profile-flipper .profile-front,
+.profile-flipper .profile-back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    backface-visibility: hidden;
+    transition: transform 0.6s linear;
+    border-radius: 50%;
+    /* If you want a rounded shape */
+}
+
+.profile-flipper .profile-front {
+    transform: rotateY(0deg);
+}
+
+.profile-flipper .profile-back {
+    transform: rotateY(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    /* Adjust as needed */
+}
+
+.profile-flipper.show-number .profile-front {
+    transform: rotateY(-180deg);
+}
+
+.profile-flipper.show-number .profile-back {
+    transform: rotateY(0deg);
 }
