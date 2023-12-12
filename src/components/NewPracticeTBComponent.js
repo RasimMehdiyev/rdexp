@@ -30,9 +30,9 @@ const NewPracticeComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
             if (userError) throw userError;
 
             const { data: teams_list, error: teamsError } = await supabase
-                .from('team_users')
+                .from('team')
                 .select('*')
-                .eq('user_id', user_data.id)
+                .eq('coach_id', user_data.id)
     
             if (teamsError) throw teamsError;
             let team_n = []
@@ -40,7 +40,7 @@ const NewPracticeComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                 const { data: team_data, error: teamError } = await supabase
                     .from('team')
                     .select('*')
-                    .eq('id', team.team_id)
+                    .eq('id', team.id)
                     .single();
                 if (teamError) throw teamError;
                 let team_info = {}
@@ -55,7 +55,7 @@ const NewPracticeComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
         getTeams();
     }, [])
 
-    const handleChange = async (event) => { //happens when team is selected
+    const handleTeamChange = async (event) => { //happens when team is selected
         // Update the state with the selected option's id
         if (event.target.value != "No Selection") {
             setLoading(true);
@@ -95,30 +95,57 @@ const NewPracticeComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
         return (
             <form className="flex flex-col justify-center gap-2">
                 <div className="mb-2 flex items-center">
-    <MdGroup className="text-sn-main-orange mr-3" size={32} />
-    <select onChange={handleChange} className="form-input border border-blue-500 rounded-lg text-black w-full max-w-xs px-2 py-2 text-lg bg-white">
-        <option value="">{selectedID ? teamNames.find(team => team.id === selectedID).team_name : 'No Selection'}</option>
-        {teamNames.map((team) => (
-            <option key={team.id} value={team.id}>{team.team_name}</option>
-        ))}
-    </select>
-</div>
+                    <MdGroup className="text-sn-main-orange mr-3" size={32} />
+                    <select
+                        onChange={handleTeamChange}
+                        className="w-[150px] h-[40px] px-2 bg-white rounded-lg"
+                        name="teams"
+                        id="teams"
+                        placeholder="Choose team">
+                        <option className="h-[40px] bg-white rounded-md">{ selectedID ? teamNames.find(team => team.id == selectedID).team_name : 'No Selection'}</option>
+                        {
+                            teamNames.map((team) => (
+                                <option key={team.id} value={team.id} >
+                                    {team.team_name}
+                                </option>
+                            ))
+                        }
+                    </select>
+                </div>                
 
+                <div className="mb-2 flex items-center"> 
+                <MdDateRange className="text-sn-main-orange mr-3" size={32} />
+                <input 
+                    value={date} 
+                    onChange={(e) => setDate(e.target.value)} 
+                    type="date" 
+                    className="form-input pl-3 pr-3 rounded-lg text-black h-[40px] w-[150px]" 
+                    
+                />
+                </div>
 
-    <div className="mb-2 flex items-center">
-        <MdDateRange className="text-sn-main-orange mr-3" size={32} />
-        <input value={date} onChange={(e) => setDate(e.target.value)} type="date" className="form-input border border-blue-500 rounded-lg text-black" style={{ width: '150px', height: '40px', fontSize: '1rem' }} />
-    </div>
+                <div className="mb-2 flex items-center"> 
+                <MdAccessTime className="text-sn-main-orange mr-3" size={32} /> 
+                <input 
+                    value={time} 
+                    onChange={(e) => setTime(e.target.value)} 
+                    type="time" 
+                    className="form-input rounded-lg pl-3 pr-3 text-black h-[40px] w-[150px]" 
+                    
+                />
+                </div>
 
-    <div className="mb-2 flex items-center">
-        <MdAccessTime className="text-sn-main-orange mr-3" size={32} />
-        <input value={time} onChange={(e) => setTime(e.target.value)} type="time" className="form-input border border-blue-500 rounded-lg text-black" style={{ width: '110px', height: '40px', fontSize: '1rem' }} />
-    </div>
-
-    <div className="mb-2 flex items-center">
-        <MdLocationOn className="text-sn-main-orange mr-3" size={32} />
-        <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location" type="text" className="form-input border max-w-xs border-blue-500 rounded-lg text-black w-full px-2 py-2 text-lg" />
-    </div>
+                <div className="mb-2 flex items-center"> 
+                <MdLocationOn className="text-sn-main-orange mr-3 w-[32px] h-[32px]" /> 
+                <input 
+                    value={location} 
+                    onChange={(e) => setLocation(e.target.value)} 
+                    placeholder="Location" 
+                    type="text" 
+                    className="form-input rounded-lg text-black w-full pl-3 pr-3" 
+                    style={{ height: '40px', fontSize: '1rem' }} 
+                />
+                </div>
             </form>
         );
     }

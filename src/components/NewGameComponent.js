@@ -24,41 +24,46 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
     const [preSubstitutePlayers, setPreSubstitutePlayers] = useState([]);
 
     useEffect(() => { // first thing that happens
-        const getTeams = async () => {
-            let user = await supabase.auth.getUser();
-            let userID = user.data.user.id;
-            const { data: user_data, error: userError } = await supabase
-                .from('users')
-                .select('*')
-                .eq('user_id', userID)
-                .single();
-    
-            if (userError) throw userError;
+        try {
+            const getTeams = async () => {
+                let user = await supabase.auth.getUser();
+                let userID = user.data.user.id;
+                const { data: user_data, error: userError } = await supabase
+                    .from('users')
+                    .select('*')
+                    .eq('user_id', userID)
+                    .single();
+        
+                if (userError) throw userError;
 
-            const { data: teams_list, error: teamsError } = await supabase
-                .from('team_users')
-                .select('*')
-                .eq('user_id', user_data.id)
-    
-            if (teamsError) throw teamsError;
-            let team_n = []
-            for (const team of teams_list) {
-                const { data: team_data, error: teamError } = await supabase
+                const { data: teams_list, error: teamsError } = await supabase
                     .from('team')
                     .select('*')
-                    .eq('id', team.team_id)
-                    .single();
-                // getExtraRoles(team.team_id);
-                if (teamError) throw teamError;
-                let team_info = {}
-                team_info['team_name'] = team_data.team_name;
-                team_info['id'] = team_data.id;
-                team_n.push(team_info);
+                    .eq('coach_id', user_data.id)
+        
+                if (teamsError) throw teamsError;
+                let team_n = []
+                for (const team of teams_list) {
+                    const { data: team_data, error: teamError } = await supabase
+                        .from('team')
+                        .select('*')
+                        .eq('id', team.id)
+                        .single();
+                    // getExtraRoles(team.team_id);
+                    if (teamError) throw teamError;
+                    let team_info = {}
+                    team_info['team_name'] = team_data.team_name;
+                    team_info['id'] = team_data.id;
+                    team_n.push(team_info);
+                }
+                setTeamNames(team_n);
             }
-            setTeamNames(team_n);
+            getTeams();
+            setLoading(false);
+        } catch (error) {
+            console.error(error)
         }
-        getTeams();
-        setLoading(false);
+        
     }, [])
 
     const handleTeamChange = async (event) => { //happens when team is selected

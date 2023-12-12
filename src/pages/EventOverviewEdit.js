@@ -42,7 +42,7 @@ const EventOverviewEdit = () => {
 
     const handleOnChange = async () => {
         
-        if (selectedOption == "game" | selectedOption == "") {
+        if (generalInfo.type == "game" | generalInfo.type == "") {
             setLoading(true);
             console.log("event title", eventTitle);
             console.log("selected option", selectedOption);
@@ -80,7 +80,7 @@ const EventOverviewEdit = () => {
                       datetime: `${generalInfo.date}T${generalInfo.time}:00+00`, // Ensure this is in the correct format
                       location: generalInfo.location,
                       team: generalInfo.teamId, 
-                      type: selectedOption // Make sure this is the correct event type you want to set
+                      type: generalInfo.type // Make sure this is the correct event type you want to set
                   })
                   .eq('id', generalInfo.eventid);
           
@@ -204,7 +204,7 @@ const EventOverviewEdit = () => {
                 return;
             }
             console.log("event title", eventTitle);
-            console.log("selected option", selectedOption);
+            console.log("selected option", generalInfo.type);
             console.log("general info", generalInfo);
             console.log("players", selectedPlayers);
             console.log("team", selectedTeam);
@@ -220,36 +220,17 @@ const EventOverviewEdit = () => {
                 console.log("User:", userResponse);
                 const user = userResponse.data.user;
                 if (user) {
-                    // Update general info => inserting column in event table
-                    if (!generalInfo.date || !generalInfo.time || !generalInfo.location || !eventTitle || !selectedTeam) {
-                    const { eventData, errorEventData } = await supabase
-                        .from('event')
-                        .insert([
-                            { title: eventTitle, team: selectedTeam, datetime: timestamp, location: generalInfo.location, type: selectedOption },
-                        ])
-                        .select()
-                    if (errorEventData) throw errorEventData;
-                      }
-                      if (!generalInfo.date || !generalInfo.time || !generalInfo.location || !eventTitle || !selectedTeam) {
-                    let { data: eventDataID, errorEventDataID } = await supabase
-                        .from('event')
-                        .select('*')
-                        .order('id', { ascending: false }) // Sort by id in descending order
-                        .limit(1); // Limit the result to 1 row
-                    if (errorEventDataID) console.error('Error fetching latest event:', errorEventDataID)}
-                    else {
-                        console.log("event data is", eventDataID);
-                        const event_id = eventDataID[0].id;
-                        const finalUploadPlayers = toUploadPlayers.map((p) => ({ ...p, event_id: event_id, is_attending: "Pending" }));
-                        console.log("finalUploadPlayers: ", finalUploadPlayers);                        
-
-                        const { playersData, errorPlayersData } = await supabase
-                            .from('event_users')
-                            .insert(finalUploadPlayers)
-                            .select()
-                        if (errorPlayersData) throw errorPlayersData;    
-                    };                            
-                }                  
+                    const { data: updatedEvent, error: updateError } = await supabase
+                    .from('event')
+                    .update({
+                        title: eventTitle,
+                        datetime: `${generalInfo.date}T${generalInfo.time}:00+00`, // Ensure this is in the correct format
+                        location: generalInfo.location,
+                        team: generalInfo.teamId, 
+                        type: generalInfo.type // Make sure this is the correct event type you want to set
+                    })
+                    .eq('id', generalInfo.eventid);                          
+                    }                  
             } catch (error) {
                 console.error("Error uploading data", error);
             } finally {
