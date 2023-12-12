@@ -6,8 +6,6 @@ import { MdDateRange, MdAccessTime, MdLocationOn, MdGroup } from 'react-icons/md
 
 
 const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlayerChanges, onSelectedExtraChanges, onTeamChanges }) => {
-    // const [title, setTitle] = useState(eventTitle);
-    const [selectedOption, setSelectedOption] = useState("Game");
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [location, setLocation] = useState('');
@@ -221,26 +219,11 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
     useEffect(() => {
         onGeneralInfoChanges({date:date, time:time, location:location});
     }, [date, time, location]);
-
-    const submitEvent = () => {
-
-        console.log("Title:", eventTitle);
-        console.log("Type:", selectedOption);
-        console.log("Team:", selectedID);
-        console.log("Date:", date);
-        console.log("Time:", time);
-        console.log("Location:", location);
-        console.log("Team Names:", teamNames);
-        console.log("Team Players:", teamPlayers);
-        console.log("Selected ID:", selectedID);
-    }  
-    
+   
 
     const handleAddSubstitute = () => {
         setPreSubstitutePlayers(prev => [...prev, { full_name: "No Selection", id: -1 }]);
-    };
-
-    
+    };    
     
     const handleSubstituteChange = (index, playerId) => {
         let selectedPlayer = { full_name: "No Selection", id: -1 };

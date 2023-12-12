@@ -200,29 +200,12 @@ const EventOverview = () => {
                 : <div></div>
 
             }
-            <div className="pt-6 h-screen bg-sn-bg-light-blue flex flex-col px-5">
+            <div className="pt-6 min-h-screen bg-almostwhite flex flex-col px-5">
                 
                 
-            <div className="flex justify-center mb-4">
-            <input
-                value={eventTitle}
-                disabled={true}
-                type="text"
-                style={{
-                    fontSize: '1.875rem', // equivalent to text-3xl
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    color: '#007bff', // Replace with the exact hex code for 'text-sn-main-blue'
-                    backgroundColor: 'transparent',
-                    border: 'none',
-                    borderRadius: '.5rem', // equivalent to rounded-lg
-                    padding: '.5rem 1rem', // equivalent to py-2 px-4
-                    width: '100%',
-                    maxWidth: '28rem', // equivalent to max-w-md
-                    fontFamily: '"Russo One", sans-serif' // Ensure Russo One font is loaded
-                }}
-            />
-        </div>
+            <div className="flex mb-4 text-3xl font-russoOne text-sn-main-blue">
+            {eventTitle}
+            </div>
             {generalInfo.type == 'game' ? (
                 <GameOverviewComponent                    
                     generalInfo={generalInfo}

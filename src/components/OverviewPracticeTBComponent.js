@@ -344,52 +344,29 @@ const OverviewPracticeTBComponent = ({
     } else {
 
         return (
-            <form className="flex bg-sn-bg-light-blue flex-col justify-center gap-2">
+            <form className="flex bg-white flex-col justify-center gap-2 rounded-md px-2 py-2 mb-4">
                 <div className="mb-2 flex items-center">
-    <MdGroup className="text-sn-main-orange mr-3" size={32} />
-    <input
-        type="text"
-        readOnly
-        value={generalInfo?.teamName || 'No team selected'}
-        style={{ height: '40px' }}
-        className="form-input block w-full max-w-xs pl-3 pr-3 text-lg border border-blue-500 rounded-lg text-gray-500 bg-white"
-        disabled={true}
-    />
-</div>
+                    <MdGroup className="text-sn-main-orange mr-3" size={32} />
+                    <div className="form-input w-full pl-3 pr-3 text-lg">{generalInfo?.teamName || 'No team selected'}</div>
+                </div>
 
-<div className="mb-2 flex items-center">
-    <MdDateRange className="text-sn-main-orange mr-3" size={32} />
-    <input 
-        value={date}
-        type="date"
-        className="form-input border border-blue-500 rounded-lg text-gray-500 bg-white"
-        style={{ width: '130px', height: '40px', fontSize: '1rem' }}
-        disabled={true}
-    />
-</div>
+                <div className="mb-2 flex items-center">
+                    <MdDateRange className="text-sn-main-orange mr-3" size={32} />
+                    
+                    <div className="form-input w-full pl-3 pr-3 text-lg">{date}</div>
+                </div>
 
-<div className="mb-2 flex items-center">
-    <MdAccessTime className="text-sn-main-orange mr-3" size={32} />
-    <input 
-        value={time}
-        type="time"
-        className="form-input border border-blue-500 rounded-lg text-gray-500 bg-white"
-        style={{ width: '110px', height: '40px', fontSize: '1rem' }}
-        disabled={true}
-    />
-</div>
+                <div className="mb-2 flex items-center">
+                    <MdAccessTime className="text-sn-main-orange mr-3" size={32} />
+                    
+                    <div className="form-input w-full pl-3 pr-3 text-lg">{time}</div>
+                </div>
 
-<div className="mb-2 flex items-center">
-    <MdLocationOn className="text-sn-main-orange mr-3" size={32} />
-    <input 
-        value={location}
-        type="text"
-        placeholder="Location"
-        className="form-input border max-w-xs border-blue-500 rounded-lg text-gray-500 bg-white w-full pl-3 pr-3"
-        style={{ height: '40px', fontSize: '1rem' }}
-        disabled={true}
-    />
-</div>
+                <div className="mb-2 flex items-center">
+                    <MdLocationOn className="text-sn-main-orange mr-3" size={32} />
+                    
+                    <div className="form-input w-full pl-3 pr-3 text-lg">{location}</div>
+                </div>
 
 
 
