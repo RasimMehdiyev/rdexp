@@ -1,4 +1,4 @@
-import React,  { useEffect, useState } from "react";
+import React,  { useEffect, useState, useRef } from "react";
 import { supabase } from '../lib/helper/supabaseClient';
 import { PencilIcon } from '@heroicons/react/24/solid'
 import { EnvelopeIcon, PhoneIcon } from '@heroicons/react/24/outline'
@@ -31,10 +31,12 @@ const EditProfilePage = () => {
     const [loading, setLoading] = useState(true); // Add a loading state
     // navigate
     const navigate = useNavigate();
-    
+    const isInitialRender = useRef(true);
+
     
 
     const handleImageChange = (e) => {
+        e.preventDefault();
         const file = e.target.files[0];
         //console.log("handling img change, file is:", file);
         if (file) {
@@ -81,6 +83,7 @@ const EditProfilePage = () => {
           finally {
             setLoading(false); // Stop loading regardless of the outcome
           }
+
         };
     
         fetchData();
@@ -142,11 +145,11 @@ const EditProfilePage = () => {
         setButtonEnabled( allFieldsFilled || !emailError);
         setButtonOpacity( allFieldsFilled && !emailError ? 1 : 0.5);
     };
-
-    
+  
     useEffect(() => {
         updateButtonState();
-      }, [newPhoneNumber, newEmail, newBio]);
+       
+    }, [newPhoneNumber, newEmail, newBio]);
     
     const onSave = async (event) => {
        // setLoading(true);
@@ -231,8 +234,8 @@ const EditProfilePage = () => {
                             id="profilePictureInput"
                             accept="image/*"
                             style={{ display: 'none' }}
-                            onChange={() => {
-                                handleImageChange();
+                            onChange={(e) => {
+                                handleImageChange(e);
                                 //updateButtonState();
                             }}
                             
