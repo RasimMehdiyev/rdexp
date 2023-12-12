@@ -23,6 +23,9 @@ const ProfilePage = () => {
       };
   }, []);
 
+  
+
+
   const handleProfileClick = () => {
       setShowNumber(!showNumber);
   };
@@ -68,7 +71,6 @@ const ProfilePage = () => {
         return (
             <div className="bg-gradient-to-b from-sn-bg-light-blue from-40% to-white to-55% flex flex-col items-center justify-start h-screen">
                 <div className="p-4 flex flex-col items-center gap-5">
-
                   <div className={`profile-flipper ${showNumber ? 'show-number' : ''}`} onClick={handleProfileClick}>
                       <div className="profile-front">
                           {userData.profile_picture ? (
@@ -81,7 +83,6 @@ const ProfilePage = () => {
                           <div className="player-number text-5xl">{userData.number || 'No Number'}</div>
                       </div>
                   </div>
-                    
                     <div className="flex-col justify-start items-center gap-1 flex">
                         <div className="text-center text-blue-800 text-3xl font-russoOne leading-normal">{userData.full_name}</div>
                         <div className="text-center text-neutral-900 text-sm font-interEBold uppercase">{userData.role}</div>
