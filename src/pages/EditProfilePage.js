@@ -23,6 +23,8 @@ const EditProfilePage = () => {
     const [phoneTextColor, setPhoneTextColor] = useState('neutral-500');
     const [bioTextColor, setBioTextColor] = useState('neutral-500');
     const [placeholderEmail, setPlaceholderEmail] = useState(userData.email);
+    const [placeholderPhoneNumber, setPlaceholderPhoneNumber] = useState(userData.phone_number);
+    const [placeholderBio, setPlaceholderBio] = useState(userData.bio);
     const [previewImage, setPreviewImage] = useState(null);
     const [buttonOpacity, setButtonOpacity] = useState('0.5');
     const [buttonEnabled, setButtonEnabled] = useState(false);
@@ -115,11 +117,14 @@ const EditProfilePage = () => {
 
     const handlePhoneBlur=() =>{
         setPhoneTextColor("black");
+        setPlaceholderPhoneNumber("Phone");
         //updateButtonState();
     }
 
     const handleBioBlur=() =>{
         setBioTextColor("black");
+        setPlaceholderBio("Bio");
+        console.log("placeholderBio:", placeholderBio);
         //updateButtonState();
     }
 
@@ -138,11 +143,10 @@ const EditProfilePage = () => {
         setButtonOpacity( allFieldsFilled && !emailError ? 1 : 0.5);
     };
 
+    /*
     useEffect(() => {
-        // Assuming updateButtonState uses newPhoneNumber, we call it here to ensure
-        // it uses the most up-to-date state.
         updateButtonState();
-      }, [newPhoneNumber, updateButtonState]);
+      }, [newPhoneNumber, updateButtonState]);*/
     
     const onSave = async (event) => {
        // setLoading(true);
@@ -227,7 +231,10 @@ const EditProfilePage = () => {
                             id="profilePictureInput"
                             accept="image/*"
                             style={{ display: 'none' }}
-                            onChange={handleImageChange}
+                            onChange={() => {
+                                handleImageChange();
+                                updateButtonState();
+                            }}
                             
                         />
                     </div>
@@ -239,7 +246,7 @@ const EditProfilePage = () => {
                         <div className=" justify-start items-start gap-2.5 inline-flex">
                             <div className="text-blue-600 text-xl font-russoOne">Contact details</div>
                         </div>
-                        <div className={`w-[322px] h-12 pl-5 pr-4 py-3 mb-2 bg-white rounded-lg border-2 ${
+                        <div className={`w-[322px] h-12 pl-2 pr-4 py-3 mb-2 bg-white rounded-lg border-2 ${
                             emailError  ? 'border-red-500' : 'border-club-header-blue'
                         } justify-start items-center gap-2.5 inline-flex`}>
                             
@@ -268,15 +275,18 @@ const EditProfilePage = () => {
                             style={{ height: '3rem', marginBottom: '30px' }}
                             inputStyle={{ height: '100%', width:'100%' }}
                             className={`text-${phoneTextColor} phone-input border-2 rounded-lg border-club-header-blue`}
-                            placeholder={userData.phone_number}
+                            placeholder={placeholderPhoneNumber}
                             dropdownStyle={{ textAlign: 'left' }} 
                             value={newPhoneNumber}
                             onChange={(newPhoneNumber) => {
                                 setNewPhoneNumber(newPhoneNumber); // Update the phone number
+                                /*
                                 if (typeof updateButtonState === 'function') {
                                 updateButtonState(); // Update the state of the button
-                                }
+                                }*/
+                                updateButtonState();
                             }}
+                            onBlur={handlePhoneBlur}
                         />
 
        
@@ -308,9 +318,12 @@ const EditProfilePage = () => {
                             <div className="grow h-auto basis-0 justify-start items-center flex">
                                 <textarea
                                     value={newBio}
-                                    onChange={(event) => setNewBio(event.target.value)}
+                                    onChange={(event) => {
+                                        setNewBio(event.target.value);
+                                        updateButtonState();
+                                    }}
                                     className={`text-${bioTextColor} grow basis-0  font-normal font-interReg"`} cols="30" rows="5" maxLength={255}
-                                    placeholder={userData.bio ? userData.bio : 'Information about yourself...'}
+                                    placeholder={placeholderBio}
                                     onBlur={handleBioBlur}
                                     />
                             </div>
