@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import StickyEditProfileComponent from "../components/StickyEditProfileComponent";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PhoneInput from "react-phone-input-2";
 
 const EditProfilePage = () => {
     const [userData, setUserData] = useState({});
@@ -16,11 +17,19 @@ const EditProfilePage = () => {
     const [newNumber, setNewNumber] = useState('');
 
     const [phoneNumberError, setPhoneNumberError] = useState('');
-    const [emailError, setEmailError] = useState('');
+    const [emailError, setEmailError] = useState(false);
+    const [phoneError, setPhoneError] = useState(false);
+    const [emailTextColor, setEmailTextColor] = useState('neutral-500');
+    const [phoneTextColor, setPhoneTextColor] = useState('neutral-500');
+    const [bioTextColor, setBioTextColor] = useState('neutral-500');
+    const [placeholderEmail, setPlaceholderEmail] = useState(userData.email);
     const [previewImage, setPreviewImage] = useState(null);
+    const [buttonOpacity, setButtonOpacity] = useState('0.5');
+    const [buttonEnabled, setButtonEnabled] = useState(false);
     const [loading, setLoading] = useState(true); // Add a loading state
     // navigate
     const navigate = useNavigate();
+    
     
 
     const handleImageChange = (e) => {
@@ -84,13 +93,49 @@ const EditProfilePage = () => {
         
     };
 
-    const validatePhoneNumber = (newPhoneNumber) => {
-        // Regular expression for a valid phone number
-        if (newPhoneNumber != '') {
-            const phonePattern = /^[\d\+\-\s]+$/;
-            return phonePattern.test(newPhoneNumber);
-        } else return true;
+
+    const handleBlur = () => {
+        setEmailTextColor("black");
+        if(emailError)
+        {
+            toast.error("Please enter a valid email address.", {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }
         
+        setPlaceholderEmail("Email")
+    };
+
+    const handlePhoneBlur=() =>{
+        setPhoneTextColor("black");
+        updateButtonState();
+    }
+
+    const handleBioBlur=() =>{
+        setBioTextColor("black");
+        updateButtonState();
+    }
+
+    const updateButtonState = () => {
+        if (!validateEmail(newEmail)) {
+            setEmailError(true);
+        }
+        else
+        {
+            setEmailError(false);
+        }
+
+        const allFieldsFilled = newEmail.trim() !== '' && newPhoneNumber.trim() !== '' && newNumber.trim() !== '';
+       
+        setButtonEnabled( allFieldsFilled || !emailError);
+        setButtonOpacity( allFieldsFilled && !emailError ? 1 : 0.5);
     };
     
     const onSave = async (event) => {
@@ -152,7 +197,7 @@ const EditProfilePage = () => {
     } else {
         return (
             <div>
-            <StickyEditProfileComponent onSave={onSave}/>
+            <StickyEditProfileComponent buttonOpacity={buttonOpacity} isButtonEnabled={buttonEnabled} onSave={onSave}/>
             <div className="grow flex bg-indigo-100 flex-col items-center justify-start h-screen">
                 <div className="grow p-4 flex-col justify-start items-center gap-4 inline-flex">
                 <div className="w-[329px] justify-center items-start gap-2.5 inline-flex">
@@ -188,63 +233,78 @@ const EditProfilePage = () => {
                         <div className=" justify-start items-start gap-2.5 inline-flex">
                             <div className="text-blue-600 text-xl font-russoOne">Contact details</div>
                         </div>
-                        <div className="w-[322px] h-12 pl-5 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue  justify-start items-center gap-2.5 inline-flex">
-                            <EnvelopeIcon className="h-5 w-5  text-club-header-blue"></EnvelopeIcon>
-                            <div className="w-full h-auto basis-0 justify-start items-center flex">
+                        <div className={`w-[322px] h-12 pl-5 pr-4 py-3 mb-2 bg-white rounded-lg border-2 ${
+                            emailError  ? 'border-red-500' : 'border-club-header-blue'
+                        } justify-start items-center gap-2.5 inline-flex`}>
+                            
+                            <EnvelopeIcon className={`h-5 w-5  text-club-header-blue ${
+                                        emailError ? 'text-red-500' : ''}`}></EnvelopeIcon>
+                            <div className="w-full h-auto basis-0 justify-start items-center flex ">
                                 <input
-                                    className='text-neutral-500 text-base font-normal font-interReg leading-normal'
-                                    placeholder={userData.email}
+                                    className={`text-${emailTextColor} p-2 text-base font-normal font-interReg leading-normal  ${
+                                        emailError ? 'text-red-500' : 'text-black'
+                                    }`}
+                                    placeholder={placeholderEmail}
                                     type="email"
                                     value={newEmail}
-                                        onChange={(event) => {
-                                            setNewEmail(event.target.value);
-                                            setEmailError(''); }
-                                    } />
+                                    onChange={(event) => {
+                                        setNewEmail(event.target.value);
+                                        //setEmailError('');
+                                        updateButtonState();
+                                        
+                                    }} 
+                                    onBlur={handleBlur}
+                                />
                             </div>
                         </div>
-                        {(emailError != '') ? <div className="text-red-500">{emailError}</div>:<div></div>}
-                        <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-blue-600 justify-start items-center gap-2.5 inline-flex">
-                            <PhoneIcon className="h-5 w-5 text-neutral-500"></PhoneIcon>
-                            <div className="w-full h-auto basis-0 justify-start items-center flex">                            
-                                <input
-                                    className="text-neutral-500 text-base font-normal font-interReg leading-normal"
+                        
+                        <PhoneInput
+                                    style={{ height: '3rem', marginBottom: '30px' }}
+                                    inputStyle={{ height: '100%', width:'100%' }}
+                                    className={`text-${phoneTextColor} phone-input border-2 rounded-lg border-club-header-blue`}
                                     placeholder={userData.phone_number}
-                                    type="tel"
+                                    dropdownStyle={{ textAlign: 'left' }} 
                                     value={newPhoneNumber}
-                                            onChange={(event) => {
-                                                setNewPhoneNumber(event.target.value);
-                                                setPhoneNumberError('');
-                                            }} />
-                            </div>
-                        </div>
-                        {(phoneNumberError != '') ? <div className="text-red-500">{phoneNumberError}</div>:<div></div>}        
+                                    onChange={(newPhoneNumber) => {
+                                        setNewPhoneNumber(newPhoneNumber);
+                                        //setPhoneNumberError('');
+                                        updateButtonState();
+                                    }}
+                                    onBlur={handlePhoneBlur}
+                        />
+       
                         
                     </div>                                          
                         
                     </div>
                     <div className="flex-col justify-start items-start gap-1 flex">
-                        <div className="w-[178px] justify-start items-start gap-2.5 inline-flex">
-                            <div className="text-blue-600 text-xl font-russoOne">About player</div>
-                        </div>
-                        {
-                            userData.role_id == 2 ?                         
-                            <div className="justify-start items-center gap-2.5 flex">
-                                <input type="text" 
-                                    onChange={(event)=>{setNewNumber(event.target.value)}}
-                                    value={newNumber}
-                                    className="text-neutral-500 text-base font-normal leading-normal w-14 h-8 pl-4 pr-4 bg-white rounded-md border border-blue-600"
-                                    placeholder={userData.number ? userData.number : 'Nr.'}
-                                />
+                        <div className="flex-row flex items-center">
+                            <div className="w-[178px] justify-start items-start inline-flex">
+                                <div className="text-blue-600 text-xl font-russoOne">About player</div>
                             </div>
-                            : <div></div>
-                        }
-                        <div className="w-[322px] px-4 py-1 bg-white rounded-md border border-blue-600  justify-start items-center inline-flex">
+                            {
+                                userData.role_id == 2 ?                         
+                                <div className="flex items-center gap-2.5 mb-2">
+                                    <input
+                                        type="text"
+                                        onChange={(event) => { setNewNumber(event.target.value) }}
+                                        value={newNumber}
+                                        className="text-neutral-500 text-base font-normal leading-normal w-14 h-14 pl-4 pr-4 bg-white rounded-full border-2 border-club-header-blue"
+                                        placeholder={userData.number ? userData.number : 'Nr.'}
+                                    />
+                                  
+                                </div>
+                                : <div></div>
+                            }
+                        </div>
+                        <div className="w-[322px] px-4 py-1 mt-2 bg-white rounded-lg border-2 border-club-header-blue  justify-start items-center inline-flex">
                             <div className="grow h-auto basis-0 justify-start items-center flex">
                                 <textarea
                                     value={newBio}
                                     onChange={(event) => setNewBio(event.target.value)}
-                                    className="grow basis-0 text-neutral-500 text-sm font-normal font-interReg"
+                                    className={`text-${bioTextColor} grow basis-0  font-normal font-interReg"`} cols="30" rows="5" maxLength={255}
                                     placeholder={userData.bio ? userData.bio : 'Information about yourself...'}
+                                    onBlur={handleBioBlur}
                                     />
                             </div>
                         </div>
