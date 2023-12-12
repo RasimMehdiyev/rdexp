@@ -185,11 +185,11 @@ const EditProfilePage = () => {
                 <div className="flex-col justify-start items-start gap-2 flex">
                     
                     <div className="flex-col justify-start items-start gap-1 flex">
-                        <div className="px-4 justify-start items-start gap-2.5 inline-flex">
+                        <div className=" justify-start items-start gap-2.5 inline-flex">
                             <div className="text-blue-600 text-xl font-russoOne">Contact details</div>
                         </div>
-                        <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-blue-600  justify-start items-center gap-2.5 inline-flex">
-                            <EnvelopeIcon className="h-5 w-5 text-neutral-500"></EnvelopeIcon>
+                        <div className="w-[322px] h-12 pl-5 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue  justify-start items-center gap-2.5 inline-flex">
+                            <EnvelopeIcon className="h-5 w-5  text-club-header-blue"></EnvelopeIcon>
                             <div className="w-full h-auto basis-0 justify-start items-center flex">
                                 <input
                                     className='text-neutral-500 text-base font-normal font-interReg leading-normal'
@@ -223,14 +223,14 @@ const EditProfilePage = () => {
                         
                     </div>
                     <div className="flex-col justify-start items-start gap-1 flex">
-                        <div className="w-[178px] px-4 justify-start items-start gap-2.5 inline-flex">
+                        <div className="w-[178px] justify-start items-start gap-2.5 inline-flex">
                             <div className="text-blue-600 text-xl font-russoOne">About player</div>
                         </div>
                         <div className="justify-start items-center gap-2.5 flex">
                             <input type="text" 
                                 onChange={(event)=>{setNewNumber(event.target.value)}}
                                 value={newNumber}
-                                className="text-neutral-500 text-base font-normal leading-normal w-16 h-8 pl-5 pr-4 bg-white rounded-md border border-blue-600"
+                                className="text-neutral-500 text-base font-normal leading-normal w-16 h-12 pl-5 pr-4 bg-white rounded-lg border border-text-club-header-blue"
                                 placeholder={userData.number ? userData.number : 'Player number'}
                             />
                         </div>
