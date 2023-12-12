@@ -23,10 +23,15 @@ const TeamCreatePage = () => {
   };
 
   const addPlayer = (player) => {
+    if (players.some(p => p.name === player.name)) {
+      toast.warning('Player already exists!', { position: "top-center" });
+      return;
+    }
+
     const newPlayer = {
       id: player.id,
       name: player.name,
-      number: "21", // Make sure this is the correct value you want to display
+      number: player.number, // Make sure this is the correct value you want to display
       isPlayer: true,  // Make sure to pass these properties if they are needed in PersonTag
       isMember: false  // Make sure to pass these properties if they are needed in PersonTag
     };
@@ -50,7 +55,7 @@ const TeamCreatePage = () => {
     try {
       const { data, error } = await supabase
         .from('users')
-        .select('id, full_name');
+        .select('id, full_name,number');
 
       if (error) {
         console.error('Error fetching users:', error);
