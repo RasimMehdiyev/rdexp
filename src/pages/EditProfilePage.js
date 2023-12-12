@@ -15,6 +15,7 @@ const EditProfilePage = () => {
     const [newEmail, setNewEmail] = useState('');
     const [newPhoneNumber, setNewPhoneNumber] = useState('');
     const [newNumber, setNewNumber] = useState('');
+    const [clickNumber, setClickNumber] = useState(0);
 
     const [phoneNumberError, setPhoneNumberError] = useState('');
     const [emailError, setEmailError] = useState(false);
@@ -29,11 +30,32 @@ const EditProfilePage = () => {
     const [buttonOpacity, setButtonOpacity] = useState('0.5');
     const [buttonEnabled, setButtonEnabled] = useState(false);
     const [loading, setLoading] = useState(true); // Add a loading state
+    const [showNumber, setShowNumber] = useState(false);
     // navigate
     const navigate = useNavigate();
     const isInitialRender = useRef(true);
 
     
+    useEffect(() => {
+        // Flipping to show number on first load
+        const timer = setTimeout(() => setShowNumber(true), 1000);
+        const timer2 = setTimeout(() => setShowNumber(false), 2000);
+        return () => {
+            clearTimeout(timer);
+            clearTimeout(timer2);
+        };
+    }, []);
+  
+    const handleProfileClick = () => {
+        // SET NUMBER OF CLICKS
+        setClickNumber(clickNumber + 1);
+        if (clickNumber  % 3 == 0) {
+            setShowNumber(false);
+        } else {
+            setShowNumber(true);
+        }
+        console.log("click number is:", clickNumber);
+    };
 
     const handleImageChange = (e) => {
         e.preventDefault();
@@ -205,6 +227,7 @@ const EditProfilePage = () => {
 
     };
 
+
     
     if (loading) {
     } else {
@@ -213,35 +236,44 @@ const EditProfilePage = () => {
             <StickyEditProfileComponent buttonOpacity={buttonOpacity} isButtonEnabled={buttonEnabled} onSave={onSave}/>
             <div className="grow flex bg-indigo-100 flex-col items-center justify-start h-screen">
                 <div className="grow p-4 flex-col justify-start items-center gap-4 inline-flex">
-                <div className="w-[329px] justify-center items-start gap-2.5 inline-flex">
-                    <div className="relative">
-                        
-                        <label htmlFor="profilePictureInput">
-                            {previewImage ? (
-                            <img className="w-[142px] h-[142px] rounded-full object-cover overflow-hidden cursor-pointer" src={previewImage} alt="Preview" />
-                            ) : (
-                            <img className="w-[150px] h-[150px] rounded-full cursor-pointer object-cover overflow-hidden" src={process.env.PUBLIC_URL + "/images/no_user.png"} alt="No user" />
-                            )}
-
-                            <div className="w-[35px] h-[35px] left-[107px] top-[98px] absolute">
-                            <div className="w-[35px] h-[35px] left-[-3px] top-0 absolute bg-blue-600 rounded-full flex justify-center items-center cursor-pointer">
-                                <PencilIcon className="h-6 w-6 text-white" />
-                            </div>
-                            </div>
-                        </label>
-                        <input
-                            type="file"
-                            id="profilePictureInput"
-                            accept="image/*"
-                            style={{ display: 'none' }}
-                            onChange={(e) => {
-                                handleImageChange(e);
-                                //updateButtonState();
-                            }}
+                    <div className={`profile-flipper ${showNumber ? 'show-number' : ''}`} onClick={handleProfileClick}>
+                        <div className="profile-front"> 
                             
-                        />
+                                    {previewImage ? (
+                                    <img className="w-[142px] h-[142px] rounded-full object-cover overflow-hidden" src={previewImage} alt="Preview" />
+                                    ) : (
+                                    <img className="w-[150px] h-[150px] rounded-full  object-cover overflow-hidden" src={process.env.PUBLIC_URL + "/images/no_user.png"} alt="No user" />
+                                    )}
+                                    <label htmlFor="profilePictureInput">
+                                        <div className="w-[35px] h-[35px] left-[107px] top-[98px] absolute" onChange={(e) => (handleImageChange(e))}>
+                                            <div className="w-[35px] h-[35px] left-[-3px] top-0 absolute bg-blue-600 rounded-full flex justify-center items-center cursor-pointer">
+                                                <PencilIcon className="h-6 w-6 text-white"/>
+                                            </div>
+                                        </div>
+                                    </label>
+                                        <input
+                                            type="file"
+                                            id="profilePictureInput"
+                                            accept="image/*"
+                                            style={{ display: 'none' }}
+                                        />
+                                    
+                        </div>
+                        <div className="profile-back bg-sn-main-orange circle-number rounded-full font-russoOne shadow-md text-white mr-8">
+                            {
+                                userData.role_id == 2 ?    
+                                <input
+                                            type="text"
+                                            className="text-white placeholder:text-5xl w-full placeholder:text-white border-none font-russoOne font-normal bg-sn-main-orange leading-normal text-center !text-5xl  rounded-full"
+                                            placeholder={userData.number || 'Nr.'}
+                                            value={newNumber}
+                                            onChange={(e) => setNewNumber(e.target.value)}
+                                        />
+                                        :
+                                <div></div>
+                                }
+                        </div>
                     </div>
-                </div>
                 
                 <div className="flex-col justify-start items-start gap-2 flex">
                     

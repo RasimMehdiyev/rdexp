@@ -42,6 +42,8 @@ const HeaderComponent = ({ toggleSidebar }) => {
             .select('id, name, picture')
             .eq('id', club.club_id)
             .single(); // Use single to get a single record or null
+        console.log("Club data:", clubData);
+        console.log("Team data:", team[0]);
 
         if (clubNameError) throw clubNameError;
         setClubData(clubData);
@@ -100,14 +102,14 @@ const HeaderComponent = ({ toggleSidebar }) => {
     }
   return (
     <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-20'> {/* Ensure z-index is high enough */}
-            {
-              clubData.picture ? (
+              {
+              clubData ? (
                 <Link to={`/team-profile/${clubData.id}/${teamData.team_id}`} className='flex flex-col items-center justify-center'>
-                  <img className='cursor-pointer border-2 border-white object-cover overflow-hidden w-[45px] h-[45px] rounded-10px' src={clubData.picture} alt="team-profile" />
+                  <img className='cursor-pointer border-2 border-white bg-white object-cover overflow-hidden w-[40px] h-[40px] rounded-10px' src={clubData.picture ? clubData.picture : process.env.PUBLIC_URL + "/images/sport-team.png"} alt="team-profile" />
                 </Link>
                 ) : (
                 <Link to="no-team/" className='flex flex-col items-center justify-center'>
-                    <img className='bg-white cursor-pointer border-2 border-white object-cover overflow-hidden w-[50px] h-[50px] rounded-10px' src={process.env.PUBLIC_URL + "/images/Teams-1.svg"} alt="profile" />
+                    <img className='bg-white cursor-pointer border-2 border-white object-cover overflow-hidden w-[40px] h-[40px] rounded-10px' src={process.env.PUBLIC_URL + "/images/sport-team.png"} alt="profile" />
                 </Link>
                 )
               }

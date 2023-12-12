@@ -150,7 +150,7 @@ const GameOverviewComponent = ({
             param_role_id: 2, 
             param_team_id: teamID
         })
-        console.log(data.length)
+        console.log("data length:",data.length)
         if (data.length == 0) {
             const { data: sup_players, error: playersError } = await supabase
             .from('team_users')
