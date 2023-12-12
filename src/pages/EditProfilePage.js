@@ -115,12 +115,12 @@ const EditProfilePage = () => {
 
     const handlePhoneBlur=() =>{
         setPhoneTextColor("black");
-        updateButtonState();
+        //updateButtonState();
     }
 
     const handleBioBlur=() =>{
         setBioTextColor("black");
-        updateButtonState();
+        //updateButtonState();
     }
 
     const updateButtonState = () => {
