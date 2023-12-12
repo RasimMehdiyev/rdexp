@@ -19,6 +19,10 @@ const TeamProfilePage = () => {
     const [tab, setTab] = useState(0);
 
     useEffect(() => {
+
+        console.log("User team ids:", userTeamIds);
+        console.log("Team id:", teamId);
+        console.log("Club id", clubId);
         if(!loading){
             if(userData){
                 if (!loading && (!userTeamIds.includes(Number(teamId)))) {

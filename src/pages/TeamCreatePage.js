@@ -119,7 +119,7 @@ const TeamCreatePage = () => {
     try {
       const { data: updateData, error: updateError } = await supabase
         .from('team')
-        .update({ team_name: teamName })
+        .update({ team_name: teamName, coach_id: localStorage.getItem('userID') })
         .eq('id', teamID);
   
       if (updateError) throw updateError;
