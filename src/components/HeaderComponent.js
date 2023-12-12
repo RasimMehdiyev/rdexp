@@ -42,6 +42,8 @@ const HeaderComponent = ({ toggleSidebar }) => {
             .select('id, name, picture')
             .eq('id', club.club_id)
             .single(); // Use single to get a single record or null
+        console.log("Club data:", clubData);
+        console.log("Team data:", team[0]);
 
         if (clubNameError) throw clubNameError;
         setClubData(clubData);
