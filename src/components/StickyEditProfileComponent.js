@@ -4,8 +4,8 @@ import {useNavigate} from "react-router-dom"
 
 
 const StickyEditProfileComponent = ({onSave}) => {
+    const nagivate = useNavigate();
 
-  const nagivate = useNavigate();
 
   const getPreviousPage = () => {
       nagivate(-1);

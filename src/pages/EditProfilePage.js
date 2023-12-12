@@ -226,21 +226,25 @@ const EditProfilePage = () => {
                         <div className="w-[178px] justify-start items-start gap-2.5 inline-flex">
                             <div className="text-blue-600 text-xl font-russoOne">About player</div>
                         </div>
-                        <div className="justify-start items-center gap-2.5 flex">
-                            <input type="text" 
-                                onChange={(event)=>{setNewNumber(event.target.value)}}
-                                value={newNumber}
-                                className="text-neutral-500  text-base font-normal leading-normal w-16 h-12 pl-5 pr-4 bg-white rounded-lg border-2 border-club-header-blue"
-                                placeholder={userData.number ? userData.number : 'Player number'}
-                            />
-                        </div>
-                        <div className="w-[322px] px-4 py-1 bg-white rounded-md border border-club-header-blue  justify-start items-center inline-flex">
+                        {
+                            userData.role_id == 2 ?                         
+                            <div className="justify-start items-center gap-2.5 flex">
+                                <input type="text" 
+                                    onChange={(event)=>{setNewNumber(event.target.value)}}
+                                    value={newNumber}
+                                    className="text-neutral-500 text-base font-normal leading-normal w-14 h-8 pl-4 pr-4 bg-white rounded-md border border-blue-600"
+                                    placeholder={userData.number ? userData.number : 'Nr.'}
+                                />
+                            </div>
+                            : <div></div>
+                        }
+                        <div className="w-[322px] px-4 py-1 bg-white rounded-md border border-blue-600  justify-start items-center inline-flex">
                             <div className="grow h-auto basis-0 justify-start items-center flex">
                                 <textarea
                                     value={newBio}
                                     onChange={(event) => setNewBio(event.target.value)}
                                     className="grow basis-0 text-neutral-500 text-sm font-normal font-interReg"
-                                    placeholder={userData.bio}
+                                    placeholder={userData.bio ? userData.bio : 'Information about yourself...'}
                                     />
                             </div>
                         </div>

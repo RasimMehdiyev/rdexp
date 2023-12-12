@@ -23,6 +23,7 @@ import NoTeamPage from './pages/NoTeamPage.js';
 import { useRef } from 'react';
 import NotificationPage from './pages/NotificationPage.js';
 import EditTeamPage from './pages/EditTeamPage.js';
+import Oops from './pages/OopsPage.js';
 
 LogRocket.init('u7ityk/synthlete');
 
@@ -110,6 +111,8 @@ const App = () => {
                <Route path="/team-profile/edit/:clubId/:teamId" element={<EditTeamPage/>} />
                <Route path="/no-team" element={<NoTeamPage/>} />
                <Route path="/notification" element={<NotificationPage />} />
+               <Route path="*" element={<Oops/>} />
+
 
             </Routes>
          </>
