@@ -1,9 +1,14 @@
 import React, { useEffect } from 'react'
+import {useNavigate} from 'react-router-dom';
 
 
 
 const StickyEditProfileComponent = ({onSave}) => {
+    const nagivate = useNavigate();
 
+    const getPreviousPage = () => {
+        nagivate(-1);
+    }
  
     return (
       <div className="bg-sn-subheader-blue sticky top-16 shadow-md z-20"> 
