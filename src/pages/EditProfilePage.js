@@ -230,11 +230,11 @@ const EditProfilePage = () => {
                             <input type="text" 
                                 onChange={(event)=>{setNewNumber(event.target.value)}}
                                 value={newNumber}
-                                className="text-neutral-500 text-base font-normal leading-normal w-16 h-12 pl-5 pr-4 bg-white rounded-lg border border-text-club-header-blue"
+                                className="text-neutral-500  text-base font-normal leading-normal w-16 h-12 pl-5 pr-4 bg-white rounded-lg border-2 border-club-header-blue"
                                 placeholder={userData.number ? userData.number : 'Player number'}
                             />
                         </div>
-                        <div className="w-[322px] px-4 py-1 bg-white rounded-md border border-blue-600  justify-start items-center inline-flex">
+                        <div className="w-[322px] px-4 py-1 bg-white rounded-md border border-club-header-blue  justify-start items-center inline-flex">
                             <div className="grow h-auto basis-0 justify-start items-center flex">
                                 <textarea
                                     value={newBio}
