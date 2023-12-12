@@ -137,6 +137,12 @@ const EditProfilePage = () => {
         setButtonEnabled( allFieldsFilled || !emailError);
         setButtonOpacity( allFieldsFilled && !emailError ? 1 : 0.5);
     };
+
+    useEffect(() => {
+        // Assuming updateButtonState uses newPhoneNumber, we call it here to ensure
+        // it uses the most up-to-date state.
+        updateButtonState();
+      }, [newPhoneNumber, updateButtonState]);
     
     const onSave = async (event) => {
        // setLoading(true);
@@ -259,19 +265,20 @@ const EditProfilePage = () => {
                         </div>
                         
                         <PhoneInput
-                                    style={{ height: '3rem', marginBottom: '30px' }}
-                                    inputStyle={{ height: '100%', width:'100%' }}
-                                    className={`text-${phoneTextColor} phone-input border-2 rounded-lg border-club-header-blue`}
-                                    placeholder={userData.phone_number}
-                                    dropdownStyle={{ textAlign: 'left' }} 
-                                    value={newPhoneNumber}
-                                    onChange={(newPhoneNumber) => {
-                                        setNewPhoneNumber(newPhoneNumber);
-                                        //setPhoneNumberError('');
-                                        updateButtonState();
-                                    }}
-                                    onBlur={handlePhoneBlur}
+                            style={{ height: '3rem', marginBottom: '30px' }}
+                            inputStyle={{ height: '100%', width:'100%' }}
+                            className={`text-${phoneTextColor} phone-input border-2 rounded-lg border-club-header-blue`}
+                            placeholder={userData.phone_number}
+                            dropdownStyle={{ textAlign: 'left' }} 
+                            value={newPhoneNumber}
+                            onChange={(newPhoneNumber) => {
+                                setNewPhoneNumber(newPhoneNumber); // Update the phone number
+                                if (typeof updateButtonState === 'function') {
+                                updateButtonState(); // Update the state of the button
+                                }
+                            }}
                         />
+
        
                         
                     </div>                                          
