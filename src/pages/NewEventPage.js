@@ -239,7 +239,7 @@ const NewGamePage = () => {
         return (
             <div>
                 <StickySubheaderEventCreateComponent onSave={handleOnChange} />
-                <div className="pt-6 h-screen bg-sn-bg-light-blue flex flex-col px-5">
+                <div className="pt-6 h-min-screen bg-almostwhite flex flex-col px-5 gap-2">
                     <h1 className="font-russoOne text-sn-main-blue text-2xl">New {selectedOption ? selectedOption : "game"}</h1>
                     {inputCheck ? (
                         <div />
@@ -252,7 +252,7 @@ const NewGamePage = () => {
                         onChange={(e) => setEventTitle(e.target.value)}
                         type="text"
                         placeholder="Title"
-                        className="text-3xl font-bold text-center text-blue bg-transparent border-0 rounded-lg py-2 px-4 w-full max-w-md font-russoOne"
+                        className="text-2xl text-blue bg-transparent border-0 rounded-lg py-2 px-2 w-full max-w-md font-interReg"
                     />
                     <div className="flex flex-row justify-between gap-4 pt-2 pb-4">
                         <div className="flex flex-row items-center gap-2">
@@ -265,7 +265,7 @@ const NewGamePage = () => {
                                 onChange={handleRadioChange}
                                 className="form-radio h-5 w-5 text-sn-main-blue"
                             />
-                            <label className="text-lg font-russoOne text-sn-main-blue" htmlFor="game">
+                            <label className="text-base " htmlFor="game">
                                 Game
                             </label>
                         </div>
@@ -279,7 +279,7 @@ const NewGamePage = () => {
                                 onChange={handleRadioChange}
                                 className="form-radio h-5 w-5 text-sn-main-blue"
                             />
-                            <label className="text-lg font-russoOne text-sn-main-blue" htmlFor="practice">
+                            <label className="text-base " htmlFor="practice">
                                 Practice
                             </label>
                         </div>
@@ -293,7 +293,7 @@ const NewGamePage = () => {
                                 onChange={handleRadioChange}
                                 className="form-radio h-5 w-5 text-sn-main-blue"
                             />
-                            <label className="text-lg font-russoOne text-sn-main-blue" htmlFor="team building">
+                            <label className="text-base " htmlFor="team building">
                                 Team Building
                             </label>
                         </div>
