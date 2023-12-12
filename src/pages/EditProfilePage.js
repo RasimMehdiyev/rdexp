@@ -218,18 +218,18 @@ const EditProfilePage = () => {
                         </div>
                     </div>
                 
-                <div className="flex-col justify-start items-start gap-2 flex">
+                <div className="mt-5 flex-col justify-start items-start gap-2 flex">
                     
                     <div className="flex-col justify-start items-start gap-1 flex">
-                        <div className="px-4 justify-start items-start gap-2.5 inline-flex">
+                        <div className="justify-start items-start gap-2.5 inline-flex">
                             <div className="text-blue-600 text-xl font-russoOne">Contact details</div>
                         </div>
                         <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-blue-600  justify-start items-center gap-2.5 inline-flex">
                             <EnvelopeIcon className="h-5 w-5 text-neutral-500"></EnvelopeIcon>
-                            <div className="w-full h-auto basis-0 justify-start items-center flex">
+                            <div className="w-full h-auto justify-start items-center flex">
                                 <input
-                                    className='text-neutral-500 text-base font-normal font-interReg leading-normal'
-                                    placeholder={userData.email}
+                                    className='w-full placeholder:-translate-x-2 text-neutral-500 text-base font-normal font-interReg leading-normal'
+                                    placeholder="Enter email"
                                     type="email"
                                     value={newEmail}
                                         onChange={(event) => {
@@ -241,10 +241,10 @@ const EditProfilePage = () => {
                         {(emailError != '') ? <div className="text-red-500">{emailError}</div>:<div></div>}
                         <div className="w-[322px] h-8 pl-5 pr-4 py-3 bg-white rounded-md border border-blue-600 justify-start items-center gap-2.5 inline-flex">
                             <PhoneIcon className="h-5 w-5 text-neutral-500"></PhoneIcon>
-                            <div className="w-full h-auto basis-0 justify-start items-center flex">                            
+                            <div className="w-full h-auto justify-start items-center flex">                            
                                 <input
-                                    className="text-neutral-500 text-base font-normal font-interReg leading-normal"
-                                    placeholder={userData.phone_number}
+                                    className="w-full placeholder:-translate-x-2 text-neutral-500 text-base font-normal font-interReg leading-normal"
+                                    placeholder="Enter phone number"
                                     type="tel"
                                     value={newPhoneNumber}
                                             onChange={(event) => {
@@ -259,7 +259,7 @@ const EditProfilePage = () => {
                         
                     </div>
                     <div className="flex-col justify-start items-start gap-1 flex">
-                        <div className="w-[178px] px-4 justify-start items-start gap-2.5 inline-flex">
+                        <div className="w-[178px] justify-start items-start gap-2.5 inline-flex">
                             <div className="text-blue-600 text-xl font-russoOne">About player</div>
                         </div>
                         <div className="w-[322px] px-4 py-1 bg-white rounded-md border border-blue-600  justify-start items-center inline-flex">
@@ -267,8 +267,8 @@ const EditProfilePage = () => {
                                 <textarea
                                     value={newBio}
                                     onChange={(event) => setNewBio(event.target.value)}
-                                    className="grow basis-0 text-neutral-500 text-sm font-normal font-interReg"
-                                    placeholder={userData.bio ? userData.bio : 'Information about yourself...'}
+                                    className="pt-2 grow basis-0 text-neutral-500 text-sm font-normal font-interReg h-[100px]"
+                                    placeholder='Information about yourself...'
                                     />
                             </div>
                         </div>

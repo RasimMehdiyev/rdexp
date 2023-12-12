@@ -98,7 +98,7 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
                   type="text"
                   value={inputValue}
                   onChange={handleInputChange}
-                  className={`placeholder:-translate-x-3 pl-10 border ${inputError ? 'border-red-500' : 'border-club-header-blue'} ${inputError ? 'bg-red-100' : 'bg-white'} h-12 w-full rounded-10px text-lg ${inputError ? 'text-red-500' : 'text-club-header-blue'}`}
+                  className={`pl-10 border ${inputError ? 'border-red-500 bg-red-100 text-red-500' : 'border-club-header-blue bg-white text-club-header-blue'} h-12 w-full rounded-10px text-lg placeholder:-translate-x-2`}
                   placeholder={isPlayer ? "Enter player's name" : "Enter name"}
                 />
               </div>

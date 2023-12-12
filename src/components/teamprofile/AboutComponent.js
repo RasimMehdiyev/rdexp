@@ -16,7 +16,7 @@ const AboutComponent = ( {teamData, clubData, isCoach}) => {
                 <div className="self-stretch flex-col justify-start items-start gap-2">
                     { isCoach && (
                     <div className="w-full self-stretch justify-between items-start inline-flex">
-                        <div className="text-blue-800 text-2xl font-russoOne">Details</div>
+                        <div className="text-blue-800 text-2xl font-russoOne">Contact Details</div>
                         <Link to={`/team-profile/edit/${clubData.id}/${teamData.id}`} className='flex items-center space-x-2 p-2 rounded-md justify-start'>
                             <div className="bg-orange-500 rounded-full p-2 flex items-center justify-center w-8 h-8">
                                 <FontAwesomeIcon icon={faPencil} className="h-4 w-4 text-white"/> 
@@ -26,30 +26,30 @@ const AboutComponent = ( {teamData, clubData, isCoach}) => {
                     )}
                     <div className="flex-col justify-start items-start gap-2 flex">
                         <div className="inline-flex items-center gap-4">
-                            <EnvelopeIcon className='w-6 h-6'/>
+                            <EnvelopeIcon className='w-6 h-6 text-neutral-600'/>
                             { teamData.email ? (
-                                <div className="text-neutral-600 text-sm font-normal font-['Inter']">{teamData.email}</div>
+                                <div className="text-neutral-600 text-sm font-interReg">{teamData.email}</div>
                                 ) : (
-                                <div className="text-neutral-600 text-sm font-normal font-['Inter']">No email</div>
+                                <div className="text-neutral-600 text-sm font-interReg">No email</div>
                             )}
                         </div>
 
                         <div className="inline-flex items-center gap-4">
-                            <PhoneIcon className='w-6 h-6'/>
+                            <PhoneIcon className='w-6 h-6 text-neutral-600'/>
                             { teamData.phone_number ? (
-                                <div className="text-neutral-600 text-sm font-normal font-['Inter']">{teamData.phone_number}</div>
+                                <div className="text-neutral-600 text-sm font-interReg">{teamData.phone_number}</div>
                                 ) : (
-                                <div className="text-neutral-600 text-sm font-normal font-['Inter']">No phone number</div>
+                                <div className="text-neutral-600 text-sm font-interReg">No phone number</div>
                             )}
                         </div>
                     </div>
                 </div>
-                <div className="flex-col justify-start items-start gap-2 flex">
+                <div className="mt-2 flex-col justify-start items-start gap-2 flex">
                     <div className="text-blue-800 text-2xl font-normal font-russoOne">Bio</div>
                         { clubData.description ? (
-                            <div className="w-[343px] text-neutral-600 text-sm font-normal font-['Inter']">{clubData.description}</div>
+                            <div className="w-[343px] text-neutral-600 text-sm font-interReg">{clubData.description}</div>
                             ) : (
-                            <div className="w-[343px] text-neutral-600 text-sm font-normal font-['Inter']">No bio</div>
+                            <div className="w-[343px] text-neutral-600 text-sm font-interReg">No bio</div>
                         )
                         }
                 </div> 

@@ -28,9 +28,9 @@ const TeamProfileHeaderComponent = ({ clubData, teamData, teamSocialsData, userT
           <div className="pt-8 pb-5 flex-col items-center gap-5 flex">
             {/* Club picture */}
             {clubData.picture ? (
-              <img className="w-[142px] object-cover overflow-hidden h-[142px] rounded-full border-3 border-white" src={clubData.picture} />
+              <img className="w-[142px] object-cover overflow-hidden h-[142px] rounded-full border-4 bg-gray-100 border-white" src={clubData.picture} />
             ) : (
-              <img className="w-[142px] object-cover overflow-hidden h-[142px] rounded-full border-3 border-white" src={process.env.PUBLIC_URL + "/images/no_user.png"} />
+              <img className="w-[142px] object-cover overflow-hidden h-[142px] rounded-full border-4 bg-gray-100 border-white" src={process.env.PUBLIC_URL + "/images/no_user.png"} />
             )}
       
             {/* Team name display */}
