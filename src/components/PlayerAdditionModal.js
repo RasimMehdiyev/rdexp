@@ -1,90 +1,123 @@
-import { Fragment, useRef, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import PlayerInput from '../components/PlayerInput.js';
+import React, { useState, Fragment, useEffect } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-regular-svg-icons';
+import { supabase } from '../lib/helper/supabaseClient';
 
-export default function PlayerAdditionModal({ isOpen, closeModal, onSave, isPlayer}) {
+const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
   const [inputValue, setInputValue] = useState('');
-  const [error, setError] = useState("");
+  const [inputError, setInputError] = useState(false);
 
-  const cancelButtonRef = useRef(null)
 
-  const handleInputChange = (value) => {
-    setInputValue(value);
-  };
+  useEffect(() => {
+    if (!isOpen) {
+      setInputValue('');
+      setInputError(false);
+    }
+  }, [isOpen]);
 
-  const handleAddPlayer = async () => {
-    const errorMsg = await onSave(inputValue, isPlayer);
-    setError(errorMsg);
-    if (!errorMsg) {
-        closeModal();
-        setInputValue(''); // Reset the input field after adding
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+    if (inputError) {
+      setInputError(false); // Reset error state when user starts typing again
     }
   };
 
-  const resetAndCloseModal = () => {
-    setInputValue('');
-    setError("");
-    closeModal();
-  }
 
+  const handleSave = async () => {
+    try {
+      const { data, error } = await checkConstraints(inputValue);
+      console.log(data, error)
+      if (error) {
+        setInputError('Error checking constraints: ' + error.message);
+      } else if (data) {
+        onSave(data);
+        setInputValue('');
+        onClose();
+      } else {
+        setInputError('Player not found or does not meet criteria.');
+      }
+    } catch (error) {
+      setInputError('Error checking constraints: ' + error.message);
+    }
+    console.log(inputError)
+  };
+
+  const checkConstraints = async (fullName) => {
+    try {
+      const { data, error } = await supabase.rpc('check_user_addition_constraints', {
+        team_id_to_check: teamId,
+        user_name_to_check: fullName,
+        is_player: isPlayer, 
+
+      });
+
+      return { data, error };
+    } catch (error) {
+      throw error;
+    }
+  };
+  
 
 
   return (
-    <Transition.Root show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={resetAndCloseModal} initialFocus={cancelButtonRef}>
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-black opacity-75 transition-opacity" />
-        </Transition.Child>
+    <Transition appear show={isOpen} as={Fragment}>
+      <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={onClose}>
+        <div className="min-h-screen px-4 text-center">
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-75" />
+          </Transition.Child>
 
-        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-          <div className="flex min-h-full items-end justify-center p-4 text-center xxs:items-center xxs:p-0">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 translate-y-4 xxs:translate-y-0 xxs:scale-95"
-              enterTo="opacity-100 translate-y-0 xxs:scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 translate-y-0 xxs:scale-100"
-              leaveTo="opacity-0 translate-y-4 xxs:translate-y-0 xxs:scale-95"
-            >
-              <Dialog.Panel className="bg-blue-200 sm-w-full relative transform overflow-hidden rounded-lgtext-left shadow-xl transition-all xxs:my-8 ">
-                <div className=" px-4 pb-4 pt-5 xxs:p-6 xxs:pb-4">
-                  <div className="xxs:flex xxs:items-start">
-                    <div className="mt-3 text-center xxs:ml-2 xxs:mt-0 xxs:text-left">
-                    <Dialog.Title as="h3" className="font-russoOne text-2xl leading-6 text-game-blue">
-                      {isPlayer ? 'ADD PLAYER' : 'ADD EXTRA'}
-                    </Dialog.Title>
-                      <div className="mt-4">
-                      <PlayerInput onInputChange={handleInputChange} errorMessage={error} isPlayer={isPlayer}/>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="px-4  py-3 xxs:flex xxs:flex-row-reverse xxs:px-6">
-                
-                  <button
-                    type="button"
-                    className="xxs:max-h-12 w-[80vw] xxs:text-center xxs:items-center inline-flex font-interELight mr-6 justify-center rounded-10px bg-game-blue px-3 py-4 text-lg text-white shadow-xxs xxs:ml-3 "
-                    onClick={handleAddPlayer}>
-                    SAVE
-                  </button>
-                </div>
-              </Dialog.Panel>
-            </Transition.Child>
-          </div>
+          <span className="inline-block h-screen align-middle" aria-hidden="true">&#8203;</span>
+
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            <div className="inline-block w-11/12 sm:w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-blue-200 shadow-xl rounded-lg">
+              <Dialog.Title as="h3" className="text-2xl leading-6 text-club-header-blue font-russoOne">
+                {isPlayer ? 'ADD PLAYER' : 'ADD EXTRA'}
+              </Dialog.Title>
+              <div className="mt-4 relative">
+                <FontAwesomeIcon icon={faUser} className={`absolute left-3.5 top-3.5 h-5 ${inputError ? 'text-red-500' : 'text-club-header-blue'}`} />
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={handleInputChange}
+                  className={`pl-10 border ${inputError ? 'border-red-500 bg-red-100 text-red-500' : 'border-club-header-blue bg-white text-club-header-blue'} h-12 w-full rounded-10px text-lg placeholder:-translate-x-2`}
+                  placeholder={isPlayer ? "Enter player's name" : "Enter name"}
+                />
+              </div>
+              <div className="mt-4">
+                <button
+                  type="button"
+                  className={`inline-flex justify-center px-4 py-2 text-lg font-interELight text-white bg-club-header-blue rounded-10px w-full ${inputValue ? '' : 'opacity-50 cursor-not-allowed'}`}
+                  onClick={handleSave}
+                  disabled={!inputValue}
+                >
+                  SAVE
+                </button>
+              </div>
+            </div>
+          </Transition.Child>
         </div>
       </Dialog>
-    </Transition.Root>
-  )
-}
+    </Transition>
+  );
+};
+
+export default PlayerAdditionModal;

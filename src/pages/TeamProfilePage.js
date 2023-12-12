@@ -13,8 +13,7 @@ const TeamProfilePage = () => {
     const navigate = useNavigate()
     const { 
         userData, teamData, clubData, coach, teamSocialsData, roles, players, 
-        extras, isCoach, userTeamIds, loading, setRoles, setExtras, 
-        setPlayers, findUserIdByName, findUserRoleById, findUserNumberById
+        extras, isCoach, userTeamIds, loading, setRoles, setExtras, setPlayers
     } = useTeamData(teamId, clubId);
     const [tab, setTab] = useState(0);
 
@@ -66,9 +65,6 @@ const TeamProfilePage = () => {
                         players={players}
                         extras={extras}
                         isCoach={isCoach}
-                        findUserIdByName={findUserIdByName}
-                        findUserNumberById={findUserNumberById} 
-                        findUserRoleById={findUserRoleById}
                     />
                 );
             case 2:
@@ -90,7 +86,7 @@ const TeamProfilePage = () => {
     }  
     else{
         return (
-        <div className="w-screen h-screen py-4 bg-gradient-to-b from-sn-bg-light-blue from-40% to-white to-55% flex-col justify-start items-center flex">
+        <div className="w-screen h-screen py-4 bg-gradient-to-b from-sn-bg-light-blue from-30% to-white to-55% flex-col justify-start items-center flex">
             <TeamProfileHeaderComponent
                 clubData={clubData}
                 teamData={teamData} 
@@ -111,7 +107,7 @@ const Tab = ({ isActive, label, onClick }) => {
         className="basis-1/3 flex justify-center items-center cursor-pointer"
         onClick={onClick}
       >
-        <div className={`w-[85px] rounded-lg flex justify-center items-center ${isActive ? 'bg-indigo-100' : ''}`}>
+        <div className={`rounded-lg pt-2 pb-2 pr-3 pl-3 flex justify-center items-center ${isActive ? 'bg-indigo-100' : ''}`}>
           <div className={`text-center text-xl font-interReg ${isActive ? 'text-blue-800' : 'text-neutral-300'}`}>
             {label}
           </div>

@@ -7,7 +7,6 @@ import EventCard from "../components/EventCard";
 import React from 'react';
 import LoadingPage from './LoadingPage';
 import StickyMonthHeader from '../components/StickyMonthComponent';
-import { PlusIcon } from '@heroicons/react/24/solid';
 
 const HomePage = () => {
   const [userData, setUserData] = useState({});
@@ -347,7 +346,7 @@ else {
           {/* Plus Button */}
           
           {isCoach && (
-            <div className="fixed top-[69px] right-[105px] z-20">
+            <div className={`fixed top-[69px] ${fetchedTeams.length > 1 ? 'right-[105px]' : 'right-[65px]'} z-20`}>
               <button
                 className="bg-sn-light-orange text-white rounded-10px  text-3xl shadow-sm flex items-center justify-center"
                 style={{ width: '36px', height: '36px' }}  
@@ -359,7 +358,8 @@ else {
           )}
 
           {/* Filter Button */}
-          <div className="fixed top-[69px] right-[65px] z-20">
+          
+            <div className={`fixed top-[69px] ${fetchedTeams.length > 1 ? 'right-[65px]' : 'right-[25px]'} z-20`}>
             <button
               id="filter-button"
               className={`filter-dropdown text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2  border-sn-light-orange  justify-center ${
@@ -412,51 +412,51 @@ else {
             )}
           </div>
           {/* Team Button */}
-          <div className="fixed top-[69px] right-[25px] z-20">
-            <button
-              id="team-button"
-              className={`team-dropdown text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2  border-sn-light-orange  justify-center ${
-                team === -1 ? 'bg-white ' : 'bg-sn-light-orange'
-              }`}
-              style={{ width: '36px', height: '36px' }}
-              onClick={toggleTeamDropdown}
-            >
-              {/* Conditionally render the team icon based on the selected team */}
-              {team === -1 ? (
-                <img
-                  src={process.env.PUBLIC_URL + "/images/team_card_orange.svg"}
-                  alt="Team Icon"
-                />
-              ) : (
-                <img
-                  src={process.env.PUBLIC_URL + "/images/team_card_white.svg"}
-                  alt="Team Icon"
-                />
-              )}
-            </button>
-            {/* Team Options */}
-            {openDropdown === 'team' && (
-              <div className="absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
-                <p
-                  className={`cursor-pointer ${team === -1 ? 'text-sn-light-orange font-bold' : ''}`}
-                  onClick={() => handleTeamChange(-1)}
-                >
-                  All
-                </p>
-                {fetchedTeams.map((fetchedTeam) => (
+          { fetchedTeams.length > 1 && (
+            <div className="fixed top-[69px] right-[25px] z-20">
+              <button
+                id="team-button"
+                className={`team-dropdown text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2  border-sn-light-orange  justify-center ${
+                  team === -1 ? 'bg-white ' : 'bg-sn-light-orange'
+                }`}
+                style={{ width: '36px', height: '36px' }}
+                onClick={toggleTeamDropdown}
+              >
+                {/* Conditionally render the team icon based on the selected team */}
+                {team === -1 ? (
+                  <img
+                    src={process.env.PUBLIC_URL + "/images/team_card_orange.svg"}
+                    alt="Team Icon"
+                  />
+                ) : (
+                  <img
+                    src={process.env.PUBLIC_URL + "/images/team_card_white.svg"}
+                    alt="Team Icon"
+                  />
+                )}
+              </button>
+              {/* Team Options */}
+              {openDropdown === 'team' && (
+                <div className="absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
                   <p
-                    key={fetchedTeam.team_id}
-                    className={`cursor-pointer ${fetchedTeam.id === team ? 'text-sn-light-orange font-bold' : ''}`}
-                    onClick={() => handleTeamChange(fetchedTeam.id)}
+                    className={`cursor-pointer ${team === -1 ? 'text-sn-light-orange font-bold' : ''}`}
+                    onClick={() => handleTeamChange(-1)}
                   >
-                    {fetchedTeam.team_name}
+                    All
                   </p>
-                ))}
-
-              </div>
-            )}
-
+                  {fetchedTeams.map((fetchedTeam) => (
+                    <p
+                      key={fetchedTeam.team_id}
+                      className={`cursor-pointer ${fetchedTeam.id === team ? 'text-sn-light-orange font-bold' : ''}`}
+                      onClick={() => handleTeamChange(fetchedTeam.id)}
+                    >
+                      {fetchedTeam.team_name}
+                    </p>
+                  ))}
+                </div>
+              )}
           </div>
+          )}
         </div>
 
 

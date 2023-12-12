@@ -295,10 +295,10 @@ const EditProfilePage = () => {
                         </div>
                     </div>
                 
-                <div className="flex-col justify-start items-start gap-2 flex">
+                <div className="mt-5 flex-col justify-start items-start gap-2 flex">
                     
                     <div className="flex-col justify-start items-start gap-1 flex">
-                        <div className="px-4 justify-start items-start gap-2.5 inline-flex">
+                        <div className="justify-start items-start gap-2.5 inline-flex">
                             <div className="text-blue-600 text-xl font-russoOne">Contact details</div>
                         </div>
                         <div className={`w-[322px] h-12 pl-2 pr-4 py-3 mb-3 bg-white rounded-lg border-2 ${emailError ? 'border-red-500':'border-club-header-blue'}  justify-start items-center gap-2.5 inline-flex`}>
@@ -341,7 +341,7 @@ const EditProfilePage = () => {
                         
                     </div>
                     <div className="flex-col justify-start items-start gap-1 flex">
-                        <div className="w-[178px] px-4 justify-start items-start gap-2.5 inline-flex">
+                        <div className="w-[178px] justify-start items-start gap-2.5 inline-flex">
                             <div className="text-blue-600 text-xl font-russoOne">About player</div>
                         </div>
                         <div className="w-[322px] px-4 py-1 bg-white rounded-lg border-2 border-club-header-blue  justify-start items-center inline-flex">

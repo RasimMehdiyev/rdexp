@@ -29,7 +29,7 @@ const PersonTag = ({ id, name, number, team, isPlayer, isMember, onDelete }) => 
   };
 
   return (
-    <div className="flex items-center mb-5 bg-white shadow-md p-2 rounded-10px w-[90vw]">
+    <div className="flex items-center mb-5 bg-white shadow-md p-2 rounded-10px w-full">
       {isPlayer && (
         <div className="font-russoOne circle-number shadow-md bg-sn-main-orange text-white mr-8">{number}</div>
       )}
