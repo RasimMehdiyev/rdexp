@@ -96,6 +96,7 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
           </div>
         </div>       
         
+        
       </div>
     </div>
   );
