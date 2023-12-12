@@ -26,7 +26,7 @@ const TeamCreatePage = () => {
     const newPlayer = {
       id: player.id,
       name: player.name,
-      number: "21", // Make sure this is the correct value you want to display
+      number: player.number, // Make sure this is the correct value you want to display
       isPlayer: true,  // Make sure to pass these properties if they are needed in PersonTag
       isMember: false  // Make sure to pass these properties if they are needed in PersonTag
     };
@@ -82,7 +82,10 @@ const TeamCreatePage = () => {
     try {
       const { data: updateData, error: updateError } = await supabase
         .from('team')
-        .update({ team_name: teamName })
+        .update({ 
+          team_name: teamName,
+          coach_id: localStorage.getItem('userID')
+         })
         .eq('id', teamID);
   
       if (updateError) throw updateError;
@@ -97,6 +100,7 @@ const TeamCreatePage = () => {
             team_id: teamID,
           }
         ]);
+        
 
       // If team update is successful, proceed to add players
       const insertPromises = players.map(player => {

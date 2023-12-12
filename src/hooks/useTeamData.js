@@ -170,66 +170,6 @@ const useTeamData = (teamId, clubId) => {
             return [];
         }
     };
-
-
-
-    
-    const findUserIdByName = async (userName) => {
-        try {
-            const { data, error } = await supabase
-                .from('users')
-                .select('id')
-                .ilike('full_name', userName); // Use ilike for case-insensitive match
-    
-            if (error) throw error;
-    
-            if (data && data.length === 1) {
-                return data[0].id;
-            } else {
-                console.log('No user or multiple users found with this name.');
-                return null;
-            }
-        } catch (error) {
-            console.error('Error finding user ID by name:', error);
-            return null;
-        }
-    };
-    
-    
-    
-
-    const findUserNumberById = async (userId) => {
-        try {
-            const { data, error } = await supabase
-                .from('users')
-                .select('number') // Replace 'phone_number' with your actual column name
-                .eq('id', userId)
-                .single();
-
-            if (error) throw error;
-            return data ? data.number : null; // Adjust the property name as per your schema
-        } catch (error) {
-            console.error('Error finding user number by ID:', error);
-            return null;
-        }
-    };
-
-    const findUserRoleById = async (userId) => {
-        try {
-            const { data, error } = await supabase
-                .from('users')
-                .select('role_id') // Replace 'phone_number' with your actual column name
-                .eq('id', userId)
-                .single();
-
-            if (error) throw error;
-            return data ? data.role_id : null; // Adjust the property name as per your schema
-        } catch (error) {
-            console.error('Error finding user role by ID:', error);
-            return null;
-        }
-    };
-
     
     useEffect(() => {
         if (!teamId || !clubId) return;
@@ -284,7 +224,7 @@ const useTeamData = (teamId, clubId) => {
         fetchData();
     }, [teamId, clubId]);
 
-    return {userData, setUserData, teamData, setTeamData, clubData, setClubData, coach, setCoach, teamSocialsData, setTeamSocialsData, roles, setRoles, players, setPlayers, extras, setExtras, isCoach, setIsCoach, userTeamIds, loading, setLoading, error, findUserIdByName, findUserNumberById, findUserRoleById};
+    return {userData, setUserData, teamData, setTeamData, clubData, setClubData, coach, setCoach, teamSocialsData, setTeamSocialsData, roles, setRoles, players, setPlayers, extras, setExtras, isCoach, setIsCoach, userTeamIds, loading, setLoading, error};
 };
 
 export default useTeamData;

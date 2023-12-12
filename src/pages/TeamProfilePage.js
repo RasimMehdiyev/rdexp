@@ -13,8 +13,7 @@ const TeamProfilePage = () => {
     const navigate = useNavigate()
     const { 
         userData, teamData, clubData, coach, teamSocialsData, roles, players, 
-        extras, isCoach, userTeamIds, loading, setRoles, setExtras, 
-        setPlayers, findUserIdByName, findUserRoleById, findUserNumberById
+        extras, isCoach, userTeamIds, loading, setRoles, setExtras, setPlayers
     } = useTeamData(teamId, clubId);
     const [tab, setTab] = useState(0);
 
@@ -62,9 +61,6 @@ const TeamProfilePage = () => {
                         players={players}
                         extras={extras}
                         isCoach={isCoach}
-                        findUserIdByName={findUserIdByName}
-                        findUserNumberById={findUserNumberById} 
-                        findUserRoleById={findUserRoleById}
                     />
                 );
             case 2:
