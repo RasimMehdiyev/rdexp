@@ -7,6 +7,7 @@ import EventCard from "../components/EventCard";
 import React from 'react';
 import LoadingPage from './LoadingPage';
 import StickyMonthHeader from '../components/StickyMonthComponent';
+import { PlusIcon } from '@heroicons/react/24/solid';
 
 const HomePage = () => {
   const [userData, setUserData] = useState({});
@@ -320,7 +321,7 @@ else {
               )}
               <div className="event-container">
                 {dayEvents
-                  .filter(event => team === -1 || event.teamId === team)
+                  //.filter(event => team === -1 || event.teamId === team)
                   .filter((event) => filter === 'all' || event.type === filter)
                   .sort((a, b) => (a.dateTime != null && b.dateTime != null ? a.dateTime.localeCompare(b.dateTime) : 0))
                   .map((event, index) => (
@@ -342,112 +343,121 @@ else {
         </div>
       ))}
 
-        
-        {/* Plus Button */}
-        
-        {isCoach && (
-          <div className="fixed top-[69px] right-[105px] z-20">
+        <div>
+          {/* Plus Button */}
+          
+          {isCoach && (
+            <div className="fixed top-[69px] right-[105px] z-20">
+              <button
+                className="bg-sn-light-orange text-white rounded-10px  text-3xl shadow-sm flex items-center justify-center"
+                style={{ width: '36px', height: '36px' }}  
+                onClick={() => navigate('/game/create')}
+              >
+                <img src={`${process.env.PUBLIC_URL}/images/plus-square.svg`} alt="Add event" />
+              </button>
+            </div>
+          )}
+
+          {/* Filter Button */}
+          <div className="fixed top-[69px] right-[65px] z-20">
             <button
-              className="bg-sn-light-orange text-white rounded-10px  text-3xl shadow-sm flex items-center justify-center"
-              style={{ width: '36px', height: '36px' }}  
-              onClick={() => navigate('/game/create')}
+              id="filter-button"
+              className={`filter-dropdown text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2  border-sn-light-orange  justify-center ${
+                filter === 'all' ? 'bg-white ' : 'bg-sn-light-orange'
+              }`}
+              style={{ width: '36px', height: '36px' }}
+              onClick={toggleFilterDropdown}
             >
-              +
+              {/* Conditionally render the filter icon based on the selected filter */}
+              {filter === 'all' ? (
+                <img
+                  src={process.env.PUBLIC_URL + "/images/filter_toggle.svg"}
+                  alt="Filter Icon"
+                />
+              ) : (
+                <img
+                  src={process.env.PUBLIC_URL + "/images/filter.svg"}
+                  alt="Filter Icon"
+                />
+              )}
             </button>
-          </div>
-        )}
-
-        
-
-        {/* Filter Button */}
-        <div className="fixed top-[69px] right-[65px] z-20">
-          <button
-            id="filter-button"
-            className={`filter-dropdown text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2  border-sn-light-orange  justify-center ${
-              filter === 'all' ? 'bg-white ' : 'bg-sn-light-orange'
-            }`}
-            style={{ width: '36px', height: '36px' }}
-            onClick={toggleFilterDropdown}
-          >
-            {/* Conditionally render the filter icon based on the selected filter */}
-            {filter === 'all' ? (
-              <img
-                src={process.env.PUBLIC_URL + "/images/filter_toggle.svg"}
-                alt="Filter Icon"
-              />
-            ) : (
-              <img
-                src={process.env.PUBLIC_URL + "/images/filter.svg"}
-                alt="Filter Icon"
-              />
-            )}
-          </button>
-          {/* Filter Options */}
-          {openDropdown === 'filter' && (
-            <div className=" absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
-              <p
-                className={`cursor-pointer ${filter === 'all' ? 'text-sn-light-orange font-bold' : ''}`}
-                onClick={() => handleFilterChange('all')}
-              >
-                All
-              </p>
-              <p
-                className={`cursor-pointer ${filter === 'practice' ? 'text-sn-light-orange font-bold' : ''}`}
-                onClick={() => handleFilterChange('practice')}
-              >
-                Practice
-              </p>
-              <p
-                className={`cursor-pointer ${filter === 'game' ? 'text-sn-light-orange font-bold' : ''}`}
-                onClick={() => handleFilterChange('game')}
-              >
-                Game
-              </p>
-              <p
-                className={`cursor-pointer ${filter === 'team building' ? 'text-sn-light-orange font-bold' : ''}`}
-                onClick={() => handleFilterChange('team building')}
-              >
-                Team building
-              </p>
-            </div>
-          )}
-        </div>
-        {/* Team Button */}
-        <div className="fixed top-[69px] right-[25px] z-20">
-          <button
-            className="team-dropdown bg-sn-light-orange text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center justify-center"
-            style={{ width: '36px', height: '36px' }}
-            onClick={toggleTeamDropdown}
-          >
-            <img
-              src={process.env.PUBLIC_URL + "/images/teams.svg"}
-              alt="Team Icon"
-              style={{filter: 'brightness(0) invert(1)' }}
-            />
-          </button>
-          {/* Team Options */}
-          {openDropdown === 'team' && (
-            <div className="absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
-              <p
-                className={`cursor-pointer ${team === -1 ? 'text-sn-light-orange font-bold' : ''}`}
-                onClick={() => handleTeamChange(-1)}
-              >
-                All
-              </p>
-              {fetchedTeams.map((fetchedTeam) => (
+            {/* Filter Options */}
+            {openDropdown === 'filter' && (
+              <div className=" absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
                 <p
-                  key={fetchedTeam.team_id}
-                  className={`cursor-pointer ${fetchedTeam.id === team ? 'text-sn-light-orange font-bold' : ''}`}
-                  onClick={() => handleTeamChange(fetchedTeam.id)}
+                  className={`cursor-pointer ${filter === 'all' ? 'text-sn-light-orange font-bold' : ''}`}
+                  onClick={() => handleFilterChange('all')}
                 >
-                  {fetchedTeam.team_name}
+                  All
                 </p>
-              ))}
+                <p
+                  className={`cursor-pointer ${filter === 'practice' ? 'text-sn-light-orange font-bold' : ''}`}
+                  onClick={() => handleFilterChange('practice')}
+                >
+                  Practice
+                </p>
+                <p
+                  className={`cursor-pointer ${filter === 'game' ? 'text-sn-light-orange font-bold' : ''}`}
+                  onClick={() => handleFilterChange('game')}
+                >
+                  Game
+                </p>
+                <p
+                  className={`cursor-pointer ${filter === 'team building' ? 'text-sn-light-orange font-bold' : ''}`}
+                  onClick={() => handleFilterChange('team building')}
+                >
+                  Team building
+                </p>
+              </div>
+            )}
+          </div>
+          {/* Team Button */}
+          <div className="fixed top-[69px] right-[25px] z-20">
+            <button
+              id="team-button"
+              className={`team-dropdown text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2  border-sn-light-orange  justify-center ${
+                team === -1 ? 'bg-white ' : 'bg-sn-light-orange'
+              }`}
+              style={{ width: '36px', height: '36px' }}
+              onClick={toggleTeamDropdown}
+            >
+              {/* Conditionally render the team icon based on the selected team */}
+              {team === -1 ? (
+                <img
+                  src={process.env.PUBLIC_URL + "/images/team_card_orange.svg"}
+                  alt="Team Icon"
+                />
+              ) : (
+                <img
+                  src={process.env.PUBLIC_URL + "/images/team_card_white.svg"}
+                  alt="Team Icon"
+                />
+              )}
+            </button>
+            {/* Team Options */}
+            {openDropdown === 'team' && (
+              <div className="absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
+                <p
+                  className={`cursor-pointer ${team === -1 ? 'text-sn-light-orange font-bold' : ''}`}
+                  onClick={() => handleTeamChange(-1)}
+                >
+                  All
+                </p>
+                {fetchedTeams.map((fetchedTeam) => (
+                  <p
+                    key={fetchedTeam.team_id}
+                    className={`cursor-pointer ${fetchedTeam.id === team ? 'text-sn-light-orange font-bold' : ''}`}
+                    onClick={() => handleTeamChange(fetchedTeam.id)}
+                  >
+                    {fetchedTeam.team_name}
+                  </p>
+                ))}
 
-            </div>
-          )}
+              </div>
+            )}
 
           </div>
+        </div>
 
 
       </div>
