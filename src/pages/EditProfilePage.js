@@ -303,9 +303,9 @@ const EditProfilePage = () => {
                         </div>
                         <div className={`w-[322px] h-12 pl-2 pr-4 py-3 mb-3 bg-white rounded-lg border-2 ${emailError ? 'border-red-500':'border-club-header-blue'}  justify-start items-center gap-2.5 inline-flex`}>
                             <EnvelopeIcon className={`h-5 w-5 text-club-header-blue ${emailError ? 'text-red-500' : ''}`}></EnvelopeIcon>
-                            <div className="w-full h-auto basis-0 justify-start items-center flex">
+                            <div className="w-full h-auto justify-start items-center flex">
                                 <input
-                                    className={`text-base text-${emailTextColor} ${emailError ? 'text-red-500' : 'text-black'} font-normal font-interReg leading-normal`}
+                                    className={`text-base text-${emailTextColor} ${emailError ? 'text-red-500' : 'text-black'} font-normal font-interReg leading-normal w-full placeholder:-translate-x-2`}
                                     placeholder={userData.email}
                                     type="email"
                                     value={newEmail}
@@ -323,7 +323,7 @@ const EditProfilePage = () => {
                         <PhoneInput
                             style={{ height: '3rem', marginBottom: '30px' }}
                             inputStyle={{ height: '100%', width:'100%' }}
-                            className={`text-${phoneTextColor} phone-input border-2 rounded-lg border-club-header-blue`}
+                            className={`text-${phoneTextColor} phone-input border-2 rounded-lg border-club-header-blue `}
                             placeholder={placeholderPhoneNumber}
                             dropdownStyle={{ textAlign: 'left' }} 
                             value={newPhoneNumber}
