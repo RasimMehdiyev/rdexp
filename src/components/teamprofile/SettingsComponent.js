@@ -46,14 +46,13 @@ const SettingsComponent = ( {roles, setRoles, teamData, isCoach}) => {
             console.error('Error adding role:', error);
         }
     };
-    
     return (
-        <div className="w-full py-4 bg-white flex-col justify-start items-center gap-6 inline-flex">
-            <div className="self-stretch py-2 flex-col justify-start items-start gap-6 flex">
-                <div className="self-stretch px-4 justify-start items-center gap-4 inline-flex">
+        <div className="w-full pl-6 pr-6 flex-col justify-start items-start inline-flex">
+            <div className="self-stretch flex-col justify-start items-start flex">
+                <div className="self-stretch justify-start items-center gap-4 inline-flex pt-5 pb-4">
                     <div className="text-blue-800 text-2xl font-russoOne leading-normal">Extra Roles</div>
                 </div>
-                <div className="self-stretch flex-col justify-start items-start gap-4 flex pl-4">
+                <div className="self-stretch flex-col justify-start items-start gap-3 flex">
                     {roles.map((role) => (
                         isCoach 
                         ? <PersonTag key={role.id} {...role} team={teamData.team_name} onDelete={deleteRole} />

@@ -12,6 +12,7 @@ const HomePage = () => {
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
   const [fetchedEvents, setFetchedEvents] = useState([]);
+  const [fetchedTeams, setFetchedTeams] = useState([]);
   const [currentMonth, setCurrentMonth] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [isCoach, setIsCoach] = useState(false);
@@ -74,14 +75,24 @@ const HomePage = () => {
         .from('team_users')
         .select('team_id')
         .eq("user_id", userTableIdAndRole.id);
-  
-      console.log("this is the team of the user");
-      console.log(teamData);
-  
+
       if (teamError) {
         console.error(teamError);
         return; // Stop execution if there's an error
       }
+      
+      // Get all teams with the team IDs from teamData
+      let { data: teams, error: teamsError } = await supabase
+        .from('team')
+        .select('*')
+        .in('id', teamData.map(team => team.team_id));
+
+      if (teamsError) {
+        console.error(teamsError);
+        return; // Stop execution if there's an error
+      }
+    
+      setFetchedTeams(teams);
 
       // Set isCoach based on user's role
       setIsCoach(userTableIdAndRole.role_id === 1);
@@ -102,12 +113,14 @@ const HomePage = () => {
         }
       } else {
         let { data, error } = await supabase
-          .rpc('get_event_attendees', {
-            user_uuid: uuid
+          .rpc('get_user_assigned_events', {
+            user_uuid: uuid,
           });
-        console.log("Events: ");
         if (error) console.error(error);
         else console.log("event data: ", data);
+        if (data.length === 0) {
+          data = []
+        }
         setFetchedEvents(data);
       }
     } catch (error) {
@@ -123,7 +136,7 @@ const HomePage = () => {
     event.preventDefault();
     console.log("open card");
     console.log(index);
-    navigate('/game-overview/' + index);
+    navigate('/event-overview/' + index);
   }
 
 
@@ -208,13 +221,6 @@ const HomePage = () => {
       document.body.removeEventListener('click', handleOutsideClick);
     };
   }, [setShowFilterOptions]);
-  
-  
-  
-  const handleFilterChange = (newFilter) => {
-    setFilter(newFilter);
-    setShowFilterOptions(false); // Hide the filter options after selecting an option
-  };
 
  // Organize events by month and then by day, considering the filter
 const organizedEvents = transformedEvents
@@ -239,6 +245,20 @@ const organizedEvents = transformedEvents
 }, {});
 
 
+const handleFilterChange = (newFilter) => {
+  setFilter(newFilter);
+  setShowFilterOptions(false); // Hide the filter options after selecting an option
+};
+
+const [team, setTeam] = useState(-1); // Default team is 'all'
+const [showTeamOptions, setShowTeamOptions] = useState(false);
+
+const handleTeamChange = (newTeam) => {
+  setTeam(newTeam);
+  setShowTeamOptions(false); // Hide the filter options after selecting an option
+};
+
+
   if (loading) {
     return <LoadingPage />;
   } else
@@ -246,7 +266,7 @@ const organizedEvents = transformedEvents
   if (!fetchedEvents.some(event => new Date(event.datetime) > new Date())) {
     return (
       
-      <div className="mt-[-80px]">
+      <div className="mt-[-80px] bg-almostwhite">
         {isCoach && ( 
           <div className="flex flex-col justify-center items-center h-screen font-Inter text-sn-main-orange">
             <p className="text-3xl font-bold mb-1">You haven&apos;t</p>
@@ -299,6 +319,7 @@ else {
               )}
               <div className="event-container">
                 {dayEvents
+                  .filter(event => team === -1 || event.teamId === team)
                   .filter((event) => filter === 'all' || event.type === filter)
                   .sort((a, b) => (a.dateTime != null && b.dateTime != null ? a.dateTime.localeCompare(b.dateTime) : 0))
                   .map((event, index) => (
@@ -306,7 +327,7 @@ else {
                       <EventCard
                         type={event.type}
                         eventName={event.eventName}
-                        teamName={event.teamName}
+                        teamName={event.teamId}
                         eventTime={event.eventTime}
                         location={event.location}
                         attendance={event.attendance}
@@ -334,7 +355,7 @@ else {
         {/* Plus Button */}
         
         {isCoach && (
-          <div className="fixed top-[69px] right-[65px] z-20">
+          <div className="fixed top-[69px] right-[105px] z-20">
             <button
               className="bg-sn-light-orange text-white rounded-10px  text-3xl shadow-sm flex items-center justify-center"
               style={{ width: '36px', height: '36px' }}  
@@ -348,7 +369,7 @@ else {
         
 
         {/* Filter Button */}
-        <div className="fixed top-[69px] right-[20px] z-20">
+        <div className="fixed top-[69px] right-[65px] z-20">
           <button
             id="filter-button"
             className={`text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2  border-sn-light-orange  justify-center ${
@@ -400,6 +421,45 @@ else {
             </div>
           )}
         </div>
+        {/* Team Button */}
+        <div className="fixed top-[69px] right-[25px] z-20">
+          <button
+            className="bg-sn-light-orange text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center justify-center"
+            style={{ width: '36px', height: '36px' }}
+            onClick={() => {
+              setShowTeamOptions(!showTeamOptions)}}
+          >
+            <img
+              src={process.env.PUBLIC_URL + "/images/teams.svg"}
+              alt="Team Icon"
+              style={{filter: 'brightness(0) invert(1)' }}
+            />
+          </button>
+          {/* Team Options */}
+          {showTeamOptions && (
+            <div className="absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
+              <p
+                className={`cursor-pointer ${team === -1 ? 'text-sn-light-orange font-bold' : ''}`}
+                onClick={() => handleTeamChange(-1)}
+              >
+                All
+              </p>
+              {fetchedTeams.map((fetchedTeam) => (
+                <p
+                  key={fetchedTeam.team_id}
+                  className={`cursor-pointer ${fetchedTeam.id === team ? 'text-sn-light-orange font-bold' : ''}`}
+                  onClick={() => handleTeamChange(fetchedTeam.id)}
+                >
+                  {fetchedTeam.team_name}
+                </p>
+              ))}
+
+            </div>
+          )}
+
+          </div>
+
+
       </div>
     );
   }

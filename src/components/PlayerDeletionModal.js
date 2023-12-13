@@ -44,12 +44,12 @@ export default function PlayerDeletionModal({ isOpen, closeModal, onConfirm, id,
                       REMOVE FROM TEAM
                     </Dialog.Title>
                       <div>
-                        <p className="mt-4 text-game-blue">
+                        <p className="mt-4 text-club-header-blue">
                         Are you sure you want to remove</p>
                         
                         
                         <PersonTagNotDeletable name={name} number={number} isPlayer={isPlayer} />
-                        <p className=" text-game-blue">
+                        <p className=" text-club-header-blue">
                         
                         from <strong>{team}</strong>?</p>
                         
