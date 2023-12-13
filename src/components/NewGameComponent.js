@@ -228,11 +228,11 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
    
 
     const handleAddSubstitute = () => {
-        setPreSubstitutePlayers(prev => [...prev, { full_name: "No Selection", id: -1 }]);
+        setPreSubstitutePlayers(prev => [...prev, { full_name: "Choose player", id: -1 }]);
     };    
     
     const handleSubstituteChange = (index, playerId) => {
-        let selectedPlayer = { full_name: "No Selection", id: -1 };
+        let selectedPlayer = { full_name: "Choose player", id: -1 };
         if (playerId != -1) {
             selectedPlayer = teamPlayers.find((player) => player.id == playerId);
         }
@@ -338,7 +338,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                         className="w-[150px] h-[40px] px-2 bg-white rounded-lg border-2 border-sn-main-orange text-interReg "
                         name="teams"
                         id="teams"
-                        placeholder="Choose team">
+                        placeholder="No Selection">
                         <option className="h-[40px] bg-white rounded-md">{ selectedID ? teamNames.find(team => team.id == selectedID).team_name : 'No Selection'}</option>
                         {
                             teamNames.map((team) => (
