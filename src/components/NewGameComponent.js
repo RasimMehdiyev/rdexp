@@ -228,11 +228,11 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
    
 
     const handleAddSubstitute = () => {
-        setPreSubstitutePlayers(prev => [...prev, { full_name: "No Selection", id: -1 }]);
+        setPreSubstitutePlayers(prev => [...prev, { full_name: "Choose player", id: -1 }]);
     };    
     
     const handleSubstituteChange = (index, playerId) => {
-        let selectedPlayer = { full_name: "No Selection", id: -1 };
+        let selectedPlayer = { full_name: "Choose player", id: -1 };
         if (playerId != -1) {
             selectedPlayer = teamPlayers.find((player) => player.id == playerId);
         }
@@ -335,10 +335,10 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                     <MdGroup className="text-sn-main-orange mr-3" size={32} />
                     <select
                         onChange={handleTeamChange}
-                        className="w-[150px] h-[40px] px-2 bg-white rounded-lg border-2 border-sn-main-orange"
+                        className="w-[150px] h-[40px] px-2 bg-white rounded-lg border-2 border-sn-main-orange text-interReg "
                         name="teams"
                         id="teams"
-                        placeholder="Choose team">
+                        placeholder="No Selection">
                         <option className="h-[40px] bg-white rounded-md">{ selectedID ? teamNames.find(team => team.id == selectedID).team_name : 'No Selection'}</option>
                         {
                             teamNames.map((team) =>
@@ -362,7 +362,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                     value={date} 
                     onChange={(e) => setDate(e.target.value)} 
                     type="date" 
-                    className="form-input pl-3 pr-3 rounded-lg border-2 border-sn-main-orange text-black h-[40px] w-[150px]"
+                    className="form-input text-interReg pl-3 pr-3 rounded-lg border-2 border-sn-main-orange text-black h-[40px] w-[150px]"
                     min={getCurrentDate()} 
                 />
                 </div>
@@ -376,7 +376,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                                 value={time}
                                 onChange={(e) => setTime(e.target.value)}
                                 type="time"
-                                className="form-input rounded-lg pl-3 pr-3 border-2 border-sn-main-orange text-black h-[40px] w-[150px]"
+                                className="form-input text-interReg rounded-lg pl-3 pr-3 border-2  border-sn-main-orange text-black h-[40px] w-[150px]"
                             />
                         </div>
                     ) : (
@@ -384,7 +384,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                             <select
                                 value={time}
                                 onChange={(e) => setTime(e.target.value)}
-                                className="form-select rounded-lg pl-3 pr-3 border-2 border-sn-main-orange text-black h-[40px] w-[150px]"
+                                className="form-select text-interReg rounded-lg pl-3 pr-3 border-2 border-sn-main-orange text-black h-[40px] w-[150px]"
                             >
                                 {generateTimeOptions()}
                             </select>
@@ -400,7 +400,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                 
                 </div>                
                 
-                <div id='players' className="flex flex-col gap-4 mt-7 mb-10">
+                <div id='players' className="flex flex-col gap-4 mt-10 mb-10">
                         {isTeamSelected && (
                         <h5 className="text-2xl text-left text-sn-main-blue font-russoOne mb-2">Initial Line-up</h5>
                         )}
@@ -414,7 +414,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                                         <select
                                             id={`player_select_${position.id}`}
                                             onChange={(event) => handlePlayerChange(event, position)}
-                                            className="form-select w-full px-2 py-2 h-12 bg-white rounded-lg border-2 border-sn-main-orange"
+                                            className="form-select w-full px-2 py-2 h-12 bg-white rounded-lg border-2 border-club-header-blue"
                                             disabled={!selectedID}
                                         >
                                             {selectedPlayers.find(player => player.position_id === position.id) ?
@@ -464,7 +464,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                                 SUB
                                 </div>                          
                                     <select
-                                        className="form-select w-full px-2 py-2 h-12 bg-white rounded-lg border-2 border-sn-main-orange"
+                                        className="form-select w-full px-2 py-2 h-12 bg-white rounded-lg border-2 border-club-header-blue"
                                         name={`substituteSelect_${index}`}
                                         id={`substituteSelect_${index}`}
                                         value={substitute.id}
@@ -498,16 +498,16 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                         ))}
                     </div>
                 </div>
-                <div id='extra-roles' className="flex flex-col gap-4 mt-4 mb-10">
+                <div id='extra-roles' className="flex flex-col gap-4 mt-10 mb-10">
                     {isTeamSelected && (
                     <h5 className="text-2xl text-left text-sn-main-blue font-russoOne mb-2">Extra Roles</h5>)}
                     {extraRoles.map((extraRole) => (
-                        <div className="flex flex-col gap-0" key={extraRole.id} > 
+                        <div className="flex flex-col " key={extraRole.id} > 
                             <div className="flex items-center mb-1">
-                                <span className="text-black mr-3" style={{ width: '128px', color: '#007bff', fontFamily: 'Inter ' }}>{extraRole.role_title}</span>
+                                <span className="text-black  text-xl" style={{ width: '128px', color: '#007bff', fontFamily: 'Inter Bold' }}>{extraRole.role_title}</span>
                                 
                                 <select
-                                    className="form-select px-2 py-2 bg-white rounded-lg flex-grow border-2 border-sn-main-orange h-12"
+                                    className="form-select px-2 py-2 ml-3 bg-white rounded-lg flex-grow border-2 border-club-header-blue h-12"
                                     name="" 
                                     id="" 
                                     disabled={!selectedID}

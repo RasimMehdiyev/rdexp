@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useCombobox } from 'downshift';
 
-const LocationInput = ({ onLocationChange, borderColor, isIconVisible }) => {
+const LocationInput = ({ onLocationChange, borderColor, isIconVisible, value }) => {
   const [inputItems, setInputItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -12,6 +12,7 @@ const LocationInput = ({ onLocationChange, borderColor, isIconVisible }) => {
     getInputProps,
     getItemProps,
     selectedItem,
+    setInputValue
   } = useCombobox({
     items: inputItems,
     onInputValueChange: ({ inputValue }) => {
@@ -44,6 +45,13 @@ const LocationInput = ({ onLocationChange, borderColor, isIconVisible }) => {
     }
   };
 
+    
+  useEffect(() => {
+    setInputValue(value);
+  }, [value, setInputValue]);
+
+
+
   return (
     <div className='input-container w-full'>
       <div className="relative w-full ">
@@ -53,7 +61,7 @@ const LocationInput = ({ onLocationChange, borderColor, isIconVisible }) => {
         <textarea
           {...getInputProps()}
           type="text"
-          placeholder='Location'
+          placeholder="Location"
           className={`text-black font-interReg p-2 w-full border-2 pl-${isIconVisible ? '8' : '2'} border-${borderColor} h-30 rounded-10px m-auto `}
           maxLength={255}
           rows={4}
