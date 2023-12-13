@@ -283,7 +283,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
 
         return (
             <form className="flex bg-sn-bg-light-blue flex-col justify-center gap-2">
-                <select onChange={handleTeamChange} className="h-7 mt-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="teams" id="teams" placeholder="Choose team">
+                <select onChange={handleTeamChange} className="h-12 mt-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="teams" id="teams" placeholder="Choose team">
                     <option className="h-7 w-[210px] bg-white rounded-md">{ selectedID ? teamNames.find(team => team.id == selectedID).team_name : 'No Selection'}</option>
                     {
                         teamNames.map((team) => (
@@ -339,7 +339,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                         {preSubstitutePlayers.map((substitute, index) => (
                             <div key={index} className="flex gap-4 items-start w-full" >
                             <select
-                                className="h-7 px-2 w-[210px] bg-white rounded-md border-sn-light-orange border-[1.5px]"
+                                className="h-12 px-2 w-[210px] bg-white rounded-md border-sn-light-orange border-[1.5px]"
                                 name={`substituteSelect_${index}`}
                                 id={`substituteSelect_${index}`}
                                 value={substitute.id}
