@@ -261,17 +261,22 @@ const EditProfilePage = () => {
                         </div>
                         <div className="profile-back bg-sn-main-orange circle-number rounded-full font-russoOne shadow-md text-white mr-8">
                             {
-                                userData.role_id == 2 ?    
-                                <input
-                                            type="text"
-                                            className="text-white placeholder:text-5xl w-full placeholder:text-white border-none font-russoOne font-normal bg-sn-main-orange leading-normal text-center !text-5xl  rounded-full"
-                                            placeholder={userData.number || 'Nr.'}
-                                            value={newNumber}
-                                            onChange={(e) => setNewNumber(e.target.value)}
-                                        />
-                                        :
-                                <div></div>
-                                }
+                                userData.role_id === 2 ? (
+                                    <input
+                                        type="text"
+                                        className="text-white placeholder:text-5xl w-full placeholder:text-white border-none font-russoOne font-normal bg-sn-main-orange leading-normal text-center !text-5xl  rounded-full"
+                                        placeholder={userData.number || 'Nr.'}
+                                        value={newNumber}
+                                        onChange={(e) => {
+                                            if (/^\d{0,2}$/.test(e.target.value)) {
+                                                setNewNumber(e.target.value);
+                                            }
+                                        }}
+                                    />
+                                ) : (
+                                    <div></div>
+                                )
+                            }
                         </div>
                     </div>
                 
@@ -334,20 +339,7 @@ const EditProfilePage = () => {
                             <div className="w-[178px] justify-start items-start inline-flex">
                                 <div className="text-blue-600 text-xl font-russoOne">About player</div>
                             </div>
-                            {
-                                userData.role_id == 2 ?                         
-                                <div className="flex items-center gap-2.5 mb-2">
-                                    <input
-                                        type="text"
-                                        onChange={(event) => { setNewNumber(event.target.value) }}
-                                        value={newNumber}
-                                        className="text-neutral-500 text-base font-normal leading-normal w-14 h-14 pl-4 pr-4 bg-white rounded-full border-2 border-club-header-blue"
-                                        placeholder={userData.number ? userData.number : 'Nr.'}
-                                    />
-                                  
-                                </div>
-                                : <div></div>
-                            }
+                            
                         </div>
                         <div className="w-[322px] px-4 py-1 mt-2 bg-white rounded-lg border-2 border-club-header-blue  justify-start items-center inline-flex">
                             <div className="grow h-auto basis-0 justify-start items-center flex">
