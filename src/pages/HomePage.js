@@ -344,7 +344,7 @@ else {
           {/* Plus Button */}
           
           {isCoach && (
-            <div className={`fixed top-[69px] ${fetchedTeams.length > 1 ? 'right-[105px]' : 'right-[65px]'} z-20`}>
+            <div className={`mt-1 fixed top-[69px] ${fetchedTeams.length > 1 ? 'right-[105px]' : 'right-[65px]'} z-20`}>
               <button
                 className="bg-sn-light-orange text-white rounded-10px  text-3xl shadow-sm flex items-center justify-center"
                 style={{ width: '36px', height: '36px' }}  
@@ -356,7 +356,7 @@ else {
           )}
 
           {/* Filter Button */}
-          <div className={`fixed top-[69px] ${
+          <div className={`mt-1 fixed top-[69px] ${
             (isCoach && fetchedTeams.length > 1) || (!isCoach && fetchedTeams.length > 1) ? 'right-[65px]' : 'right-[25px]'
             } z-20`}>
             <button
@@ -412,7 +412,7 @@ else {
           </div>
           {/* Team Button */}
           {((isCoach && fetchedTeams.length > 1) || (!isCoach && fetchedTeams.length > 1)) && (
-            <div className="fixed top-[69px] right-[25px] z-20">
+            <div className="mt-1 fixed top-[69px] right-[25px] z-20">
               <button
                 id="team-button"
                 className={`team-dropdown text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2 border-sn-light-orange justify-center ${
