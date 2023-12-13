@@ -21,7 +21,11 @@ const EventOverviewEdit = () => {
     const [selectedTeam, setSelectedTeam] = useState([]);
     const [inputCheck, setInputCheck] = useState(true);
     const [userCheck, setUserCheck] = useState(true);
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
+    useEffect(()=>{
+        setIsButtonDisabled(!checkInput());
+    }, [generalInfo, eventTitle, selectedTeam])
 
     const handleOnDelete= async () => {
             if(generalInfo.eventid)
@@ -404,7 +408,7 @@ const EventOverviewEdit = () => {
     } else if (userCheck){    
         return (
             <div className="flex flex-col min-h-screen bg-almostwhite font-interReg">
-              <StickySubheaderEventCreateComponent onSave={handleOnChange} onDelete={handleOnDelete}/>
+              <StickySubheaderEventCreateComponent onSave={handleOnChange} onDelete={handleOnDelete} buttonEnabled={!isButtonDisabled}/>
           
                 <div className="p-4">
                 {inputCheck ? (
