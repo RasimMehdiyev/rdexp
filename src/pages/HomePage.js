@@ -21,6 +21,12 @@ const HomePage = () => {
   const [team, setTeam] = useState(-1); 
   const [openDropdown, setOpenDropdown] = useState(null);
   const navigate = useNavigate();
+
+  const [toggleState, setToggleState] = useState(false);
+  const handleToggle = () => {
+    setToggleState(!toggleState);
+    // Send absent/attend to the database or perform other actions
+  };
   
 
   useEffect(() => {
@@ -128,6 +134,9 @@ const HomePage = () => {
   
   
   const openCard = (index,event) =>{
+    // Check if the clicked element is the toggle switch
+    const isToggleSwitch = event.target.closest('.toggle-switch');
+
     event.preventDefault();
     console.log("open card");
     console.log(index);
@@ -217,6 +226,7 @@ const HomePage = () => {
   // Check if the event has a valid dateTime property
   const month = event.date.slice(0, 7); // Extracting yyyy-mm to represent a month
   const day = event.date.slice(8, 10); // Extracting dd to represent a day
+  
 
   if (!acc[month]) {
     acc[month] = {};
@@ -263,7 +273,7 @@ const toggleTeamDropdown = () => {
     return <LoadingPage />;
   } else
   // Check if fetchedEvents is empty
-  if (fetchedEvents.length == 0) {
+  if (!fetchedEvents.some(event => new Date(event.datetime) > new Date())) {
     return (
       
       <div className="mt-[-80px] bg-almostwhite">
@@ -331,12 +341,22 @@ else {
                         location={event.location}
                         attendance={event.attendance}
                         number_invitation={event.number_invitation}
-                      />
+                      >
+                      </EventCard>
+                      
                     </div>
+                    
                   ))}
               </div>
+              <div className="absolute relative inline-flex bottom-[85px] z-10000  text-[15px] font-extralight font-['Inter'] left-[295px] text-[#485687] ">Attend?</div>
+                      <label className="relative inline-flex  items-center cursor-pointer left-[245px] bottom-[55px]">
+                        <input type="checkbox" value="" className="sr-only peer" style={{ outline: 'none' }} />
+                        <div className="w-11 h-6  peer-focus:outline-none  rounded-full peer dark:bg-[#c2272e] peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#06b80f]"></div>
+                      </label>
             </div>
+            
           ))}
+
         </div>
       ))}
 

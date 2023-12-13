@@ -2,18 +2,8 @@ import React, { useState } from 'react';
 import { UserGroupIcon } from '@heroicons/react/24/solid'
 
 const EventCard = ({ type, eventName, teamName, eventTime, location, attendance, number_invitation, date }) => {
-  const [isAccepted, setIsAccepted] = useState(false);
-  const [isDeclined, setIsDeclined] = useState(false);
 
-  const handleAccept = () => {
-    setIsAccepted(!isAccepted);
-    setIsDeclined(false);
-  };
 
-  const handleDecline = () => {
-    setIsAccepted(false);
-    setIsDeclined(!isDeclined);
-  };
 
   const getBackgroundColor = () => {
     switch (type) {
@@ -104,8 +94,8 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
               {attendance}/{number_invitation}
             </div>
           </div>
-        </div>
-
+        </div>       
+        
         
       </div>
     </div>
