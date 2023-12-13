@@ -175,8 +175,13 @@ const HomePage = () => {
     .filter((event) => event.datetime && new Date(event.datetime) > currentDate)
     .map((event) => {
 
-    // Extracting date and time from the dateTime string
-    const eventDateTime = new Date(event.datetime);
+      // Extracting date and time from the dateTime string
+      const eventDateTimeTest = new Date('2023-12-15T15:38:00')
+      const eventDateTime = new Date(event.datetime);
+      console.log("event date time is...", eventDateTime)
+      console.log("original date time is..", event.datetime)
+      console.log("test date time is: ", eventDateTimeTest)
+      
     const date = eventDateTime.toISOString().split('T')[0];
     const time = eventDateTime.toTimeString().slice(0, 5); // Extracting hh:mm
   

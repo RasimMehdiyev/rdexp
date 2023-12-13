@@ -51,7 +51,18 @@ const EventOverviewEdit = () => {
             console.log("extras", selectedExtras);
             console.log("team", selectedTeam);
 
+            // const timezoneOffsetMinutes = new Date().getTimezoneOffset();
+            // const timezoneOffsetHours = timezoneOffsetMinutes / 60;
+            // console.log(timezoneOffsetMinutes);
+            // console.log(timezoneOffsetHours);
+            // // Format the offset to include the sign and pad with zeros
+            // const formattedTimezoneOffset = `${timezoneOffsetHours >= 0 ? '+' : '-'}${Math.abs(timezoneOffsetHours)
+            // .toString()
+            // .padStart(2, '0')}`;
+
             const timestamp = `${generalInfo.date} ${generalInfo.time}:00+00`;
+
+            //const timestamp = `${generalInfo.date} ${generalInfo.time}:00+00`;
             console.log("timestamp", timestamp);
 
             const toUploadPlayers = selectedPlayers.map((p) => ({ user_id: p.id, position_id: p.position_id }));
@@ -66,7 +77,7 @@ const EventOverviewEdit = () => {
                 setLoading(false);
                 return;
             }
-
+            
             //all the same up till here
             try {
                 const userResponse = await supabase.auth.getUser();
@@ -77,7 +88,7 @@ const EventOverviewEdit = () => {
                   .from('event')
                   .update({
                       title: eventTitle,
-                      datetime: `${generalInfo.date}T${generalInfo.time}:00+00`, // Ensure this is in the correct format
+                      datetime: timestamp, // Ensure this is in the correct format
                       location: generalInfo.location,
                       team: generalInfo.teamId, 
                       type: generalInfo.type // Make sure this is the correct event type you want to set
