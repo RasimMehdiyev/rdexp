@@ -240,7 +240,8 @@ const NewGamePage = () => {
             <div>
                 <StickySubheaderEventCreateComponent onSave={handleOnChange} />
                 <div className="pt-6 min-h-screen w-full bg-almostwhite flex flex-col px-5 gap-2">
-                    <h1 className="font-russoOne text-sn-main-blue text-2xl">New {selectedOption ? selectedOption : "game"}</h1>
+                    {/*<h1 className="font-russoOne text-sn-main-blue text-2xl">New {selectedOption ? selectedOption : "game"}</h1>*/}
+                    <h1 className="font-russoOne text-sn-main-blue text-2xl">General information</h1>
                     {inputCheck ? (
                         <div />
                     ) : (
@@ -265,6 +266,7 @@ const NewGamePage = () => {
                                 onChange={handleRadioChange}
                                 className="form-radio h-5 w-5 text-sn-main-blue"
                             />
+                            
                             <label className="text-base " htmlFor="game">
                                 Game
                             </label>
