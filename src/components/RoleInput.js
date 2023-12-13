@@ -21,7 +21,7 @@ const RoleInput = ({ value, onAdd }) => {
     <div className="flex flex-row gap-1 justify-start items-center w-[90vw]">
       <div className="relative">
         <input
-          className="h-[6vh] w-[80vw]  p-2 rounded-10px border-2 border-club-header-blue font-interReg placeholder-text"
+          className="h-[6vh] w-[80vw]  p-5 rounded-10px border-2 border-club-header-blue font-interReg placeholder-text placeholder:-translate-x-2"
           placeholder="Enter new role"
           value={roleName}
           onChange={handleInputChange}

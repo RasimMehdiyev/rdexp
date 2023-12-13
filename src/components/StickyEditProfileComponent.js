@@ -1,10 +1,13 @@
-import React, { useEffect } from 'react'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
+const StickyEditProfileComponent = ({ onSave, isButtonEnabled, buttonOpacity }) => {
+    const navigate = useNavigate();
 
+    const getPreviousPage = () => {
+        navigate(-1);
+    };
 
-const StickyEditProfileComponent = ({onSave}) => {
-
- 
     return (
       <div className="bg-sn-subheader-blue sticky top-16 shadow-md z-20"> 
         <div className="p-2 h-16 flex flex-row justify-between items-center">
@@ -13,12 +16,18 @@ const StickyEditProfileComponent = ({onSave}) => {
               <p className='text-[20px] font-russoOne text-white'>Edit Profile</p>
           </div>
           <div className='flex flex-row justify-between gap-4'>       
-              <button className='bg-sn-main-orange h-8 w-[72px] text-white rounded-[10px] text-[14px]' onClick={onSave}>SAVE</button>
+              <button 
+                className='bg-sn-main-orange h-8 w-[72px] text-white rounded-[10px] text-[14px]'
+                onClick={onSave}
+                disabled={!isButtonEnabled} // Disable button based on isButtonEnabled
+                style={{ opacity: buttonOpacity }} // Apply opacity from props
+              >
+                SAVE
+              </button>
           </div>
         </div>
       </div>
     );
-    
 }
 
-export default StickyEditProfileComponent
+export default StickyEditProfileComponent;

@@ -9,8 +9,27 @@ import {PhoneIcon, EnvelopeIcon } from '@heroicons/react/24/outline'
 const ProfilePage = () => {
     const [userData, setUserData] = useState({})
     const [loading, setLoading] = useState(true); // Add a loading state
-    // navigate
     const navigate = useNavigate();
+    const [showNumber, setShowNumber] = useState(false);
+
+
+    useEffect(() => {
+      // Flipping to show number on first load
+      const timer = setTimeout(() => setShowNumber(true), 1000);
+      const timer2 = setTimeout(() => setShowNumber(false), 2000);
+      return () => {
+          clearTimeout(timer);
+          clearTimeout(timer2);
+      };
+  }, []);
+
+  
+
+
+  const handleProfileClick = () => {
+      setShowNumber(!showNumber);
+  };
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -51,17 +70,19 @@ const ProfilePage = () => {
       else{
         return (
             <div className="bg-gradient-to-b from-sn-bg-light-blue from-40% to-white to-55% flex flex-col items-center justify-start h-screen">
-                <div className="self-stretch h-auto p-4 flex-col justify-start items-center gap-5 flex">
-
-                    {userData.profile_picture ? (
-                        <img className="w-[142px] object-cover overflow-hidden h-[142px] rounded-full border-3 border-white" src={userData.profile_picture} />
-
-                    ) : (
-                        <img className="w-[142px] object-cover overflow-hidden h-[142px] rounded-full border-3 border-white" src={process.env.PUBLIC_URL + "/images/no_user.png"} />
-                    )
-                        
-                    }
-                    
+                <div className="p-4 flex flex-col items-center gap-5">
+                  <div className={`profile-flipper ${showNumber ? 'show-number' : ''}`} onClick={handleProfileClick}>
+                      <div className="profile-front">
+                          {userData.profile_picture ? (
+                              <img className="object-cover h-[142px] w-[142px] rounded-full border-3 border-white" src={userData.profile_picture} alt="Profile" />
+                          ) : (
+                              <img className="object-cover h-[142px] w-[142px] rounded-full border-3 border-white" src={process.env.PUBLIC_URL + "/images/no_user.png"} alt="No user" />
+                          )}
+                      </div>
+                      <div className="profile-back bg-sn-main-orange rounded-full font-russoOne circle-number shadow-md text-white mr-8">
+                          <div className="player-number text-5xl">{userData.number || 'No Number'}</div>
+                      </div>
+                  </div>
                     <div className="flex-col justify-start items-center gap-1 flex">
                         <div className="text-center text-blue-800 text-3xl font-russoOne leading-normal">{userData.full_name}</div>
                         <div className="text-center text-neutral-900 text-sm font-interEBold uppercase">{userData.role}</div>

@@ -98,7 +98,7 @@ const HomePage = () => {
       if (userTableIdAndRole.role_id === 1) {
         if (Array.isArray(teamData) && teamData.length > 0) {
           let { data, error } = await supabase
-            .rpc('get_event_attendees_team', {
+            .rpc('get_event_attendees_team_with_team_id', {
               team_ids: teamData.map(team => team.team_id)
             });
   
@@ -111,7 +111,7 @@ const HomePage = () => {
         }
       } else {
         let { data, error } = await supabase
-          .rpc('get_user_assigned_events', {
+          .rpc('get_user_assigned_events_with_team_id', {
             user_uuid: uuid,
           });
         if (error) console.error(error);
@@ -139,8 +139,6 @@ const HomePage = () => {
     const fetchData = async () => {
       try {
         const user = await supabase.auth.getUser();
-        console.log("User: ")
-        console.log(user);
         if (user.data.user) {
           setUserData(user.data.user)
           LogRocket.identify(user.data.user.id, {
@@ -168,9 +166,9 @@ const HomePage = () => {
 
     console.log("Home page fetches starting now");
     fetchData();
+    console.log("Fetched events: ", fetchedEvents);
 
   }, [navigate]);
-  console.log("fetched events", fetchedEvents);
 
   const currentDate = new Date();
   const transformedEvents = fetchedEvents
@@ -187,6 +185,7 @@ const HomePage = () => {
       type: event.type.toLowerCase(), // Convert to lowercase as per your example
       eventName: event.title,
       teamName: event.team_name,
+      teamId: event.team_id,
       eventTime: time,
       location: event.location,
       id: event.event_id,
@@ -314,15 +313,13 @@ else {
           <StickyMonthHeader currentMonth={new Date(month).toLocaleString('en-US', { month: 'long' })} />
           {Object.entries(days).map(([day, dayEvents]) => (
             <div key={day}>
-              {/* Check if there are events for this day based on the filter */}
-              {dayEvents.some((event) => filter === 'all' || event.type === filter) && (
-              
+              {/* Check if there are events for this day based on both the event type and team filters */}
+              {dayEvents.some((event) => (filter === 'all' || event.type === filter) && (team === -1 || event.teamId === team)) && (
                 <p className="text-md font-interBold text-gray-700 ml-2">{`${new Date(`${month}-${day}`).toLocaleString('en-US', { weekday: 'long' })} ${day}`}</p>
               )}
               <div className="event-container">
                 {dayEvents
-                  //.filter(event => team === -1 || event.teamId === team)
-                  .filter((event) => filter === 'all' || event.type === filter)
+                  .filter(event => (filter === 'all' || event.type === filter) && (team === -1 || event.teamId === team))
                   .sort((a, b) => (a.dateTime != null && b.dateTime != null ? a.dateTime.localeCompare(b.dateTime) : 0))
                   .map((event, index) => (
                     <div key={index} onClick={(e) => openCard(event.id , e)} className="event-card">
@@ -347,7 +344,7 @@ else {
           {/* Plus Button */}
           
           {isCoach && (
-            <div className="fixed top-[69px] right-[105px] z-20">
+            <div className={`mt-1 fixed top-[69px] ${fetchedTeams.length > 1 ? 'right-[105px]' : 'right-[65px]'} z-20`}>
               <button
                 className="bg-sn-light-orange text-white rounded-10px  text-3xl shadow-sm flex items-center justify-center"
                 style={{ width: '36px', height: '36px' }}  
@@ -359,7 +356,9 @@ else {
           )}
 
           {/* Filter Button */}
-          <div className="fixed top-[69px] right-[65px] z-20">
+          <div className={`mt-1 fixed top-[69px] ${
+            (isCoach && fetchedTeams.length > 1) || (!isCoach && fetchedTeams.length > 1) ? 'right-[65px]' : 'right-[25px]'
+            } z-20`}>
             <button
               id="filter-button"
               className={`filter-dropdown text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2  border-sn-light-orange  justify-center ${
@@ -412,51 +411,52 @@ else {
             )}
           </div>
           {/* Team Button */}
-          <div className="fixed top-[69px] right-[25px] z-20">
-            <button
-              id="team-button"
-              className={`team-dropdown text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2  border-sn-light-orange  justify-center ${
-                team === -1 ? 'bg-white ' : 'bg-sn-light-orange'
-              }`}
-              style={{ width: '36px', height: '36px' }}
-              onClick={toggleTeamDropdown}
-            >
-              {/* Conditionally render the team icon based on the selected team */}
-              {team === -1 ? (
-                <img
-                  src={process.env.PUBLIC_URL + "/images/team_card_orange.svg"}
-                  alt="Team Icon"
-                />
-              ) : (
-                <img
-                  src={process.env.PUBLIC_URL + "/images/team_card_white.svg"}
-                  alt="Team Icon"
-                />
-              )}
-            </button>
-            {/* Team Options */}
-            {openDropdown === 'team' && (
-              <div className="absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
-                <p
-                  className={`cursor-pointer ${team === -1 ? 'text-sn-light-orange font-bold' : ''}`}
-                  onClick={() => handleTeamChange(-1)}
-                >
-                  All
-                </p>
-                {fetchedTeams.map((fetchedTeam) => (
+          {((isCoach && fetchedTeams.length > 1) || (!isCoach && fetchedTeams.length > 1)) && (
+            <div className="mt-1 fixed top-[69px] right-[25px] z-20">
+              <button
+                id="team-button"
+                className={`team-dropdown text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2 border-sn-light-orange justify-center ${
+                  team === -1 ? 'bg-white ' : 'bg-sn-light-orange'
+                }`}
+                style={{ width: '36px', height: '36px' }}
+                onClick={toggleTeamDropdown}
+              >
+                {/* Conditionally render the team icon based on the selected team */}
+                {team === -1 ? (
+                  <img
+                    src={process.env.PUBLIC_URL + "/images/team_card_orange.svg"}
+                    alt="Team Icon"
+                  />
+                ) : (
+                  <img
+                    src={process.env.PUBLIC_URL + "/images/team_card_white.svg"}
+                    alt="Team Icon"
+                  />
+                )}
+              </button>
+              {/* Team Options */}
+              {openDropdown === 'team' && (
+                <div className="absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
                   <p
-                    key={fetchedTeam.team_id}
-                    className={`cursor-pointer ${fetchedTeam.id === team ? 'text-sn-light-orange font-bold' : ''}`}
-                    onClick={() => handleTeamChange(fetchedTeam.id)}
+                    className={`cursor-pointer ${team === -1 ? 'text-sn-light-orange font-bold' : ''}`}
+                    onClick={() => handleTeamChange(-1)}
                   >
-                    {fetchedTeam.team_name}
+                    All
                   </p>
-                ))}
+                  {fetchedTeams.map((fetchedTeam) => (
+                    <p
+                      key={fetchedTeam.team_id}
+                      className={`cursor-pointer ${fetchedTeam.id === team ? 'text-sn-light-orange font-bold' : ''}`}
+                      onClick={() => handleTeamChange(fetchedTeam.id)}
+                    >
+                      {fetchedTeam.team_name}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
-              </div>
-            )}
-
-          </div>
         </div>
 
 

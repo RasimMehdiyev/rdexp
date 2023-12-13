@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import GameOverviewComponent from '../components/GameOverviewComponent';
-import NewPracticeTBComponent from '../components/NewPracticeTBComponent';
+import GameOverviewComponent from '../components/OverviewGameComponent';
+import OverviewPracticeTBComponent from '../components/OverviewPracticeTBComponent';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../lib/helper/supabaseClient';
 import StickySubheaderGameOverviewComponent from '../components/StickySubheaderGameOverviewComponent';
@@ -19,45 +19,14 @@ const EventOverview = () => {
     const [selectedExtras, setSelectedExtras] = useState([]);
     const [selectedTeam, setSelectedTeam] = useState([]);
     const [inputCheck, setInputCheck] = useState(true);
+    const [userCheck, setUserCheck] = useState(true);
     const [role, setRole] = useState('');
-
     const hasFetched = useRef(false);
 
     const handleOnChange = async () => {
-                const eventId = generalInfo.eventid;
-                navigate(`/event-overview/edit/${eventId}`);
-            }
-            
-            
-        
-    
-
-    const checkInput = () => {
-        if (!generalInfo.date | !generalInfo.location | !generalInfo.time | !eventTitle | !selectedTeam) {
-            return false;
-        } else return true;
-    }
-
-    
-  
-
-    const handleRadioChange = (event) => {
-        setSelectedOption(event.target.value);
-    };
-
-    useEffect(() => {
-        console.log("new general info", generalInfo);
-    }, [generalInfo]);
-
-    useEffect(() => {
-        console.log("new selected extras in parent", selectedExtras);
-    }, [selectedExtras]);
-
-    useEffect(() => {
-        console.log("new selected players in parent", selectedPlayers);
-    }, [selectedPlayers]);
-
-
+        const eventId = generalInfo.eventid;
+        navigate(`/event-overview/edit/${eventId}`);
+    }   
 
     useEffect(() => {
         const isLoggedIn = async () => {
@@ -81,16 +50,13 @@ const EventOverview = () => {
         isLoggedIn();
     }, [role])
     
-
     useEffect(() => {
-      const fetchEventDetails = async () => {
-          setLoading(true);
-          
-          
+        const fetchEventDetails = async () => {
+          setLoading(true);                    
           try {
               const { data: event, error } = await supabase
                   .from('event')
-                  .select('id, title, datetime, location, team')
+                  .select('id, title, datetime, location, team, type')
                   .eq('id', eventId) 
                   .single();
     
@@ -106,7 +72,8 @@ const EventOverview = () => {
                       time: event.datetime.slice(11, 16),
                       location: event.location,
                       gameName: event.title,
-                      eventid: event.id
+                      eventid: event.id,
+                      type: event.type
                   };
                   setEventTitle(event.title);
                   // Fetch the team name
@@ -126,30 +93,106 @@ const EventOverview = () => {
                    
                   // Now, set the generalInfo state with the newGeneralInfo object
                   setGeneralInfo(newGeneralInfo);
+                  checkUser(newGeneralInfo.teamId, newGeneralInfo.eventid);
               }
           } catch (error) {
               console.error('Caught an error while fetching event details:', error);
           } finally {
               setLoading(false);
           }
-      };
-    
-      fetchEventDetails();
-    }, []);
-    
-    
+        };
+
+        const isUserCoachOfTeam = async (teamId, userId) => {
+            try {
+            // Retrieve the team from the database based on teamId
+            const { data, error } = await supabase
+                .from('team')
+                .select('coach_id')
+                .eq('id', teamId)
+                .single();
+
+            if (error) {
+                console.error('Error fetching team:', error.message);
+                setUserCheck(false);
+            }
+
+            // Check if the coach of the team is equal to the provided userId
+            if (data && data.coach_id == userId) {
+                setUserCheck(true);
+            } else {
+                setUserCheck(false);
+            }
+            } catch (error) {
+            console.error('Error:', error.message);
+            setUserCheck(false);
+            }
+        };  
+
+        const isUserInEvent = async (eventId, userId) => {
+            try {
+                // Retrieve the event_user row from the database based on eventId and userId
+                const { data, error } = await supabase
+                .from('event_users')
+                .select('user_id')
+                .eq('event_id', eventId)
+                .eq('user_id', userId)
+                .single();
+
+                if (error) {
+                console.error('Error fetching event user:', error.message);
+                setUserCheck(false); // or throw an error
+                }
+
+                // Check if the user is associated with the event
+                if (data !== null) {
+                    setUserCheck(true);
+                } else {
+                    setUserCheck(false);
+                }
+            } catch (error) {
+                console.error('Error:', error.message);
+                setUserCheck(false);
+            }
+        };
+
+        const checkUser = async (teamId, eventId) => {          
+            try {
+                const userResponse = await supabase.auth.getUser();
+                const user = userResponse.data.user;
+                console.log("User:", user);
+                if (user) {
+                    // Initially, we don't know the user's role, so fetch from both tables.
+                    const { data: user_data, error: userError } = await supabase
+                        .from('users')
+                        .select('*')
+                        .eq('user_id', user.id)
+                        .single(); // Use single to get a single record or null   
+                    if (userError) throw userError;
+                    console.log("User data:", user_data);
+
+                    if (user_data.role_id == 1) { //if he is a coach
+                        isUserCoachOfTeam(teamId, user_data.id) 
+                    } else {
+                        isUserInEvent(eventId, user_data.id)
+                    }
+
+                }
+            } catch (error) {
+                console.error(error)
+                setUserCheck(false)
+            }
+        }
+
+        fetchEventDetails();
+    }, []);   
     
     useEffect(() => {
-      console.log("Selected Team in Parent:", selectedTeam);
-    }, [selectedTeam]);
-    
+        console.log("user check has been set to", userCheck)
+    }, [userCheck])
 
     if (loading) {
         return (<LoadingPage></LoadingPage>)
-    } else {
-
-      
-
+    } else if (userCheck) {    
       return (
         <div>
             {
@@ -157,37 +200,35 @@ const EventOverview = () => {
                 : <div></div>
 
             }
-            <div className="pt-6 h-screen bg-sn-bg-light-blue flex flex-col px-5">
-                <h1 className="font-russoOne text-sn-main-blue text-2xl">New Game</h1>
-                {inputCheck ? (
-                    <div />
-                ) : (
-                    <div className='text-sm text-red-500'>Please ensure that title event, date, time, team, and location are filled/selected</div>
-                )}
-
-                <input
-                    value={eventTitle} // Use the gameName from generalInfo
-                    onChange={(e) => setEventTitle(e.target.value)}
-                    type="text"
-                    placeholder="Title"
-                    disabled="true"
-                    className="h-10 px-2 rounded-md border-sn-light-orange border-[1.5px] font-russoOne"
-                />
-
-                {/* Render EditGameComponent */}
-                <GameOverviewComponent
-                    eventTitle={eventTitle}
+            <div className="pt-6 min-h-screen bg-almostwhite flex flex-col px-5">
+                
+                
+            <div className="flex mb-4 text-3xl font-russoOne text-sn-main-blue">
+            {eventTitle}
+            </div>
+            {generalInfo.type == 'game' ? (
+                <GameOverviewComponent                    
                     generalInfo={generalInfo}
-                    selectedTeam={selectedTeam}
-                    onGeneralInfoChanges={setGeneralInfo}
-                    onSelectedPlayerChanges={setSelectedPlayers}
-                    onSelectedExtraChanges={setSelectedExtras}
-                    onTeamChanges={setSelectedTeam}
+                    className="bg-white border border-gray-300 rounded-lg p-4"
                 />
+            ) : (
+                <OverviewPracticeTBComponent
+                eventTitle={eventTitle}
+                generalInfo={generalInfo}
+                selectedTeam={selectedTeam}
+                onGeneralInfoChanges={setGeneralInfo}
+                onSelectedPlayerChanges={setSelectedPlayers}
+                onSelectedExtraChanges={setSelectedExtras}
+                onTeamChanges={setSelectedTeam}
+                className="bg-white border border-gray-300 rounded-lg p-4"
+                />
+            )}
             </div>
         </div>
-    );
-}
+        );
+    } else {
+        return (<div>You do not have access to this page</div>)
+    }
 }
 
 export default EventOverview;

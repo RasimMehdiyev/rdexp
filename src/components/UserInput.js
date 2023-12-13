@@ -26,16 +26,16 @@ const UserInput = ({ onAdd, users }) => {
   const handleAddClick = () => {
     if (inputValue.name.trim()) {
       onAdd(inputValue);
-      setInputValue(''); // Reset input field after adding
+      setInputValue({ name: '', id: null }); // Reset input field and ID after adding
+      setSuggestions([]); // Clear suggestions after adding
     }
   };
 
   const handleSuggestionClick = (user, event) => {
     event.preventDefault();
-    console.log('Suggestion clicked:', user.full_name); // Verify function is called
-    setInputValue({ name: user.full_name, id: user.id });
-    setSuggestions([]);
-    console.log('Suggestions should be cleared now'); // Check if this line is reached
+    onAdd({ name: user.full_name, id: user.id, number:user.number }); // Add the user to the parent component
+    setInputValue({ name: '', id: null }); // Reset input field and ID after selecting
+    setSuggestions([]); // Clear suggestions after selecting
   };
   
   
@@ -78,7 +78,7 @@ const UserInput = ({ onAdd, users }) => {
         </button>
       </div>
       {suggestions.length > 0 && (
-        <div className="absolute bg-white shadow-md rounded-md ml-2 w-[60vw] mt-2 z-10">
+        <div className="absolute bg-white shadow-md rounded-md ml-2 w-[60vw] mt-12 z-10">
           {suggestions.map((user) => (
             <div 
               key={user.id} 
