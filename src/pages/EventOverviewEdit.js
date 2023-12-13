@@ -408,7 +408,7 @@ const EventOverviewEdit = () => {
                         onChange={(e) => setEventTitle(e.target.value)}
                         type="text"
                         placeholder="Title"
-                        className="text-2xl bg-white rounded-lg py-2 px-2 w-full max-w-md font-interReg h-[40px]" // Adjusted font, size, and width
+                        className="text-2xl bg-white rounded-lg border-2 border-sn-main-orange py-2 px-2 w-full max-w-md font-interReg h-12" // Adjusted font, size, and width
                     />
                 </div>
           

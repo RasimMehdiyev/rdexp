@@ -137,12 +137,12 @@ const GameOverviewComponent = ({
                     
                     <div className="form-input w-full pl-3 pr-3 text-lg">{location}</div>
                 </div>                              
-                <div id='players' className="flex flex-col gap-2 mt-4">
+                <div id='players' className="flex flex-col mt-7 gap-2 mt-4">
                     <div className="text-2xl text-left text-sn-main-blue font-russoOne mb-2">Initial Line-up</div>
                     {positions.map((position) => (
                         <div className="flex flex-col gap-0 " key={position.position_abbreviation}>
                         <div className="flex flex-row items-center gap-1" >
-                            <div className="bg-position-blue text-white font-bold p-1 rounded text-center w-12 ">
+                            <div className="bg-club-header-blue text-white font-bold p-1 rounded text-center w-12 ">
                                 {position.position_abbreviation}                            
                             </div>
                             <div className="flex flex-col gap-0">
@@ -190,13 +190,13 @@ const GameOverviewComponent = ({
                         </div>
                     ))}
                 </div>
-                <div id='substitutes' className="flex flex-col mt-4">
-                    <h5 className="text-2xl font-bold text-sn-main-blue font-russoOne mb-2">Substitutes</h5>
+                <div id='substitutes' className="flex flex-col mt-7">
+                    <h5 className="text-2xl  text-sn-main-blue font-russoOne mb-2">Substitutes</h5>
                     <div className="flex flex-col gap-2 justify-center items-start">
                         {preSubstitutePlayers.map((substitute, index) => (
                             <div className="flex flex-col gap-0" key={index}>
                                 <div className="flex gap-1 items-center w-full">
-                                    <div className="bg-position-blue text-white font-bold p-1 rounded text-center w-12 mr-3">
+                                    <div className="bg-club-header-blue text-white font-bold p-1 rounded text-center w-12 mr-3">
                                         SUB
                                     </div>                                                                    
                                     {preSubstitutePlayers[index].is_attending == 'Declined' ?
@@ -223,13 +223,13 @@ const GameOverviewComponent = ({
                         ))}
                     </div>
                 </div>
-                <div id='extra-roles' className="flex flex-col gap-1 mt-4">
-                    <h5 className="text-2xl font-bold text-left text-sn-main-blue font-russoOne mb-2">Extra Roles</h5>
+                <div id='extra-roles' className="flex flex-col gap-1 mt-7">
+                    <h5 className="text-2xl  text-left text-sn-main-blue font-russoOne mb-2">Extra Roles</h5>
                     {extraRoles.map((extraRole) => (
                         
                         <div className="flex flex-col gap-0 " key={extraRole.id}>
                         <div className="flex flex-row items-center gap-1" >
-                            <span className="mr-3 max-w-128px text-sn-subheader-blue font-russoOne text-lg" style={{ width: '128px', color: '#007bff', fontFamily: 'Russo One' }}>{extraRole.role_title}</span>
+                            <span className="mr-3 max-w-128px text-club-header-blue text-lg" style={{ width: '128px', color: '#007bff', fontFamily: 'Inter Bold' }}>{extraRole.role_title}</span>
                             <div className="flex flex-col gap-0">
                                 <div className="flex-grow relative">
                                     {selectedExtras.find(extra => extra.extraRole_id === extraRole.id) ?

@@ -394,7 +394,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                 
                 </div>                
                 
-                <div id='players' className="flex flex-col gap-4 mt-7 mb-10">
+                <div id='players' className="flex flex-col gap-4 mt-10 mb-10">
                         {isTeamSelected && (
                         <h5 className="text-2xl text-left text-sn-main-blue font-russoOne mb-2">Initial Line-up</h5>
                         )}
@@ -408,7 +408,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                                         <select
                                             id={`player_select_${position.id}`}
                                             onChange={(event) => handlePlayerChange(event, position)}
-                                            className="form-select w-full px-2 py-2 h-12 bg-white rounded-lg border-2 border-sn-main-orange"
+                                            className="form-select w-full px-2 py-2 h-12 bg-white rounded-lg border-2 border-club-header-blue"
                                             disabled={!selectedID}
                                         >
                                             <option value="" className="text-black " >
@@ -447,7 +447,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                                 SUB
                                 </div>                          
                                     <select
-                                        className="form-select w-full px-2 py-2 h-12 bg-white rounded-lg border-2 border-sn-main-orange"
+                                        className="form-select w-full px-2 py-2 h-12 bg-white rounded-lg border-2 border-club-header-blue"
                                         name={`substituteSelect_${index}`}
                                         id={`substituteSelect_${index}`}
                                         value={substitute.id}
@@ -472,7 +472,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                         ))}
                     </div>
                 </div>
-                <div id='extra-roles' className="flex flex-col gap-4 mt-4 mb-10">
+                <div id='extra-roles' className="flex flex-col gap-4 mt-10 mb-10">
                     {isTeamSelected && (
                     <h5 className="text-2xl text-left text-sn-main-blue font-russoOne mb-2">Extra Roles</h5>)}
                     {extraRoles.map((extraRole) => (
@@ -481,7 +481,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                                 <span className="text-black  text-xl" style={{ width: '128px', color: '#007bff', fontFamily: 'Inter Bold' }}>{extraRole.role_title}</span>
                                 
                                 <select
-                                    className="form-select px-2 py-2 bg-white rounded-lg flex-grow border-2 border-sn-main-orange h-12"
+                                    className="form-select px-2 py-2 ml-3 bg-white rounded-lg flex-grow border-2 border-club-header-blue h-12"
                                     name="" 
                                     id="" 
                                     disabled={!selectedID}

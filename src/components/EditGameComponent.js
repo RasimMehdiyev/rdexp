@@ -330,7 +330,7 @@ const EditGameComponent = ({
                         value={date} 
                         onChange={(e) => setDate(e.target.value)} 
                         type="date" 
-                        className="form-input pl-3 pr-3 rounded-lg text-black h-[40px] w-[150px]" 
+                        className="form-input pl-3 pr-3 rounded-lg border-2 border-sn-main-orange text-black h-[40px] w-[150px]" 
                         
                     />
                     </div>
@@ -341,7 +341,7 @@ const EditGameComponent = ({
                         value={time} 
                         onChange={(e) => setTime(e.target.value)} 
                         type="time" 
-                        className="form-input rounded-lg pl-3 pr-3 text-black h-[40px] w-[150px]" 
+                        className="form-input rounded-lg border-2 border-sn-main-orange pl-3 pr-3 text-black h-[40px] w-[150px]" 
                         
                     />
                     </div>
@@ -358,18 +358,18 @@ const EditGameComponent = ({
                     />
                     </div>                
                 
-                    <div id='players' className="flex flex-col gap-4 mt-4">
+                    <div id='players' className="flex flex-col gap-4 mt-10">
                         <h5 className="text-2xl text-left text-sn-main-blue font-russoOne mb-2">Initial Line-up</h5>
                         {positions.map((position) => (
                             <div className="flex flex-col gap-0" key={position.position_abbreviation}>
                                 <div className="flex flex-row items-center mb-1" >
-                                    <div className="bg-position-blue text-white font-bold p-1 rounded text-center w-12 mr-3">
+                                    <div className="bg-club-header-blue text-white font-bold p-1 rounded text-center w-12 mr-3">
                                         {position.position_abbreviation}
                                     </div>
                                     <div className="flex-grow">                                    
                                         {selectedPlayers.find(player => player.position_id === position.id) ?
                                             (selectedPlayers.find(player => player.position_id === position.id).is_attending == 'Declined' ?
-                                                <select
+                                                <select 
                                                     id={`player_select_${position.id}`}
                                                     onChange={(event) => handlePlayerChange(event, position)}
                                                     className="form-select w-full px-2 py-2 bg-white rounded-lg border-red-500 border text-red-500"
@@ -390,7 +390,7 @@ const EditGameComponent = ({
                                                 <select
                                                     id={`player_select_${position.id}`}
                                                     onChange={(event) => handlePlayerChange(event, position)}
-                                                    className="form-select w-full px-2 py-2 bg-white rounded-lg"
+                                                    className="form-select w-full px-2 py-2 h-12 bg-white rounded-lg border-2 border-club-header-blue"
                                                     disabled={!selectedID}
                                                 >
                                                     <option value="">
@@ -409,7 +409,7 @@ const EditGameComponent = ({
                                             (<select
                                                     id={`player_select_${position.id}`}
                                                     onChange={(event) => handlePlayerChange(event, position)}
-                                                    className="form-select w-full px-2 py-2 bg-white rounded-lg text-gray-500"
+                                                    className="form-select w-full px-2 py-2 h-12 bg-white rounded-lg text-gray-500 border-2 border-club-header-blue"
                                                     disabled={!selectedID}
                                                 >
                                                     <option value="" className="text-black">
@@ -447,7 +447,7 @@ const EditGameComponent = ({
                             </div>
                         ))}
                     </div>
-                    <div id='substitutes' className="flex flex-col gap-4 mt-4">
+                    <div id='substitutes' className="flex flex-col gap-4 mt-10">
                         <div className="flex items-center mb-2 gap-2">
                             <h5 className="text-2xl text-sn-main-blue font-russoOne">Substitutes</h5>
                             <span onClick={handleAddSubstitute} className="cursor-pointer">
@@ -456,11 +456,11 @@ const EditGameComponent = ({
                         </div>
 
 
-                        <div className="flex flex-col gap-2 justify-center items-start">
+                        <div className="flex flex-col gap-2 justify-center items-start w-full">
                             {preSubstitutePlayers.map((substitute, index) => (
-                                <div className="flex flex-col gap-0" key={index} >
-                                    <div className="flex flex-row gap-2 items-center">
-                                        <div className="bg-position-blue text-white font-bold p-1 rounded text-center w-12 mr-3">
+                                <div className="flex flex-col gap-0 w-full" key={index} >
+                                    <div className="flex flex-row gap-2 w-full items-center">
+                                        <div className="bg-club-header-blue text-white font-bold p-1 rounded text-center w-12 mr-3">
                                             SUB
                                         </div>
                                 
@@ -485,7 +485,7 @@ const EditGameComponent = ({
                                                 </select> )
                                                 :
                                                 (<select
-                                                    className="form-select w-full px-2 py-2 bg-white rounded-lg"
+                                                    className="form-select w-full px-2 py-2 bg-white h-12 rounded-lg border-2 border-club-header-blue"
                                                     name={`substituteSelect_${index}`}
                                                     id={`substituteSelect_${index}`}
                                                     value={substitute.id}
@@ -540,12 +540,12 @@ const EditGameComponent = ({
                             ))}
                         </div>
                     </div>
-                    <div id='extra-roles' className="flex flex-col gap-4 mt-4">
+                    <div id='extra-roles' className="flex flex-col gap-4 mt-10">
                         <h5 className="text-2xl text-left text-sn-main-blue font-russoOne mb-2">Extra Roles</h5>
                         {extraRoles.map((extraRole) => (
                             <div className="flex flex-col gap-0" key={extraRole.id} > 
                                 <div className="flex items-center mb-1">
-                                    <span className="text-black mr-3" style={{ width: '128px', color: '#007bff', fontFamily: 'Russo One' }}>{extraRole.role_title}</span>
+                                    <span className="mr-3 text-club-header-blue" style={{ width: '128px', fontFamily: 'Inter Bold' }}>{extraRole.role_title}</span>
                                     
                                     {selectedExtras.find(extra => extra.extraRole_id === extraRole.id) ?
                                         (selectedExtras.find(extra => extra.extraRole_id === extraRole.id).is_attending == 'Declined' ?
@@ -569,7 +569,7 @@ const EditGameComponent = ({
                                             </select>)
                                             :
                                             (<select
-                                                className="form-select px-2 py-2 bg-white rounded-lg text-black flex-grow"
+                                                className="form-select px-2 py-2 h-12 bg-white rounded-lg text-black border-2 border-club-header-blue flex-grow"
                                                 name="" 
                                                 id="" 
                                                 disabled={!selectedID}
@@ -589,7 +589,7 @@ const EditGameComponent = ({
                                         )
                                         :
                                         (<select
-                                            className="form-select px-2 py-2 bg-white rounded-lg text-black flex-grow text-gray-500"
+                                            className="form-select px-2 py-2 bg-white rounded-lg border-2 border-club-header-blue h-12 text-black flex-grow text-gray-500"
                                             name="" 
                                             id="" 
                                             disabled={!selectedID}
