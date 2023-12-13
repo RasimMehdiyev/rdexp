@@ -79,9 +79,20 @@ const ProfilePage = () => {
                               <img className="object-cover h-[142px] w-[142px] rounded-full border-3 border-white" src={process.env.PUBLIC_URL + "/images/no_user.png"} alt="No user" />
                           )}
                       </div>
-                      <div className="profile-back bg-sn-main-orange rounded-full font-russoOne circle-number shadow-md text-white mr-8">
-                          <div className="player-number text-5xl">{userData.number || 'No Number'}</div>
-                      </div>
+                          {                      
+                            userData.role_id === 2 ?
+                            <div className="profile-back bg-sn-main-orange rounded-full font-russoOne circle-number shadow-md text-white mr-8">
+                              <div className="player-number text-5xl">{userData.number || 'No Number'}</div>
+                            </div>
+                            :
+                            <div className="profile-back">
+                            {userData.profile_picture ? (
+                                <img className="object-cover h-[142px] w-[142px] rounded-full border-3 border-white" src={userData.profile_picture} alt="Profile" />
+                            ) : (
+                                <img className="object-cover h-[142px] w-[142px] rounded-full border-3 border-white" src={process.env.PUBLIC_URL + "/images/no_user.png"} alt="No user" />
+                            )}
+                        </div>
+                          }
                   </div>
                     <div className="flex-col justify-start items-center gap-1 flex">
                         <div className="text-center text-blue-800 text-3xl font-russoOne leading-normal">{userData.full_name}</div>

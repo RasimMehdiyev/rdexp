@@ -329,8 +329,9 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
         return <LoadingPage />; 
     } else {
         return (
-            <form className="flex flex-col justify-center gap-2">                
+            <form className="flex flex-col justify-center gap-2">    
                 <div className="mb-2 flex items-center">
+                 
                     <MdGroup className="text-sn-main-orange mr-3" size={32} />
                     <select
                         onChange={handleTeamChange}

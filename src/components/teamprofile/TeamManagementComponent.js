@@ -89,7 +89,7 @@ const TeamManagementComponent = ({ teamData, coach, players, extras, isCoach, se
         }
     };
     return (
-            <div className="w-full pl-6 pr-6 flex-col justify-start items-start inline-flex">
+            <div className="w-full pl-5 pr-5 flex-col justify-start items-start inline-flex">
                 {/* Coach Section */}
                 <div className="self-stretch flex-col justify-start items-start flex">
                     <div className="self-stretch justify-start items-center inline-flex pt-5 pb-4">

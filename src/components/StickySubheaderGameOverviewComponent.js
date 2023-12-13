@@ -11,7 +11,7 @@ const StickyGameOverviewComponent = ({onSave}) => {
 
 
   return (
-    <div className="bg-sn-subheader-blue sticky top-1 shadow-md z-10"> 
+    <div className="bg-sn-subheader-blue sticky top-16 shadow-md z-20"> 
       <div className="p-2 h-16 flex flex-row justify-between items-center">
         <div className='flex flex-row justify-between gap-1 items-center'>
             <img className='cursor-pointer' onClick={getPreviousPage} src={process.env.PUBLIC_URL + "/images/chevron-down.svg"} alt="" />
