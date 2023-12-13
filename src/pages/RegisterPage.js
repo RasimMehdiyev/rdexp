@@ -119,7 +119,7 @@ function RegisterPage() {
         if (role === '2') { 
             return (
                 <input
-                    className='shadow-md placeholder-text ml-2 mt-5 placeholder:text-white placeholder:font-russoOne placeholder:font-bold font-bold text-white text-center bg-sn-main-orange w-12 h-12 rounded-full font-russoOne'
+                    className='shadow-md placeholder-text ml-2 mt-5 placeholder:text-white placeholder:text-center placeholder:font-russoOne placeholder:font-bold font-bold text-white text-center bg-sn-main-orange w-12 h-12 rounded-full font-russoOne'
                     placeholder='Nr'
                     type="text"
                     pattern="\d{1,2}"

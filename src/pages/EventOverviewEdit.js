@@ -402,6 +402,8 @@ const EventOverviewEdit = () => {
                 ) : (
                   <div className='text-sm text-red-500'>Please ensure that title event, date, time, team, and location are filled/selected</div>
                 )}
+
+                <h5 className="text-2xl text-left text-sn-main-blue font-russoOne  mt-5 mb-3">Event Details</h5>
           
                 <div className="flex justify-center mb-4">
                     <input
@@ -409,7 +411,8 @@ const EventOverviewEdit = () => {
                         onChange={(e) => setEventTitle(e.target.value)}
                         type="text"
                         placeholder="Title"
-                        className="text-2xl bg-white rounded-lg py-2 px-2 w-full max-w-md font-interReg h-[40px]" // Adjusted font, size, and width
+                        className="text-2xl bg-white rounded-lg border-2 border-sn-main-orange py-2 px-2 w-full max-w-md font-interReg h-12" // Adjusted font, size, and width
+                        maxLength={50}
                     />
                 </div>
           
