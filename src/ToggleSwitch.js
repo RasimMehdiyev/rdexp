@@ -14,18 +14,21 @@ const ToggleSwitch = ({ onToggle }) => {
   const getBackgroundColor = () => {
     switch (toggleState) {
       case 1:
-        return 'bg-[#06b80f]'; // Green background when on the left
+        return 'bg-[#3de043]'; // Green background when on the left
       case 2:
-        return 'bg-[#ebebf2]'; // Default background color in the middle
+        return 'bg-[#c2c2d1]'; // Default background color in the middle
       case 3:
-        return 'bg-[#d9434a]'; // Red background when on the right
+        return 'bg-[#e35258]'; // Red background when on the right
       default:
         return 'bg-[#ebebf2]';
     }
   };
 
+  const displayCheckmark = toggleState === 1; // Display checkmark when the button is green
+
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center relative">
+        <div className='absolute font-inter text-xs font-bold text-orange-700 bottom-[18px] left-[-2px]'>attend?</div>
       <input
         type="range"
         name="points"
@@ -35,13 +38,23 @@ const ToggleSwitch = ({ onToggle }) => {
         max="3"
         value={toggleState}
         id="custom-toggle"
-        className={`tgl appearance-none focus:outline-none w-9 h-4 ${getBackgroundColor()} rounded-full p-0 cursor-pointer`}
+        className={`tgl appearance-none w-9 h-4 ${getBackgroundColor()} rounded-full p-0 cursor-pointer`}
         style={{
           '--thumb-size': '1rem',
           '--thumb-color': 'gray',
           '--thumb-border-radius': '50%',
         }}
       />
+      {toggleState === 1 && (
+        <div className="absolute font-inter text-xs font-bold top-1/2 left-[24px] transform -translate-x-1/2 -translate-y-1/2 text-white">
+          ✓
+        </div>
+      )}
+      {toggleState === 3 && (
+        <div className="absolute font-arial text-xs top-[7.5px] left-[12px] transform -translate-x-1/2 -translate-y-1/2 text-white">
+          x
+        </div>
+      )}
       <style>
         {`
           #custom-toggle::-webkit-slider-thumb {

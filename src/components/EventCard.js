@@ -94,8 +94,8 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
             <div className="attendence text-eventcard-text text-[15px] font-extralight font-['Inter'] whitespace-nowrap">
               {attendance}/{number_invitation}
             </div>
-            <div className="absolute relative inline-flex  z-10000  text-[15px] font-extralight font-['Inter']  text-[#485687] ">Attend?</div>
-                <ToggleSwitch/>
+            <div className='absolute right-10'><ToggleSwitch/></div>
+              
           </div>
         </div>       
         
