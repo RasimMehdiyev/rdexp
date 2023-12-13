@@ -12,7 +12,7 @@ import { toast, ToastContainer } from 'react-toastify';
 
 const NewGamePage = () => {
     const [eventTitle, setEventTitle] = useState('');
-    const [selectedOption, setSelectedOption] = useState("game");
+    const [selectedOption, setSelectedOption] = useState("Game");
     const [loading, setLoading] = useState(false);
     const [generalInfo, setGeneralInfo] = useState({ date: "", time: "", location: "" });
     const [selectedPlayers, setSelectedPlayers] = useState([]);
@@ -238,9 +238,8 @@ const NewGamePage = () => {
     } else if (userCheck) {
         return (
             <div>
-                <StickySubheaderEventCreateComponent onSave={handleOnChange} />
+                <StickySubheaderEventCreateComponent onSave={handleOnChange} eventType={selectedOption ? selectedOption : "Game"} />
                 <div className="pt-6 min-h-screen bg-almostwhite flex flex-col px-5 gap-2">
-                    <h1 className="font-russoOne text-sn-main-blue text-2xl">New {selectedOption ? selectedOption : "game"}</h1>
                     {inputCheck ? (
                         <div />
                     ) : (
@@ -260,12 +259,12 @@ const NewGamePage = () => {
                                 type="radio"
                                 id="Game"
                                 name="activity"
-                                value="game"
-                                checked={selectedOption === "game"}
+                                value="Game"
+                                checked={selectedOption === "Game"}
                                 onChange={handleRadioChange}
                                 className="form-radio h-5 w-5 text-sn-main-blue"
                             />
-                            <label className="text-base " htmlFor="game">
+                            <label className="text-base " htmlFor="Game">
                                 Game
                             </label>
                         </div>
@@ -274,31 +273,31 @@ const NewGamePage = () => {
                                 type="radio"
                                 id="Practice"
                                 name="activity"
-                                value="practice"
-                                checked={selectedOption === "practice"}
+                                value="Practice"
+                                checked={selectedOption === "Practice"}
                                 onChange={handleRadioChange}
                                 className="form-radio h-5 w-5 text-sn-main-blue"
                             />
-                            <label className="text-base " htmlFor="practice">
+                            <label className="text-base " htmlFor="Practice">
                                 Practice
                             </label>
                         </div>
                         <div className="flex flex-row items-center gap-2">
                             <input
                                 type="radio"
-                                id="Team Building"
+                                id="TB"
                                 name="activity"
-                                value="team building"
-                                checked={selectedOption === "team building"}
+                                value="TB"
+                                checked={selectedOption === "TB"}
                                 onChange={handleRadioChange}
                                 className="form-radio h-5 w-5 text-sn-main-blue"
                             />
-                            <label className="text-base " htmlFor="team building">
+                            <label className="text-base " htmlFor="TB">
                                 Team Building
                             </label>
                         </div>
                     </div>              
-                    {(selectedOption === 'game' || selectedOption === '') &&
+                    {(selectedOption === 'Game' || selectedOption === '') &&
                         <NewGamePageComponent
                             eventTitle={eventTitle}
                             onGeneralInfoChanges={setGeneralInfo}
@@ -306,14 +305,14 @@ const NewGamePage = () => {
                             onSelectedPlayerChanges={setSelectedPlayers}
                             onTeamChanges={setSelectedTeam}
                         />}
-                    {selectedOption === 'practice' &&
+                    {selectedOption === 'Practice' &&
                         <NewPracticeTBComponent
                             eventTitle={eventTitle}
                             onGeneralInfoChanges={setGeneralInfo}                            
                             onSelectedPlayerChanges={setSelectedPlayers}
                             onTeamChanges={setSelectedTeam}
                         />}
-                    {selectedOption === 'team building' &&
+                    {selectedOption === 'TB' &&
                         <NewPracticeTBComponent
                             eventTitle={eventTitle}
                             onGeneralInfoChanges={setGeneralInfo}                            
