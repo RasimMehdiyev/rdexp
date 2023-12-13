@@ -21,6 +21,12 @@ const HomePage = () => {
   const [team, setTeam] = useState(-1); 
   const [openDropdown, setOpenDropdown] = useState(null);
   const navigate = useNavigate();
+
+  const [toggleState, setToggleState] = useState(false);
+  const handleToggle = () => {
+    setToggleState(!toggleState);
+    // Send absent/attend to the database or perform other actions
+  };
   
 
   useEffect(() => {
@@ -127,12 +133,20 @@ const HomePage = () => {
   };
   
   
-  const openCard = (index,event) =>{
-    event.preventDefault();
-    console.log("open card");
-    console.log(index);
-    navigate('/event-overview/' + index);
-  }
+  const openCard = (index, event) => {
+    // Check if the clicked element is the toggle switch
+    const isToggleSwitch = event.target.closest('.toggle-switch');
+  
+    // If it's not the toggle switch, navigate to the event overview
+    if (!isToggleSwitch && !event.target.classList.contains('toggle-switch')) {
+      event.preventDefault();
+      console.log("open card");
+      console.log(index);
+      navigate('/event-overview/' + index);
+    }
+  };
+  
+  
 
 
   useEffect(() => {
@@ -176,12 +190,9 @@ const HomePage = () => {
     .map((event) => {
 
       // Extracting date and time from the dateTime string
-      const eventDateTimeTest = new Date('2023-12-15T15:38:00')
-      const eventDateTime = new Date(event.datetime);
-      console.log("event date time is...", eventDateTime)
-      console.log("original date time is..", event.datetime)
-      console.log("test date time is: ", eventDateTimeTest)
-      
+    
+    const eventDateTime = new Date(event.datetime.slice(0, 19));
+    
     const date = eventDateTime.toISOString().split('T')[0];
     const time = eventDateTime.toTimeString().slice(0, 5); // Extracting hh:mm
   
@@ -194,8 +205,8 @@ const HomePage = () => {
       eventTime: time,
       location: event.location,
       id: event.event_id,
-      attendance: event.total_attendees.toString(), // Assuming total_attendees is a number
-      number_invitation: "20", // You can set this value as needed
+      attendance: event.confirmed_attendees.toString(), // Assuming total_attendees is a number
+      number_invitation: event.total_attendees.toString(), // You can set this value as needed
       date: date,
     };
   });
@@ -217,11 +228,12 @@ const HomePage = () => {
 
  // Organize events by month and then by day, considering the filter
   const organizedEvents = transformedEvents
-.filter((event) => filter === 'all' || event.type === filter)
-.reduce((acc, event) => {
+    .filter(event => (filter === 'all' || event.type === filter) && (team === -1 || event.teamId === team))
+    .reduce((acc, event) => {
   // Check if the event has a valid dateTime property
   const month = event.date.slice(0, 7); // Extracting yyyy-mm to represent a month
   const day = event.date.slice(8, 10); // Extracting dd to represent a day
+  
 
   if (!acc[month]) {
     acc[month] = {};
@@ -268,7 +280,7 @@ const toggleTeamDropdown = () => {
     return <LoadingPage />;
   } else
   // Check if fetchedEvents is empty
-  if (fetchedEvents.length == 0) {
+  if (!fetchedEvents.some(event => new Date(event.datetime) > new Date())) {
     return (
       
       <div className="mt-[-80px] bg-almostwhite">
@@ -336,12 +348,17 @@ else {
                         location={event.location}
                         attendance={event.attendance}
                         number_invitation={event.number_invitation}
-                      />
+                      >
+                      </EventCard>
+                      
                     </div>
+                    
                   ))}
               </div>
             </div>
+            
           ))}
+
         </div>
       ))}
 
