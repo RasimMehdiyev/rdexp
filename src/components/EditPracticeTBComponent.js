@@ -366,7 +366,7 @@ const EditPracticeTBComponent = ({
                         value={date} 
                         onChange={(e) => setDate(e.target.value)} 
                         type="date" 
-                        className="form-input border border-blue-500 pl-3 pr-3 rounded-lg text-black h-[40px] w-[150px]" 
+                        className="form-input pl-3 pr-3 rounded-lg text-black h-[40px] w-[150px]" 
                         
                     />
                     </div>
@@ -377,7 +377,7 @@ const EditPracticeTBComponent = ({
                         value={time} 
                         onChange={(e) => setTime(e.target.value)} 
                         type="time" 
-                        className="form-input border border-blue-500 rounded-lg pl-3 pr-3 text-black h-[40px] w-[150px]" 
+                        className="form-input rounded-lg pl-3 pr-3 text-black h-[40px] w-[150px]" 
                         
                     />
                     </div>
@@ -389,7 +389,7 @@ const EditPracticeTBComponent = ({
                         onChange={(e) => setLocation(e.target.value)} 
                         placeholder="Location" 
                         type="text" 
-                        className="form-input border border-blue-500 rounded-lg text-black w-full pl-3 pr-3" 
+                        className="form-input rounded-lg text-black w-full pl-3 pr-3" 
                         style={{ height: '40px', fontSize: '1rem' }} 
                     />
                     </div> 
