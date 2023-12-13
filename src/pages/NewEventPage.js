@@ -299,7 +299,7 @@ const NewGamePage = () => {
                             </label>
                         </div>
                     </div>              
-                    {(selectedOption === 'Game' || selectedOption === '') &&
+                    {(selectedOption === 'game' || selectedOption === '') &&
                         <NewGamePageComponent
                             eventTitle={eventTitle}
                             onGeneralInfoChanges={setGeneralInfo}
@@ -307,14 +307,14 @@ const NewGamePage = () => {
                             onSelectedPlayerChanges={setSelectedPlayers}
                             onTeamChanges={setSelectedTeam}
                         />}
-                    {selectedOption === 'Practice' &&
+                    {selectedOption === 'practice' &&
                         <NewPracticeTBComponent
                             eventTitle={eventTitle}
                             onGeneralInfoChanges={setGeneralInfo}                            
                             onSelectedPlayerChanges={setSelectedPlayers}
                             onTeamChanges={setSelectedTeam}
                         />}
-                    {selectedOption === 'TB' &&
+                    {selectedOption === 'team building' &&
                         <NewPracticeTBComponent
                             eventTitle={eventTitle}
                             onGeneralInfoChanges={setGeneralInfo}                            
