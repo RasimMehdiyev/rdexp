@@ -133,15 +133,20 @@ const HomePage = () => {
   };
   
   
-  const openCard = (index,event) =>{
+  const openCard = (index, event) => {
     // Check if the clicked element is the toggle switch
     const isToggleSwitch = event.target.closest('.toggle-switch');
-
-    event.preventDefault();
-    console.log("open card");
-    console.log(index);
-    navigate('/event-overview/' + index);
-  }
+  
+    // If it's not the toggle switch, navigate to the event overview
+    if (!isToggleSwitch && !event.target.classList.contains('toggle-switch')) {
+      event.preventDefault();
+      console.log("open card");
+      console.log(index);
+      navigate('/event-overview/' + index);
+    }
+  };
+  
+  
 
 
   useEffect(() => {

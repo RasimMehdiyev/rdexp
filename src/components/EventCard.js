@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { UserGroupIcon } from '@heroicons/react/24/solid'
+import ToggleSwitch from '../ToggleSwitch';
 
 const EventCard = ({ type, eventName, teamName, eventTime, location, attendance, number_invitation, date }) => {
 
@@ -94,10 +95,7 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
               {attendance}/{number_invitation}
             </div>
             <div className="absolute relative inline-flex  z-10000  text-[15px] font-extralight font-['Inter']  text-[#485687] ">Attend?</div>
-                <label className="relative inline-flex  items-center cursor-pointer bottom-[55px]">
-                  <input type="checkbox" value="" className="sr-only peer" style={{ outline: 'none' }} />
-                  <div className="w-11 h-6  peer-focus:outline-none  rounded-full peer dark:bg-[#c2272e] peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#06b80f]"></div>
-                </label>
+                <ToggleSwitch/>
           </div>
         </div>       
         
