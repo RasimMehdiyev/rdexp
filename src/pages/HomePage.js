@@ -221,8 +221,8 @@ const HomePage = () => {
 
  // Organize events by month and then by day, considering the filter
   const organizedEvents = transformedEvents
-.filter((event) => filter === 'all' || event.type === filter)
-.reduce((acc, event) => {
+    .filter(event => (filter === 'all' || event.type === filter) && (team === -1 || event.teamId === team))
+    .reduce((acc, event) => {
   // Check if the event has a valid dateTime property
   const month = event.date.slice(0, 7); // Extracting yyyy-mm to represent a month
   const day = event.date.slice(8, 10); // Extracting dd to represent a day
