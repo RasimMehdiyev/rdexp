@@ -243,7 +243,7 @@ const organizedEvents = transformedEvents
     return <LoadingPage />;
   } else
   // Check if fetchedEvents is empty
-  if (fetchedEvents.length == 0) {
+  if (!fetchedEvents.some(event => new Date(event.datetime) > new Date())) {
     return (
       
       <div className="mt-[-80px]">
@@ -295,7 +295,6 @@ else {
             <div key={day}>
               {/* Check if there are events for this day based on the filter */}
               {dayEvents.some((event) => filter === 'all' || event.type === filter) && (
-              
                 <p className="text-md font-interBold text-gray-700 ml-2">{`${new Date(`${month}-${day}`).toLocaleString('en-US', { weekday: 'long' })} ${day}`}</p>
               )}
               <div className="event-container">
@@ -314,15 +313,16 @@ else {
                         number_invitation={event.number_invitation}
                       >
                       </EventCard>
-
+                      
                     </div>
+                    
                   ))}
               </div>
-              <div className="absolute relative inline-flex bottom-[85px]  text-[15px] font-extralight font-['Inter'] left-[295px] text-[#485687] ">Attend?</div>
-              <label className="relative inline-flex  items-center cursor-pointer left-[245px] bottom-[55px]">
-                <input type="checkbox" value="" className="sr-only peer" style={{ outline: 'none' }} />
-                <div className="w-11 h-6  peer-focus:outline-none  rounded-full peer dark:bg-[#c2272e] peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#06b80f]"></div>
-              </label>
+              <div className="absolute relative inline-flex bottom-[85px] z-10000  text-[15px] font-extralight font-['Inter'] left-[295px] text-[#485687] ">Attend?</div>
+                      <label className="relative inline-flex  items-center cursor-pointer left-[245px] bottom-[55px]">
+                        <input type="checkbox" value="" className="sr-only peer" style={{ outline: 'none' }} />
+                        <div className="w-11 h-6  peer-focus:outline-none  rounded-full peer dark:bg-[#c2272e] peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#06b80f]"></div>
+                      </label>
             </div>
             
           ))}
