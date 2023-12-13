@@ -330,7 +330,7 @@ const EditGameComponent = ({
                         value={date} 
                         onChange={(e) => setDate(e.target.value)} 
                         type="date" 
-                        className="form-input border border-blue-500 pl-3 pr-3 rounded-lg text-black h-[40px] w-[150px]" 
+                        className="form-input pl-3 pr-3 rounded-lg text-black h-[40px] w-[150px]" 
                         
                     />
                     </div>
@@ -341,7 +341,7 @@ const EditGameComponent = ({
                         value={time} 
                         onChange={(e) => setTime(e.target.value)} 
                         type="time" 
-                        className="form-input border border-blue-500 rounded-lg pl-3 pr-3 text-black h-[40px] w-[150px]" 
+                        className="form-input rounded-lg pl-3 pr-3 text-black h-[40px] w-[150px]" 
                         
                     />
                     </div>
@@ -353,7 +353,7 @@ const EditGameComponent = ({
                         onChange={(e) => setLocation(e.target.value)} 
                         placeholder="Location" 
                         type="text" 
-                        className="form-input border border-blue-500 rounded-lg text-black w-full pl-3 pr-3" 
+                        className="form-input rounded-lg text-black w-full pl-3 pr-3" 
                         style={{ height: '40px', fontSize: '1rem' }} 
                     />
                     </div>                
@@ -390,7 +390,7 @@ const EditGameComponent = ({
                                                 <select
                                                     id={`player_select_${position.id}`}
                                                     onChange={(event) => handlePlayerChange(event, position)}
-                                                    className="form-select w-full px-2 py-2 bg-white rounded-lg border border-blue-500"
+                                                    className="form-select w-full px-2 py-2 bg-white rounded-lg"
                                                     disabled={!selectedID}
                                                 >
                                                     <option value="">
@@ -409,7 +409,7 @@ const EditGameComponent = ({
                                             (<select
                                                     id={`player_select_${position.id}`}
                                                     onChange={(event) => handlePlayerChange(event, position)}
-                                                    className="form-select w-full px-2 py-2 bg-white rounded-lg border border-blue-500 text-gray-500"
+                                                    className="form-select w-full px-2 py-2 bg-white rounded-lg text-gray-500"
                                                     disabled={!selectedID}
                                                 >
                                                     <option value="" className="text-black">
@@ -485,7 +485,7 @@ const EditGameComponent = ({
                                                 </select> )
                                                 :
                                                 (<select
-                                                    className="form-select w-full px-2 py-2 bg-white rounded-lg border border-blue-500"
+                                                    className="form-select w-full px-2 py-2 bg-white rounded-lg"
                                                     name={`substituteSelect_${index}`}
                                                     id={`substituteSelect_${index}`}
                                                     value={substitute.id}
@@ -505,7 +505,7 @@ const EditGameComponent = ({
                                             :
                                             (
                                                 <select
-                                                    className="form-select w-full px-2 py-2 bg-white rounded-lg border border-blue-500 text-gray-500"
+                                                    className="form-select w-full px-2 py-2 bg-white rounded-lg text-gray-500"
                                                     name={`substituteSelect_${index}`}
                                                     id={`substituteSelect_${index}`}
                                                     value={substitute.id}
@@ -540,7 +540,7 @@ const EditGameComponent = ({
                             ))}
                         </div>
                     </div>
-                    <div id='extra-roles' className="flex flex-col gap-4 mt-4 bg-sn-bg-light-blue">
+                    <div id='extra-roles' className="flex flex-col gap-4 mt-4">
                         <h5 className="text-2xl text-left text-sn-main-blue font-russoOne mb-2">Extra Roles</h5>
                         {extraRoles.map((extraRole) => (
                             <div className="flex flex-col gap-0" key={extraRole.id} > 
@@ -569,7 +569,7 @@ const EditGameComponent = ({
                                             </select>)
                                             :
                                             (<select
-                                                className="form-select px-2 py-2 bg-white rounded-lg border border-blue-500 text-black flex-grow"
+                                                className="form-select px-2 py-2 bg-white rounded-lg text-black flex-grow"
                                                 name="" 
                                                 id="" 
                                                 disabled={!selectedID}
@@ -589,7 +589,7 @@ const EditGameComponent = ({
                                         )
                                         :
                                         (<select
-                                            className="form-select px-2 py-2 bg-white rounded-lg border border-blue-500 text-black flex-grow text-gray-500"
+                                            className="form-select px-2 py-2 bg-white rounded-lg text-black flex-grow text-gray-500"
                                             name="" 
                                             id="" 
                                             disabled={!selectedID}

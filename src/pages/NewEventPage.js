@@ -239,7 +239,7 @@ const NewGamePage = () => {
         return (
             <div>
                 <StickySubheaderEventCreateComponent onSave={handleOnChange} />
-                <div className="pt-6 h-min-screen bg-almostwhite flex flex-col px-5 gap-2">
+                <div className="pt-6 min-h-screen bg-almostwhite flex flex-col px-5 gap-2">
                     <h1 className="font-russoOne text-sn-main-blue text-2xl">New {selectedOption ? selectedOption : "game"}</h1>
                     {inputCheck ? (
                         <div />
