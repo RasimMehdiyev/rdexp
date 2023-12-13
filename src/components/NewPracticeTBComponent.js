@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { supabase } from "../lib/helper/supabaseClient";
 import LoadingPage from "../pages/LoadingPage";
 import { MdDateRange, MdAccessTime, MdLocationOn, MdGroup } from 'react-icons/md';
+import LocationInput from '../components/LocationInput.js';
+
 
 const NewPracticeComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlayerChanges, onTeamChanges }) => {
     const [title, setTitle] = useState(eventTitle);
@@ -55,6 +57,10 @@ const NewPracticeComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
         getTeams();
     }, [])
 
+    const handleLocationInputChange= (value)=>{
+       setLocation(value)
+    }
+
     const handleTeamChange = async (event) => { //happens when team is selected
         // Update the state with the selected option's id
         if (event.target.value != "No Selection") {
@@ -89,6 +95,57 @@ const NewPracticeComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
         onGeneralInfoChanges({ date: date, time: time, location: location });
     }, [date, time, location]);
 
+    const getCurrentDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        let month = today.getMonth() + 1; 
+        let day = today.getDate();
+    
+        month = month < 10 ? `0${month}` : month;
+        day = day < 10 ? `0${day}` : day;
+    
+        return `${year}-${month}-${day}`;
+    };
+
+    const getCurrentTime = () => {
+        const today = new Date();
+        const hours = today.getHours();
+        const minutes = today.getMinutes();
+
+        const formattedHours = hours < 10 ? `0${hours}` : hours;
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    
+        return `${formattedHours}:${formattedMinutes}`;
+    };
+
+    const generateTimeOptions = () => {
+        const currentTime = getCurrentTime();
+        const [currentHour, currentMinute] = currentTime.split(':');
+    
+        const options = [];
+        const startHour = date === getCurrentDate() ? parseInt(currentHour, 10) + 1 : parseInt(currentHour, 10);
+    
+        for (let hour = startHour; hour <= 23; hour++) {
+            const maxMinute = hour === parseInt(currentHour, 10) ? currentMinute : 59;
+            for (let minute = 0; minute <= maxMinute; minute++) {
+                const formattedHour = String(hour).padStart(2, '0');
+                const formattedMinute = String(minute).padStart(2, '0');
+                const timeOption = `${formattedHour}:${formattedMinute}`;
+                options.push(
+                    <option
+                        key={timeOption}
+                        value={timeOption}
+                        disabled={date === getCurrentDate() && timeOption < currentTime}
+                    >
+                        {timeOption}
+                    </option>
+                );
+            }
+        }
+    
+        return options;
+    };
+
     if (loading) {
         return <LoadingPage />; // You can replace this with any loading spinner or indicator
     } else {
@@ -98,7 +155,7 @@ const NewPracticeComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                     <MdGroup className="text-sn-main-orange mr-3" size={32} />
                     <select
                         onChange={handleTeamChange}
-                        className="w-[150px] h-[40px] px-2 bg-white rounded-lg"
+                        className="w-[150px] h-[40px] px-2 bg-white rounded-lg border-2 border-sn-main-orange"
                         name="teams"
                         id="teams"
                         placeholder="Choose team">
@@ -119,32 +176,40 @@ const NewPracticeComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                     value={date} 
                     onChange={(e) => setDate(e.target.value)} 
                     type="date" 
-                    className="form-input pl-3 pr-3 rounded-lg text-black h-[40px] w-[150px]" 
-                    
+                    className="form-input pl-3 pr-3 rounded-lg text-black h-[40px] w-[150px] border-2 border-sn-main-orange" 
+                    min={getCurrentDate()} 
                 />
                 </div>
 
                 <div className="mb-2 flex items-center"> 
                 <MdAccessTime className="text-sn-main-orange mr-3" size={32} /> 
-                <input 
-                    value={time} 
-                    onChange={(e) => setTime(e.target.value)} 
-                    type="time" 
-                    className="form-input rounded-lg pl-3 pr-3 text-black h-[40px] w-[150px]" 
-                    
-                />
+                {date !== getCurrentDate() ? (
+                        <div className="mb-2 flex items-center">
+                            <input
+                                value={time}
+                                onChange={(e) => setTime(e.target.value)}
+                                type="time"
+                                className="form-input rounded-lg pl-3 pr-3 border-2 border-sn-main-orange text-black h-[40px] w-[150px]"
+                            />
+                        </div>
+                    ) : (
+                        <div className="mb-2 flex items-center">
+                            <select
+                                value={time}
+                                onChange={(e) => setTime(e.target.value)}
+                                className="form-select rounded-lg pl-3 pr-3 border-2 border-sn-main-orange text-black h-[40px] w-[150px]"
+                            >
+                                {generateTimeOptions()}
+                            </select>
+                        </div>
+                    )}
                 </div>
 
                 <div className="mb-2 flex items-center"> 
+
                 <MdLocationOn className="text-sn-main-orange mr-3 w-[32px] h-[32px]" /> 
-                <input 
-                    value={location} 
-                    onChange={(e) => setLocation(e.target.value)} 
-                    placeholder="Location" 
-                    type="text" 
-                    className="form-input rounded-lg text-black w-full pl-3 pr-3" 
-                    style={{ height: '40px', fontSize: '1rem' }} 
-                />
+                <LocationInput onLocationChange={handleLocationInputChange} borderColor="sn-main-orange" isIconVisible={false} />
+                
                 </div>
             </form>
         );

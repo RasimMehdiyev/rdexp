@@ -19,6 +19,8 @@ const TeamCreatePage = () => {
   const [users, setUsers] = useState([]); // [user_id, user_name]
   const [teamBorderColor, setTeamBorderColor] = useState('border-club-header-blue');
   const [teamError, setTeamError] = useState('');
+  const [extrasUsers, setExtrasUsers] = useState([]); // [user_id, user_name
+  const [playersUsers, setPlayersUsers] = useState([]); // [user_id, user_name
 
   const handleTeamNameChange = (e) => {
     setTeamName(e.target.value);
@@ -43,8 +45,8 @@ const TeamCreatePage = () => {
   const teamExists = async () => {
     const { data, error } = await supabase
     .rpc('check_team_name_exists_within_club',{
-      team_name: teamName,
-      club_id: localStorage.getItem('clubID')
+      team_name_to_check: teamName,
+      club_id_to_check: localStorage.getItem('clubID')
     })
     if (error) {
       console.error('Error fetching users:', error);
@@ -87,14 +89,16 @@ const TeamCreatePage = () => {
     try {
       const { data, error } = await supabase
         .from('users')
-        .select('id, full_name,number');
+        .select('id,full_name, number, role_id');
 
       if (error) {
         console.error('Error fetching users:', error);
         return;
       }
 
-      setUsers(data);
+      // setUsers(data);
+      setExtrasUsers(data.filter(user => user.role_id === 3));
+      setPlayersUsers(data.filter(user => user.role_id === 2));
     } catch (error) {
       console.error('An error occurred:', error);
     }
@@ -104,17 +108,15 @@ const TeamCreatePage = () => {
     getAllPlayers();
   }, []);
 
-  // Log users after the state has been updated
   useEffect(() => {
-    console.log('Updated users:', users);
-  }, [users]);
-
+    console.log('Updated extras:', extrasUsers);
+    console.log('Updated players:', playersUsers);
+  }, [extrasUsers, playersUsers]);
 
   
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log({ teamName, players, extras, teamID });
-  
+   
     // First, update the team name
     try {
       const { data: updateData, error: updateError } = await supabase
@@ -150,25 +152,10 @@ const TeamCreatePage = () => {
 
 
       // If team update is successful, proceed to add players
-      const insertPromises = players.map(player => {
-        return supabase
-          .from('team_users')
-          .insert([
-            {
-              user_id: player.id,
-              team_id: teamID,
-            }
-          ]);
-      });
-  
-      const results = await Promise.all(insertPromises);
-      results.forEach(({ data, error }) => {
-        if (error) {
-          console.error('Error inserting data:', error);
-        } else {
-          console.log('Insertion successful:', data);
-        }
-      });
+
+      await insertPlayers();
+      await insertExtras();
+      
 
       toast.success('Team created successfully! Redirecting...', { position: "top-center", zIndex: 50});
       setTimeout(() => {
@@ -181,6 +168,59 @@ const TeamCreatePage = () => {
    
   };
   
+  // Use Promise.all to wait for all player insertions to complete
+const insertPlayers = async () => {
+  try {
+    await Promise.all(players.map(async (player) => {
+      console.log('Inserting player:', player);
+      const { data: playerTeamData, error: playerTeamError } = await supabase
+        .from('team_users')
+        .insert([
+          {
+            user_id: player.id,
+            team_id: teamID,
+          }
+        ]);
+
+      if (playerTeamError) {
+        throw playerTeamError;
+      }
+
+      return playerTeamData;
+    }));
+  } catch (error) {
+    console.error('Error inserting players:', error);
+    // Handle error appropriately
+  }
+};
+
+// Use Promise.all for extras as well
+const insertExtras = async () => {
+  try {
+    await Promise.all(extras.map(async (extra) => {
+      console.log('Inserting extra:', extra);
+      const { data: extraTeamData, error: extraTeamError } = await supabase
+        .from('team_users')
+        .insert([
+          {
+            user_id: extra.id,
+            team_id: teamID,
+          }
+        ]);
+
+      if (extraTeamError) {
+        throw extraTeamError;
+      }
+
+      return extraTeamData;
+    }));
+  } catch (error) {
+    console.error('Error inserting extras:', error);
+    // Handle error appropriately
+  }
+};
+
+
 
   const deletePlayer = (playerName) => {
     setPlayers(players.filter(player => player.name !== playerName));
@@ -222,7 +262,7 @@ const TeamCreatePage = () => {
             <PersonTag key={index} {...player} onDelete={deletePlayer} />        
           ))}
 
-          <UserInput onAdd={addPlayer} users={users} />
+          <UserInput onAdd={addPlayer} users={playersUsers} />
           <h1 className="pt-7 pb-4 text-3xl text-club-header-blue">
               Add extras
           </h1>
@@ -231,7 +271,7 @@ const TeamCreatePage = () => {
           {extras.map((extra, index) => (
             <PersonTag key={index} {...extra} onDelete={deleteExtra} />        
           ))}
-          <UserInput onAdd={addExtra} users={users} />
+          <UserInput onAdd={addExtra} users={extrasUsers} />
         </div>
       </div>
 
