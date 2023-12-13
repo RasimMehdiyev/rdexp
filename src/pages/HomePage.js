@@ -326,7 +326,7 @@ else {
                       <EventCard
                         type={event.type}
                         eventName={event.eventName}
-                        teamName={event.teamId}
+                        teamName={event.teamName}
                         eventTime={event.eventTime}
                         location={event.location}
                         attendance={event.attendance}

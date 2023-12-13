@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faUser } from '@fortawesome/free-regular-svg-icons';
 
 const UserInput = ({ onAdd, users }) => {
   const [inputValue, setInputValue] = useState({ name: '', id: null });
@@ -60,13 +61,13 @@ const UserInput = ({ onAdd, users }) => {
     <div className="relative flex flex-col gap-1 items-start w-[90vw]">
       <div className="flex flex-row items-center" ref={inputRef}>
         <input
-          className="h-[6vh] pl-10 w-[80vw] rounded-10px border-2 border-club-header-blue font-interReg"
+          className="h-[6vh] pl-10 w-[80vw] rounded-10px border-2 border-club-header-blue font-interReg placeholder:-translate-x-2"
           placeholder="Enter user's name"
           value={inputValue.name}
           onChange={handleInputChange}
         />
         <div className="absolute left-3 top-2 pt-1">
-          <FontAwesomeIcon icon={faUser} className="text-club-header-blue h-[3vh]" />
+          <FontAwesomeIcon icon={faUser} className="absolute left-1 top-2.5 h-5 text-club-header-blue" />
         </div>
         <button
           onClick={handleAddClick}

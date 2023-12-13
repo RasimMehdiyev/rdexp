@@ -47,7 +47,7 @@ const SettingsComponent = ( {roles, setRoles, teamData, isCoach}) => {
         }
     };
     return (
-        <div className="w-full pl-6 pr-6 flex-col justify-start items-start inline-flex">
+        <div className="w-full pl-5 pr-5 flex-col justify-start items-start inline-flex">
             <div className="self-stretch flex-col justify-start items-start flex">
                 <div className="self-stretch justify-start items-center gap-4 inline-flex pt-5 pb-4">
                     <div className="text-blue-800 text-2xl font-russoOne leading-normal">Extra Roles</div>

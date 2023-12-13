@@ -210,7 +210,7 @@ const TeamCreatePage = () => {
           />
         </div>
 
-        <div className='pl-5 -r-5'>
+        <div className='pl-5 pr-5'>
           <h1 className="pt-7 text-3xl text-club-header-blue">
               Add players
           </h1>
