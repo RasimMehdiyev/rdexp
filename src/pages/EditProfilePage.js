@@ -54,11 +54,7 @@ const EditProfilePage = () => {
   
     const handleProfileClick = () => {
         setClickNumber(clickNumber + 1);
-        if (clickNumber  % 3 == 0) {
-            setShowNumber(false);
-        } else {
-            setShowNumber(true);
-        }
+        setShowNumber(!showNumber);
     };
 
     const handleInputChange = (e) => {
@@ -251,7 +247,7 @@ const EditProfilePage = () => {
             />
             <div className="grow flex bg-indigo-100 flex-col items-center justify-start h-screen">
                 <div className="grow p-4 flex-col justify-start items-center gap-4 inline-flex">
-                    <div className={`profile-flipper ${showNumber ? 'show-number' : ''}`} onClick={handleProfileClick}>
+                    <div className={`profile-flipper ${showNumber ? 'show-number' : ''}`} onDoubleClick={handleProfileClick}>
                         <div className="profile-front"> 
                             
                                     {previewImage ? (
@@ -274,9 +270,10 @@ const EditProfilePage = () => {
                                         />
                                     
                         </div>
+                        {
+                                userData.role_id == 2 ?   
                         <div className="profile-back bg-sn-main-orange circle-number rounded-full font-russoOne shadow-md text-white mr-8">
-                            {
-                                userData.role_id == 2 ?    
+ 
                                 <input
                                             type="text"
                                             className="text-white placeholder:text-5xl w-full placeholder:text-white border-none font-russoOne font-normal bg-sn-main-orange leading-normal text-center !text-5xl  rounded-full"
@@ -289,10 +286,33 @@ const EditProfilePage = () => {
                                             }
                                             }
                                         />
-                                        :
-                                <div></div>
-                                }
+
+                               
+                        </div>                                        
+                        : 
+                        <div className="profile-back"> 
+                            
+                                    {previewImage ? (
+                                    <img className="w-[142px] h-[142px] rounded-full object-cover overflow-hidden" src={previewImage} alt="Preview" />
+                                    ) : (
+                                    <img className="w-[150px] h-[150px] rounded-full  object-cover overflow-hidden" src={process.env.PUBLIC_URL + "/images/no_user.png"} alt="No user" />
+                                    )}
+                                    <label htmlFor="profilePictureInput">
+                                        <div className="w-[35px] h-[35px] left-[107px] top-[98px] absolute" onChange={(e) => (handleImageChange(e))}>
+                                            <div className="w-[35px] h-[35px] left-[-3px] top-0 absolute bg-blue-600 rounded-full flex justify-center items-center cursor-pointer">
+                                                <PencilIcon className="h-6 w-6 text-white"/>
+                                            </div>
+                                        </div>
+                                    </label>
+                                        <input
+                                            type="file"
+                                            id="profilePictureInput"
+                                            accept="image/*"
+                                            style={{ display: 'none' }}
+                                        />
+                                    
                         </div>
+                         }
                     </div>
                 
                 <div className="mt-5 flex-col justify-start items-start gap-2 flex">
