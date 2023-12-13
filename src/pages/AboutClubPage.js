@@ -165,6 +165,7 @@ export const AboutClubPage = () => {
       .single();
     const clubID = data;
     console.log('club id', clubID.id);
+    localStorage.setItem('clubID', clubID.id);
 
     const { data: teamData, error: teamError } = await supabase
       .from('team')
