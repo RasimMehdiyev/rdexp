@@ -3,6 +3,7 @@ import { supabase } from "../lib/helper/supabaseClient";
 import LoadingPage from "../pages/LoadingPage";
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { MdDateRange, MdAccessTime, MdLocationOn, MdGroup } from 'react-icons/md';
+import LocationInput from '../components/LocationInput.js';
 
 
 const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlayerChanges, onSelectedExtraChanges, onTeamChanges }) => {
@@ -266,6 +267,10 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
         
     };
 
+    const handleLocationInputChange = (value) => {
+        setLocation(value)
+      };
+
     if (loading) {
         return <LoadingPage />; // You can replace this with any loading spinner or indicator
     } else {
@@ -275,7 +280,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                     <MdGroup className="text-sn-main-orange mr-3" size={32} />
                     <select
                         onChange={handleTeamChange}
-                        className="w-[150px] h-[40px] px-2 bg-white rounded-lg"
+                        className="w-[150px] h-[40px] px-2 bg-white rounded-lg border-2 border-sn-main-orange"
                         name="teams"
                         id="teams"
                         placeholder="Choose team">
@@ -296,7 +301,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                     value={date} 
                     onChange={(e) => setDate(e.target.value)} 
                     type="date" 
-                    className="form-input pl-3 pr-3 rounded-lg text-black h-[40px] w-[150px]" 
+                    className="form-input pl-3 pr-3 rounded-lg border-2 border-sn-main-orange text-black h-[40px] w-[150px]" 
                     
                 />
                 </div>
@@ -307,21 +312,16 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                     value={time} 
                     onChange={(e) => setTime(e.target.value)} 
                     type="time" 
-                    className="form-input rounded-lg pl-3 pr-3 text-black h-[40px] w-[150px]" 
+                    className="form-input rounded-lg pl-3 pr-3 border-2 border-sn-main-orange text-black h-[40px] w-[150px]" 
                     
                 />
                 </div>
 
-                <div className="mb-2 flex items-center"> 
+                <div className="mb-2 w-full flex items-center"> 
                 <MdLocationOn className="text-sn-main-orange mr-3 w-[32px] h-[32px]" /> 
-                <input 
-                    value={location} 
-                    onChange={(e) => setLocation(e.target.value)} 
-                    placeholder="Location" 
-                    type="text" 
-                    className="form-input rounded-lg text-black w-full pl-3 pr-3" 
-                    style={{ height: '40px', fontSize: '1rem' }} 
-                />
+                
+                <LocationInput onLocationChange={handleLocationInputChange} borderColor="sn-main-orange" isIconVisible={false} />
+                
                 </div>                
                 
                 <div id='players' className="flex flex-col gap-4 mt-4">

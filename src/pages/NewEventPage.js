@@ -252,7 +252,7 @@ const NewGamePage = () => {
                         onChange={(e) => setEventTitle(e.target.value)}
                         type="text"
                         placeholder="Title"
-                        className="text-2xl text-blue bg-transparent border-0 rounded-lg py-2 px-2 w-full max-w-md font-interReg"
+                        className="text-2xl border-sn-main-orange text-blue bg-transparent border-2 rounded-lg py-2 px-2 w-full max-w-md font-interReg"
                     />
                     <div className="flex flex-row justify-between gap-4 pt-2 pb-4">
                         <div className="flex flex-row items-center gap-2">

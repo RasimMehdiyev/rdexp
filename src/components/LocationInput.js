@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useCombobox } from 'downshift';
 
-const LocationInput = ({ onLocationChange }) => {
+const LocationInput = ({ onLocationChange, borderColor, isIconVisible }) => {
   const [inputItems, setInputItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -45,14 +45,16 @@ const LocationInput = ({ onLocationChange }) => {
   };
 
   return (
-    <div className='input-container'>
-      <div className="relative w-full">
-        <img className="input-icon pt-4" src={process.env.PUBLIC_URL + "/images/map-pin.svg"} alt="map-pin" />
+    <div className='input-container w-full'>
+      <div className="relative w-full ">
+        {isIconVisible && (
+          <img className="input-icon pt-4" src={process.env.PUBLIC_URL + "/images/map-pin.svg"} alt="map-pin" />
+        )}
         <textarea
           {...getInputProps()}
           type="text"
           placeholder='Location'
-          className="text-black p-2 border-2 pl-8 border-club-header-blue h-30 rounded-10px min-w-full m-auto"
+          className={`text-black p-2 w-full border-2 pl-${isIconVisible ? '8' : '2'} border-${borderColor} h-30 rounded-10px m-auto `}
           maxLength={255}
           rows={4}
         />

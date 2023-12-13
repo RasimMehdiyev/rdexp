@@ -273,7 +273,7 @@ export const AboutClubPage = () => {
           />
         </div>
 
-        <LocationInput onLocationChange={handleLocationInputChange} />
+        <LocationInput onLocationChange={handleLocationInputChange} borderColor="club-header-blue" isIconVisible={true} />
 
       </div>
       <div className='flex flex-col gap-2 justify-center align-center'>
