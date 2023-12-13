@@ -26,12 +26,12 @@ const NewGamePage = () => {
         
         if (selectedOption == "game" | selectedOption == "") {
             //setLoading(true);
-            console.log("event title", eventTitle);
-            console.log("selected option", selectedOption);
-            console.log("general info", generalInfo);
-            console.log("players", selectedPlayers);
-            console.log("extras", selectedExtras);
-            console.log("team", selectedTeam);
+            // console.log("event title", eventTitle);
+            // console.log("selected option", selectedOption);
+            // console.log("general info", generalInfo);
+            // console.log("players", selectedPlayers);
+            // console.log("extras", selectedExtras);
+            // console.log("team", selectedTeam);
 
             const timestamp = `${generalInfo.date} ${generalInfo.time}:00+00`;
             // console.log("timestamp", timestamp);
@@ -52,7 +52,7 @@ const NewGamePage = () => {
             try {
                 setLoading(true);
                 const userResponse = await supabase.auth.getUser();
-                console.log("User:", userResponse);
+                // console.log("User:", userResponse);
                 const user = userResponse.data.user;
                 if (user) {
                     // Update general info => inserting column in event table
@@ -121,7 +121,7 @@ const NewGamePage = () => {
             // console.log("to upload players", toUploadPlayers);
             try {
                 const userResponse = await supabase.auth.getUser();
-                console.log("User:", userResponse);
+                // console.log("User:", userResponse);
                 const user = userResponse.data.user;
                 if (user) {
                     // Update general info => inserting column in event table
@@ -140,10 +140,10 @@ const NewGamePage = () => {
                         .limit(1); // Limit the result to 1 row
                     if (errorEventDataID) console.error('Error fetching latest event:', errorEventDataID)
                     else {
-                        console.log("event data is", eventDataID);
+                        // console.log("event data is", eventDataID);
                         const event_id = eventDataID[0].id;
                         const finalUploadPlayers = toUploadPlayers.map((p) => ({ ...p, event_id: event_id, is_attending: "Pending" }));
-                        console.log("finalUploadPlayers: ", finalUploadPlayers);                        
+                        // console.log("finalUploadPlayers: ", finalUploadPlayers);                        
 
                         const { playersData, errorPlayersData } = await supabase
                             .from('event_users')
@@ -177,25 +177,25 @@ const NewGamePage = () => {
     };
 
     useEffect(() => {
-        console.log("new general info", generalInfo);
+        // console.log("new general info", generalInfo);
     }, [generalInfo]);
 
     useEffect(() => {
-        console.log("new selected extras in parent", selectedExtras);
+        // console.log("new selected extras in parent", selectedExtras);
     }, [selectedExtras]);
 
     useEffect(() => {
-        console.log("new selected players in parent", selectedPlayers);
+        // console.log("new selected players in parent", selectedPlayers);
     }, [selectedPlayers]);
 
     useEffect(() => {
-        console.log("new selected team", selectedTeam);
+        // console.log("new selected team", selectedTeam);
     }, [selectedTeam]);
 
     useEffect(() => {
         const isLoggedIn = async () => {
             const user = await supabase.auth.getUser();
-            console.log(user)
+            // console.log(user)
             if (!user.data.user) {
                 navigate('/auth');
             }
@@ -205,7 +205,7 @@ const NewGamePage = () => {
             try {
                 const userResponse = await supabase.auth.getUser();
                 const user = userResponse.data.user;
-                console.log("User:", user);
+                // console.log("User:", user);
                 if (user) {
                     // Initially, we don't know the user's role, so fetch from both tables.
                     const { data: user_data, error: userError } = await supabase
@@ -214,7 +214,7 @@ const NewGamePage = () => {
                         .eq('user_id', user.id)
                         .single(); // Use single to get a single record or null   
                     if (userError) throw userError;
-                    console.log("User data:", user_data);
+                    // console.log("User data:", user_data);
 
                     if (user_data.role_id == 1) { //if he is a coach
                         setUserCheck(true); 
@@ -224,7 +224,7 @@ const NewGamePage = () => {
 
                 }
             } catch (error) {
-                console.error(error)
+                // console.error(error)
                 setUserCheck(false)
             }
         }
