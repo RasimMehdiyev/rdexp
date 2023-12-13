@@ -476,9 +476,9 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                     {isTeamSelected && (
                     <h5 className="text-2xl text-left text-sn-main-blue font-russoOne mb-2">Extra Roles</h5>)}
                     {extraRoles.map((extraRole) => (
-                        <div className="flex flex-col gap-0" key={extraRole.id} > 
+                        <div className="flex flex-col " key={extraRole.id} > 
                             <div className="flex items-center mb-1">
-                                <span className="text-black mr-3" style={{ width: '128px', color: '#007bff', fontFamily: 'Inter ' }}>{extraRole.role_title}</span>
+                                <span className="text-black  text-xl" style={{ width: '128px', color: '#007bff', fontFamily: 'Inter Bold' }}>{extraRole.role_title}</span>
                                 
                                 <select
                                     className="form-select px-2 py-2 bg-white rounded-lg flex-grow border-2 border-sn-main-orange h-12"
