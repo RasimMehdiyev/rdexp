@@ -388,6 +388,7 @@ const EventOverviewEdit = () => {
     }, [selectedTeam]);
     
 
+
     if (loading) {
         return (<LoadingPage></LoadingPage>)
     } else if (userCheck){    

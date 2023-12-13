@@ -310,3 +310,7 @@ input {
 .profile-flipper.show-number .profile-back {
     transform: rotateY(0deg);
 }
+
+.button-pressed:active {
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.25);
+}
