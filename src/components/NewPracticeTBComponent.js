@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { supabase } from "../lib/helper/supabaseClient";
 import LoadingPage from "../pages/LoadingPage";
+import { MdDateRange, MdAccessTime, MdLocationOn, MdGroup } from 'react-icons/md';
 
 const NewPracticeComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlayerChanges, onTeamChanges }) => {
     const [title, setTitle] = useState(eventTitle);
@@ -29,9 +30,9 @@ const NewPracticeComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
             if (userError) throw userError;
 
             const { data: teams_list, error: teamsError } = await supabase
-                .from('team_users')
+                .from('team')
                 .select('*')
-                .eq('user_id', user_data.id)
+                .eq('coach_id', user_data.id)
     
             if (teamsError) throw teamsError;
             let team_n = []
@@ -39,7 +40,7 @@ const NewPracticeComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                 const { data: team_data, error: teamError } = await supabase
                     .from('team')
                     .select('*')
-                    .eq('id', team.team_id)
+                    .eq('id', team.id)
                     .single();
                 if (teamError) throw teamError;
                 let team_info = {}
@@ -54,7 +55,7 @@ const NewPracticeComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
         getTeams();
     }, [])
 
-    const handleChange = async (event) => { //happens when team is selected
+    const handleTeamChange = async (event) => { //happens when team is selected
         // Update the state with the selected option's id
         if (event.target.value != "No Selection") {
             setLoading(true);
@@ -93,22 +94,58 @@ const NewPracticeComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
     } else {
         return (
             <form className="flex flex-col justify-center gap-2">
-                <select onChange={handleChange} className="h-7 mt-7 px-2 bg-white rounded-md border-sn-light-orange border-[1.5px]" name="teams" id="teams" placeholder="Choose team">
-                    <option className="h-7 w-[210px] bg-white rounded-md">{selectedID ? teamNames.find(team => team.id == selectedID).team_name : 'No Selection'}</option>
-                    {
-                        teamNames.map((team) => (
-                            <option key={team.id} value={team.id} className="h-7 w-[210px] bg-white rounded-md">
-                                {team.team_name}
-                            </option>
-                        ))
-                    }
-                </select>
+                <div className="mb-2 flex items-center">
+                    <MdGroup className="text-sn-main-orange mr-3" size={32} />
+                    <select
+                        onChange={handleTeamChange}
+                        className="w-[150px] h-[40px] px-2 bg-white rounded-lg"
+                        name="teams"
+                        id="teams"
+                        placeholder="Choose team">
+                        <option className="h-[40px] bg-white rounded-md">{ selectedID ? teamNames.find(team => team.id == selectedID).team_name : 'No Selection'}</option>
+                        {
+                            teamNames.map((team) => (
+                                <option key={team.id} value={team.id} >
+                                    {team.team_name}
+                                </option>
+                            ))
+                        }
+                    </select>
+                </div>                
 
-                <div className="flex-row flex justify-between ">
-                    <span><input value={date} onChange={(e) => setDate(e.target.value)} type="date" className="h-7 px-2 rounded-md border-sn-light-orange border-[1.5px]" /></span>
-                    <span><input value={time} onChange={(e) => setTime(e.target.value)} type="time" className="h-7 px-2 rounded-md border-sn-light-orange border-[1.5px]" /></span>
+                <div className="mb-2 flex items-center"> 
+                <MdDateRange className="text-sn-main-orange mr-3" size={32} />
+                <input 
+                    value={date} 
+                    onChange={(e) => setDate(e.target.value)} 
+                    type="date" 
+                    className="form-input pl-3 pr-3 rounded-lg text-black h-[40px] w-[150px]" 
+                    
+                />
                 </div>
-                <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location" type="text" className="h-7 px-2 rounded-md border-sn-light-orange border-[1.5px]" />
+
+                <div className="mb-2 flex items-center"> 
+                <MdAccessTime className="text-sn-main-orange mr-3" size={32} /> 
+                <input 
+                    value={time} 
+                    onChange={(e) => setTime(e.target.value)} 
+                    type="time" 
+                    className="form-input rounded-lg pl-3 pr-3 text-black h-[40px] w-[150px]" 
+                    
+                />
+                </div>
+
+                <div className="mb-2 flex items-center"> 
+                <MdLocationOn className="text-sn-main-orange mr-3 w-[32px] h-[32px]" /> 
+                <input 
+                    value={location} 
+                    onChange={(e) => setLocation(e.target.value)} 
+                    placeholder="Location" 
+                    type="text" 
+                    className="form-input rounded-lg text-black w-full pl-3 pr-3" 
+                    style={{ height: '40px', fontSize: '1rem' }} 
+                />
+                </div>
             </form>
         );
     }
