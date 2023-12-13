@@ -335,7 +335,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                     <MdGroup className="text-sn-main-orange mr-3" size={32} />
                     <select
                         onChange={handleTeamChange}
-                        className="w-[150px] h-[40px] px-2 bg-white rounded-lg border-2 border-sn-main-orange"
+                        className="w-[150px] h-[40px] px-2 bg-white rounded-lg border-2 border-sn-main-orange text-interReg "
                         name="teams"
                         id="teams"
                         placeholder="Choose team">
@@ -356,7 +356,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                     value={date} 
                     onChange={(e) => setDate(e.target.value)} 
                     type="date" 
-                    className="form-input pl-3 pr-3 rounded-lg border-2 border-sn-main-orange text-black h-[40px] w-[150px]"
+                    className="form-input text-interReg pl-3 pr-3 rounded-lg border-2 border-sn-main-orange text-black h-[40px] w-[150px]"
                     min={getCurrentDate()} 
                 />
                 </div>
@@ -370,7 +370,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                                 value={time}
                                 onChange={(e) => setTime(e.target.value)}
                                 type="time"
-                                className="form-input rounded-lg pl-3 pr-3 border-2 border-sn-main-orange text-black h-[40px] w-[150px]"
+                                className="form-input text-interReg rounded-lg pl-3 pr-3 border-2  border-sn-main-orange text-black h-[40px] w-[150px]"
                             />
                         </div>
                     ) : (
@@ -378,7 +378,7 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                             <select
                                 value={time}
                                 onChange={(e) => setTime(e.target.value)}
-                                className="form-select rounded-lg pl-3 pr-3 border-2 border-sn-main-orange text-black h-[40px] w-[150px]"
+                                className="form-select text-interReg rounded-lg pl-3 pr-3 border-2 border-sn-main-orange text-black h-[40px] w-[150px]"
                             >
                                 {generateTimeOptions()}
                             </select>

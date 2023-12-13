@@ -24,7 +24,7 @@ const NewGamePage = () => {
 
     const handleOnChange = async () => {
         
-        if (selectedOption == "game" | selectedOption == "") {
+        if (selectedOption == "Game" | selectedOption == "") {
             //setLoading(true);
             // console.log("event title", eventTitle);
             // console.log("selected option", selectedOption);
@@ -176,19 +176,29 @@ const NewGamePage = () => {
         setSelectedOption(event.target.value);
     };
 
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+
+    useEffect(()=>{
+        setIsButtonDisabled(!checkInput());
+    }, [generalInfo, eventTitle, selectedTeam])
+
     useEffect(() => {
         // console.log("new general info", generalInfo);
+        checkInput();
     }, [generalInfo]);
 
     useEffect(() => {
         // console.log("new selected extras in parent", selectedExtras);
+        
     }, [selectedExtras]);
 
     useEffect(() => {
+        
         // console.log("new selected players in parent", selectedPlayers);
     }, [selectedPlayers]);
 
     useEffect(() => {
+        checkInput();
         // console.log("new selected team", selectedTeam);
     }, [selectedTeam]);
 
@@ -238,7 +248,7 @@ const NewGamePage = () => {
     } else if (userCheck) {
         return (
             <div>
-                <StickySubheaderEventCreateComponent onSave={handleOnChange} eventType={selectedOption ? selectedOption : "Game"} />
+                <StickySubheaderEventCreateComponent onSave={handleOnChange} eventType={selectedOption ? selectedOption : "Game"} buttonEnabled={!isButtonDisabled} />
                 <div className="pt-6 min-h-screen bg-almostwhite flex flex-col px-5 gap-2">
                     {inputCheck ? (
                         <div />
