@@ -12,25 +12,26 @@ import { toast, ToastContainer } from 'react-toastify';
 
 const NewGamePage = () => {
     const [eventTitle, setEventTitle] = useState('');
-    const [selectedOption, setSelectedOption] = useState("game");
+    const [selectedOption, setSelectedOption] = useState("Game");
     const [loading, setLoading] = useState(false);
     const [generalInfo, setGeneralInfo] = useState({ date: "", time: "", location: "" });
     const [selectedPlayers, setSelectedPlayers] = useState([]);
     const [selectedExtras, setSelectedExtras] = useState([]);
     const [selectedTeam, setSelectedTeam] = useState([]);
     const [inputCheck, setInputCheck] = useState(true);
+    const [userCheck, setUserCheck] = useState(true);
     const navigate = useNavigate();
 
     const handleOnChange = async () => {
         
         if (selectedOption == "game" | selectedOption == "") {
             //setLoading(true);
-            console.log("event title", eventTitle);
-            console.log("selected option", selectedOption);
-            console.log("general info", generalInfo);
-            console.log("players", selectedPlayers);
-            console.log("extras", selectedExtras);
-            console.log("team", selectedTeam);
+            // console.log("event title", eventTitle);
+            // console.log("selected option", selectedOption);
+            // console.log("general info", generalInfo);
+            // console.log("players", selectedPlayers);
+            // console.log("extras", selectedExtras);
+            // console.log("team", selectedTeam);
 
             const timestamp = `${generalInfo.date} ${generalInfo.time}:00+00`;
             // console.log("timestamp", timestamp);
@@ -51,7 +52,7 @@ const NewGamePage = () => {
             try {
                 setLoading(true);
                 const userResponse = await supabase.auth.getUser();
-                console.log("User:", userResponse);
+                // console.log("User:", userResponse);
                 const user = userResponse.data.user;
                 if (user) {
                     // Update general info => inserting column in event table
@@ -120,7 +121,7 @@ const NewGamePage = () => {
             // console.log("to upload players", toUploadPlayers);
             try {
                 const userResponse = await supabase.auth.getUser();
-                console.log("User:", userResponse);
+                // console.log("User:", userResponse);
                 const user = userResponse.data.user;
                 if (user) {
                     // Update general info => inserting column in event table
@@ -139,10 +140,10 @@ const NewGamePage = () => {
                         .limit(1); // Limit the result to 1 row
                     if (errorEventDataID) console.error('Error fetching latest event:', errorEventDataID)
                     else {
-                        console.log("event data is", eventDataID);
+                        // console.log("event data is", eventDataID);
                         const event_id = eventDataID[0].id;
                         const finalUploadPlayers = toUploadPlayers.map((p) => ({ ...p, event_id: event_id, is_attending: "Pending" }));
-                        console.log("finalUploadPlayers: ", finalUploadPlayers);                        
+                        // console.log("finalUploadPlayers: ", finalUploadPlayers);                        
 
                         const { playersData, errorPlayersData } = await supabase
                             .from('event_users')
@@ -176,100 +177,127 @@ const NewGamePage = () => {
     };
 
     useEffect(() => {
-        console.log("new general info", generalInfo);
+        // console.log("new general info", generalInfo);
     }, [generalInfo]);
 
     useEffect(() => {
-        console.log("new selected extras in parent", selectedExtras);
+        // console.log("new selected extras in parent", selectedExtras);
     }, [selectedExtras]);
 
     useEffect(() => {
-        console.log("new selected players in parent", selectedPlayers);
+        // console.log("new selected players in parent", selectedPlayers);
     }, [selectedPlayers]);
 
     useEffect(() => {
-        console.log("new selected team", selectedTeam);
+        // console.log("new selected team", selectedTeam);
     }, [selectedTeam]);
 
     useEffect(() => {
         const isLoggedIn = async () => {
             const user = await supabase.auth.getUser();
-            console.log(user)
+            // console.log(user)
             if (!user.data.user) {
                 navigate('/auth');
             }
         }
+
+        const checkUser = async () => {          
+            try {
+                const userResponse = await supabase.auth.getUser();
+                const user = userResponse.data.user;
+                // console.log("User:", user);
+                if (user) {
+                    // Initially, we don't know the user's role, so fetch from both tables.
+                    const { data: user_data, error: userError } = await supabase
+                        .from('users')
+                        .select('*')
+                        .eq('user_id', user.id)
+                        .single(); // Use single to get a single record or null   
+                    if (userError) throw userError;
+                    // console.log("User data:", user_data);
+
+                    if (user_data.role_id == 1) { //if he is a coach
+                        setUserCheck(true); 
+                    } else {
+                        setUserCheck(false);
+                    }
+
+                }
+            } catch (error) {
+                // console.error(error)
+                setUserCheck(false)
+            }
+        }
         isLoggedIn();
+        checkUser();
+        
     }, [])
     
     if (loading) {
         return (<LoadingPage></LoadingPage>)
-    } else {
-
+    } else if (userCheck) {
         return (
             <div>
+                <StickySubheaderEventCreateComponent onSave={handleOnChange} eventType={selectedOption ? selectedOption : "Game"} />
+                <div className="pt-6 min-h-screen bg-almostwhite flex flex-col px-5 gap-2">
+                    {inputCheck ? (
+                        <div />
+                    ) : (
+                        <div className='text-sm text-red-500'>Please ensure that title event, date, time, team, and location are filled/selected</div>
+                    )}
 
-        <StickySubheaderEventCreateComponent onSave={handleOnChange} />
-        <div className="pt-6 h-screen bg-sn-bg-light-blue flex flex-col px-5">
-            <h1 className="font-russoOne text-sn-main-blue text-2xl">New {selectedOption ? selectedOption : "game"}</h1>
-            {inputCheck ? (
-                <div />
-            ) : (
-                <div className='text-sm text-red-500'>Please ensure that title event, date, time, team, and location are filled/selected</div>
-            )}
-
-            <input
-                value={eventTitle}
-                onChange={(e) => setEventTitle(e.target.value)}
-                type="text"
-                placeholder="Title"
-                className="h-10 px-2 rounded-md border-sn-light-orange border-[1.5px] font-russoOne"
-            />
-            <div className="flex flex-row justify-between gap-4 pt-2">
-                <div className="flex flex-row justify-between gap-2">
                     <input
-                        type="radio"
-                        id="Game"
-                        name="activity"
-                        value="game"
-                        checked={selectedOption === "game"}
-                        onChange={handleRadioChange}
+                        value={eventTitle}
+                        onChange={(e) => setEventTitle(e.target.value)}
+                        type="text"
+                        placeholder="Title"
+                        className="text-2xl text-blue bg-transparent border-0 rounded-lg py-2 px-2 w-full max-w-md font-interReg"
                     />
-                    <label className="text-[14px] font-russoOne text-sn-main-blue" htmlFor="game">
-                        Game
-                    </label>
-                </div>
-                <div className="flex flex-row justify-between gap-2">
-                    <input
-                        type="radio"
-                        id="Practice"
-                        name="activity"
-                        value="practice"
-                        checked={selectedOption === "practice"}
-                        onChange={handleRadioChange}
-                    />
-                    <label className="text-[14px] font-russoOne text-sn-main-blue" htmlFor="practice">
-                        Practice
-                    </label>
-                </div>
-                <div className="flex flex-row justify-between gap-2">
-                    <input
-                        type="radio"
-                        id="Team Building"
-                        name="activity"
-                        value="team building"
-                        checked={selectedOption === "team building"}
-                        onChange={handleRadioChange}
-                    />
-                    <label className="text-[14px] font-russoOne text-sn-main-blue" htmlFor="team building">
-                        Team Building
-                    </label>
-                </div>
-            </div>
-
-               
-                
-                    {(selectedOption === 'game' || selectedOption === '') &&
+                    <div className="flex flex-row justify-between gap-4 pt-2 pb-4">
+                        <div className="flex flex-row items-center gap-2">
+                            <input
+                                type="radio"
+                                id="Game"
+                                name="activity"
+                                value="Game"
+                                checked={selectedOption === "Game"}
+                                onChange={handleRadioChange}
+                                className="form-radio h-5 w-5 text-sn-main-blue"
+                            />
+                            <label className="text-base " htmlFor="Game">
+                                Game
+                            </label>
+                        </div>
+                        <div className="flex flex-row items-center gap-2">
+                            <input
+                                type="radio"
+                                id="Practice"
+                                name="activity"
+                                value="Practice"
+                                checked={selectedOption === "Practice"}
+                                onChange={handleRadioChange}
+                                className="form-radio h-5 w-5 text-sn-main-blue"
+                            />
+                            <label className="text-base " htmlFor="Practice">
+                                Practice
+                            </label>
+                        </div>
+                        <div className="flex flex-row items-center gap-2">
+                            <input
+                                type="radio"
+                                id="TB"
+                                name="activity"
+                                value="TB"
+                                checked={selectedOption === "TB"}
+                                onChange={handleRadioChange}
+                                className="form-radio h-5 w-5 text-sn-main-blue"
+                            />
+                            <label className="text-base " htmlFor="TB">
+                                Team Building
+                            </label>
+                        </div>
+                    </div>              
+                    {(selectedOption === 'Game' || selectedOption === '') &&
                         <NewGamePageComponent
                             eventTitle={eventTitle}
                             onGeneralInfoChanges={setGeneralInfo}
@@ -277,14 +305,14 @@ const NewGamePage = () => {
                             onSelectedPlayerChanges={setSelectedPlayers}
                             onTeamChanges={setSelectedTeam}
                         />}
-                    {selectedOption === 'practice' &&
+                    {selectedOption === 'Practice' &&
                         <NewPracticeTBComponent
                             eventTitle={eventTitle}
                             onGeneralInfoChanges={setGeneralInfo}                            
                             onSelectedPlayerChanges={setSelectedPlayers}
                             onTeamChanges={setSelectedTeam}
                         />}
-                    {selectedOption === 'team building' &&
+                    {selectedOption === 'TB' &&
                         <NewPracticeTBComponent
                             eventTitle={eventTitle}
                             onGeneralInfoChanges={setGeneralInfo}                            
@@ -295,6 +323,8 @@ const NewGamePage = () => {
                 <ToastContainer/>
             </div>
         );
+    } else {
+        return (<div>You do not have access to this page</div>)
     }
 }
 

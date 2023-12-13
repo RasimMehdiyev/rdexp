@@ -7,15 +7,19 @@ import EventCard from "../components/EventCard";
 import React from 'react';
 import LoadingPage from './LoadingPage';
 import StickyMonthHeader from '../components/StickyMonthComponent';
+import { PlusIcon } from '@heroicons/react/24/solid';
 
 const HomePage = () => {
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
   const [fetchedEvents, setFetchedEvents] = useState([]);
   const [fetchedTeams, setFetchedTeams] = useState([]);
-  const [currentMonth, setCurrentMonth] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('all');
   const [isCoach, setIsCoach] = useState(false);
+  const [currentMonth, setCurrentMonth] = useState('');
+
+  const [filter, setFilter] = useState('all'); 
+  const [team, setTeam] = useState(-1); 
+  const [openDropdown, setOpenDropdown] = useState(null);
   const navigate = useNavigate();
 
   const [toggleState, setToggleState] = useState(false);
@@ -100,7 +104,7 @@ const HomePage = () => {
       if (userTableIdAndRole.role_id === 1) {
         if (Array.isArray(teamData) && teamData.length > 0) {
           let { data, error } = await supabase
-            .rpc('get_event_attendees_team', {
+            .rpc('get_event_attendees_team_with_team_id', {
               team_ids: teamData.map(team => team.team_id)
             });
   
@@ -113,7 +117,7 @@ const HomePage = () => {
         }
       } else {
         let { data, error } = await supabase
-          .rpc('get_user_assigned_events', {
+          .rpc('get_user_assigned_events_with_team_id', {
             user_uuid: uuid,
           });
         if (error) console.error(error);
@@ -144,8 +148,6 @@ const HomePage = () => {
     const fetchData = async () => {
       try {
         const user = await supabase.auth.getUser();
-        console.log("User: ")
-        console.log(user);
         if (user.data.user) {
           setUserData(user.data.user)
           LogRocket.identify(user.data.user.id, {
@@ -173,9 +175,9 @@ const HomePage = () => {
 
     console.log("Home page fetches starting now");
     fetchData();
+    console.log("Fetched events: ", fetchedEvents);
 
   }, [navigate]);
-  console.log("fetched events", fetchedEvents);
 
   const currentDate = new Date();
   const transformedEvents = fetchedEvents
@@ -192,6 +194,7 @@ const HomePage = () => {
       type: event.type.toLowerCase(), // Convert to lowercase as per your example
       eventName: event.title,
       teamName: event.team_name,
+      teamId: event.team_id,
       eventTime: time,
       location: event.location,
       id: event.event_id,
@@ -201,29 +204,23 @@ const HomePage = () => {
     };
   });
 
-  const [filter, setFilter] = useState('all'); // Default filter is 'all'
-  const [showFilterOptions, setShowFilterOptions] = useState(false);
+
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      const filterButton = document.getElementById('filter-button'); // Add an ID to your filter button
-  
-      if (filterButton && !filterButton.contains(event.target)) {
-        // Click outside the filter button, close filter options
-        setShowFilterOptions(false);
+      if (!event.target.closest('.filter-dropdown') && !event.target.closest('.team-dropdown')) {
+        setOpenDropdown(null);
       }
     };
   
-    // Add click event listener to the document body
     document.body.addEventListener('click', handleOutsideClick);
-  
-    // Clean up event listener on component unmount
+
     return () => {
       document.body.removeEventListener('click', handleOutsideClick);
     };
-  }, [setShowFilterOptions]);
+  }, []);
 
  // Organize events by month and then by day, considering the filter
-const organizedEvents = transformedEvents
+  const organizedEvents = transformedEvents
 .filter((event) => filter === 'all' || event.type === filter)
 .reduce((acc, event) => {
   // Check if the event has a valid dateTime property
@@ -245,17 +242,30 @@ const organizedEvents = transformedEvents
 }, {});
 
 
+
+
+
 const handleFilterChange = (newFilter) => {
   setFilter(newFilter);
-  setShowFilterOptions(false); // Hide the filter options after selecting an option
+  toggleFilterDropdown();
 };
 
-const [team, setTeam] = useState(-1); // Default team is 'all'
-const [showTeamOptions, setShowTeamOptions] = useState(false);
 
 const handleTeamChange = (newTeam) => {
   setTeam(newTeam);
-  setShowTeamOptions(false); // Hide the filter options after selecting an option
+  toggleTeamDropdown();
+};
+
+
+const toggleFilterDropdown = () => {
+  console.log("toggle filter dropdown", openDropdown);
+  setOpenDropdown(openDropdown === 'filter' ? null : 'filter');
+};
+
+const toggleTeamDropdown = () => {
+  console.log("toggle team dropdown before", openDropdown);
+  setOpenDropdown(openDropdown === 'team' ? null : 'team');
+  console.log("toggle team dropdown after", openDropdown);
 };
 
 
@@ -313,21 +323,20 @@ else {
           <StickyMonthHeader currentMonth={new Date(month).toLocaleString('en-US', { month: 'long' })} />
           {Object.entries(days).map(([day, dayEvents]) => (
             <div key={day}>
-              {/* Check if there are events for this day based on the filter */}
-              {dayEvents.some((event) => filter === 'all' || event.type === filter) && (
+              {/* Check if there are events for this day based on both the event type and team filters */}
+              {dayEvents.some((event) => (filter === 'all' || event.type === filter) && (team === -1 || event.teamId === team)) && (
                 <p className="text-md font-interBold text-gray-700 ml-2">{`${new Date(`${month}-${day}`).toLocaleString('en-US', { weekday: 'long' })} ${day}`}</p>
               )}
               <div className="event-container">
                 {dayEvents
-                  .filter(event => team === -1 || event.teamId === team)
-                  .filter((event) => filter === 'all' || event.type === filter)
+                  .filter(event => (filter === 'all' || event.type === filter) && (team === -1 || event.teamId === team))
                   .sort((a, b) => (a.dateTime != null && b.dateTime != null ? a.dateTime.localeCompare(b.dateTime) : 0))
                   .map((event, index) => (
                     <div key={index} onClick={(e) => openCard(event.id , e)} className="event-card">
                       <EventCard
                         type={event.type}
                         eventName={event.eventName}
-                        teamName={event.teamId}
+                        teamName={event.teamName}
                         eventTime={event.eventTime}
                         location={event.location}
                         attendance={event.attendance}
@@ -351,113 +360,124 @@ else {
         </div>
       ))}
 
-        
-        {/* Plus Button */}
-        
-        {isCoach && (
-          <div className="fixed top-[69px] right-[105px] z-20">
+        <div>
+          {/* Plus Button */}
+          
+          {isCoach && (
+            <div className={`mt-1 fixed top-[69px] ${fetchedTeams.length > 1 ? 'right-[105px]' : 'right-[65px]'} z-20`}>
+              <button
+                className="bg-sn-light-orange text-white rounded-10px  text-3xl shadow-sm flex items-center justify-center"
+                style={{ width: '36px', height: '36px' }}  
+                onClick={() => navigate('/game/create')}
+              >
+                <img src={`${process.env.PUBLIC_URL}/images/plus-square.svg`} alt="Add event" />
+              </button>
+            </div>
+          )}
+
+          {/* Filter Button */}
+          <div className={`mt-1 fixed top-[69px] ${
+            (isCoach && fetchedTeams.length > 1) || (!isCoach && fetchedTeams.length > 1) ? 'right-[65px]' : 'right-[25px]'
+            } z-20`}>
             <button
-              className="bg-sn-light-orange text-white rounded-10px  text-3xl shadow-sm flex items-center justify-center"
-              style={{ width: '36px', height: '36px' }}  
-              onClick={() => navigate('/game/create')}
+              id="filter-button"
+              className={`filter-dropdown text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2  border-sn-light-orange  justify-center ${
+                filter === 'all' ? 'bg-white ' : 'bg-sn-light-orange'
+              }`}
+              style={{ width: '36px', height: '36px' }}
+              onClick={toggleFilterDropdown}
             >
-              +
+              {/* Conditionally render the filter icon based on the selected filter */}
+              {filter === 'all' ? (
+                <img
+                  src={process.env.PUBLIC_URL + "/images/filter_toggle.svg"}
+                  alt="Filter Icon"
+                />
+              ) : (
+                <img
+                  src={process.env.PUBLIC_URL + "/images/filter.svg"}
+                  alt="Filter Icon"
+                />
+              )}
             </button>
-          </div>
-        )}
-
-        
-
-        {/* Filter Button */}
-        <div className="fixed top-[69px] right-[65px] z-20">
-          <button
-            id="filter-button"
-            className={`text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2  border-sn-light-orange  justify-center ${
-              filter === 'all' ? 'bg-white ' : 'bg-sn-light-orange'
-            }`}
-            style={{ width: '36px', height: '36px' }}
-            onClick={() => setShowFilterOptions(!showFilterOptions)}
-          >
-            {/* Conditionally render the filter icon based on the selected filter */}
-            {filter === 'all' ? (
-              <img
-                src={process.env.PUBLIC_URL + "/images/filter_toggle.svg"}
-                alt="Filter Icon"
-              />
-            ) : (
-              <img
-                src={process.env.PUBLIC_URL + "/images/filter.svg"}
-                alt="Filter Icon"
-              />
-            )}
-          </button>
-          {/* Filter Options */}
-          {showFilterOptions && (
-            <div className="absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
-              <p
-                className={`cursor-pointer ${filter === 'all' ? 'text-sn-light-orange font-bold' : ''}`}
-                onClick={() => handleFilterChange('all')}
-              >
-                All
-              </p>
-              <p
-                className={`cursor-pointer ${filter === 'practice' ? 'text-sn-light-orange font-bold' : ''}`}
-                onClick={() => handleFilterChange('practice')}
-              >
-                Practice
-              </p>
-              <p
-                className={`cursor-pointer ${filter === 'game' ? 'text-sn-light-orange font-bold' : ''}`}
-                onClick={() => handleFilterChange('game')}
-              >
-                Game
-              </p>
-              <p
-                className={`cursor-pointer ${filter === 'team building' ? 'text-sn-light-orange font-bold' : ''}`}
-                onClick={() => handleFilterChange('team building')}
-              >
-                Team building
-              </p>
-            </div>
-          )}
-        </div>
-        {/* Team Button */}
-        <div className="fixed top-[69px] right-[25px] z-20">
-          <button
-            className="bg-sn-light-orange text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center justify-center"
-            style={{ width: '36px', height: '36px' }}
-            onClick={() => {
-              setShowTeamOptions(!showTeamOptions)}}
-          >
-            <img
-              src={process.env.PUBLIC_URL + "/images/teams.svg"}
-              alt="Team Icon"
-              style={{filter: 'brightness(0) invert(1)' }}
-            />
-          </button>
-          {/* Team Options */}
-          {showTeamOptions && (
-            <div className="absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
-              <p
-                className={`cursor-pointer ${team === -1 ? 'text-sn-light-orange font-bold' : ''}`}
-                onClick={() => handleTeamChange(-1)}
-              >
-                All
-              </p>
-              {fetchedTeams.map((fetchedTeam) => (
+            {/* Filter Options */}
+            {openDropdown === 'filter' && (
+              <div className=" absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
                 <p
-                  key={fetchedTeam.team_id}
-                  className={`cursor-pointer ${fetchedTeam.id === team ? 'text-sn-light-orange font-bold' : ''}`}
-                  onClick={() => handleTeamChange(fetchedTeam.id)}
+                  className={`cursor-pointer ${filter === 'all' ? 'text-sn-light-orange font-bold' : ''}`}
+                  onClick={() => handleFilterChange('all')}
                 >
-                  {fetchedTeam.team_name}
+                  All
                 </p>
-              ))}
-
+                <p
+                  className={`cursor-pointer ${filter === 'practice' ? 'text-sn-light-orange font-bold' : ''}`}
+                  onClick={() => handleFilterChange('practice')}
+                >
+                  Practice
+                </p>
+                <p
+                  className={`cursor-pointer ${filter === 'game' ? 'text-sn-light-orange font-bold' : ''}`}
+                  onClick={() => handleFilterChange('game')}
+                >
+                  Game
+                </p>
+                <p
+                  className={`cursor-pointer ${filter === 'team building' ? 'text-sn-light-orange font-bold' : ''}`}
+                  onClick={() => handleFilterChange('team building')}
+                >
+                  Team building
+                </p>
+              </div>
+            )}
+          </div>
+          {/* Team Button */}
+          {((isCoach && fetchedTeams.length > 1) || (!isCoach && fetchedTeams.length > 1)) && (
+            <div className="mt-1 fixed top-[69px] right-[25px] z-20">
+              <button
+                id="team-button"
+                className={`team-dropdown text-white rounded-10px text-3xl p-[4px] shadow-sm flex items-center border-2 border-sn-light-orange justify-center ${
+                  team === -1 ? 'bg-white ' : 'bg-sn-light-orange'
+                }`}
+                style={{ width: '36px', height: '36px' }}
+                onClick={toggleTeamDropdown}
+              >
+                {/* Conditionally render the team icon based on the selected team */}
+                {team === -1 ? (
+                  <img
+                    src={process.env.PUBLIC_URL + "/images/team_card_orange.svg"}
+                    alt="Team Icon"
+                  />
+                ) : (
+                  <img
+                    src={process.env.PUBLIC_URL + "/images/team_card_white.svg"}
+                    alt="Team Icon"
+                  />
+                )}
+              </button>
+              {/* Team Options */}
+              {openDropdown === 'team' && (
+                <div className="absolute mt-1 right-[-3px] bg-white rounded-md shadow-md p-4 bg-[#DDD] w-[140px]">
+                  <p
+                    className={`cursor-pointer ${team === -1 ? 'text-sn-light-orange font-bold' : ''}`}
+                    onClick={() => handleTeamChange(-1)}
+                  >
+                    All
+                  </p>
+                  {fetchedTeams.map((fetchedTeam) => (
+                    <p
+                      key={fetchedTeam.team_id}
+                      className={`cursor-pointer ${fetchedTeam.id === team ? 'text-sn-light-orange font-bold' : ''}`}
+                      onClick={() => handleTeamChange(fetchedTeam.id)}
+                    >
+                      {fetchedTeam.team_name}
+                    </p>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
-          </div>
+        </div>
 
 
       </div>

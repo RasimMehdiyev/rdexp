@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -23,6 +23,7 @@ import NoTeamPage from './pages/NoTeamPage.js';
 import { useRef } from 'react';
 import NotificationPage from './pages/NotificationPage.js';
 import EditTeamPage from './pages/EditTeamPage.js';
+import Oops from './pages/OopsPage.js';
 
 LogRocket.init('u7ityk/synthlete');
 
@@ -31,9 +32,23 @@ const App = () => {
    const location = useLocation();
 
    const toggleSidebar = () => {
-      console.log("Toggling sidebar. Current state:", rightIsOpen);
       setRightIsOpen(!rightIsOpen);
     };
+
+    useEffect(() => {
+      const handleOutsideClick = (event) => {
+        if (!event.target.closest('.profile-dropdown')) {
+         setRightIsOpen(false);
+        }
+      };
+    
+      document.body.addEventListener('click', handleOutsideClick);
+    
+      return () => {
+        document.body.removeEventListener('click', handleOutsideClick);
+      };
+    }, []);
+  
 
      // Close sidebar on route change
 
@@ -96,6 +111,8 @@ const App = () => {
                <Route path="/team-profile/edit/:clubId/:teamId" element={<EditTeamPage/>} />
                <Route path="/no-team" element={<NoTeamPage/>} />
                <Route path="/notification" element={<NotificationPage />} />
+               <Route path="*" element={<Oops/>} />
+
 
             </Routes>
          </>

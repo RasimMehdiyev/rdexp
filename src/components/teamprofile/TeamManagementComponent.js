@@ -6,74 +6,53 @@ import PersonTagNotDeletable from '../PersonTagNotDeletable.js';
 
 
 
-const TeamManagementComponent = ({ teamData, coach, players, extras, isCoach, setPlayers, setExtras, findUserIdByName, findUserNumberById, findUserRoleById }) => {
+
+
+const TeamManagementComponent = ({ teamData, coach, players, extras, isCoach, setPlayers, setExtras}) => {
     const [addingPlayer, setAddingPlayer] = useState(false);
     const [isAdditionModalOpen, setAdditionModalOpen] = useState(false);
+
+
+    const addUserToTeam = async (newPlayerData) => {
+        const playerData = newPlayerData[0];
+        const { user_id, full_name, number, role_id } = playerData;
+        console.log("Data Player 1", playerData)
+        console.log("Data Player 2", user_id, full_name, number, role_id);
+        const newPlayer = {
+            team_id: teamData.id,
+            user_id: user_id,
+        };
     
-    const addUserToTeam = async (name, isPlayer) => {
-        if (!name.trim()) {
-            return isPlayer ? "Please enter a player's name" : 'Please enter a name';
-        }
-        
         try {
-            
-            const userId = await findUserIdByName(name);
-            if (!userId) {
-                // Condition 3: Player wasn't found
-                return `${name} is not registered`;
-            }
-    
-            const userRole = await findUserRoleById(userId);
-            if(isPlayer && userRole !== 2) {
-                // Condition 2: Player doesn't have role id 2
-                return `${name} is not a player`;
-            }
-
-            if(!isPlayer && userRole !== 3) {
-                // Condition 2: Player doesn't have role id 2
-                return `${name} is not a extra`;
-            }
-    
-            const isAlreadyInTeam = players.some(player => player.id === userId);
-            if (isAlreadyInTeam) {
-                // Condition 1: Player is already in the team
-                return `${name} is already in the team`;
-            }
-    
-            // Proceed to add the player to the team
-            const number = await findUserNumberById(userId);
-            
-            const newMember = {
-                team_id: teamData.id,
-                user_id: userId,
-                accepted: false
-            };
-
             const { data, error } = await supabase
-                .from('team_user_invite')
-                .insert([newMember]);
-
-            if(isPlayer){
+                .from('team_users')
+                .insert([newPlayer]);
+    
+            if (error) {
+                throw error;
+            }
+    
+            if (role_id === 2) {
                 setPlayers(players => [...players, { 
-                    id: userId, 
-                    name: name,
+                    id: user_id, 
+                    name: full_name,
                     number: number,
                     isPlayer: true, 
                     isMember: true,  
-                }]); 
-            }else{
+                }]);
+            } else {
                 setExtras(extras => [...extras, { 
-                    id: userId, 
-                    name: name,
+                    id: user_id, 
+                    name: full_name,
                     isPlayer: false, 
                     isMember: true,  
-                }]); 
+                }]);
             }
+            return "User successfully added to the team.";
         } catch (error) {
-            console.error('Error in adding user:', error);
-            return "An error occurred while adding the player";
+            console.error('Error adding user to the team:', error);
+            return "Failed to add user to the team.";
         }
-        return ""; // No error
     };
     
 
@@ -110,7 +89,7 @@ const TeamManagementComponent = ({ teamData, coach, players, extras, isCoach, se
         }
     };
     return (
-            <div className="w-full pl-6 pr-6 flex-col justify-start items-start inline-flex">
+            <div className="w-full pl-5 pr-5 flex-col justify-start items-start inline-flex">
                 {/* Coach Section */}
                 <div className="self-stretch flex-col justify-start items-start flex">
                     <div className="self-stretch justify-start items-center inline-flex pt-5 pb-4">
@@ -160,15 +139,13 @@ const TeamManagementComponent = ({ teamData, coach, players, extras, isCoach, se
                 </div>
                 
                 
-                <PlayerAdditionModal 
-                    isOpen={isAdditionModalOpen} 
-                    closeModal={() => setAdditionModalOpen(false)} 
+                <PlayerAdditionModal
+                    isOpen={isAdditionModalOpen}
+                    onClose={() => setAdditionModalOpen(false)}
                     onSave={addUserToTeam}
                     isPlayer={addingPlayer}
-
-
+                    teamId={teamData.id}
                 />
-
             </div>
     )
 }

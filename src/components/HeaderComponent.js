@@ -42,6 +42,8 @@ const HeaderComponent = ({ toggleSidebar }) => {
             .select('id, name, picture')
             .eq('id', club.club_id)
             .single(); // Use single to get a single record or null
+        console.log("Club data:", clubData);
+        console.log("Team data:", team[0]);
 
         if (clubNameError) throw clubNameError;
         setClubData(clubData);
@@ -89,26 +91,25 @@ const HeaderComponent = ({ toggleSidebar }) => {
     fetchData();
   }, []);
 
-
   if (loading) {
     return(  
     <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-20'> {/* Ensure z-index is high enough */}
-      <Link className="flex justify-center ml-[39%] items-center" to="/">
+      <Link className="flex justify-center ml-[44%] items-center" to="/">
         <SynthleteSmallLogo />
       </Link>
     </header> 
     )
     }
   return (
-    <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-5 justify-between h-16 z-20'> {/* Ensure z-index is high enough */}
-            {
-              clubData.picture ? (
-                <Link to={`/team-profile/${clubData.id}/${teamData.team_id}`} className='flex flex-col items-center justify-center'>
-                  <img className='cursor-pointer border-2 border-white object-cover overflow-hidden w-[45px] h-[45px] rounded-10px' src={clubData.picture} alt="team-profile" />
+    <header className='bg-sn-main-blue sticky top-0 items-center flex flex-row px-3 justify-between h-16 z-20'> {/* Ensure z-index is high enough */}
+              {
+              clubData ? (
+                <Link to={`/team-profile/${clubData.id}/${teamData.team_id}`} className='flex flex-col items-center justify-center border-white border-1 rounded-lg'>
+                  <img className='cursor-pointer border-2 border-white bg-white object-cover overflow-hidden w-[40px] h-[40px] rounded-10px' src={clubData.picture ? clubData.picture : process.env.PUBLIC_URL + "/images/sport-team.png"} alt="team-profile" />
                 </Link>
                 ) : (
-                <Link to="no-team/" className='flex flex-col items-center justify-center'>
-                    <img className='bg-white cursor-pointer border-2 border-white object-cover overflow-hidden w-[50px] h-[50px] rounded-10px' src={process.env.PUBLIC_URL + "/images/Teams-1.svg"} alt="profile" />
+                <Link to="no-team/" className='flex flex-col items-center justify-center border-white border-1 rounded-lg'>
+                    <img className='bg-white cursor-pointer border-2 border-white object-cover overflow-hidden w-[40px] h-[40px] rounded-10px' src={process.env.PUBLIC_URL + "/images/sport-team.png"} alt="profile" />
                 </Link>
                 )
               }
@@ -120,10 +121,9 @@ const HeaderComponent = ({ toggleSidebar }) => {
           <Link className='flex flex-col justify-center items-center relative'>
             <button 
               onClick={() => {
-                console.log("Profile picture clicked.");
                 toggleSidebar();
               }}
-              className="rounded-full w-[50px] h-[50px] p-0 overflow-hidden">
+              className="profile-dropdown rounded-full w-[50px] h-[50px] p-0 overflow-hidden bg-white">
               {
                 userData.profile_picture ? (
                   <img className='object-cover overflow-hidden border-2 rounded-full border-white w-[50px] h-[50px]' src={userData.profile_picture} alt="profile" />
@@ -135,7 +135,7 @@ const HeaderComponent = ({ toggleSidebar }) => {
             
             <div className="absolute bottom-0 right-0 w-4 h-4 bg-lf-light-gray text-white text-xs rounded-full flex items-center justify-center border-2 border-white" 
                 style={{ transform: 'translate(50%, 50%) translateX(-8px) translateY(-10px)' }}> {/* Adjusted transformation here */}
-              <FontAwesomeIcon icon={faChevronDown} className="h-2 w-2 text-white" />
+              <FontAwesomeIcon icon={faChevronDown} className="h-2 ml-[1px] mt-[1px] w-2 text-white" />
             </div>   
           </Link>
     </header>
