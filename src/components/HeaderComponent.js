@@ -135,7 +135,7 @@ const HeaderComponent = ({ toggleSidebar }) => {
             
             <div className="absolute bottom-0 right-0 w-4 h-4 bg-lf-light-gray text-white text-xs rounded-full flex items-center justify-center border-2 border-white" 
                 style={{ transform: 'translate(50%, 50%) translateX(-8px) translateY(-10px)' }}> {/* Adjusted transformation here */}
-              <FontAwesomeIcon icon={faChevronDown} className="h-2 w-2 text-white" />
+              <FontAwesomeIcon icon={faChevronDown} className="h-2 ml-[1px] mt-[1px] w-2 text-white" />
             </div>   
           </Link>
     </header>
