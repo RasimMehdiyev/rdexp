@@ -19,7 +19,6 @@ const StickySubheaderComponent = () => {
               <p className='text-[20px] font-russoOne text-white'>Game</p>
           </div>
           <div className='flex flex-row justify-between gap-4'>       
-              <button className='bg-sn-main-blue h-8 w-[72px] text-white rounded-[10px] text-[14px]'>DELETE</button>
               <button  className='bg-sn-main-orange h-8 w-[72px] text-white rounded-[10px] text-[14px]'>SAVE</button>
           </div>
         </div>
