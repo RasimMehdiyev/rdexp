@@ -17,21 +17,58 @@ const TeamCreatePage = () => {
   const [extras, setExtras] = useState([]);
   const [teamID, setTeamID] = useState(localStorage.getItem('teamID')); // [team_id, team_name]
   const [users, setUsers] = useState([]); // [user_id, user_name]
+  const [teamBorderColor, setTeamBorderColor] = useState('border-club-header-blue');
+  const [teamError, setTeamError] = useState('');
 
   const handleTeamNameChange = (e) => {
     setTeamName(e.target.value);
   };
 
   const addPlayer = (player) => {
+    if (players.some(p => p.name === player.name)) {
+      toast.warning('Player already exists!', { position: "top-center" });
+      return;
+    }
+
     const newPlayer = {
       id: player.id,
       name: player.name,
-      number: "21", // Make sure this is the correct value you want to display
+      number: player.number, // Make sure this is the correct value you want to display
       isPlayer: true,  // Make sure to pass these properties if they are needed in PersonTag
       isMember: false  // Make sure to pass these properties if they are needed in PersonTag
     };
     setPlayers([...players, newPlayer]);
   };
+
+  const teamExists = async () => {
+    const { data, error } = await supabase
+    .rpc('check_team_name_exists_within_club',{
+      team_name: teamName,
+      club_id: localStorage.getItem('clubID')
+    })
+    if (error) {
+      console.error('Error fetching users:', error);
+      return;
+    }else if (data) {
+      setTeamBorderColor('border-red-500');
+      setTeamError('Team already exists!');
+      toast.error('Team already exists!', {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        });
+  }
+  else{
+      setTeamBorderColor('border-club-header-blue');
+      setTeamError('');
+  }
+
+  }
   
   
   const addExtra = (extra) => {
@@ -50,7 +87,7 @@ const TeamCreatePage = () => {
     try {
       const { data, error } = await supabase
         .from('users')
-        .select('id, full_name');
+        .select('id, full_name,number');
 
       if (error) {
         console.error('Error fetching users:', error);
@@ -82,7 +119,10 @@ const TeamCreatePage = () => {
     try {
       const { data: updateData, error: updateError } = await supabase
         .from('team')
-        .update({ team_name: teamName })
+        .update({ 
+          team_name: teamName,
+          coach_id: localStorage.getItem('userID')
+         })
         .eq('id', teamID);
   
       if (updateError) throw updateError;
@@ -97,6 +137,17 @@ const TeamCreatePage = () => {
             team_id: teamID,
           }
         ]);
+        
+
+        const {data:teamSportData, error: teamSportError} = await supabase
+        .from('sport_team')
+        .insert([
+          {
+            team_id: teamID,
+            sport_id: 1
+          }
+        ])
+
 
       // If team update is successful, proceed to add players
       const insertPromises = players.map(player => {
@@ -150,11 +201,12 @@ const TeamCreatePage = () => {
             YOUR TEAM
           </h1>
           <input
-            className="mt-5 h-12 p-2 w-[60vw] rounded-10px border-2 border-club-header-blue font-interReg placeholder-text"
+            className={`mt-5 h-12 p-2 ${teamBorderColor} ${teamError ? 'text-red-500' : 'text-black'} w-[60vw] rounded-10px border-2 border-club-header-blue font-interReg placeholder-text`}
             placeholder="Team name"
             value={teamName}
             onChange={handleTeamNameChange}
             maxLength={30}
+            onBlur={teamExists}
           />
         </div>
 

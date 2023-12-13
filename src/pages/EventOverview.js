@@ -196,7 +196,7 @@ const EventOverview = () => {
       return (
         <div>
             {
-                role === 1 ? <StickySubheaderGameOverviewComponent onSave={handleOnChange} />
+                role == 1 ? <StickySubheaderGameOverviewComponent onSave={handleOnChange} />
                 : <div></div>
 
             }
