@@ -1,19 +1,10 @@
 import React, { useState } from 'react';
 import { UserGroupIcon } from '@heroicons/react/24/solid'
+import ToggleSwitch from '../ToggleSwitch';
 
 const EventCard = ({ type, eventName, teamName, eventTime, location, attendance, number_invitation, date }) => {
-  const [isAccepted, setIsAccepted] = useState(false);
-  const [isDeclined, setIsDeclined] = useState(false);
 
-  const handleAccept = () => {
-    setIsAccepted(!isAccepted);
-    setIsDeclined(false);
-  };
 
-  const handleDecline = () => {
-    setIsAccepted(false);
-    setIsDeclined(!isDeclined);
-  };
 
   const getBackgroundColor = () => {
     switch (type) {
@@ -99,13 +90,15 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
               style={{ left: '2px', top:'3px'}}
 
             />
-            <div className="teamname text-eventcard-text text-[15px]  font-['Inter'] whitespace-nowrap font-bold">{teamName}: </div>
+            <div className="teamname text-eventcard-text text-[15px]  font-extralight font-['Inter'] whitespace-nowrap ">{teamName}: </div>
             <div className="attendence text-eventcard-text text-[15px] font-extralight font-['Inter'] whitespace-nowrap">
               {attendance}/{number_invitation}
             </div>
+            <div className='absolute right-10'><ToggleSwitch/></div>
+              
           </div>
-        </div>
-
+        </div>       
+        
         
       </div>
     </div>

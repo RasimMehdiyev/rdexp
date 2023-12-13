@@ -3,6 +3,7 @@ import { supabase } from "../lib/helper/supabaseClient";
 import LoadingPage from "../pages/LoadingPage";
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { MdDateRange, MdAccessTime, MdLocationOn, MdGroup } from 'react-icons/md';
+import LocationInput from '../components/LocationInput.js';
 
 
 const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlayerChanges, onSelectedExtraChanges, onTeamChanges }) => {
@@ -266,16 +267,75 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
         
     };
 
+    const handleLocationInputChange = (value) => {
+        setLocation(value)
+      };
+
+    const isTeamSelected = !!selectedID;
+
+    const getCurrentDate = () => {
+        const today = new Date();
+        const year = today.getFullYear();
+        let month = today.getMonth() + 1; 
+        let day = today.getDate();
+    
+        month = month < 10 ? `0${month}` : month;
+        day = day < 10 ? `0${day}` : day;
+    
+        return `${year}-${month}-${day}`;
+    };
+
+    const getCurrentTime = () => {
+        const today = new Date();
+        const hours = today.getHours();
+        const minutes = today.getMinutes();
+
+        const formattedHours = hours < 10 ? `0${hours}` : hours;
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    
+        return `${formattedHours}:${formattedMinutes}`;
+    };
+
+    
+    const generateTimeOptions = () => {
+        const currentTime = getCurrentTime();
+        const [currentHour, currentMinute] = currentTime.split(':');
+    
+        const options = [];
+        const startHour = date === getCurrentDate() ? parseInt(currentHour, 10) + 1 : parseInt(currentHour, 10);
+    
+        for (let hour = startHour; hour <= 23; hour++) {
+            const maxMinute = hour === parseInt(currentHour, 10) ? currentMinute : 59;
+            for (let minute = 0; minute <= maxMinute; minute++) {
+                const formattedHour = String(hour).padStart(2, '0');
+                const formattedMinute = String(minute).padStart(2, '0');
+                const timeOption = `${formattedHour}:${formattedMinute}`;
+                options.push(
+                    <option
+                        key={timeOption}
+                        value={timeOption}
+                        disabled={date === getCurrentDate() && timeOption < currentTime}
+                    >
+                        {timeOption}
+                    </option>
+                );
+            }
+        }
+    
+        return options;
+    };
+
     if (loading) {
-        return <LoadingPage />; // You can replace this with any loading spinner or indicator
+        return <LoadingPage />; 
     } else {
         return (
-            <form className="flex flex-col justify-center gap-2">                
+            <form className="flex flex-col justify-center gap-2">    
                 <div className="mb-2 flex items-center">
+                 
                     <MdGroup className="text-sn-main-orange mr-3" size={32} />
                     <select
                         onChange={handleTeamChange}
-                        className="w-[150px] h-[40px] px-2 bg-white rounded-lg"
+                        className="w-[150px] h-[40px] px-2 bg-white rounded-lg border-2 border-sn-main-orange"
                         name="teams"
                         id="teams"
                         placeholder="Choose team">
@@ -302,54 +362,66 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                     value={date} 
                     onChange={(e) => setDate(e.target.value)} 
                     type="date" 
-                    className="form-input pl-3 pr-3 rounded-lg text-black h-[40px] w-[150px]" 
-                    
+                    className="form-input pl-3 pr-3 rounded-lg border-2 border-sn-main-orange text-black h-[40px] w-[150px]"
+                    min={getCurrentDate()} 
                 />
                 </div>
 
                 <div className="mb-2 flex items-center"> 
                 <MdAccessTime className="text-sn-main-orange mr-3" size={32} /> 
-                <input 
-                    value={time} 
-                    onChange={(e) => setTime(e.target.value)} 
-                    type="time" 
-                    className="form-input rounded-lg pl-3 pr-3 text-black h-[40px] w-[150px]" 
-                    
-                />
+        
+                {date !== getCurrentDate() ? (
+                        <div className="mb-2 flex items-center">
+                            <input
+                                value={time}
+                                onChange={(e) => setTime(e.target.value)}
+                                type="time"
+                                className="form-input rounded-lg pl-3 pr-3 border-2 border-sn-main-orange text-black h-[40px] w-[150px]"
+                            />
+                        </div>
+                    ) : (
+                        <div className="mb-2 flex items-center">
+                            <select
+                                value={time}
+                                onChange={(e) => setTime(e.target.value)}
+                                className="form-select rounded-lg pl-3 pr-3 border-2 border-sn-main-orange text-black h-[40px] w-[150px]"
+                            >
+                                {generateTimeOptions()}
+                            </select>
+                        </div>
+                    )}
+                
                 </div>
 
-                <div className="mb-2 flex items-center"> 
+                <div className="mb-2 w-full flex items-center"> 
                 <MdLocationOn className="text-sn-main-orange mr-3 w-[32px] h-[32px]" /> 
-                <input 
-                    value={location} 
-                    onChange={(e) => setLocation(e.target.value)} 
-                    placeholder="Location" 
-                    type="text" 
-                    className="form-input rounded-lg text-black w-full pl-3 pr-3" 
-                    style={{ height: '40px', fontSize: '1rem' }} 
-                />
+                
+                <LocationInput onLocationChange={handleLocationInputChange} borderColor="sn-main-orange" isIconVisible={false} />
+                
                 </div>                
                 
-                <div id='players' className="flex flex-col gap-4 mt-4">
+                <div id='players' className="flex flex-col gap-4 mt-7 mb-10">
+                        {isTeamSelected && (
                         <h5 className="text-2xl text-left text-sn-main-blue font-russoOne mb-2">Initial Line-up</h5>
+                        )}
                         {positions.map((position) => (
                             <div className="flex flex-col gap-0" key={position.position_abbreviation}>
                                 <div className="flex flex-row items-center mb-1" >
-                                    <div className="bg-position-blue text-white font-bold p-1 rounded text-center w-12 mr-3">
+                                    <div className="bg-club-header-blue text-white font-bold p-1 rounded text-center w-12 mr-3">
                                         {position.position_abbreviation}
                                     </div>
                                     <div className="flex-grow">                                    
                                         <select
                                             id={`player_select_${position.id}`}
                                             onChange={(event) => handlePlayerChange(event, position)}
-                                            className="form-select w-full px-2 py-2 bg-white rounded-lg"
+                                            className="form-select w-full px-2 py-2 h-12 bg-white rounded-lg border-2 border-sn-main-orange"
                                             disabled={!selectedID}
                                         >
-                                            <option value="" className="text-black" >
+                                            <option value="" className="text-black " >
                                                 {selectedPlayers.find(player => player.position_id === position.id) ?
-                                                    selectedPlayers.find(player => player.position_id === position.id).full_name : 'No Selection'}
+                                                    selectedPlayers.find(player => player.position_id === position.id).full_name : 'Choose player'}
                                             </option>
-                                            <option value={-1} className="text-black">No Selection</option>
+                                            <option value={-1} className="text-black  ">Choose player</option>
                                             {optionPlayers.map((player) => (
                                                 <option key={player.id} value={player.id} className="text-black">
                                                     {player.full_name}
@@ -364,31 +436,33 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                         ))}
                 </div>
                 <div id='substitutes' className="flex flex-col gap-4 mt-4">
+                {isTeamSelected && (
                     <div className="flex items-center mb-2 gap-2">
+                        
                         <h5 className="text-2xl text-sn-main-blue font-russoOne">Substitutes</h5>
                         <span onClick={handleAddSubstitute} className="cursor-pointer">
-                            <img src={process.env.PUBLIC_URL + "/images/small-plus.svg"} alt="" className="w-6 h-6"/>
+                            <img src={process.env.PUBLIC_URL + "/images/small-plus.svg"} alt="" className="w-6 h-6 ml-3"/>
                         </span>
-                    </div>
+                    </div>)}
 
-                    <div className="flex flex-col gap-2 justify-center items-start">
+                    <div className="flex flex-col gap-2 justify-center items-start w-full">
                         {preSubstitutePlayers.map((substitute, index) => (
-                            <div className="flex flex-col gap-0" key={index} >
-                                <div className="flex flex-row gap-2 items-center">
-                                    <div className="bg-position-blue text-white font-bold p-1 rounded text-center w-12 mr-3">
-                                        SUB
-                                    </div>                            
+                            <div className="flex flex-col gap-0 w-full" key={index} >
+                                <div className="flex flex-row gap-2 items-center w-full">
+                                <div className="bg-club-header-blue text-white font-bold p-2 rounded flex items-center justify-center w-12 mr-3">
+                                SUB
+                                </div>                          
                                     <select
-                                        className="form-select w-full px-2 py-2 bg-white rounded-lg"
+                                        className="form-select w-full px-2 py-2 h-12 bg-white rounded-lg border-2 border-sn-main-orange"
                                         name={`substituteSelect_${index}`}
                                         id={`substituteSelect_${index}`}
                                         value={substitute.id}
                                         onChange={(e) => handleSubstituteChange(index, e.target.value)}
                                     >
-                                        <option value="" className="text-black">
-                                            {preSubstitutePlayers[index].full_name || 'No Selection'}
+                                        <option value="" className="text-black ">
+                                            {preSubstitutePlayers[index].full_name || 'Choose player'}
                                         </option>
-                                        <option className="text-black" value={-1}>No Selection</option>
+                                        <option className="text-black" value={-1}>Choose player</option>
                                         {optionPlayers.map((player) => (
                                             <option key={player.id} value={player.id} className="text-black">
                                                 {player.full_name}
@@ -404,15 +478,16 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                         ))}
                     </div>
                 </div>
-                <div id='extra-roles' className="flex flex-col gap-4 mt-4">
-                    <h5 className="text-2xl text-left text-sn-main-blue font-russoOne mb-2">Extra Roles</h5>
+                <div id='extra-roles' className="flex flex-col gap-4 mt-4 mb-10">
+                    {isTeamSelected && (
+                    <h5 className="text-2xl text-left text-sn-main-blue font-russoOne mb-2">Extra Roles</h5>)}
                     {extraRoles.map((extraRole) => (
                         <div className="flex flex-col gap-0" key={extraRole.id} > 
                             <div className="flex items-center mb-1">
-                                <span className="text-black mr-3" style={{ width: '128px', color: '#007bff', fontFamily: 'Russo One' }}>{extraRole.role_title}</span>
+                                <span className="text-black mr-3" style={{ width: '128px', color: '#007bff', fontFamily: 'Inter ' }}>{extraRole.role_title}</span>
                                 
                                 <select
-                                    className="form-select px-2 py-2 bg-white rounded-lg flex-grow"
+                                    className="form-select px-2 py-2 bg-white rounded-lg flex-grow border-2 border-sn-main-orange h-12"
                                     name="" 
                                     id="" 
                                     disabled={!selectedID}
@@ -420,9 +495,9 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                                 >
                                     <option value="" className="text-black">
                                         {selectedExtras.find(extra => extra.extraRole_id === extraRole.id) ?
-                                            selectedExtras.find(extra => extra.extraRole_id === extraRole.id).full_name : 'No Selection'}
+                                            selectedExtras.find(extra => extra.extraRole_id === extraRole.id).full_name : 'Choose person'}
                                     </option>
-                                    <option value={-1} className="text-black">No Selection</option>
+                                    <option value={-1} className="text-black">Choose person</option>
                                     {optionExtras.map((volunteer) => (
                                         <option key={volunteer.id} value={volunteer.id} className="text-black">
                                             {volunteer.full_name}
