@@ -12,7 +12,7 @@ const AboutComponent = ( {teamData, clubData, isCoach}) => {
 
         return (
 
-            <div className="w-full p-4 flex-col justify-start items-start gap-2 inline-flex">
+            <div className="w-full p-5 flex-col justify-start items-start gap-2 inline-flex">
                 <div className="self-stretch flex-col justify-start items-start gap-2">
                     { isCoach && (
                     <div className="w-full self-stretch justify-between items-start inline-flex">
