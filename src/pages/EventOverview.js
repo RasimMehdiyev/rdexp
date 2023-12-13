@@ -5,6 +5,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../lib/helper/supabaseClient';
 import StickySubheaderGameOverviewComponent from '../components/StickySubheaderGameOverviewComponent';
 import LoadingPage from './LoadingPage';
+import DeleteEventModal from '../components/DeleteEventModal';
+import { ToastContainer,toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const EventOverview = () => {
     const { eventId } = useParams(); 
@@ -22,11 +26,21 @@ const EventOverview = () => {
     const [userCheck, setUserCheck] = useState(true);
     const [role, setRole] = useState('');
     const hasFetched = useRef(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleOnChange = async () => {
         const eventId = generalInfo.eventid;
         navigate(`/event-overview/edit/${eventId}`);
     }   
+
+    const handleDelete = async () => {
+        setIsModalOpen(true); // Open the modal
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false); // Function to close the modal
+    };
+
 
     useEffect(() => {
         const isLoggedIn = async () => {
@@ -196,7 +210,7 @@ const EventOverview = () => {
       return (
         <div>
             {
-                role == 1 ? <StickySubheaderGameOverviewComponent onSave={handleOnChange} />
+                role == 1 ? <StickySubheaderGameOverviewComponent onSave={handleOnChange} onDelete={handleDelete}/>
                 : <div></div>
 
             }
@@ -206,7 +220,7 @@ const EventOverview = () => {
             <div className="flex mb-4 text-3xl font-russoOne text-sn-main-blue">
             {eventTitle}
             </div>
-            {generalInfo.type == 'game' ? (
+            {generalInfo.type == 'Game' ? (
                 <GameOverviewComponent                    
                     generalInfo={generalInfo}
                     className="bg-white border border-gray-300 rounded-lg p-4"
@@ -224,6 +238,16 @@ const EventOverview = () => {
                 />
             )}
             </div>
+            {isModalOpen && (
+                    <DeleteEventModal
+                        isOpen={closeModal}
+                        closeModal={closeModal}
+                        onConfirm={handleDelete}
+                        eventName={eventTitle}
+                        id={generalInfo.eventid}
+                    />
+                )}
+            <ToastContainer />
         </div>
         );
     } else {

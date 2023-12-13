@@ -393,7 +393,7 @@ const EventOverviewEdit = () => {
     } else if (userCheck){    
         return (
             <div className="flex flex-col min-h-screen bg-almostwhite font-interReg">
-              <StickySubheaderEventCreateComponent onSave={handleOnChange} onDelete={handleOnDelete}/>
+              <StickySubheaderEventCreateComponent onSave={handleOnChange} onDelete={handleOnDelete} eventType={generalInfo.type}/>
           
                 <div className="p-4">
                 {inputCheck ? (
@@ -412,7 +412,7 @@ const EventOverviewEdit = () => {
                     />
                 </div>
           
-                {generalInfo.type === 'game' ? (
+                {generalInfo.type === 'Game' ? (
                     <EditGameComponent
                         eventTitle={eventTitle}
                         generalInfo={generalInfo}

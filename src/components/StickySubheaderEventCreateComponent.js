@@ -7,7 +7,6 @@ const StickySubheaderEventCreateComponent = ({onSave,eventType}) => {
     const nagivate = useNavigate();
 
     const getPreviousPage = () => {
-        // console.log('previous page');
         nagivate(-1);
     }
 
@@ -25,7 +24,7 @@ const StickySubheaderEventCreateComponent = ({onSave,eventType}) => {
         <div className='flex flex-row justify-between gap-4'>        
             <button className='bg-sn-main-orange h-8 w-[72px] text-white rounded-[10px] text-[14px]' onClick={onSave}>
               SAVE
-              </button>
+            </button>
         </div>
       </div>
     </div>
