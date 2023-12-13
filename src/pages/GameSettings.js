@@ -85,22 +85,21 @@ const GameSettings = () => {
           </h1>
           <h1 className="text-5xl text-club-header-blue">
             SETTINGS
-            </h1>
-            <h3 className="flex flex-row justify-center pb-7 mt-3 text-2xl font-interELight text-club-header-blue p-1 bg-white rounded-10px shadow-md h-[6vh] w-[70vw] ">
-              {
-                loading ? (
-                        <p className="spinner-club mt-[10px] items-center"></p>
-                        )
-                        :
-                        (
+          </h1>
+          <h3 className="items-center flex flex-row justify-center pb-7 mt-3 text-2xl font-interELight text-club-header-blue p-1 bg-white rounded-10px shadow-md h-[6vh] w-[70vw] ">
+            {
+              loading ? (
+                      <p className="spinner-club mt-[10px] items-center"></p>
+                      )
+                      :
+                      (
                           <p>{teamName.team_name}</p>
-                        )
-              }
-              
-            </h3>
+                      )
+            }  
+          </h3>
         </div>
 
-        <div className='pl-5'>
+        <div className='pl-5 pr-5'>
           <h1 className="pt-7 text-3xl text-club-header-blue">
             Add roles
           </h1>
@@ -109,7 +108,7 @@ const GameSettings = () => {
           </h3>
 
           {roles.map((role, index) => (
-            <PersonTag key={index} name={role.name} number={role.number} isPlayer={role.isPlayer} isMember={role.isMember} />
+            <PersonTag key={index} name={role.name} number={role.number} isPlayer={role.isPlayer} isMember={role.isMember} team={teamName.team_name}/>
           ))}
           <RoleInput onAdd={addRole} />
         </div>

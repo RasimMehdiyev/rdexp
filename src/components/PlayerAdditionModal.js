@@ -17,8 +17,9 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
   }, [isOpen]);
 
 
-  const handleInputChange = (e) => {
+  const handleInputChange = async (e) => {
     setInputValue(e.target.value);
+    const { data, error } = await checkConstraints(inputValue);
     if (inputError) {
       setInputError(false); // Reset error state when user starts typing again
     }
@@ -98,7 +99,7 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
                   type="text"
                   value={inputValue}
                   onChange={handleInputChange}
-                  className={`pl-10 border ${inputError ? 'border-red-500 bg-red-100 text-red-500' : 'border-club-header-blue bg-white text-club-header-blue'} h-12 w-full rounded-10px text-lg placeholder:-translate-x-2`}
+                  className={`pl-10 border ${inputError ? 'border-red-500 bg-red-100 text-red-500' : 'border-club-header-blue bg-white '} h-12 w-full rounded-10px text-lg placeholder:-translate-x-2`}
                   placeholder={isPlayer ? "Enter player's name" : "Enter name"}
                 />
               </div>
