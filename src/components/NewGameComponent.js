@@ -281,11 +281,17 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                         placeholder="Choose team">
                         <option className="h-[40px] bg-white rounded-md">{ selectedID ? teamNames.find(team => team.id == selectedID).team_name : 'No Selection'}</option>
                         {
-                            teamNames.map((team) => (
-                                <option key={team.id} value={team.id} >
-                                    {team.team_name}
-                                </option>
-                            ))
+                            teamNames.map((team) =>
+                                team.id == selectedID ?
+                                    (<option key={team.id} value={team.id} className="hidden">
+                                        {team.team_name}
+                                    </option>) :
+                                    (
+                                    <option key={team.id} value={team.id} >
+                                        {team.team_name}
+                                    </option>
+                                    )
+                            )
                         }
                     </select>
                 </div>                
