@@ -6,7 +6,6 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PasswordInput from '../components/PasswordInput.js';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
@@ -120,7 +119,7 @@ function RegisterPage() {
         if (role === '2') { 
             return (
                 <input
-                    className='shadow-md placeholder-text ml-2 mt-5 pl-2 font-interReg w-16 h-12 rounded-lg border-2 border-club-header-blue'
+                    className='shadow-md placeholder-text ml-2 mt-5 placeholder:text-white placeholder:font-russoOne placeholder:font-bold font-bold text-white text-center bg-sn-main-orange w-12 h-12 rounded-full font-russoOne'
                     placeholder='Nr'
                     type="text"
                     pattern="\d{1,2}"
