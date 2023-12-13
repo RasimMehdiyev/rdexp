@@ -3,6 +3,7 @@ import { supabase } from "../lib/helper/supabaseClient";
 import LoadingPage from "../pages/LoadingPage";
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { MdDateRange, MdAccessTime, MdLocationOn, MdGroup } from 'react-icons/md';
+import LocationInput from '../components/LocationInput.js';
 
 
 const EditGameComponent = ({
@@ -17,6 +18,7 @@ const EditGameComponent = ({
     const [date, setDate] = useState(generalInfo?.date || '');
     const [time, setTime] = useState(generalInfo?.time || '');
     const [location, setLocation] = useState(generalInfo?.location || '');
+    const [initialLocation, setInitialLocation] = useState(generalInfo?.location || '');
     const [teamPlayers, setTeamPlayers] = useState([]);
     const [selectedID, setSelectedID] = useState('');
     const [volunteers, setVolunteers] = useState([]);
@@ -29,6 +31,7 @@ const EditGameComponent = ({
     const [selectedExtras, setSelectedExtras] = useState([])
     const [optionExtras, setOptionExtras] = useState([]);
     const [preSubstitutePlayers, setPreSubstitutePlayers] = useState([]);
+    // const [newLocation, setNewLocation] = useState()
          
     const [selectedUsers, setSelectedUsers] = useState([]);
 
@@ -280,6 +283,11 @@ const EditGameComponent = ({
         setPreSubstitutePlayers(updatedSubstitute);        
         
     };
+
+    const handleLocationInputChange = (value) => {
+        setLocation(value)
+      };
+
     
     useEffect(() => {
         // Update selectedPlayer whenever preSubstitutePlayer change
@@ -348,14 +356,15 @@ const EditGameComponent = ({
 
                     <div className="mb-2 flex items-center"> 
                     <MdLocationOn className="text-sn-main-orange mr-3 w-[32px] h-[32px]" /> 
-                    <input 
+                    <LocationInput onLocationChange={handleLocationInputChange} borderColor="sn-main-orange" isIconVisible={false} value={initialLocation}/>
+                    {/*<input 
                         value={location} 
                         onChange={(e) => setLocation(e.target.value)} 
                         placeholder="Location" 
                         type="text" 
                         className="form-input rounded-lg text-black w-full pl-3 pr-3" 
                         style={{ height: '40px', fontSize: '1rem' }} 
-                    />
+        />*/}
                     </div>                
                 
                     <div id='players' className="flex flex-col gap-4 mt-10">
