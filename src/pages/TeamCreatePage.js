@@ -19,6 +19,8 @@ const TeamCreatePage = () => {
   const [users, setUsers] = useState([]); // [user_id, user_name]
   const [teamBorderColor, setTeamBorderColor] = useState('border-club-header-blue');
   const [teamError, setTeamError] = useState('');
+  const [extrasUsers, setExtrasUsers] = useState([]); // [user_id, user_name
+  const [playersUsers, setPlayersUsers] = useState([]); // [user_id, user_name
 
   const handleTeamNameChange = (e) => {
     setTeamName(e.target.value);
@@ -87,14 +89,16 @@ const TeamCreatePage = () => {
     try {
       const { data, error } = await supabase
         .from('users')
-        .select('id, full_name,number');
+        .select('id,full_name, number, role_id');
 
       if (error) {
         console.error('Error fetching users:', error);
         return;
       }
 
-      setUsers(data);
+      // setUsers(data);
+      setExtrasUsers(data.filter(user => user.role_id === 3));
+      setPlayersUsers(data.filter(user => user.role_id === 2));
     } catch (error) {
       console.error('An error occurred:', error);
     }

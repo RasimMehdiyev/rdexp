@@ -277,7 +277,7 @@ export const AboutClubPage = () => {
 
       </div>
       <div className='flex flex-col gap-2 justify-center align-center'>
-        <p className='font-russoOne text-[20px] '>Description</p>
+        <p className='font-russoOne text-[20px]'>Description</p>
         <textarea onChange={handleClubDescriptionInputChange} className='rounded-10px p-2 min-w-full m-auto border-2 border-club-header-blue text-black' name="description" id="description" cols="30" rows="5" maxLength={255}></textarea>
       </div>
 
