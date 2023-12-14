@@ -7,6 +7,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import StickyEditTeamComponent from "../components/StickyEditTeamComponent";
 import { useParams } from 'react-router-dom';
 import useTeamData from "../hooks/useTeamData";
+import PhoneInput from 'react-phone-input-2';
+import LocationInput from '../components/LocationInput.js';
+
 
 const EditTeamPage = () => {
     const { clubId, teamId } = useParams();
@@ -26,6 +29,9 @@ const EditTeamPage = () => {
     });
     const [errors, setErrors] = useState({});
     const [previewImage, setPreviewImage] = useState(null);
+    const [placeholderPhoneNumber, setPlaceholderPhoneNumber] = useState('Phone');
+    const [newPhoneNumber, setNewPhoneNumber] = useState('');
+    const [initialLocation, setInitialLocation] = useState(clubData?.location || '');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -47,6 +53,8 @@ const EditTeamPage = () => {
                                     instagram: teamSocialsData.instagram_handle || '',
                                     x: teamSocialsData.x_handle || '' // Replace 'x_handle' with actual field name if different
                                 });
+
+                               
                 
                                 // Set the preview image if available
                                 setPreviewImage(clubData.picture || null);
@@ -289,6 +297,21 @@ const EditTeamPage = () => {
                                     </div>
                                 </div>
 
+                                <PhoneInput
+                                    style={{ height: '3rem', marginBottom: '30px' }}
+                                    inputStyle={{ height: '100%', width:'100%' }}
+                                    className={`phone-input border-2 rounded-lg border-club-header-blue `}
+                                    placeholder={formValues.phoneNumber}
+                                    dropdownStyle={{ textAlign: 'left' }} 
+                                    value={newPhoneNumber}
+                                    onChange={(newPhoneNumber) => {
+                                        setNewPhoneNumber(newPhoneNumber);
+                                        setPhoneNumberError('');
+                                        setHasUserMadeChanges(true);
+                                    }}
+                                    //onBlur={handlePhoneBlur}
+                                />
+
                                 <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
                                     <MapPinIcon className=" h-5 w-5 text-club-header-blue"></MapPinIcon>
                                     <div className="w-full h-auto justify-start items-center flex">                            
@@ -301,7 +324,11 @@ const EditTeamPage = () => {
                                         placeholder="Enter location"
                                     />
                                     </div>
+
+                                    
                                 </div>
+
+                                <LocationInput onLocationChange={handleInputChange} borderColor="club-header-blue" isIconVisible={false} value={initialLocation}/>
 
                                 {/* Stadium Section 
 
