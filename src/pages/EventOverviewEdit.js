@@ -21,7 +21,11 @@ const EventOverviewEdit = () => {
     const [selectedTeam, setSelectedTeam] = useState([]);
     const [inputCheck, setInputCheck] = useState(true);
     const [userCheck, setUserCheck] = useState(true);
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
+    useEffect(()=>{
+        setIsButtonDisabled(!checkInput());
+    }, [generalInfo, eventTitle, selectedTeam])
 
     const handleOnDelete= async () => {
             if(generalInfo.eventid)
@@ -51,7 +55,18 @@ const EventOverviewEdit = () => {
             console.log("extras", selectedExtras);
             console.log("team", selectedTeam);
 
+            // const timezoneOffsetMinutes = new Date().getTimezoneOffset();
+            // const timezoneOffsetHours = timezoneOffsetMinutes / 60;
+            // console.log(timezoneOffsetMinutes);
+            // console.log(timezoneOffsetHours);
+            // // Format the offset to include the sign and pad with zeros
+            // const formattedTimezoneOffset = `${timezoneOffsetHours >= 0 ? '+' : '-'}${Math.abs(timezoneOffsetHours)
+            // .toString()
+            // .padStart(2, '0')}`;
+
             const timestamp = `${generalInfo.date} ${generalInfo.time}:00+00`;
+
+            //const timestamp = `${generalInfo.date} ${generalInfo.time}:00+00`;
             console.log("timestamp", timestamp);
 
             const toUploadPlayers = selectedPlayers.map((p) => ({ user_id: p.id, position_id: p.position_id }));
@@ -66,7 +81,7 @@ const EventOverviewEdit = () => {
                 setLoading(false);
                 return;
             }
-
+            
             //all the same up till here
             try {
                 const userResponse = await supabase.auth.getUser();
@@ -77,7 +92,7 @@ const EventOverviewEdit = () => {
                   .from('event')
                   .update({
                       title: eventTitle,
-                      datetime: `${generalInfo.date}T${generalInfo.time}:00+00`, // Ensure this is in the correct format
+                      datetime: timestamp, // Ensure this is in the correct format
                       location: generalInfo.location,
                       team: generalInfo.teamId, 
                       type: generalInfo.type // Make sure this is the correct event type you want to set
@@ -162,30 +177,6 @@ const EventOverviewEdit = () => {
                               }
                           }
                       }
-
-                    //delete all event users where event id = event id
-                    // if (errorEventDataID) console.error('Error fetching latest event:', errorEventDataID)
-                    // else {
-                    //     console.log("event data is", eventDataID);
-                    //     const event_id = eventDataID[0].id;
-                    //     const finalUploadPlayers = toUploadPlayers.map((p) => ({ ...p, event_id: event_id, is_attending: "Pending" }));
-                    //     console.log("finalUploadPlayers: ", finalUploadPlayers);
-                    //     const finalUploadExtras = toUploadExtras.map((ex) => ({ ...ex, event_id: event_id, is_attending: "Pending" }));
-                    //     console.log("finalUploadExtras: ", finalUploadExtras);
-
-                    //     const { playersData, errorPlayersData } = await supabase
-                    //         .from('event_users')
-                    //         .insert(finalUploadPlayers)
-                    //         .select()
-                    //     if (errorPlayersData) throw errorPlayersData;
-                        
-
-                    //     const { extrasData, errorExtrasData } = await supabase
-                    //         .from('event_users')
-                    //         .insert(finalUploadExtras)
-                    //         .select()
-                    //     if (errorExtrasData) throw errorExtrasData;
-                    // };                            
                 }                    
                             
             } catch (error) {
@@ -394,8 +385,8 @@ const EventOverviewEdit = () => {
     } else if (userCheck){    
         return (
             <div className="flex flex-col min-h-screen bg-almostwhite font-interReg">
-              <StickySubheaderEventCreateComponent onSave={handleOnChange} onDelete={handleOnDelete} eventType={generalInfo.type}/>
-          
+              <StickySubheaderEventCreateComponent onSave={handleOnChange} onDelete={handleOnDelete} eventType={generalInfo.type} buttonEnabled={!isButtonDisabled}/>
+
                 <div className="p-4">
                 {inputCheck ? (
                   <div />

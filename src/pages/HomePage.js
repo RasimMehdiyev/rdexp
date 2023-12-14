@@ -189,8 +189,10 @@ const HomePage = () => {
     .filter((event) => event.datetime && new Date(event.datetime) > currentDate)
     .map((event) => {
 
-    // Extracting date and time from the dateTime string
-    const eventDateTime = new Date(event.datetime);
+      // Extracting date and time from the dateTime string
+    
+    const eventDateTime = new Date(event.datetime.slice(0, 19));
+    
     const date = eventDateTime.toISOString().split('T')[0];
     const time = eventDateTime.toTimeString().slice(0, 5); // Extracting hh:mm
   
@@ -203,8 +205,8 @@ const HomePage = () => {
       eventTime: time,
       location: event.location,
       id: event.event_id,
-      attendance: event.total_attendees.toString(), // Assuming total_attendees is a number
-      number_invitation: "20", // You can set this value as needed
+      attendance: event.confirmed_attendees.toString(), // Assuming total_attendees is a number
+      number_invitation: event.total_attendees.toString(), // You can set this value as needed
       date: date,
     };
   });

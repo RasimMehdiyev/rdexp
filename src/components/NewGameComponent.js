@@ -341,11 +341,17 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                         placeholder="No Selection">
                         <option className="h-[40px] bg-white rounded-md">{ selectedID ? teamNames.find(team => team.id == selectedID).team_name : 'No Selection'}</option>
                         {
-                            teamNames.map((team) => (
-                                <option key={team.id} value={team.id} >
-                                    {team.team_name}
-                                </option>
-                            ))
+                            teamNames.map((team) =>
+                                team.id == selectedID ?
+                                    (<option key={team.id} value={team.id} className="hidden">
+                                        {team.team_name}
+                                    </option>) :
+                                    (
+                                    <option key={team.id} value={team.id} >
+                                        {team.team_name}
+                                    </option>
+                                    )
+                            )
                         }
                     </select>
                 </div>                
@@ -411,11 +417,22 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                                             className="form-select w-full px-2 py-2 h-12 bg-white rounded-lg border-2 border-club-header-blue"
                                             disabled={!selectedID}
                                         >
-                                            <option value="" className="text-black " >
-                                                {selectedPlayers.find(player => player.position_id === position.id) ?
-                                                    selectedPlayers.find(player => player.position_id === position.id).full_name : 'Choose player'}
-                                            </option>
-                                            <option value={-1} className="text-black  ">Choose player</option>
+                                            {selectedPlayers.find(player => player.position_id === position.id) ?
+                                                (
+                                                    <>
+                                                    <option value="" className="text-black " >
+                                                    {selectedPlayers.find(player => player.position_id === position.id).full_name }
+                                                    </option>
+                                                    
+                                                    </>
+                                                ) :
+                                                (
+                                                    <></>
+                                                )
+                                            }
+                                            <option value={-1} className="text-black  ">No Selection</option>
+
+                                            
                                             {optionPlayers.map((player) => (
                                                 <option key={player.id} value={player.id} className="text-black">
                                                     {player.full_name}
@@ -453,10 +470,19 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                                         value={substitute.id}
                                         onChange={(e) => handleSubstituteChange(index, e.target.value)}
                                     >
-                                        <option value="" className="text-black ">
-                                            {preSubstitutePlayers[index].full_name || 'Choose player'}
-                                        </option>
-                                        <option className="text-black" value={-1}>Choose player</option>
+                                        {preSubstitutePlayers[index].full_name != 'No Selection' ?
+                                            (
+                                                <option value="" className="text-black ">
+                                                    {preSubstitutePlayers[index].full_name || 'No Selection'}
+                                                </option>                                               
+                                                
+                                            ) :
+                                            (
+                                                <></>
+                                            )
+                                        }
+                                        <option className="text-black" value={-1}>No Selection</option>
+                                        
                                         {optionPlayers.map((player) => (
                                             <option key={player.id} value={player.id} className="text-black">
                                                 {player.full_name}
@@ -487,11 +513,25 @@ const NewGamePageComponent = ({ eventTitle, onGeneralInfoChanges, onSelectedPlay
                                     disabled={!selectedID}
                                     onChange={(event) => handleExtraChange(event, extraRole)}
                                 >
-                                    <option value="" className="text-black">
+                                    {selectedExtras.find(extra => extra.extraRole_id === extraRole.id) ?
+                                        (
+                                            <>
+                                            <option value="" className="text-black " >
+                                            {selectedExtras.find(extra => extra.extraRole_id === extraRole.id).full_name }
+                                            </option>
+                                            
+                                            </>
+                                        ) :
+                                        (
+                                            <></>
+                                        )
+                                    }
+                                    <option value={-1} className="text-black  ">No Selection</option>
+                                    {/* <option value="" className="text-black">
                                         {selectedExtras.find(extra => extra.extraRole_id === extraRole.id) ?
                                             selectedExtras.find(extra => extra.extraRole_id === extraRole.id).full_name : 'Choose person'}
                                     </option>
-                                    <option value={-1} className="text-black">Choose person</option>
+                                    <option value={-1} className="text-black">Choose person</option> */}
                                     {optionExtras.map((volunteer) => (
                                         <option key={volunteer.id} value={volunteer.id} className="text-black">
                                             {volunteer.full_name}
