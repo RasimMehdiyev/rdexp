@@ -73,11 +73,12 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
     try {
       const { data, error } = await checkConstraints(inputValue);
       if (error) {
-        setInputError('Player already exists.');
+        const roleName = isPlayer ? 'Player' : 'Extra';
+        setInputError('This ' + roleName + ' is already part of the team. Please try someone else.');
       } else if (data) {
 
         if (data.exists){
-          setInputError('Player already exists.');
+          setInputError('This ' + roleName + ' is already part of the team. Please try someone else.');
         }
         else{
           onSave(data);
@@ -85,7 +86,7 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
           onClose();
         }
       } else {
-        setInputError('Player not found or does not meet criteria.');
+        setInputError('This '+ roleName +' not found or does not meet criteria.');
       }
     } catch (error) {
       setInputError('Error checking constraints: ' + error.message);
