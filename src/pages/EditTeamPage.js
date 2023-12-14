@@ -7,6 +7,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import StickyEditTeamComponent from "../components/StickyEditTeamComponent";
 import { useParams } from 'react-router-dom';
 import useTeamData from "../hooks/useTeamData";
+import PhoneInput from 'react-phone-input-2';
+import LocationInput from '../components/LocationInput.js';
+
 
 const EditTeamPage = () => {
     const { clubId, teamId } = useParams();
@@ -26,6 +29,12 @@ const EditTeamPage = () => {
     });
     const [errors, setErrors] = useState({});
     const [previewImage, setPreviewImage] = useState(null);
+    const [placeholderPhoneNumber, setPlaceholderPhoneNumber] = useState('Phone');
+    const [newPhoneNumber, setNewPhoneNumber] = useState('');
+    const [phoneNumberError, setPhoneNumberError] = useState('');
+    const [hasUserMadeChanges, setHasUserMadeChanges] = useState(false);
+    const [initialLocation, setInitialLocation] = useState(clubData?.location || '');
+    const [locationInputValue, setLocationInputValue] = useState(formValues.location || '');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -47,6 +56,8 @@ const EditTeamPage = () => {
                                     instagram: teamSocialsData.instagram_handle || '',
                                     x: teamSocialsData.x_handle || '' // Replace 'x_handle' with actual field name if different
                                 });
+
+                               
                 
                                 // Set the preview image if available
                                 setPreviewImage(clubData.picture || null);
@@ -165,6 +176,33 @@ const EditTeamPage = () => {
             throw error;
         }
     };
+
+    const handlePhoneNumberChange = (newPhoneNumber) => {
+        setFormValues(prevState => ({
+            ...prevState,
+            phoneNumber: newPhoneNumber
+        }));
+        setPhoneNumberError('');
+        setHasUserMadeChanges(true);
+    };
+    
+    const handleLocationChange = (newLocation) => {
+        setFormValues(prevState => ({
+            ...prevState,
+            location: newLocation
+        }));
+        setLocationInputValue(newLocation); // Update the direct input state
+        setHasUserMadeChanges(true);
+    };
+    // Function to clear the location input
+    const clearLocation = () => {
+        setLocationInputValue('');
+        setFormValues(prevState => ({
+            ...prevState,
+            location: ''
+        }));
+        setHasUserMadeChanges(true);
+    };
     
 
     const updateTeamSocialsData = async (teamId, formData) => {
@@ -229,17 +267,17 @@ const EditTeamPage = () => {
                         <div className="flex-col justify-start items-start gap-2 flex">
                             <div className="flex-col justify-start items-start gap-1 flex">
                                 <div className="justify-start items-start gap-2.5 inline-flex">
-                                    <label className="text-blue-600 text-xl font-russoOne">Team Name</label>
+                                    
                                 </div>
-                                <div className="w-[322px] h-12 mb-3 pl-1 pr-4 py-3 bg-white rounded-md border-2 border-club-header-blue  justify-start items-center gap-2.5 inline-flex">
+                                <div className="w-[322px] h-12 mb-3 pl-1 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue  justify-start items-center gap-2.5 inline-flex">
                                     <div className="w-full h-auto basis-0 justify-start items-center flex"></div>
                                         <input
                                             name="teamName"
                                             value={formValues.teamName}
                                             onChange={handleInputChange}
-                                            className="text-neutral-500 form-input w-full placeholder:-translate-x-2"
+                                            className=" form-input w-full placeholder:-translate-x-2"
                                             type="text"
-                                            placeholder="Enter team name"
+                                            placeholder="Team name"
                                         />
                                 </div>
                             </div>
@@ -252,21 +290,21 @@ const EditTeamPage = () => {
 
                             <div className="flex-col justify-start items-start gap-1 flex">
                                 <div className=" justify-start items-start gap-2.5 inline-flex">
-                                    <div className="text-blue-600 text-xl font-russoOne">Contact details</div>
+                                    <div className="text-blue-600 text-xl font-russoOne">Club information</div>
                                 </div>
 
                                  {/* Email Section */}
 
-                                <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-md border-2 border-club-header-blue  justify-start items-center gap-2.5 inline-flex">
-                                    <EnvelopeIcon className="h-5 w-5 h-5 w-5 text-club-header-blue"></EnvelopeIcon>
+                                <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue  justify-start items-center gap-2.5 inline-flex">
+                                    <EnvelopeIcon className=" h-5 w-5 text-club-header-blue"></EnvelopeIcon>
                                     <div className="w-full h-auto justify-start items-center flex">
                                         <input
                                             name="email"
                                             value={formValues.email}
                                             onChange={handleInputChange}
-                                            className="form-input w-full placeholder:-translate-x-2 text-neutral-500"
+                                            className="form-input w-full font-interReg placeholder:-translate-x-2 "
                                             type="email"
-                                            placeholder="Enter email"
+                                            placeholder="Email"
                                         />
                                         {errors.email && <span className="error">{errors.email}</span>}
                                     </div>
@@ -274,36 +312,17 @@ const EditTeamPage = () => {
 
                                 {/* Phone Section */}
 
-                                <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-md border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
-                                    <PhoneIcon className="h-5 w-5 h-5 w-5 text-club-header-blue"></PhoneIcon>
-                                    <div className="w-full h-auto justify-start items-center flex">                            
-                                        <input
-                                            name="phoneNumber"
-                                            value={formValues.phoneNumber}
-                                            onChange={handleInputChange}
-                                            className="form-input w-full placeholder:-translate-x-2 text-neutral-500"
-                                            type="tel"
-                                            placeholder="Enter phone number"
-                                        />
-                                        {errors.phoneNumber && <span className="error">{errors.phoneNumber}</span>}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                    <PhoneInput
+                                        style={{ height: '3rem', marginBottom: '30px' }}
+                                        inputStyle={{ height: '100%', width:'100%' }}
+                                        className="phone-input border-2 rounded-lg border-club-header-blue"
+                                        placeholder={placeholderPhoneNumber}
+                                        value={formValues.phoneNumber} // Make sure this reflects the current state
+                                        onChange={handlePhoneNumberChange}
+                                    />
 
-                        {/* Location Details Section */}
-
-                        <div className="flex-col justify-start items-start gap-2 flex">
-
-                        <div className="flex-col justify-start items-start gap-1 flex">
-                            <div className=" justify-start items-start gap-2.5 inline-flex">
-                                <div className="text-blue-600 text-xl font-russoOne">Location Details</div>
-                            </div>
-
-                                {/* Location Section */}
-
-                                <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-md border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
-                                    <MapPinIcon className="h-5 w-5 h-5 w-5 text-club-header-blue"></MapPinIcon>
+                                {/* <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
+                                    <MapPinIcon className=" h-5 w-5 text-club-header-blue"></MapPinIcon>
                                     <div className="w-full h-auto justify-start items-center flex">                            
                                     <input
                                         name="location"
@@ -314,9 +333,15 @@ const EditTeamPage = () => {
                                         placeholder="Enter location"
                                     />
                                     </div>
-                                </div>
+                                </div> */}
 
-                                {/* Stadium Section */}
+                                <LocationInput 
+                                    onLocationChange={handleLocationChange} 
+                                    borderColor="club-header-blue" 
+                                    isIconVisible={true} 
+                                    value={formValues.location}
+                                />
+                                {/* Stadium Section 
 
                                 <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-md border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
                                     <MapPinIcon className="h-5 w-5 h-5 w-5 text-club-header-blue"></MapPinIcon>
@@ -330,30 +355,49 @@ const EditTeamPage = () => {
                                         placeholder="Enter stadium"
                                     />
                                     </div>
-                                </div>
+                                </div>*/}
+
+                                {/* Bio Section */}
+
+                                <div className="flex-col justify-start items-start gap-1 flex">
+                                    
+                                    <div className="w-[322px] py-1 bg-white rounded-lg border-2 border-club-header-blue  justify-start items-center inline-flex">
+                                        <div className="grow h-auto justify-start items-center flex">
+                                            <textarea
+                                                name="bio"
+                                                value={formValues.bio}
+                                                onChange={handleInputChange}
+                                                className="form-textarea font-interReg w-full pl-3 pt-2 h-[100px] "
+                                                placeholder="Bio"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>   
                             </div>
                         </div>
+
+                        
 
                         {/* Social Media Section */}
 
                         <div className="flex-col justify-start items-start gap-2 flex">
 
 
-                            <div className="flex-col justify-start items-start gap-1 flex">
+                            <div className="flex-col mt-3 justify-start items-start gap-1 flex">
                                 <div className=" justify-start items-start gap-2.5 inline-flex">
                                     <div className="text-blue-600 text-xl font-russoOne">Social Media</div>
                                 </div>
 
                                  {/* Facebook Section */}
 
-                                <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-md border-2 border-club-header-blue  justify-start items-center gap-2.5 inline-flex">
+                                <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue  justify-start items-center gap-2.5 inline-flex">
                                     <img src={`${process.env.PUBLIC_URL}/images/facebook.svg`} alt='facebook' />
                                     <div className="w-full h-auto justify-start items-center flex">
                                         <input
                                             name="facebook"
                                             value={formValues.facebook}
                                             onChange={handleInputChange}
-                                            className="form-input w-full placeholder:-translate-x-2 text-neutral-500"
+                                            className="form-input w-full placeholder:-translate-x-2 font-interLight"
                                             type="text"
                                             placeholder="Enter Facebook name"
                                         />
@@ -362,14 +406,14 @@ const EditTeamPage = () => {
 
                                 {/* Instagram Section */}
 
-                                <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-md border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
+                                <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
                                     <img src={`${process.env.PUBLIC_URL}/images/instagram.svg`} alt='instagram' />
                                     <div className="w-full h-auto justify-start items-center flex">                            
                                         <input
                                             name="instagram"
                                             value={formValues.instagram}
                                             onChange={handleInputChange}
-                                            className="form-input w-full placeholder:-translate-x-2 text-neutral-500"
+                                            className="form-input w-full placeholder:-translate-x-2 "
                                             type="text"
                                             placeholder="Enter Instagram name"
                                         />
@@ -378,14 +422,14 @@ const EditTeamPage = () => {
 
                                 {/* X Section */}
 
-                                <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-md border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
+                                <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
                                     <img src={`${process.env.PUBLIC_URL}/images/twitter.svg`} alt='twitter' />
                                     <div className="w-full h-auto justify-start items-center flex">                            
                                         <input
                                             name="x"
                                             value={formValues.x}
                                             onChange={handleInputChange}
-                                            className="form-input w-full placeholder:-translate-x-2 text-neutral-500"
+                                            className="form-input w-full placeholder:-translate-x-2 "
                                             type="text"
                                             placeholder="Enter X name"
                                         />
@@ -394,24 +438,7 @@ const EditTeamPage = () => {
                             </div>
                         </div>
 
-                        {/* Bio Section */}
-
-                        <div className="flex-col justify-start items-start gap-1 flex">
-                            <div className="w-[178px]  justify-start items-start gap-2.5 inline-flex">
-                                <div className="text-blue-600 text-xl font-russoOne">Bio</div>
-                            </div>
-                            <div className="w-[322px] py-1 bg-white rounded-md border-2 border-club-header-blue  justify-start items-center inline-flex">
-                                <div className="grow h-auto justify-start items-center flex">
-                                    <textarea
-                                        name="bio"
-                                        value={formValues.bio}
-                                        onChange={handleInputChange}
-                                        className="text-neutral-500 form-textarea w-full pl-3 pt-2 h-[100px] "
-                                        placeholder="Enter information about the team..."
-                                    />
-                                </div>
-                            </div>
-                        </div>        
+                             
                     </div>
                 </div>
             </div>
