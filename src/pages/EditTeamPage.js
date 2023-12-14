@@ -31,6 +31,8 @@ const EditTeamPage = () => {
     const [previewImage, setPreviewImage] = useState(null);
     const [placeholderPhoneNumber, setPlaceholderPhoneNumber] = useState('Phone');
     const [newPhoneNumber, setNewPhoneNumber] = useState('');
+    const [phoneNumberError, setPhoneNumberError] = useState('');
+    const [hasUserMadeChanges, setHasUserMadeChanges] = useState(false);
     const [initialLocation, setInitialLocation] = useState(clubData?.location || '');
 
     useEffect(() => {
@@ -173,7 +175,23 @@ const EditTeamPage = () => {
             throw error;
         }
     };
+
+    const handlePhoneNumberChange = (newPhoneNumber) => {
+        setFormValues(prevState => ({
+            ...prevState,
+            phoneNumber: newPhoneNumber
+        }));
+        setPhoneNumberError('');
+        setHasUserMadeChanges(true);
+    };
     
+    const handleLocationChange = (newLocation) => {
+        setFormValues(prevState => ({
+            ...prevState,
+            location: newLocation
+        }));
+        setHasUserMadeChanges(true);
+    };
 
     const updateTeamSocialsData = async (teamId, formData) => {
         try {
@@ -282,37 +300,16 @@ const EditTeamPage = () => {
 
                                 {/* Phone Section */}
 
-                                <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
-                                    <PhoneIcon className="h-5 w-5 text-club-header-blue"></PhoneIcon>
-                                    <div className="w-full h-auto justify-start items-center flex">                            
-                                        <input
-                                            name="phoneNumber"
-                                            value={formValues.phoneNumber}
-                                            onChange={handleInputChange}
-                                            className="form-input w-full placeholder:-translate-x-2 text-neutral-500"
-                                            type="tel"
-                                            placeholder="Enter phone number"
-                                        />
-                                        {errors.phoneNumber && <span className="error">{errors.phoneNumber}</span>}
-                                    </div>
-                                </div>
+                                    <PhoneInput
+                                        style={{ height: '3rem', marginBottom: '30px' }}
+                                        inputStyle={{ height: '100%', width:'100%' }}
+                                        className="phone-input border-2 rounded-lg border-club-header-blue"
+                                        placeholder={placeholderPhoneNumber}
+                                        value={formValues.phoneNumber} // Make sure this reflects the current state
+                                        onChange={handlePhoneNumberChange}
+                                    />
 
-                                <PhoneInput
-                                    style={{ height: '3rem', marginBottom: '30px' }}
-                                    inputStyle={{ height: '100%', width:'100%' }}
-                                    className={`phone-input border-2 rounded-lg border-club-header-blue `}
-                                    placeholder={formValues.phoneNumber}
-                                    dropdownStyle={{ textAlign: 'left' }} 
-                                    value={newPhoneNumber}
-                                    onChange={(newPhoneNumber) => {
-                                        setNewPhoneNumber(newPhoneNumber);
-                                        setPhoneNumberError('');
-                                        setHasUserMadeChanges(true);
-                                    }}
-                                    //onBlur={handlePhoneBlur}
-                                />
-
-                                <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
+                                {/* <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
                                     <MapPinIcon className=" h-5 w-5 text-club-header-blue"></MapPinIcon>
                                     <div className="w-full h-auto justify-start items-center flex">                            
                                     <input
@@ -324,12 +321,14 @@ const EditTeamPage = () => {
                                         placeholder="Enter location"
                                     />
                                     </div>
+                                </div> */}
 
-                                    
-                                </div>
-
-                                <LocationInput onLocationChange={handleInputChange} borderColor="club-header-blue" isIconVisible={false} value={initialLocation}/>
-
+                                <LocationInput 
+                                    onLocationChange={handleLocationChange} 
+                                    borderColor="club-header-blue" 
+                                    isIconVisible={false} 
+                                    value={formValues.location} // Ensure this reflects the current state
+                                />
                                 {/* Stadium Section 
 
                                 <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-md border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
