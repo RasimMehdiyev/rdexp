@@ -20,7 +20,6 @@ import { AboutClubPage } from './pages/AboutClubPage.js';
 import TeamProfilePage from './pages/TeamProfilePage.js';
 import StickySubheaderProfileComponent from './components/StickySubheaderProfileComponent.js';
 import NoTeamPage from './pages/NoTeamPage.js';
-import NotificationPage from './pages/NotificationPage.js';
 import EditTeamPage from './pages/EditTeamPage.js';
 import Oops from './pages/OopsPage.js';
 import ChangePasswordPage from './pages/ChangePasswordPage.js';
@@ -113,7 +112,6 @@ const App = () => {
 
                <Route path="/team-profile/edit/:clubId/:teamId" element={<EditTeamPage/>} />
                <Route path="/no-team" element={<NoTeamPage/>} />
-               <Route path="/notification" element={<NotificationPage />} />
                <Route path="/password/change" element={<ChangePasswordPage/>}/>
                <Route path="*" element={<Oops/>} />
 
