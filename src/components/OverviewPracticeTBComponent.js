@@ -149,7 +149,7 @@ const OverviewPracticeTBComponent = ({
         let { data, error } = await supabase
         .rpc('get_team_users_by_role', {
             param_role_id: 2, 
-            param_team_id: parseInt(teamID, 8)
+            param_team_id: teamID
         })
         if (error) console.error(error)
         else console.log("team players: ", data)
@@ -160,7 +160,7 @@ const OverviewPracticeTBComponent = ({
     const getPositionsOfTeam = async (teamID) => {
         let { data, error } = await supabase
             .rpc('get_positions_for_team', {
-                param_team_id: parseInt(teamID, 8)
+                param_team_id: teamID
         })
         if (error) console.error(error)
         else console.log("positions", data)
