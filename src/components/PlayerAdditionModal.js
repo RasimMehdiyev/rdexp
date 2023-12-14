@@ -73,11 +73,17 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
     try {
       const { data, error } = await checkConstraints(inputValue);
       if (error) {
-        setInputError('Error checking constraints: ' + error.message);
+        setInputError('Player already exists.');
       } else if (data) {
-        onSave(data);
-        setInputValue('');
-        onClose();
+
+        if (data.exists){
+          setInputError('Player already exists.');
+        }
+        else{
+          onSave(data);
+          setInputValue('');
+          onClose();
+        }
       } else {
         setInputError('Player not found or does not meet criteria.');
       }
@@ -97,7 +103,8 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
 
       return { data, error };
     } catch (error) {
-      // throw error;
+      console.error('Error in checkConstraints:', error);
+      return { error };
     }
   };
   
@@ -143,6 +150,7 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
                   className={`pl-10 border-2 ${inputError ? 'border-red-500 bg-red-100 text-red-500' : 'border-club-header-blue bg-white '} h-12 w-full rounded-10px text-lg placeholder:-translate-x-2`}
                   placeholder={isPlayer ? "Enter player's name" : "Enter name"}
                 />
+                    {inputError && <p className="text-red-500 text-sm mt-2">{inputError}</p>}
               </div>
                 {/* Suggestions List */}
                 {suggestions.length > 0 && (
