@@ -1,13 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../lib/helper/supabaseClient';
 
-const ToggleSwitch = ({ onToggle }) => {
-  const [toggleState, setToggleState] = useState(2);
 
-  const handleToggle = (event) => {
+const ToggleSwitch = ({ userId, eventId }) => {
+  const [toggleState, setToggleState] = useState(2); // Default to Pending
+
+  useEffect(() => {
+    // Fetch the current state from the database
+    const fetchCurrentState = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('event_users')
+          .select('is_attending')
+          .eq('user_id', userId)
+          .eq('event_id', eventId)
+          .single();
+
+        if (error) throw error;
+
+        switch (data.is_attending) {
+          case 'Accepted':
+            setToggleState(1);
+            break;
+          case 'Declined':
+            setToggleState(3);
+            break;
+          default:
+            setToggleState(2); // Default to Pending
+        }
+      } catch (error) {
+        console.error('Error fetching attendance status', error);
+      }
+    };
+
+    fetchCurrentState();
+  }, [userId, eventId]);
+
+  const handleToggle = async (event) => {
     const value = parseInt(event.target.value, 10);
     setToggleState(value);
-    if (onToggle) {
-      onToggle(value);
+
+    let attendanceStatus;
+    switch (value) {
+      case 1:
+        attendanceStatus = 'Accepted';
+        break;
+      case 3:
+        attendanceStatus = 'Declined';
+        break;
+      default:
+        attendanceStatus = 'Pending';
+    }
+
+    // Update the database
+    try {
+      const { error } = await supabase
+        .from('event_users')
+        .update({ is_attending: attendanceStatus })
+        .match({ user_id: userId, event_id: eventId });
+
+      if (error) throw error;
+
+    } catch (error) {
+      console.error('Error updating attendance status', error);
     }
   };
 
@@ -23,8 +78,6 @@ const ToggleSwitch = ({ onToggle }) => {
         return 'bg-[#ebebf2]';
     }
   };
-
-  const displayCheckmark = toggleState === 1; // Display checkmark when the button is green
 
   return (
     <div className="flex flex-col items-center relative">

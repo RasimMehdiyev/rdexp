@@ -16,6 +16,7 @@ const HomePage = () => {
   const [fetchedTeams, setFetchedTeams] = useState([]);
   const [isCoach, setIsCoach] = useState(false);
   const [currentMonth, setCurrentMonth] = useState('');
+  const [userId, setUserId] = useState('');
 
   const [filter, setFilter] = useState('all'); 
   const [team, setTeam] = useState(-1); 
@@ -62,6 +63,7 @@ const HomePage = () => {
   
       console.log("This is the user table id and role");
       console.log(userTableIdAndRole);
+      setUserId(userTableIdAndRole.id)
   
       if (tableIdError) {
         console.error(tableIdError);
@@ -341,6 +343,8 @@ else {
                   .map((event, index) => (
                     <div key={index} onClick={(e) => openCard(event.id , e)} className="event-card">
                       <EventCard
+                        id={event.id}
+                        userId={userId}
                         type={event.type}
                         eventName={event.eventName}
                         teamName={event.teamName}
@@ -348,6 +352,7 @@ else {
                         location={event.location}
                         attendance={event.attendance}
                         number_invitation={event.number_invitation}
+                        isCoach={isCoach}
                       >
                       </EventCard>
                       
