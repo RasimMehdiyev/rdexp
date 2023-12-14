@@ -40,18 +40,18 @@ const ToggleSwitch = ({ onToggle }) => {
         id="custom-toggle"
         className={`tgl appearance-none w-12 h-5 ${getBackgroundColor()} rounded-full p-0 cursor-pointer`}
         style={{
-          '--thumb-size': '1.2rem',
+          '--thumb-size': '1.25rem',
           '--thumb-color': 'gray',
           '--thumb-border-radius': '50%',
         }}
       />
       {toggleState === 1 && (
-        <div className="absolute font-inter text-xs font-bold top-1/2 left-[24px] transform -translate-x-1/2 -translate-y-1/2 text-white">
+        <div className="absolute font-inter text-xs font-bold top-1/2 left-[32px] transform -translate-x-1/2 -translate-y-1/2 text-white">
           ✓
         </div>
       )}
       {toggleState === 3 && (
-        <div className="absolute font-arial text-xs top-[7.5px] left-[12px] transform -translate-x-1/2 -translate-y-1/2 text-white">
+        <div className="absolute font-arial text-xs top-[9px] left-[14px] transform -translate-x-1/2 -translate-y-1/2 text-white">
           x
         </div>
       )}
