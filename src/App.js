@@ -22,7 +22,6 @@ import StickySubheaderProfileComponent from './components/StickySubheaderProfile
 import NoTeamPage from './pages/NoTeamPage.js';
 import EditTeamPage from './pages/EditTeamPage.js';
 import Oops from './pages/OopsPage.js';
-import ChangePasswordPage from './pages/ChangePasswordPage.js';
 import { ForgottenPasswordPage } from './pages/ForgottenPasswordPage.js';
 
 LogRocket.init('u7ityk/synthlete');
@@ -52,7 +51,7 @@ const App = () => {
 
      // Close sidebar on route change
 
-   if ( location.pathname==='/club/create/settings' || location.pathname==='/club/create/settings/'  || location.pathname === '/team/create'  || location.pathname === '/team/create/' || location.pathname === '/club/create' || location.pathname === '/club/create/' || location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth' || location.pathname === '/login/' || location.pathname === '/register/' || location.pathname === '/auth/'){
+   if ( location.pathname=="/password/reset" || location.pathname=="/password/reset/" || location.pathname==='/club/create/settings' || location.pathname==='/club/create/settings/'  || location.pathname === '/team/create'  || location.pathname === '/team/create/' || location.pathname === '/club/create' || location.pathname === '/club/create/' || location.pathname === '/login' || location.pathname === '/register' || location.pathname === '/auth' || location.pathname === '/login/' || location.pathname === '/register/' || location.pathname === '/auth/'){
       return (
          <>
             <Routes>
@@ -112,7 +111,6 @@ const App = () => {
 
                <Route path="/team-profile/edit/:clubId/:teamId" element={<EditTeamPage/>} />
                <Route path="/no-team" element={<NoTeamPage/>} />
-               <Route path="/password/change" element={<ChangePasswordPage/>}/>
                <Route path="*" element={<Oops/>} />
 
 

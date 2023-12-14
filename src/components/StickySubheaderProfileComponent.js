@@ -17,8 +17,8 @@ const StickySubheaderProfileComponent = () => {
      
         <div className='flex flex-row justify-between gap-36 items-center'>
             <img className='cursor-pointer' onClick={getPreviousPage} src={process.env.PUBLIC_URL + "/images/chevron-down.svg"} alt="" />
-              </div>
-              <p className=' ml-8 text-[20px] font-russoOne text-white'>Profile</p>
+        </div>
+        <p className='text-[20px] ml-10 font-russoOne text-white'>Profile</p>
         <Link to="profile/edit">
           <div className='flex flex-row justify-between gap-4'>       
               <button className='bg-sn-main-blue h-8 w-[72px] text-white rounded-[10px] text-[14px]'>EDIT</button>
