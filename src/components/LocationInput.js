@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const LocationInput = ({ onLocationChange, borderColor, isIconVisible, value ,placeholder}) => {
+const LocationInput = ({ onLocationChange, borderColor, isIconVisible, value}) => {
   const [inputValue, setInputValue] = useState(value || '');
   const autocompleteRef = useRef(null);
 
@@ -45,7 +45,7 @@ const LocationInput = ({ onLocationChange, borderColor, isIconVisible, value ,pl
 
   useEffect(() => {
     setInputValue(value);
-  }, [value]);
+  }, [value, setInputValue]);
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -63,7 +63,7 @@ const LocationInput = ({ onLocationChange, borderColor, isIconVisible, value ,pl
           type="text"
           value={inputValue}
           onChange={handleInputChange}
-          //placeholder={placeholder}
+          placeholder="Location"
           rows={3}
           className={`text-black font-interReg p-2 w-full mb-2 border-2 pl-${isIconVisible ? '8' : '2'} border-${borderColor} h-30 rounded-10px m-auto `}
         />

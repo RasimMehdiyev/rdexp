@@ -339,8 +339,7 @@ const EditTeamPage = () => {
                                     onLocationChange={handleLocationChange} 
                                     borderColor="club-header-blue" 
                                     isIconVisible={true} 
-                                    value={locationInputValue}
-                                    placeholder={formValues.location || 'Location'}
+                                    value={formValues.location}
                                 />
                                 {/* Stadium Section 
 
@@ -369,7 +368,7 @@ const EditTeamPage = () => {
                                                 value={formValues.bio}
                                                 onChange={handleInputChange}
                                                 className="text-neutral-500 form-textarea w-full pl-3 pt-2 h-[100px] "
-                                                placeholder="Enter information about the team..."
+                                                placeholder="Bio"
                                             />
                                         </div>
                                     </div>
