@@ -348,7 +348,7 @@ const EditTeamPage = () => {
 
                                  {/* Email Section */}
 
-                                <div className={`w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-lg border-2 ${emailError ? 'border-red-500' : 'border-club-header-blue '}  justify-start items-center gap-2.5 inline-flex`}>
+                                <div className={`w-[322px] h-12 mb-1 pl-3 pr-4 py-3 bg-white rounded-lg border-2 ${emailError ? 'border-red-500' : 'border-club-header-blue '}  justify-start items-center gap-2.5 inline-flex`}>
                                     <EnvelopeIcon className={` h-5 w-5 ${emailError ? 'text-red-500' : 'text-club-header-blue'}`}></EnvelopeIcon>
                                     <div className="w-full h-auto justify-start items-center flex">
                                         <input
@@ -367,7 +367,7 @@ const EditTeamPage = () => {
                                 {/* Phone Section */}
 
                                 <PhoneInput
-                                        style={{ height: '3rem', marginBottom: '12px' }}
+                                        style={{ height: '3rem', marginBottom: '4px' }}
                                         inputStyle={{ height: '100%', width:'100%' }}
                                         className="phone-input border-2 rounded-lg border-club-header-blue"
                                         placeholder={placeholderPhoneNumber}
@@ -384,7 +384,7 @@ const EditTeamPage = () => {
                                 />
 
 
-                                <div className="flex-col justify-start items-start gap-1 flex">
+                                <div className="flex-col justify-start items-start gap-1 flex mt-5">
                                     
                                     <div className="w-[322px] py-1 bg-white rounded-lg border-2 border-club-header-blue  justify-start items-center inline-flex">
                                         <div className="grow h-auto justify-start items-center flex">
