@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PhoneInput from 'react-phone-input-2';
 import FloatingMessage from "../components/FloatingMessageComponent";
+import PasswordInput from "../components/PasswordInput";
 
 const EditProfilePage = () => {
     const [userData, setUserData] = useState({});
@@ -39,7 +40,84 @@ const EditProfilePage = () => {
     const [hasUserMadeChanges, setHasUserMadeChanges] = useState(false);
     const [showFloatingMessage, setShowFloatingMessage] = useState(true);
 
+    const [oldPassword, setOldPassword] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [confirmPassword, setConfirmPassword] = React.useState('');
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+    const [isPasswordMatch, setIsPasswordMatch] = React.useState(true);
+    const [passwordLengthError, setPasswordLengthError] = React.useState(false);
+    const [passwordColor, setPasswordColor] = React.useState('club-header-blue');
+    const [showOldPassword, setShowOldPassword] = React.useState(false);
+    const [isOldPasswordMatch, setIsOldPasswordMatch] = React.useState(false);
+    const [buttonState, setButtonState] = React.useState(false);
 
+    const handlePasswordChange = (e) => {
+        const newPassword = e.target.value;
+        setPassword(newPassword);
+        checkPasswordMatch(newPassword, confirmPassword);
+        checkOldNewPasswordMatch(newPassword, oldPassword);
+    }
+
+    const handlePasswordBlur = (e) => {
+        const password = e.target.value;
+        if (password.length < 8) {
+            setPasswordLengthError(true);
+            setPasswordColor('text-red-500');
+        } else {
+            setPasswordLengthError(false);
+            setPasswordColor('club-header-blue');
+        }
+    }
+    const handleConfirmPasswordChange = (e) => {
+        const newConfirmPassword = e.target.value;
+        setConfirmPassword(newConfirmPassword);
+        checkPasswordMatch(password, newConfirmPassword);
+    }
+
+    const checkOldNewPasswordMatch = (newPassword, oldPassword) => {
+        setIsOldPasswordMatch(newPassword === oldPassword);
+    }
+
+    const checkPasswordMatch = (password, confirmPassword) => {
+        setIsPasswordMatch(password === confirmPassword);
+    }
+
+    const handleConfirmPasswordBlur = (e) => {
+        const confirmPassword = e.target.value;
+        if (confirmPassword !== password) {
+            setIsPasswordMatch(false);
+        } else {
+            setIsPasswordMatch(true);
+        }
+    }
+    const handleOldPasswordChange = (e) => {
+        const newOldPassword = e.target.value;
+        setOldPassword(newOldPassword);
+        checkOldNewPasswordMatch(password, newOldPassword);
+    }
+
+    const handleOldPasswordBlur = (e) => {
+        const oldPassword = e.target.value;
+        if (oldPassword.length < 8) {
+            setPasswordLengthError(true);
+            setPasswordColor('text-red-500');
+        } else {
+            setPasswordLengthError(false);
+            setPasswordColor('club-header-blue');
+        }
+    }
+
+    const handleOldPasswordMatch = (e) => {
+        const newPassword = e.target.value;
+        if (oldPassword.length > 0 && newPassword === oldPassword) {
+            setIsOldPasswordMatch(true); // True if new password is the same as old
+            setPasswordColor('text-red-500');
+        } else {
+            setIsOldPasswordMatch(false);
+            setPasswordColor('club-header-blue');
+        }
+    }
     
 
     // navigate
@@ -343,8 +421,7 @@ const EditProfilePage = () => {
                          }
                     </div>
                 
-                <div className="mt-5 flex-col justify-start items-start gap-2 flex">
-                    
+                <div className="mt-5 flex-col justify-start items-start gap-2 flex">    
                     <div className="flex-col justify-start items-start gap-0 flex ">
                         <div className="justify-start items-start gap-2.5 inline-flex mb-2">
                             <div className="text-blue-600 text-xl font-russoOne ">Contact details</div>
@@ -385,12 +462,10 @@ const EditProfilePage = () => {
                         
                         {(phoneNumberError != '') ? <div className="text-red-500">{phoneNumberError}</div>:<div></div>}        
                         
-                        <p className='py-2 text-[14px] text-club-header-blue font-interReg pt-0'><Link className='font-interReg font-bold text-club-header-blue underline hover:text-[gray]' to="/password/change">Change Password</Link></p>
-
                     </div>                                          
 
-                    </div>
-                    <div className="flex-col justify-start items-start gap-1 flex">
+                </div>
+                <div className="flex-col justify-start items-start gap-1 flex">
                         <div className="w-[178px] justify-start items-start gap-2.5 inline-flex">
                             <div className="text-blue-600 text-xl font-russoOne">About player</div>
                         </div>
@@ -409,8 +484,65 @@ const EditProfilePage = () => {
                                     />
                             </div>
                         </div>
-                    </div>        
-                </div>
+                </div>    
+                <div className="mt-5 flex-col justify-start items-start gap-2 flex">    
+                    <div className="flex-col justify-start items-start gap-0 flex ">
+                        <div className="justify-start items-start gap-2.5  flex-col flex mb-2">
+                            <div className="text-blue-600 text-xl font-russoOne ">User Credentials</div>
+                            <form className='text-center gap-2 w-80 items-center flex flex-col justify-center'>
+                                        <PasswordInput
+                                                isPasswordMatch={isPasswordMatch}
+                                                passwordLengthError={passwordLengthError}
+                                                showPassword={showOldPassword}
+                                                handlePasswordChange={handleOldPasswordChange}
+                                                handlePasswordBlur={handleOldPasswordBlur}
+                                                togglePasswordVisibility={() => setShowOldPassword(!showOldPassword)}
+                                                password={oldPassword}
+                                                placeholder="Old Password"
+                                                placeholderColor={passwordColor}
+                                        />
+                                        <PasswordInput
+                                                isPasswordMatch={isPasswordMatch}
+                                                passwordLengthError={passwordLengthError}
+                                                showPassword={showPassword}
+                                                handlePasswordChange={handlePasswordChange}
+                                                handlePasswordBlur={(e) => {handlePasswordBlur(e);handleOldPasswordMatch(e)}}
+                                                togglePasswordVisibility={() => setShowPassword(!showPassword)}
+                                                password={password}
+                                                placeholder="Password"
+                                                placeholderColor={passwordColor}
+                                        />
+
+                                        <PasswordInput
+                                            isPasswordMatch={isPasswordMatch}
+                                            passwordLengthError={passwordLengthError}
+                                            showPassword={showConfirmPassword}
+                                            handlePasswordChange={handleConfirmPasswordChange}
+                                            handlePasswordBlur={handleConfirmPasswordBlur}
+                                            togglePasswordVisibility={() => setShowConfirmPassword(!showConfirmPassword)}
+                                            password={confirmPassword}
+                                            placeholder="Confirm Password"
+                                            placeholderColor={passwordColor}
+                                        />
+                                        {passwordLengthError && (
+                                            <p className='text-[10px] text-sm font-interReg leading-none text-red-500 font-bold'>Password must be at least 8 characters.</p>
+                                        )
+                                        }
+                                        {!isPasswordMatch && (
+                                            <p className='text-[10px] text-sm font-interReg leading-none text-red-500 font-bold'>Passwords do not match.</p>
+                                        )
+                                        }
+                                        {isOldPasswordMatch && (
+                                            <p className='text-[10px] text-sm font-interReg leading-none text-red-500 font-bold'>New password must be different from the old one.</p>
+                                        )
+                                        }
+
+                                        {/* <button className={`${changeButtonState()}`}>RESET</button> */}
+                            </form>
+                        </div>
+                    </div>
+                </div>    
+            </div>
                 
                 </div>
                 <ToastContainer />
