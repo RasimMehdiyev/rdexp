@@ -119,7 +119,7 @@ const ProfilePage = () => {
                 </div>
                 <div className="self-stretch px-2 py-4 flex-col justify-start items-center gap-2 flex">
                     <div className="self-stretch text-center text-neutral-900 text-xl font-interEBold">About</div>
-                        <div className="w-[343px] text-center text-neutral-600 text-sm font-interReg">
+                        <div className="w-[343px] text-left text-neutral-600 text-sm font-interReg">
                         {userData.bio ? (
                           <p>{userData.bio}</p>
                         ) : (
