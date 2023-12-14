@@ -28,7 +28,7 @@ const ToggleSwitch = ({ onToggle }) => {
 
   return (
     <div className="flex flex-col items-center relative p-2">
-        <div className='absolute font-inter text-sm font-bold text-orange-700 bottom-[33px] left-[11px]'>attend?</div>
+        <div className='absolute font-inter text-sm font-bold text-orange-700 bottom-[33px] left-[11px]'>check?</div>
       <input
         type="range"
         name="points"
