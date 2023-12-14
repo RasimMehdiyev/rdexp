@@ -362,7 +362,7 @@ const EditProfilePage = () => {
                             style={{ height: '3rem', marginBottom: '30px' }}
                             inputStyle={{ height: '100%', width:'100%' }}
                             className={`text-black phone-input border-2 rounded-lg border-club-header-blue `}
-                            placeholder={placeholderPhoneNumber}
+                            placeholder="Phone"
                             dropdownStyle={{ textAlign: 'left' }} 
                             value={newPhoneNumber}
                             onChange={(newPhoneNumber) => {
@@ -393,7 +393,7 @@ const EditProfilePage = () => {
                                     }}
                                     className={`text-black font-normal font-interReg basis-0 grow`}
                                     rows='5'
-                                    placeholder={placeholderBio}
+                                    placeholder="Bio"
                                     onBlur={handleBioBlur}
                                     />
                             </div>
