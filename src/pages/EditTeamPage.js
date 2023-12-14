@@ -267,7 +267,7 @@ const EditTeamPage = () => {
                         <div className="flex-col justify-start items-start gap-2 flex">
                             <div className="flex-col justify-start items-start gap-1 flex">
                                 <div className="justify-start items-start gap-2.5 inline-flex">
-                                    <label className="text-blue-600 text-xl font-russoOne">Team Name</label>
+                                    
                                 </div>
                                 <div className="w-[322px] h-12 mb-3 pl-1 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue  justify-start items-center gap-2.5 inline-flex">
                                     <div className="w-full h-auto basis-0 justify-start items-center flex"></div>
@@ -275,9 +275,9 @@ const EditTeamPage = () => {
                                             name="teamName"
                                             value={formValues.teamName}
                                             onChange={handleInputChange}
-                                            className="text-neutral-500 form-input w-full placeholder:-translate-x-2"
+                                            className=" form-input w-full placeholder:-translate-x-2"
                                             type="text"
-                                            placeholder="Enter team name"
+                                            placeholder="Team name"
                                         />
                                 </div>
                             </div>
@@ -302,9 +302,9 @@ const EditTeamPage = () => {
                                             name="email"
                                             value={formValues.email}
                                             onChange={handleInputChange}
-                                            className="form-input w-full placeholder:-translate-x-2 text-neutral-500"
+                                            className="form-input w-full font-interReg placeholder:-translate-x-2 "
                                             type="email"
-                                            placeholder="Enter email"
+                                            placeholder="Email"
                                         />
                                         {errors.email && <span className="error">{errors.email}</span>}
                                     </div>
@@ -367,7 +367,7 @@ const EditTeamPage = () => {
                                                 name="bio"
                                                 value={formValues.bio}
                                                 onChange={handleInputChange}
-                                                className="text-neutral-500 form-textarea w-full pl-3 pt-2 h-[100px] "
+                                                className="form-textarea font-interReg w-full pl-3 pt-2 h-[100px] "
                                                 placeholder="Bio"
                                             />
                                         </div>
@@ -397,7 +397,7 @@ const EditTeamPage = () => {
                                             name="facebook"
                                             value={formValues.facebook}
                                             onChange={handleInputChange}
-                                            className="form-input w-full placeholder:-translate-x-2 text-neutral-500"
+                                            className="form-input w-full placeholder:-translate-x-2 font-interLight"
                                             type="text"
                                             placeholder="Enter Facebook name"
                                         />
@@ -413,7 +413,7 @@ const EditTeamPage = () => {
                                             name="instagram"
                                             value={formValues.instagram}
                                             onChange={handleInputChange}
-                                            className="form-input w-full placeholder:-translate-x-2 text-neutral-500"
+                                            className="form-input w-full placeholder:-translate-x-2 "
                                             type="text"
                                             placeholder="Enter Instagram name"
                                         />
@@ -429,7 +429,7 @@ const EditTeamPage = () => {
                                             name="x"
                                             value={formValues.x}
                                             onChange={handleInputChange}
-                                            className="form-input w-full placeholder:-translate-x-2 text-neutral-500"
+                                            className="form-input w-full placeholder:-translate-x-2 "
                                             type="text"
                                             placeholder="Enter X name"
                                         />
