@@ -18,7 +18,7 @@ const StickyEditProfileComponent = ({ onSave, isButtonEnabled, buttonOpacity }) 
           
           <div className='flex flex-row justify-between gap-4'>       
               <button 
-                className='bg-sn-main-orange h-8 w-[72px] text-white rounded-[10px] text-[14px]'
+                className={`bg-sn-main-orange h-8 w-[72px] text-white rounded-[10px] text-[14px] ${!isButtonEnabled ? 'cursor-not-allowed' : ''}`}
                 onClick={onSave}
                 disabled={!isButtonEnabled} // Disable button based on isButtonEnabled
                 style={{ opacity: buttonOpacity }} // Apply opacity from props
