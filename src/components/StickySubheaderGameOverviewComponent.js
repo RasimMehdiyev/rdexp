@@ -38,7 +38,7 @@ const StickyGameOverviewComponent = ({onSave,onDelete,eventType}) => {
   
 
 
-    const pressedStyle = isPressed ? {opacity:'0.5', boxShadow: 'inset 0 0 20px rgba(0, 0, 0, 0)' } : {};
+    const pressedStyle = isPressed ? {opacity:'0.5', boxShadow: 'inset 0 0 20px rgba(0, 0, 0, 0.5)' } : {};
 
   return (
     <div className="bg-sn-subheader-blue sticky top-16 shadow-md z-20"> 
@@ -50,7 +50,7 @@ const StickyGameOverviewComponent = ({onSave,onDelete,eventType}) => {
 
       <div className='flex flex-row justify-between gap-1'>
         <div className='flex flex-row justify-between gap-4'>       
-            <button className='bg-sn-main-orange h-8 w-[72px] text-white rounded-[10px] text-[14px]' style={pressedStyle} onClick={(e)=>{onDelete(e);handleButtonClick(e);handleClickOutside(e)}}>DELETE</button>
+            <button id='delete' className='bg-sn-main-orange h-8 w-[72px] text-white rounded-[10px] text-[14px]' style={pressedStyle} onClick={(e)=>{onDelete(e);handleButtonClick(e);handleClickOutside(e)}}>DELETE</button>
         </div>
         <div className='flex flex-row justify-between gap-4'>       
             <button className='bg-sn-main-blue h-8 w-[72px] text-white rounded-[10px] text-[14px]'  onClick={onSave}>EDIT</button>
