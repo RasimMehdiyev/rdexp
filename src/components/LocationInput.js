@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const LocationInput = ({ onLocationChange, borderColor, isIconVisible, value}) => {
+const LocationInput = ({ onLocationChange, borderColor, isIconVisible, value }) => {
   const [inputValue, setInputValue] = useState(value || '');
   const autocompleteRef = useRef(null);
+  const googleMapsScriptId = 'google-maps-script'; // Unique ID for the script tag
 
   useEffect(() => {
     const handlePlaceChanged = () => {
@@ -16,7 +17,6 @@ const LocationInput = ({ onLocationChange, borderColor, isIconVisible, value}) =
     };
 
     const loadAutocomplete = () => {
-      // eslint-disable-next-line no-undef
       const autocomplete = new google.maps.places.Autocomplete(
         document.getElementById('location-autocomplete'),
         { types: ['geocode'] }
@@ -25,15 +25,16 @@ const LocationInput = ({ onLocationChange, borderColor, isIconVisible, value}) =
       autocompleteRef.current = autocomplete;
     };
 
-    if (window.google) {
-      loadAutocomplete();
-    } else {
+    if (!document.getElementById(googleMapsScriptId) && !window.google) {
       const script = document.createElement('script');
+      script.id = googleMapsScriptId;
       script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAbIeGNneNcbNWvjaa225b4v4zpU5B2TpU&libraries=places`;
       script.async = true;
       script.defer = true;
       script.onload = () => loadAutocomplete();
       document.head.appendChild(script);
+    } else if (window.google) {
+      loadAutocomplete();
     }
 
     return () => {
