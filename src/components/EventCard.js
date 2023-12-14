@@ -1,9 +1,33 @@
 import React, { useState } from 'react';
 import { UserGroupIcon } from '@heroicons/react/24/solid'
-import ToggleSwitch from '../ToggleSwitch';
+import ToggleSwitch from './ToggleSwitch';
+import { supabase } from '../lib/helper/supabaseClient';
+import { useEffect } from 'react';
 
-const EventCard = ({ type, eventName, teamName, eventTime, location, attendance, number_invitation, date }) => {
+const EventCard = ({ id, userId, type, eventName, teamName, eventTime, location, attendance, number_invitation, isCoach}) => {
+  const [isInvited, setIsInvited] = useState(false);
 
+  const fetchInvitationStatus = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('event_users')
+        .select('*')
+        .eq('user_id', userId)
+        .eq('event_id', id)
+        .single();
+
+      if (error) throw error;
+
+      // Set isInvited based on whether a record was found
+      setIsInvited(!!data);
+    } catch (error) {
+      console.error('Error fetching invitation status', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchInvitationStatus();
+  }, [userId, id]);
 
 
   const getBackgroundColor = () => {
@@ -12,7 +36,7 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
         return 'bg-practice-orange';
       case 'game':
         return 'bg-game-blue';
-      case 'team building':
+      case 'tb':
         return 'bg-teambuilding-green';
       default:
         return 'bg-practice-orange';
@@ -25,7 +49,7 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
         return 'practice.svg';
       case 'game':
         return 'game.svg';
-      case 'team building':
+      case 'tb':
         return 'teambuilding.svg';
       default:
         return 'practice.svg';
@@ -67,7 +91,7 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
               style={{ filter: '#485687', left: '-1px', top: '2px' }}
             />
           </div>
-          <div className="location text-eventcard-text text-[15px] font-extralight font-['Inter']">{location}</div>
+          <div className="location text-eventcard-text text-[15px] ml-[-6px] font-extralight font-['Inter']">{location}</div>
         </div>
 
         <div>
@@ -94,7 +118,14 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
             <div className="attendence text-eventcard-text text-[15px] font-extralight font-['Inter'] whitespace-nowrap">
               {attendance}/{number_invitation}
             </div>
-            <div className='absolute right-10'><ToggleSwitch/></div>
+            <div className='absolute right-10'>
+              {isInvited && !isCoach && (
+                <ToggleSwitch 
+                  userId={userId}
+                  eventId={id}      
+                />
+              )}
+            </div>
               
           </div>
         </div>       

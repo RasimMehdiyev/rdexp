@@ -241,7 +241,7 @@ const insertExtras = async () => {
             YOUR TEAM
           </h1>
           <input
-            className={`mt-5 h-12 p-2 ${teamBorderColor} ${teamError ? 'text-red-500' : 'text-black'} w-[60vw] rounded-10px border-2 border-club-header-blue font-interReg placeholder-text`}
+            className={`placeholder:-translate-x-2 mt-5 h-12 p-2 ${teamBorderColor} ${teamError ? 'text-red-500' : 'text-black'} w-[60vw] rounded-10px border-2 border-club-header-blue font-interReg placeholder-text`}
             placeholder="Team name"
             value={teamName}
             onChange={handleTeamNameChange}

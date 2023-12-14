@@ -220,7 +220,7 @@ const EventOverview = () => {
             <div className="flex mb-4 text-3xl font-russoOne text-sn-main-blue">
             {eventTitle}
             </div>
-            {generalInfo.type == 'game' ? (
+            {generalInfo.type == 'game' | generalInfo.type == 'Game' ? (
                 <GameOverviewComponent                    
                     generalInfo={generalInfo}
                     className="bg-white border border-gray-300 rounded-lg p-4"

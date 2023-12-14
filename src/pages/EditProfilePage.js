@@ -8,6 +8,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PhoneInput from 'react-phone-input-2';
 import FloatingMessage from "../components/FloatingMessageComponent";
+import PasswordInput from "../components/PasswordInput";
+
 
 const EditProfilePage = () => {
     const [userData, setUserData] = useState({});
@@ -38,8 +40,90 @@ const EditProfilePage = () => {
 
     const [hasUserMadeChanges, setHasUserMadeChanges] = useState(false);
     const [showFloatingMessage, setShowFloatingMessage] = useState(true);
+    const [isCoach, setIsCoach] = useState(false);
+
+    const [oldPassword, setOldPassword] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [confirmPassword, setConfirmPassword] = React.useState('');
+    const [showPassword, setShowPassword] = React.useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+    const [isPasswordMatch, setIsPasswordMatch] = React.useState(true);
+    const [passwordLengthError, setPasswordLengthError] = React.useState(false);
+    const [passwordColor, setPasswordColor] = React.useState('club-header-blue');
+    const [showOldPassword, setShowOldPassword] = React.useState(false);
+    const [isOldPasswordMatch, setIsOldPasswordMatch] = React.useState(false);
 
 
+    const handlePasswordChange = (e) => {
+        const newPassword = e.target.value;
+        setPassword(newPassword);
+        checkPasswordMatch(newPassword, confirmPassword);
+        checkOldNewPasswordMatch(newPassword, oldPassword);
+        updateButtonState();
+    }
+
+    const handlePasswordBlur = (e) => {
+        const password = e.target.value;
+        if (password.length < 8) {
+            setPasswordLengthError(true);
+            setPasswordColor('text-red-500');
+        } else {
+            setPasswordLengthError(false);
+            setPasswordColor('club-header-blue');
+        }
+    }
+    const handleConfirmPasswordChange = (e) => {
+        const newConfirmPassword = e.target.value;
+        setConfirmPassword(newConfirmPassword);
+        checkPasswordMatch(password, newConfirmPassword);
+        updateButtonState();
+
+    }
+
+    const checkOldNewPasswordMatch = (newPassword, oldPassword) => {
+        setIsOldPasswordMatch(newPassword === oldPassword);
+    }
+
+    const checkPasswordMatch = (password, confirmPassword) => {
+        setIsPasswordMatch(password === confirmPassword);
+    }
+
+    const handleConfirmPasswordBlur = (e) => {
+        const confirmPassword = e.target.value;
+        if (confirmPassword !== password) {
+            setIsPasswordMatch(false);
+        } else {
+            setIsPasswordMatch(true);
+        }
+    }
+    const handleOldPasswordChange = (e) => {
+        const newOldPassword = e.target.value;
+        setOldPassword(newOldPassword);
+        checkOldNewPasswordMatch(password, newOldPassword);
+        updateButtonState();
+    }
+
+    const handleOldPasswordBlur = (e) => {
+        const oldPassword = e.target.value;
+        if (oldPassword.length < 8) {
+            setPasswordLengthError(true);
+            setPasswordColor('text-red-500');
+        } else {
+            setPasswordLengthError(false);
+            setPasswordColor('club-header-blue');
+        }
+    }
+
+    const handleOldPasswordMatch = (e) => {
+        const newPassword = e.target.value;
+        if (oldPassword.length > 0 && newPassword === oldPassword) {
+            setIsOldPasswordMatch(true); // True if new password is the same as old
+            setPasswordColor('text-red-500');
+        } else {
+            setIsOldPasswordMatch(false);
+            setPasswordColor('club-header-blue');
+        }
+    }
     
 
     // navigate
@@ -84,9 +168,9 @@ const EditProfilePage = () => {
 
     const handleInputChange = (e) => {
         setNewEmail(e.target.value);
-        setHasUserMadeChanges(true);
+        updateButtonState(); // Call this after state update
     };
-    // Similar for other input fields
+
     
 
     const handleImageChange = (e) => {
@@ -96,31 +180,38 @@ const EditProfilePage = () => {
         const reader = new FileReader();
         reader.onloadend = () => {
             setPreviewImage(reader.result);
+            setHasUserMadeChanges(true); // Indicate that a change has been made
+            updateButtonState(); 
         };
         reader.readAsDataURL(file);
         }
     };
 
     const updateButtonState = () => {
-        const isValidEmail = newEmail ? validateEmail(newEmail) : false;
-
-        if (!isValidEmail) {
-            setEmailError(true);
-        }
-        else {
-            setEmailError(false);
-        }
-
-        const allFieldsFilled = newEmail.trim() !== '' && newPhoneNumber.trim() !== '' && newNumber.trim() !== '';
+        const isEmailValid = newEmail ? validateEmail(newEmail) : true;
+        const isPhoneNumberValid = newPhoneNumber ? validatePhoneNumber(newPhoneNumber) : true;
+        const isPasswordValid = (!oldPassword && !password && !confirmPassword) || (password.length >= 8 && isPasswordMatch && !isOldPasswordMatch);
+        const isPlayerNumberValid = role === 'Player' ? newNumber.trim() !== '' : true;
     
-        setButtonEnabled(isValidEmail && allFieldsFilled && hasUserMadeChanges);
-        setButtonOpacity(isValidEmail && allFieldsFilled && hasUserMadeChanges ? 1 : 0.5);
+        const hasEmailChanged = newEmail !== userData.email;
+        const hasPhoneNumberChanged = newPhoneNumber !== userData.phone_number;
+        const hasBioChanged = newBio !== userData.bio;
+        const hasPlayerNumberChanged = role === 'Player' ? newNumber !== userData.number : false;
+        const hasPasswordChanged = oldPassword || password || confirmPassword;
+        
+        const hasProfilePictureChanged = previewImage && previewImage !== userData.profile_picture;
+        const hasMadeChanges = hasEmailChanged || hasPhoneNumberChanged || hasBioChanged || 
+                               hasPlayerNumberChanged || hasPasswordChanged || hasProfilePictureChanged;
+    
+        setButtonEnabled(isEmailValid && isPhoneNumberValid && isPasswordValid && 
+                         isPlayerNumberValid && hasMadeChanges);
+        setButtonOpacity(hasMadeChanges ? 1 : 0.5);
     };
     
 
     useEffect(() => {
         updateButtonState();
-    }, [newEmail, newPhoneNumber, newBio, newNumber]);
+    }, [newEmail, newPhoneNumber, newBio, newNumber, oldPassword, password, confirmPassword,previewImage]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -138,6 +229,7 @@ const EditProfilePage = () => {
                 if (userError) throw userError;
                 setUserData(userData);
                 setRole(userData.role);
+                setIsCoach(userData.role_id == 2 ? true : false);
                 setNewEmail(userData.email || '');
                 setNewPhoneNumber(userData.phone_number || '');
                 setNewNumber(userData.number || '');
@@ -219,6 +311,28 @@ const EditProfilePage = () => {
                     .eq('user_id', user.id)
                     .single();
                 if (userError) throw userError;
+
+                    // Check if password fields have been filled
+                if (oldPassword && password && confirmPassword && isPasswordMatch && !isOldPasswordMatch) {
+                    try{
+                        console.log(password)
+                        const {updatePassword, updatePasswordError} = await supabase.auth.updateUser({ password: password});
+                        if(updatePasswordError){
+                            throw updatePasswordError;
+                        }
+                        console.log(updatePassword);
+                    }catch(error){
+                        toast.error(error.message, {position: "top-center", autoClose: 3000,zIndex: 50});
+                    }
+                    finally{
+                        toast.success("Password changed successfully", {position: "top-center", autoClose: 3000,zIndex: 50});
+                        setTimeout(() => {
+                            navigate('/profile');
+                        }, 3000);
+                    }
+                }
+
+
                 toast.success('Profile updated successfully! Redirecting...', { position: "bottom-center", zIndex: 50});
                 setTimeout(() => {
                     console.log("redirecting")
@@ -271,20 +385,28 @@ const EditProfilePage = () => {
                 buttonOpacity={buttonOpacity}
             />
             <div className="grow flex bg-indigo-100 flex-col items-center justify-start h-screen">
-                {showFloatingMessage && (
+                {/* {showFloatingMessage &&  (
                     <FloatingMessage />
-                )}
+                )} */}
+                {
+                    isCoach ? <FloatingMessage />
+                    : <div></div>
+                }
                 <div className="grow p-4 flex-col justify-start items-center gap-4 inline-flex">
                     <div className={`profile-flipper ${showNumber ? 'show-number' : ''}`} onDoubleClick={handleProfileClick}>
                         <div className="profile-front"> 
                             
                                     {previewImage ? (
-                                    <img className="w-[142px] h-[142px] rounded-full object-cover overflow-hidden" src={previewImage} alt="Preview" />
+                                        <img className="w-[142px] h-[142px] rounded-full object-cover overflow-hidden" 
+                                            src={previewImage} 
+                                            alt="Preview" />
                                     ) : (
-                                    <img className="w-[150px] h-[150px] rounded-full  object-cover overflow-hidden" src={process.env.PUBLIC_URL + "/images/no_user.png"} alt="No user" />
+                                        <img className="w-[150px] h-[150px] rounded-full object-cover overflow-hidden" 
+                                            src={process.env.PUBLIC_URL + "/images/no_user.png"} 
+                                            alt="No user" />
                                     )}
                                     <label htmlFor="profilePictureInput">
-                                        <div className="w-[35px] h-[35px] left-[107px] top-[98px] absolute" onChange={(e) => (handleImageChange(e))}>
+                                        <div className="w-[35px] h-[35px] left-[107px] top-[98px] absolute" >
                                             <div className="w-[35px] h-[35px] left-[-3px] top-0 absolute bg-club-header-blue rounded-full flex justify-center items-center cursor-pointer">
                                                 <PencilIcon className="h-6 w-6 text-white"/>
                                             </div>
@@ -295,7 +417,8 @@ const EditProfilePage = () => {
                                             id="profilePictureInput"
                                             accept="image/*"
                                             style={{ display: 'none' }}
-                                        />
+                                            onChange={(e) => (handleImageChange(e))} 
+                                       />
                                     
                         </div>
                         {
@@ -343,8 +466,7 @@ const EditProfilePage = () => {
                          }
                     </div>
                 
-                <div className="mt-5 flex-col justify-start items-start gap-2 flex">
-                    
+                <div className="mt-5 flex-col justify-start items-start gap-2 flex">    
                     <div className="flex-col justify-start items-start gap-0 flex ">
                         <div className="justify-start items-start gap-2.5 inline-flex mb-2">
                             <div className="text-blue-600 text-xl font-russoOne ">Contact details</div>
@@ -385,12 +507,10 @@ const EditProfilePage = () => {
                         
                         {(phoneNumberError != '') ? <div className="text-red-500">{phoneNumberError}</div>:<div></div>}        
                         
-                        <p className='py-2 text-[14px] text-club-header-blue font-interReg pt-0'><Link className='font-interReg font-bold text-club-header-blue underline hover:text-[gray]' to="/password/change">Change Password</Link></p>
-
                     </div>                                          
 
-                    </div>
-                    <div className="flex-col justify-start items-start gap-1 flex">
+                </div>
+                <div className="flex-col justify-start items-start gap-1 flex">
                         <div className="w-[178px] justify-start items-start gap-2.5 inline-flex">
                             <div className="text-blue-600 text-xl font-russoOne">About player</div>
                         </div>
@@ -409,8 +529,64 @@ const EditProfilePage = () => {
                                     />
                             </div>
                         </div>
-                    </div>        
-                </div>
+                </div>    
+                <div className="mt-5 flex-col justify-start items-start gap-2 flex">    
+                    <div className="flex-col justify-start items-start gap-0 flex ">
+                        <div className="justify-start items-start gap-2.5  flex-col flex mb-2">
+                            <div className="text-blue-600 text-xl font-russoOne ">User Credentials</div>
+                            <form className='text-center gap-2 w-80 items-center flex flex-col justify-center'>
+                                        <PasswordInput
+                                                isPasswordMatch={isPasswordMatch}
+                                                passwordLengthError={passwordLengthError}
+                                                showPassword={showOldPassword}
+                                                handlePasswordChange={handleOldPasswordChange}
+                                                handlePasswordBlur={handleOldPasswordBlur}
+                                                togglePasswordVisibility={() => setShowOldPassword(!showOldPassword)}
+                                                password={oldPassword}
+                                                placeholder="Old Password"
+                                                placeholderColor={passwordColor}
+                                        />
+                                        <PasswordInput
+                                                isPasswordMatch={isPasswordMatch}
+                                                passwordLengthError={passwordLengthError}
+                                                showPassword={showPassword}
+                                                handlePasswordChange={handlePasswordChange}
+                                                handlePasswordBlur={(e) => {handlePasswordBlur(e);handleOldPasswordMatch(e)}}
+                                                togglePasswordVisibility={() => setShowPassword(!showPassword)}
+                                                password={password}
+                                                placeholder="Password"
+                                                placeholderColor={passwordColor}
+                                        />
+
+                                        <PasswordInput
+                                            isPasswordMatch={isPasswordMatch}
+                                            passwordLengthError={passwordLengthError}
+                                            showPassword={showConfirmPassword}
+                                            handlePasswordChange={handleConfirmPasswordChange}
+                                            handlePasswordBlur={handleConfirmPasswordBlur}
+                                            togglePasswordVisibility={() => setShowConfirmPassword(!showConfirmPassword)}
+                                            password={confirmPassword}
+                                            placeholder="Confirm Password"
+                                            placeholderColor={passwordColor}
+                                        />
+                                        {passwordLengthError && (
+                                            <p className='text-[10px] text-sm font-interReg leading-none text-red-500 font-bold'>Password must be at least 8 characters.</p>
+                                        )
+                                        }
+                                        {!isPasswordMatch && (
+                                            <p className='text-[10px] text-sm font-interReg leading-none text-red-500 font-bold'>Passwords do not match.</p>
+                                        )
+                                        }
+                                        {isOldPasswordMatch && (
+                                            <p className='text-[10px] text-sm font-interReg leading-none text-red-500 font-bold'>New password must be different from the old one.</p>
+                                        )
+                                        }
+
+                            </form>
+                        </div>
+                    </div>
+                </div>    
+            </div>
                 
                 </div>
                 <ToastContainer />

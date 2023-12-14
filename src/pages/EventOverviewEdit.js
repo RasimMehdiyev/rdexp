@@ -46,7 +46,7 @@ const EventOverviewEdit = () => {
 
     const handleOnChange = async () => {
         
-        if (generalInfo.type == "game" | generalInfo.type == "") {
+        if (generalInfo.type == "Game" | generalInfo.type == "") {
             setLoading(true);
             console.log("event title", eventTitle);
             console.log("selected option", selectedOption);
@@ -407,7 +407,7 @@ const EventOverviewEdit = () => {
                     />
                 </div>
           
-                {generalInfo.type === 'game' ? (
+                {generalInfo.type == 'game' | generalInfo.type == 'Game' ? (
                     <EditGameComponent
                         eventTitle={eventTitle}
                         generalInfo={generalInfo}
