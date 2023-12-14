@@ -34,6 +34,7 @@ const EditTeamPage = () => {
     const [phoneNumberError, setPhoneNumberError] = useState('');
     const [hasUserMadeChanges, setHasUserMadeChanges] = useState(false);
     const [initialLocation, setInitialLocation] = useState(clubData?.location || '');
+    const [locationInputValue, setLocationInputValue] = useState(formValues.location || '');
 
     useEffect(() => {
         const fetchData = async () => {
@@ -190,8 +191,19 @@ const EditTeamPage = () => {
             ...prevState,
             location: newLocation
         }));
+        setLocationInputValue(newLocation); // Update the direct input state
         setHasUserMadeChanges(true);
     };
+    // Function to clear the location input
+    const clearLocation = () => {
+        setLocationInputValue('');
+        setFormValues(prevState => ({
+            ...prevState,
+            location: ''
+        }));
+        setHasUserMadeChanges(true);
+    };
+    
 
     const updateTeamSocialsData = async (teamId, formData) => {
         try {
@@ -326,8 +338,9 @@ const EditTeamPage = () => {
                                 <LocationInput 
                                     onLocationChange={handleLocationChange} 
                                     borderColor="club-header-blue" 
-                                    isIconVisible={true} 
-                                    value={formValues.location} // Ensure this reflects the current state
+                                    isIconVisible={false} 
+                                    value={locationInputValue}
+                                    placeholder={formValues.location || 'Location'}
                                 />
                                 {/* Stadium Section 
 
