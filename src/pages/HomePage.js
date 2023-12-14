@@ -7,7 +7,6 @@ import EventCard from "../components/EventCard";
 import React from 'react';
 import LoadingPage from './LoadingPage';
 import StickyMonthHeader from '../components/StickyMonthComponent';
-import { PlusIcon } from '@heroicons/react/24/solid';
 
 const HomePage = () => {
   const [userData, setUserData] = useState({});
@@ -60,9 +59,7 @@ const HomePage = () => {
         .select('id, role_id')
         .eq("user_id", uuid)
         .single();
-  
-      console.log("This is the user table id and role");
-      console.log(userTableIdAndRole);
+
       setUserId(userTableIdAndRole.id)
   
       if (tableIdError) {
@@ -142,8 +139,6 @@ const HomePage = () => {
     // If it's not the toggle switch, navigate to the event overview
     if (!isToggleSwitch && !event.target.classList.contains('toggle-switch')) {
       event.preventDefault();
-      console.log("open card");
-      console.log(index);
       navigate('/event-overview/' + index);
     }
   };
@@ -166,7 +161,6 @@ const HomePage = () => {
           LogRocket.getSessionURL(sessionURL => {
             amplitude.getInstance().logEvent('LogRocket', { 'sessionURL': sessionURL });
           });
-          console.log("SessionURL:", sessionURL);
 
           await getEvents(user.data.user.id);
 
@@ -180,9 +174,7 @@ const HomePage = () => {
       }
     }
 
-    console.log("Home page fetches starting now");
     fetchData();
-    console.log("Fetched events: ", fetchedEvents);
 
   }, [navigate]);
 
@@ -267,14 +259,11 @@ const handleTeamChange = (newTeam) => {
 
 
 const toggleFilterDropdown = () => {
-  console.log("toggle filter dropdown", openDropdown);
   setOpenDropdown(openDropdown === 'filter' ? null : 'filter');
 };
 
 const toggleTeamDropdown = () => {
-  console.log("toggle team dropdown before", openDropdown);
   setOpenDropdown(openDropdown === 'team' ? null : 'team');
-  console.log("toggle team dropdown after", openDropdown);
 };
 
 
