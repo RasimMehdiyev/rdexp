@@ -12,7 +12,7 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
         return 'bg-practice-orange';
       case 'game':
         return 'bg-game-blue';
-      case 'team building':
+      case 'tb':
         return 'bg-teambuilding-green';
       default:
         return 'bg-practice-orange';
@@ -25,7 +25,7 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
         return 'practice.svg';
       case 'game':
         return 'game.svg';
-      case 'team building':
+      case 'tb':
         return 'teambuilding.svg';
       default:
         return 'practice.svg';

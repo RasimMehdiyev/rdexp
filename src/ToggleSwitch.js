@@ -27,8 +27,8 @@ const ToggleSwitch = ({ onToggle }) => {
   const displayCheckmark = toggleState === 1; // Display checkmark when the button is green
 
   return (
-    <div className="flex flex-col items-center relative">
-        <div className='absolute font-inter text-xs font-bold text-orange-700 bottom-[18px] left-[-2px]'>attend?</div>
+    <div className="flex flex-col items-center relative p-2">
+        <div className='absolute font-inter text-sm font-bold text-orange-700 bottom-[33px] left-[11px]'>attend?</div>
       <input
         type="range"
         name="points"
@@ -38,21 +38,21 @@ const ToggleSwitch = ({ onToggle }) => {
         max="3"
         value={toggleState}
         id="custom-toggle"
-        className={`tgl appearance-none w-9 h-4 ${getBackgroundColor()} rounded-full p-0 cursor-pointer`}
+        className={`tgl appearance-none w-14 h-6 ${getBackgroundColor()} rounded-full p-0 cursor-pointer`}
         style={{
-          '--thumb-size': '1rem',
+          '--thumb-size': '1.50rem',
           '--thumb-color': 'gray',
           '--thumb-border-radius': '50%',
         }}
       />
       {toggleState === 1 && (
-        <div className="absolute font-inter text-xs font-bold top-1/2 left-[24px] transform -translate-x-1/2 -translate-y-1/2 text-white">
+        <div className="absolute font-inter text-md font-bold top-1/2 left-[48px] transform -translate-x-1/2 -translate-y-1/2 text-white">
           ✓
         </div>
       )}
       {toggleState === 3 && (
-        <div className="absolute font-arial text-xs top-[7.5px] left-[12px] transform -translate-x-1/2 -translate-y-1/2 text-white">
-          x
+        <div className="absolute font-arial text-xs top-[20px] left-[24px] transform -translate-x-1/2 -translate-y-1/2 text-white">
+          X
         </div>
       )}
       <style>
