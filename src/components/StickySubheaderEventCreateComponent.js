@@ -7,10 +7,10 @@ import { useNavigate } from 'react-router-dom';
 const StickySubheaderEventCreateComponent = ({onSave,buttonEnabled,eventType}) => {
 
     const eventTypes = () => {
-        if(eventType === "Game"){
+        if(eventType === "game"){
             return "Game"
         }
-        else if(eventType === "Practice"){
+        else if(eventType === "practice"){
             return "Practice"
         }
         else{
