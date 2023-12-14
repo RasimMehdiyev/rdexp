@@ -147,14 +147,14 @@ const GameOverviewComponent = ({
                             </div>
                             <div className="flex flex-col gap-0">
                                 <div className="flex-grow relative">
-                                    {selectedPlayers.find(player => player.position_id === position.id) ?
-                                        (selectedPlayers.find(player => player.position_id === position.id).is_attending == 'Declined' ?
+                                    {selectedPlayers.find(player => player.position_id == position.id) ?
+                                        (selectedPlayers.find(player => player.position_id == position.id).is_attending == 'Declined' ?
                                             (<div className="w-full px-2 text-red-500">
-                                            {selectedPlayers.find(player => player.position_id === position.id).full_name}
+                                            {selectedPlayers.find(player => player.position_id == position.id).full_name}
                                             </div>)
                                             :
                                             (<div className="w-full px-2">
-                                            {selectedPlayers.find(player => player.position_id === position.id).full_name}
+                                            {selectedPlayers.find(player => player.position_id == position.id).full_name}
                                             </div>)
                                         )
                                         :
