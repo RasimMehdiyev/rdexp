@@ -8,21 +8,22 @@ const EventCard = ({ id, userId, type, eventName, teamName, eventTime, location,
   const [isInvited, setIsInvited] = useState(false);
 
   const fetchInvitationStatus = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('event_users')
-        .select('*')
-        .eq('user_id', userId)
-        .eq('event_id', id)
-        .single();
+    if (!isCoach)
+          {    try {
+                const { data, error } = await supabase
+                  .from('event_users')
+                  .select('*')
+                  .eq('user_id', userId)
+                  .eq('event_id', id)
+                  .single();
 
-      if (error) throw error;
+                if (error) throw error;
 
-      // Set isInvited based on whether a record was found
-      setIsInvited(!!data);
-    } catch (error) {
-      console.error('Error fetching invitation status', error);
-    }
+                // Set isInvited based on whether a record was found
+                setIsInvited(!!data);
+              } catch (error) {
+                console.error('Error fetching invitation status', error);
+              }}
   };
 
   useEffect(() => {
