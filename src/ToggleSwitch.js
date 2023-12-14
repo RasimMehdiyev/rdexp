@@ -28,7 +28,7 @@ const ToggleSwitch = ({ onToggle }) => {
 
   return (
     <div className="flex flex-col items-center relative">
-        <div className='absolute font-inter text-xs font-bold text-orange-700 bottom-[18px] left-[-2px]'>attend?</div>
+        <div className='absolute font-inter text-sm font-bold text-orange-700 bottom-[20px] left-[0px]'>attend?</div>
       <input
         type="range"
         name="points"
@@ -38,9 +38,9 @@ const ToggleSwitch = ({ onToggle }) => {
         max="3"
         value={toggleState}
         id="custom-toggle"
-        className={`tgl appearance-none w-9 h-4 ${getBackgroundColor()} rounded-full p-0 cursor-pointer`}
+        className={`tgl appearance-none w-12 h-5 ${getBackgroundColor()} rounded-full p-0 cursor-pointer`}
         style={{
-          '--thumb-size': '1rem',
+          '--thumb-size': '1.2rem',
           '--thumb-color': 'gray',
           '--thumb-border-radius': '50%',
         }}
