@@ -46,8 +46,6 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
 
 
   useEffect(() => {
-    console.log('Updated players:', players);
-    console.log('Updated extras:', extras);
   },[players, extras])
 
 
@@ -62,9 +60,7 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
     ? players.filter(player => player.full_name.toLowerCase().includes(inputValue.toLowerCase())) 
     : extras.filter(extra => extra.full_name.toLowerCase().includes(inputValue.toLowerCase()));
 
-    console.log(filteredSuggestions)
     setSuggestions(filteredSuggestions);
-    console.log(suggestions)
   };
 
 
@@ -76,7 +72,6 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
   const handleSave = async () => {
     try {
       const { data, error } = await checkConstraints(inputValue);
-      console.log(data, error)
       if (error) {
         setInputError('Error checking constraints: ' + error.message);
       } else if (data) {
@@ -89,7 +84,6 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
     } catch (error) {
       setInputError('Error checking constraints: ' + error.message);
     }
-    console.log(inputError)
   };
 
   const checkConstraints = async (fullName) => {

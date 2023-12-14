@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { UserGroupIcon } from '@heroicons/react/24/solid'
 import ToggleSwitch from './ToggleSwitch';
 import { supabase } from '../lib/helper/supabaseClient';
 import { useEffect } from 'react';
