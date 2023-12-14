@@ -114,7 +114,7 @@ const ChangePasswordPage = () => {
 
   return (
     <div>
-        <StickyPasswordChange buttonState={changeButtonState}/>
+        <StickyPasswordChange buttonState={changeButtonState} newPassword={password}/>
         <div className='min-h-screen bg-sn-bg-light-blue flex flex-col gap-8 pt-20 items-center'>
             <p className='font-russoOne text-club-header-blue text-4xl'>Change Password</p>
             <form className='text-center gap-2 w-80 items-center flex flex-col justify-center'>

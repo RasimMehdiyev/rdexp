@@ -14,6 +14,7 @@ const StickyPasswordChange = ({buttonState , newPassword}) => {
 
     const handleSave = async () => {
         try{
+            console.log(newPassword)
             const {updatePassword, updatePasswordError} = await supabase.auth.updateUser({ password: newPassword});
             if(updatePasswordError){
                 throw updatePasswordError;
@@ -24,14 +25,16 @@ const StickyPasswordChange = ({buttonState , newPassword}) => {
         }
         finally{
             toast.success("Password changed successfully", {position: "top-center", autoClose: 3000,zIndex: 50});
-            nagivate('/profile');
+            setTimeout(() => {
+                nagivate('/profile');
+            }, 3000);
         }
     }
 
 
 
   return (
-    <>
+  
       <div className="bg-sn-subheader-blue sticky top-16 shadow-md z-20"> 
         <div className="p-2 h-14 flex flex-row justify-between items-center">
           <div className='flex flex-row justify-between gap-1 items-center'>
@@ -44,7 +47,6 @@ const StickyPasswordChange = ({buttonState , newPassword}) => {
         </div>
         <ToastContainer/>
     </div>
-    </>
 
   );
 };
