@@ -20,10 +20,11 @@ import { AboutClubPage } from './pages/AboutClubPage.js';
 import TeamProfilePage from './pages/TeamProfilePage.js';
 import StickySubheaderProfileComponent from './components/StickySubheaderProfileComponent.js';
 import NoTeamPage from './pages/NoTeamPage.js';
-import { useRef } from 'react';
 import NotificationPage from './pages/NotificationPage.js';
 import EditTeamPage from './pages/EditTeamPage.js';
 import Oops from './pages/OopsPage.js';
+import ChangePasswordPage from './pages/ChangePasswordPage.js';
+import { ForgottenPasswordPage } from './pages/ForgottenPasswordPage.js';
 
 LogRocket.init('u7ityk/synthlete');
 
@@ -63,6 +64,8 @@ const App = () => {
                <Route path="/team/create" element={<TeamCreatePage/>} />
                <Route path="/club/create" element={<AboutClubPage/>} />
                <Route path="/club/create/settings" element={<GameSettings/>} />
+               <Route path="/password/reset" element={<ForgottenPasswordPage/>}/>
+               <Route path="*" element={<Oops/>} />
             </Routes>
          </>
       );
@@ -111,6 +114,7 @@ const App = () => {
                <Route path="/team-profile/edit/:clubId/:teamId" element={<EditTeamPage/>} />
                <Route path="/no-team" element={<NoTeamPage/>} />
                <Route path="/notification" element={<NotificationPage />} />
+               <Route path="/password/change" element={<ChangePasswordPage/>}/>
                <Route path="*" element={<Oops/>} />
 
 
