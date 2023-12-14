@@ -24,23 +24,12 @@ const NewGamePage = () => {
 
     const handleOnChange = async () => {
         
-        if (selectedOption == "Game" | selectedOption == "") {
-            //setLoading(true);
-            // console.log("event title", eventTitle);
-            // console.log("selected option", selectedOption);
-            // console.log("general info", generalInfo);
-            // console.log("players", selectedPlayers);
-            // console.log("extras", selectedExtras);
-            // console.log("team", selectedTeam);
+        if (selectedOption == "Game" | selectedOption == "" ) {
 
             const timestamp = `${generalInfo.date} ${generalInfo.time}:00+00`;
-            // console.log("timestamp", timestamp);
 
             const toUploadPlayers = selectedPlayers.map((p) => ({ user_id: p.id, position_id: p.position_id }));
             const toUploadExtras = selectedExtras.map((ex) => ({ user_id: ex.id, extrarole_id: ex.extraRole_id }));
-
-            // console.log("to upload players", toUploadPlayers);
-            // console.log("to upload extras", toUploadExtras);
 
             if (checkInput()) setInputCheck(true);
             else {
@@ -71,10 +60,8 @@ const NewGamePage = () => {
                         .limit(1); // Limit the result to 1 row
                     if (errorEventDataID) console.error('Error fetching latest event:', errorEventDataID)
                     else {
-                        // console.log("event data is", eventDataID);
                         const event_id = eventDataID[0].id;
                         const finalUploadPlayers = toUploadPlayers.map((p) => ({ ...p, event_id: event_id, is_attending: "Pending" }));
-                        // console.log("finalUploadPlayers: ", finalUploadPlayers);
                         const finalUploadExtras = toUploadExtras.map((ex) => ({ ...ex, event_id: event_id, is_attending: "Pending" }));
 
                         const { playersData, errorPlayersData } = await supabase
@@ -272,8 +259,8 @@ const NewGamePage = () => {
                                 type="radio"
                                 id="Game"
                                 name="activity"
-                                value="game"
-                                checked={selectedOption === "game"}
+                                value="Game"
+                                checked={selectedOption === "Game"}
                                 onChange={handleRadioChange}
                                 className="form-radio h-5 w-5 text-sn-main-blue"
                             />
@@ -286,8 +273,8 @@ const NewGamePage = () => {
                                 type="radio"
                                 id="Practice"
                                 name="activity"
-                                value="practice"
-                                checked={selectedOption === "practice"}
+                                value="Practice"
+                                checked={selectedOption === "Practice"}
                                 onChange={handleRadioChange}
                                 className="form-radio h-5 w-5 text-sn-main-blue"
                             />
@@ -300,8 +287,8 @@ const NewGamePage = () => {
                                 type="radio"
                                 id="TB"
                                 name="activity"
-                                value="team building"
-                                checked={selectedOption === "team building"}
+                                value="TB"
+                                checked={selectedOption === "TB"}
                                 onChange={handleRadioChange}
                                 className="form-radio h-5 w-5 text-sn-main-blue"
                             />
@@ -310,7 +297,7 @@ const NewGamePage = () => {
                             </label>
                         </div>
                     </div>              
-                    {(selectedOption === 'game' || selectedOption === '') &&
+                    {(selectedOption === 'Game' || selectedOption === '') &&
                         <NewGamePageComponent
                             eventTitle={eventTitle}
                             onGeneralInfoChanges={setGeneralInfo}
@@ -318,14 +305,14 @@ const NewGamePage = () => {
                             onSelectedPlayerChanges={setSelectedPlayers}
                             onTeamChanges={setSelectedTeam}
                         />}
-                    {selectedOption === 'practice' &&
+                    {selectedOption === 'Practice' &&
                         <NewPracticeTBComponent
                             eventTitle={eventTitle}
                             onGeneralInfoChanges={setGeneralInfo}                            
                             onSelectedPlayerChanges={setSelectedPlayers}
                             onTeamChanges={setSelectedTeam}
                         />}
-                    {selectedOption === 'team building' &&
+                    {selectedOption === 'TB' &&
                         <NewPracticeTBComponent
                             eventTitle={eventTitle}
                             onGeneralInfoChanges={setGeneralInfo}                            
