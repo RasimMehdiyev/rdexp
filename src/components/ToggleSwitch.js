@@ -38,6 +38,7 @@ const ToggleSwitch = ({ userId, eventId }) => {
 
   const handleToggle = async (event) => {
     const value = parseInt(event.target.value, 10);
+    event.stopPropagation();
     setToggleState(value);
 
     let attendanceStatus;
@@ -81,7 +82,7 @@ const ToggleSwitch = ({ userId, eventId }) => {
 
   return (
     <div className="flex flex-col items-center relative">
-        <div className='absolute font-inter text-xs font-bold text-orange-700 bottom-[18px] left-[-2px]'>attend?</div>
+      <div className='absolute font-inter text-sm font-bold text-orange-700 bottom-[25px] left-[5px]'>attend?</div>
       <input
         type="range"
         name="points"
@@ -91,21 +92,27 @@ const ToggleSwitch = ({ userId, eventId }) => {
         max="3"
         value={toggleState}
         id="custom-toggle"
-        className={`tgl appearance-none w-9 h-4 ${getBackgroundColor()} rounded-full p-0 cursor-pointer`}
+        className={`tgl appearance-none w-14 h-6 ${getBackgroundColor()} rounded-full p-0 cursor-pointer`}
         style={{
-          '--thumb-size': '1rem',
+          '--thumb-size': '1.50rem',
           '--thumb-color': 'gray',
           '--thumb-border-radius': '50%',
         }}
       />
       {toggleState === 1 && (
-        <div className="absolute font-inter text-xs font-bold top-1/2 left-[24px] transform -translate-x-1/2 -translate-y-1/2 text-white">
+        <div
+          className="absolute font-interBold text-md top-1/2 left-[40px] transform -translate-x-1/2 -translate-y-1/2 text-white"
+          style={{ pointerEvents: 'none' }}
+        >
           ✓
         </div>
       )}
       {toggleState === 3 && (
-        <div className="absolute font-arial text-xs top-[7.5px] left-[12px] transform -translate-x-1/2 -translate-y-1/2 text-white">
-          x
+        <div
+          className="absolute font-arialBold text-xs top-[13px] left-[16px] transform -translate-x-1/2 -translate-y-1/2 text-white"
+          style={{ pointerEvents: 'none' }}
+        >
+          X
         </div>
       )}
       <style>

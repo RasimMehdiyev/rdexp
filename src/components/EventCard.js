@@ -36,7 +36,7 @@ const EventCard = ({ id, userId, type, eventName, teamName, eventTime, location,
         return 'bg-practice-orange';
       case 'game':
         return 'bg-game-blue';
-      case 'team building':
+      case 'tb':
         return 'bg-teambuilding-green';
       default:
         return 'bg-practice-orange';
@@ -49,7 +49,7 @@ const EventCard = ({ id, userId, type, eventName, teamName, eventTime, location,
         return 'practice.svg';
       case 'game':
         return 'game.svg';
-      case 'team building':
+      case 'tb':
         return 'teambuilding.svg';
       default:
         return 'practice.svg';
@@ -91,7 +91,7 @@ const EventCard = ({ id, userId, type, eventName, teamName, eventTime, location,
               style={{ filter: '#485687', left: '-1px', top: '2px' }}
             />
           </div>
-          <div className="location text-eventcard-text text-[15px] font-extralight font-['Inter']">{location}</div>
+          <div className="location text-eventcard-text text-[15px] ml-[-6px] font-extralight font-['Inter']">{location}</div>
         </div>
 
         <div>

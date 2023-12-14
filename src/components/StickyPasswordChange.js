@@ -5,11 +5,11 @@ import { ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const StickyPasswordChange = ({buttonState , newPassword}) => {
-    const nagivate = useNavigate();
+    const navigate = useNavigate();
 
     const getPreviousPage = () => {
         // console.log('previous page');
-        nagivate(-1);
+        navigate(-1);
     }
 
     const handleSave = async () => {
@@ -26,7 +26,7 @@ const StickyPasswordChange = ({buttonState , newPassword}) => {
         finally{
             toast.success("Password changed successfully", {position: "top-center", autoClose: 3000,zIndex: 50});
             setTimeout(() => {
-                nagivate('/profile');
+                navigate('/profile');
             }, 3000);
         }
     }
