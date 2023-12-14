@@ -326,7 +326,7 @@ const EditTeamPage = () => {
                                 <LocationInput 
                                     onLocationChange={handleLocationChange} 
                                     borderColor="club-header-blue" 
-                                    isIconVisible={false} 
+                                    isIconVisible={true} 
                                     value={formValues.location} // Ensure this reflects the current state
                                 />
                                 {/* Stadium Section 
