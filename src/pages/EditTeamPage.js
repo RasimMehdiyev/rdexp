@@ -259,12 +259,33 @@ const EditTeamPage = () => {
         }   
     }    
     
+    const [isFormValid, setIsFormValid] = useState(false);
+    useEffect(() => {
+        const isEmailValid = testEmail(formValues.email);
+        const isTeamNameFilled = formValues.teamName.trim() !== '';
+        setIsFormValid(isEmailValid && isTeamNameFilled);
+        setHasUserMadeChanges(isTeamNameFilled);
+    }, [formValues.email, formValues.teamName]);
+
+
+    const isSaveButtonDisabled = () => {
+        // Check if there are changes and mandatory fields are filled and email is valid
+        const isEmailValid = testEmail(formValues.email);
+        const areMandatoryFieldsFilled = formValues.teamName !== '' && formValues.email !== '';
+        return !hasUserMadeChanges || !isEmailValid || !areMandatoryFieldsFilled;
+    };
+
+    useEffect(() => {
+        // Initial check for button disabled state
+        setHasUserMadeChanges(isSaveButtonDisabled());
+    }, [formValues.teamName, formValues.email]);
+
     if (loading) {
         return <LoadingPage />;
     } else {
         return (
             <div>
-                <StickyEditTeamComponent onSave={handleSubmit}/>
+                <StickyEditTeamComponent onSave={handleSubmit} isDisabled={isSaveButtonDisabled()}/>
                 <div className="grow flex bg-indigo-100 flex-col items-center justify-start">
                     <div className="grow p-4 flex-col justify-start items-center gap-4 inline-flex">
 
@@ -345,28 +366,15 @@ const EditTeamPage = () => {
 
                                 {/* Phone Section */}
 
-                                    <PhoneInput
-                                        style={{ height: '3rem', marginBottom: '30px' }}
+                                <PhoneInput
+                                        style={{ height: '3rem', marginBottom: '12px' }}
                                         inputStyle={{ height: '100%', width:'100%' }}
                                         className="phone-input border-2 rounded-lg border-club-header-blue"
                                         placeholder={placeholderPhoneNumber}
                                         value={formValues.phoneNumber} // Make sure this reflects the current state
                                         onChange={handlePhoneNumberChange}
-                                    />
+                                />
 
-                                {/* <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
-                                    <MapPinIcon className=" h-5 w-5 text-club-header-blue"></MapPinIcon>
-                                    <div className="w-full h-auto justify-start items-center flex">                            
-                                    <input
-                                        name="location"
-                                        value={formValues.location}
-                                        onChange={handleInputChange}
-                                        className="form-input w-full placeholder:-translate-x-2 text-neutral-500"
-                                        type="text"
-                                        placeholder="Enter location"
-                                    />
-                                    </div>
-                                </div> */}
 
                                 <LocationInput 
                                     onLocationChange={handleLocationChange} 
@@ -374,23 +382,7 @@ const EditTeamPage = () => {
                                     isIconVisible={true} 
                                     value={formValues.location}
                                 />
-                                {/* Stadium Section 
 
-                                <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-md border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
-                                    <MapPinIcon className="h-5 w-5 h-5 w-5 text-club-header-blue"></MapPinIcon>
-                                    <div className="w-full h-auto justify-start items-center flex">                            
-                                    <input
-                                        name="stadium"
-                                        value={formValues.stadium}
-                                        onChange={handleInputChange}
-                                        className="form-input w-full placeholder:-translate-x-2 text-neutral-500"
-                                        type="text"
-                                        placeholder="Enter stadium"
-                                    />
-                                    </div>
-                                </div>*/}
-
-                                {/* Bio Section */}
 
                                 <div className="flex-col justify-start items-start gap-1 flex">
                                     
