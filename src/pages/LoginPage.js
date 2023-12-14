@@ -122,7 +122,7 @@ const LoginPage = () => {
                     placeholder="Password"
                     placeholderColor={credentialError ? 'red-500' : 'sn-main-orange'}
                 />
-                <p className='py-1 text-xs font-[Arial] text-sn-main-blue cursor-pointer' onClick={forgottenPassword}>Cannot login? <strong className='underline'>Reset password</strong></p>
+                <p className='py-1 text-xs font-[Arial] text-sn-main-orange cursor-pointer' onClick={forgottenPassword}>Cannot login? <strong className='underline'>Reset password</strong></p>
                 <button
                        
                         className={`text-white bg-sn-main-orange mt-5 w-64 h-16 font-russoOne rounded-10px ${
