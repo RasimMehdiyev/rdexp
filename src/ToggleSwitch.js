@@ -56,7 +56,7 @@ const ToggleSwitch = ({ onToggle }) => {
       )}
       {toggleState === 3 && (
         <div
-          className="absolute font-arial text-xs top-[12.5px] left-[16px] transform -translate-x-1/2 -translate-y-1/2 text-white"
+          className="absolute font-arialBold text-xs top-[13px] left-[16px] transform -translate-x-1/2 -translate-y-1/2 text-white"
           style={{ pointerEvents: 'none' }}
         >
           X
