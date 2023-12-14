@@ -407,7 +407,7 @@ const EventOverviewEdit = () => {
                     />
                 </div>
           
-                {generalInfo.type === 'Game' ? (
+                {generalInfo.type === 'game' ? (
                     <EditGameComponent
                         eventTitle={eventTitle}
                         generalInfo={generalInfo}

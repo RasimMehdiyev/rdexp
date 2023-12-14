@@ -345,9 +345,9 @@ const EditProfilePage = () => {
                 
                 <div className="mt-5 flex-col justify-start items-start gap-2 flex">
                     
-                    <div className="flex-col justify-start items-start gap-1 flex">
-                        <div className="justify-start items-start gap-2.5 inline-flex">
-                            <div className="text-blue-600 text-xl font-russoOne">Contact details</div>
+                    <div className="flex-col justify-start items-start gap-0 flex ">
+                        <div className="justify-start items-start gap-2.5 inline-flex mb-2">
+                            <div className="text-blue-600 text-xl font-russoOne ">Contact details</div>
                         </div>
                         <div className={`w-[322px] h-12 pl-2 pr-4 py-3 mb-3 bg-white rounded-lg border-2 ${emailError ? 'border-red-500':'border-club-header-blue'}  justify-start items-center gap-2.5 inline-flex`}>
                             <EnvelopeIcon className={`h-5 w-5 text-club-header-blue ${emailError ? 'text-red-500' : ''}`}></EnvelopeIcon>
@@ -385,8 +385,10 @@ const EditProfilePage = () => {
                         
                         {(phoneNumberError != '') ? <div className="text-red-500">{phoneNumberError}</div>:<div></div>}        
                         
+                        <p className='py-2 text-[14px] text-club-header-blue font-interReg pt-0'><Link className='font-interReg font-bold text-club-header-blue underline hover:text-[gray]' to="/password/change">Change Password</Link></p>
+
                     </div>                                          
-                        
+
                     </div>
                     <div className="flex-col justify-start items-start gap-1 flex">
                         <div className="w-[178px] justify-start items-start gap-2.5 inline-flex">
