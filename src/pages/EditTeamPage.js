@@ -31,11 +31,10 @@ const EditTeamPage = () => {
     const [errors, setErrors] = useState({});
     const [previewImage, setPreviewImage] = useState(null);
     const [placeholderPhoneNumber, setPlaceholderPhoneNumber] = useState('Phone');
-    const [newPhoneNumber, setNewPhoneNumber] = useState('');
     const [phoneNumberError, setPhoneNumberError] = useState('');
     const [hasUserMadeChanges, setHasUserMadeChanges] = useState(false);
-    const [initialLocation, setInitialLocation] = useState(clubData?.location || '');
     const [locationInputValue, setLocationInputValue] = useState(formValues.location || '');
+    const [imageChanged, setImageChanged] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -83,14 +82,14 @@ const EditTeamPage = () => {
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
-    
         if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setPreviewImage(reader.result);
-           
-        };
-        reader.readAsDataURL(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewImage(reader.result);
+                setImageChanged(true); // Mark that the image has been changed
+                setHasUserMadeChanges(true);
+            };
+            reader.readAsDataURL(file);
         }
     };
 
@@ -132,6 +131,7 @@ const EditTeamPage = () => {
             console.error("Error updating data:", error);
         } finally {
             setLoading(false);
+            setImageChanged(false); // Reset the image changed state
         }
     };
     
@@ -193,15 +193,6 @@ const EditTeamPage = () => {
             location: newLocation
         }));
         setLocationInputValue(newLocation); // Update the direct input state
-        setHasUserMadeChanges(true);
-    };
-    // Function to clear the location input
-    const clearLocation = () => {
-        setLocationInputValue('');
-        setFormValues(prevState => ({
-            ...prevState,
-            location: ''
-        }));
         setHasUserMadeChanges(true);
     };
     
@@ -269,11 +260,20 @@ const EditTeamPage = () => {
 
 
     const isSaveButtonDisabled = () => {
-        // Check if there are changes and mandatory fields are filled and email is valid
+        // Check if the email is valid
         const isEmailValid = testEmail(formValues.email);
-        const areMandatoryFieldsFilled = formValues.teamName !== '' && formValues.email !== '';
-        return !hasUserMadeChanges || !isEmailValid || !areMandatoryFieldsFilled;
+    
+        // Check if mandatory fields are filled
+        const areMandatoryFieldsFilled = formValues.teamName.trim() !== '' && formValues.email.trim() !== '';
+    
+        // Return true if any of the following conditions are met:
+        // - No changes have been made
+        // - Mandatory fields are not filled
+        // - Email is not valid
+        // - No new image has been selected
+        return !hasUserMadeChanges || !areMandatoryFieldsFilled || !isEmailValid;
     };
+    
 
     useEffect(() => {
         // Initial check for button disabled state
