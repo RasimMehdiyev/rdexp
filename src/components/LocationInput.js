@@ -29,7 +29,7 @@ const LocationInput = ({ onLocationChange, borderColor, isIconVisible, value ,pl
       loadAutocomplete();
     } else {
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAbIeGNneNcbNWvjaa225b4v4zpU5B2TpU&libraries=places`;
       script.async = true;
       script.defer = true;
       script.onload = () => loadAutocomplete();
