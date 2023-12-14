@@ -27,8 +27,8 @@ const ToggleSwitch = ({ onToggle }) => {
   const displayCheckmark = toggleState === 1; // Display checkmark when the button is green
 
   return (
-    <div className="flex flex-col items-center relative">
-        <div className='absolute font-inter text-sm font-bold text-orange-700 bottom-[20px] left-[0px]'>attend?</div>
+    <div className="flex flex-col items-center relative p-2">
+        <div className='absolute font-inter text-sm font-bold text-orange-700 bottom-[29px] left-[8px]'>attend?</div>
       <input
         type="range"
         name="points"
@@ -46,12 +46,12 @@ const ToggleSwitch = ({ onToggle }) => {
         }}
       />
       {toggleState === 1 && (
-        <div className="absolute font-inter text-xs font-bold top-1/2 left-[32px] transform -translate-x-1/2 -translate-y-1/2 text-white">
+        <div className="absolute font-inter text-sm font-bold top-1/2 left-[40px] transform -translate-x-1/2 -translate-y-1/2 text-white">
           ✓
         </div>
       )}
       {toggleState === 3 && (
-        <div className="absolute font-arial text-xs top-[9px] left-[14px] transform -translate-x-1/2 -translate-y-1/2 text-white">
+        <div className="absolute font-arial text-sm top-[17px] left-[24px] transform -translate-x-1/2 -translate-y-1/2 text-white">
           x
         </div>
       )}
