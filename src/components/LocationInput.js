@@ -1,101 +1,72 @@
-import React, { useState, useEffect } from 'react';
-import { useCombobox } from 'downshift';
+import React, { useState, useEffect, useRef } from 'react';
 
-const LocationInput = ({ onLocationChange, borderColor, isIconVisible, value }) => {
-  const [inputItems, setInputItems] = useState([]);
-  const [loading, setLoading] = useState(false);
+const LocationInput = ({ onLocationChange, borderColor, isIconVisible, value ,placeholder}) => {
+  const [inputValue, setInputValue] = useState(value || '');
+  const autocompleteRef = useRef(null);
 
-  const {
-    isOpen,
-    inputValue,
-    getMenuProps,
-    getInputProps,
-    getItemProps,
-    selectedItem,
-    setInputValue
-  } = useCombobox({
-    items: inputItems,
-    onInputValueChange: ({ inputValue }) => {
-      setLoading(true);
-      fetchAddresses(inputValue).then((addresses) => {
-        setInputItems(addresses);
-        setLoading(false);
-
-        // Call the onLocationChange prop with the selected location
-        if (onLocationChange && addresses.length > 0) {
-          onLocationChange(addresses[0]);
+  useEffect(() => {
+    const handlePlaceChanged = () => {
+      if (autocompleteRef.current) {
+        const place = autocompleteRef.current.getPlace();
+        if (place && place.formatted_address) {
+          setInputValue(place.formatted_address);
+          onLocationChange(place.formatted_address);
         }
-      });
-    },
-  });
+      }
+    };
 
-  const fetchAddresses = async (query) => {
-    const apiKey = '22ff9dc36a8a460893811d86a9e2436c'; 
-    const response = await fetch(
-      `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
-        query
-      )}&key=${apiKey}`
-    );
-    const data = await response.json();
+    const loadAutocomplete = () => {
+      // eslint-disable-next-line no-undef
+      const autocomplete = new google.maps.places.Autocomplete(
+        document.getElementById('location-autocomplete'),
+        { types: ['geocode'] }
+      );
+      autocomplete.addListener('place_changed', handlePlaceChanged);
+      autocompleteRef.current = autocomplete;
+    };
 
-    if (data.results) {
-      return data.results.map((result) => result.formatted);
+    if (window.google) {
+      loadAutocomplete();
     } else {
-      return [];
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      script.onload = () => loadAutocomplete();
+      document.head.appendChild(script);
+    }
+
+    return () => {
+      if (autocompleteRef.current) {
+        google.maps.event.clearInstanceListeners(autocompleteRef.current);
+      }
+    };
+  }, [onLocationChange]);
+
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
+
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+    if (!event.target.value) {
+      onLocationChange('');
     }
   };
 
-    
-  useEffect(() => {
-    setInputValue(value);
-  }, [value, setInputValue]);
-
-
-
   return (
     <div className='input-container w-full'>
-      <div className="relative w-full ">
-        {isIconVisible && (
-          <img className="input-icon pt-4" src={process.env.PUBLIC_URL + "/images/map-pin.svg"} alt="map-pin" />
-        )}
-        <textarea
-          {...getInputProps()}
+      <div className="relative w-full">
+        {isIconVisible && <img className="input-icon pt-4" src={process.env.PUBLIC_URL + "/images/map-pin.svg"} alt="map-pin" />}
+        <input
+          id="location-autocomplete"
           type="text"
-          placeholder="Location"
+          value={inputValue}
+          onChange={handleInputChange}
+          placeholder={placeholder}
           className={`text-black font-interReg p-2 w-full border-2 pl-${isIconVisible ? '8' : '2'} border-${borderColor} h-30 rounded-10px m-auto `}
-          maxLength={255}
-          rows={4}
         />
       </div>
-      <ul
-        {...getMenuProps()}
-        style={{
-          listStyle: 'none',
-          padding: 0,
-          position: 'absolute',
-          top: '100%', // Display below the input
-          left: 0,
-          zIndex: 1,
-        }}
-      >
-        {isOpen &&
-          (loading ? (
-            <li>Loading...</li>
-          ) : (
-            inputItems.map((item, index) => (
-              <li
-                {...getItemProps({ item, index })}
-                key={item}
-                style={{
-                  backgroundColor: selectedItem === item ? 'lightgray' : 'white',
-                  fontWeight: selectedItem === item ? 'bold' : 'normal',
-                }}
-              >
-                {item}
-              </li>
-            ))
-          ))}
-      </ul>
     </div>
   );
 };
