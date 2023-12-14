@@ -10,6 +10,7 @@ import PhoneInput from 'react-phone-input-2';
 import FloatingMessage from "../components/FloatingMessageComponent";
 import PasswordInput from "../components/PasswordInput";
 
+
 const EditProfilePage = () => {
     const [userData, setUserData] = useState({});
     const [role, setRole] = useState('');
@@ -51,6 +52,7 @@ const EditProfilePage = () => {
     const [passwordColor, setPasswordColor] = React.useState('club-header-blue');
     const [showOldPassword, setShowOldPassword] = React.useState(false);
     const [isOldPasswordMatch, setIsOldPasswordMatch] = React.useState(false);
+
 
     const handlePasswordChange = (e) => {
         const newPassword = e.target.value;
@@ -304,6 +306,28 @@ const EditProfilePage = () => {
                     .eq('user_id', user.id)
                     .single();
                 if (userError) throw userError;
+
+                    // Check if password fields have been filled
+                if (oldPassword && password && confirmPassword && isPasswordMatch && !isOldPasswordMatch) {
+                    try{
+                        console.log(password)
+                        const {updatePassword, updatePasswordError} = await supabase.auth.updateUser({ password: password});
+                        if(updatePasswordError){
+                            throw updatePasswordError;
+                        }
+                        console.log(updatePassword);
+                    }catch(error){
+                        toast.error(error.message, {position: "top-center", autoClose: 3000,zIndex: 50});
+                    }
+                    finally{
+                        toast.success("Password changed successfully", {position: "top-center", autoClose: 3000,zIndex: 50});
+                        setTimeout(() => {
+                            navigate('/profile');
+                        }, 3000);
+                    }
+                }
+
+
                 toast.success('Profile updated successfully! Redirecting...', { position: "bottom-center", zIndex: 50});
                 setTimeout(() => {
                     console.log("redirecting")
