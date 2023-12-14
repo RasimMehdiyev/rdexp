@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import useTeamData from "../hooks/useTeamData";
 import PhoneInput from 'react-phone-input-2';
 import LocationInput from '../components/LocationInput.js';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 const EditTeamPage = () => {
@@ -225,7 +226,38 @@ const EditTeamPage = () => {
         }
     };
     
-    
+    const [emailError, setEmailError] = useState('');
+
+    const testEmail = (newEmail) => {
+        if (newEmail != '') {
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailPattern.test(newEmail);
+        } else return true;
+        
+    };
+
+    useEffect(() => {
+
+        setEmailError(!testEmail(formValues.email));
+
+      }, [formValues.email]);
+
+    const handleEmailBlur=()=>{
+        
+        if (emailError){
+            
+            toast.error("Please enter a valid email address.", {
+                position: "bottom-center",
+                zIndex: 50,
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "light"
+            });
+        }   
+    }    
     
     if (loading) {
         return <LoadingPage />;
@@ -295,16 +327,17 @@ const EditTeamPage = () => {
 
                                  {/* Email Section */}
 
-                                <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue  justify-start items-center gap-2.5 inline-flex">
-                                    <EnvelopeIcon className=" h-5 w-5 text-club-header-blue"></EnvelopeIcon>
+                                <div className={`w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-lg border-2 ${emailError ? 'border-red-500' : 'border-club-header-blue '}  justify-start items-center gap-2.5 inline-flex`}>
+                                    <EnvelopeIcon className={` h-5 w-5 ${emailError ? 'text-red-500' : 'text-club-header-blue'}`}></EnvelopeIcon>
                                     <div className="w-full h-auto justify-start items-center flex">
                                         <input
                                             name="email"
                                             value={formValues.email}
                                             onChange={handleInputChange}
-                                            className="form-input w-full font-interReg placeholder:-translate-x-2 "
+                                            className={`form-input w-full font-interReg placeholder-translate-x-2 ${emailError ? 'text-red-500' : 'text-black'}`}
                                             type="email"
                                             placeholder="Email"
+                                            onBlur={handleEmailBlur}
                                         />
                                         {errors.email && <span className="error">{errors.email}</span>}
                                     </div>
@@ -438,7 +471,7 @@ const EditTeamPage = () => {
                             </div>
                         </div>
 
-                             
+                             <ToastContainer/>
                     </div>
                 </div>
             </div>
