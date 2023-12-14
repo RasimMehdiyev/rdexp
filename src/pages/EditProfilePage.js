@@ -180,6 +180,8 @@ const EditProfilePage = () => {
         const reader = new FileReader();
         reader.onloadend = () => {
             setPreviewImage(reader.result);
+            setHasUserMadeChanges(true); // Indicate that a change has been made
+            updateButtonState(); 
         };
         reader.readAsDataURL(file);
         }
@@ -196,17 +198,20 @@ const EditProfilePage = () => {
         const hasBioChanged = newBio !== userData.bio;
         const hasPlayerNumberChanged = role === 'Player' ? newNumber !== userData.number : false;
         const hasPasswordChanged = oldPassword || password || confirmPassword;
+        
+        const hasProfilePictureChanged = previewImage && previewImage !== userData.profile_picture;
+        const hasMadeChanges = hasEmailChanged || hasPhoneNumberChanged || hasBioChanged || 
+                               hasPlayerNumberChanged || hasPasswordChanged || hasProfilePictureChanged;
     
-        const hasMadeChanges = hasEmailChanged || hasPhoneNumberChanged || hasBioChanged || hasPlayerNumberChanged || hasPasswordChanged;
-    
-        setButtonEnabled(isEmailValid && isPhoneNumberValid && isPasswordValid && isPlayerNumberValid && hasMadeChanges);
-        setButtonOpacity(isEmailValid && isPhoneNumberValid && isPasswordValid && isPlayerNumberValid && hasMadeChanges ? 1 : 0.5);
+        setButtonEnabled(isEmailValid && isPhoneNumberValid && isPasswordValid && 
+                         isPlayerNumberValid && hasMadeChanges);
+        setButtonOpacity(hasMadeChanges ? 1 : 0.5);
     };
     
 
     useEffect(() => {
         updateButtonState();
-    }, [newEmail, newPhoneNumber, newBio, newNumber, oldPassword, password, confirmPassword]);
+    }, [newEmail, newPhoneNumber, newBio, newNumber, oldPassword, password, confirmPassword,previewImage]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -392,12 +397,16 @@ const EditProfilePage = () => {
                         <div className="profile-front"> 
                             
                                     {previewImage ? (
-                                    <img className="w-[142px] h-[142px] rounded-full object-cover overflow-hidden" src={previewImage} alt="Preview" />
+                                        <img className="w-[142px] h-[142px] rounded-full object-cover overflow-hidden" 
+                                            src={previewImage} 
+                                            alt="Preview" />
                                     ) : (
-                                    <img className="w-[150px] h-[150px] rounded-full  object-cover overflow-hidden" src={process.env.PUBLIC_URL + "/images/no_user.png"} alt="No user" />
+                                        <img className="w-[150px] h-[150px] rounded-full object-cover overflow-hidden" 
+                                            src={process.env.PUBLIC_URL + "/images/no_user.png"} 
+                                            alt="No user" />
                                     )}
                                     <label htmlFor="profilePictureInput">
-                                        <div className="w-[35px] h-[35px] left-[107px] top-[98px] absolute" onChange={(e) => (handleImageChange(e))}>
+                                        <div className="w-[35px] h-[35px] left-[107px] top-[98px] absolute" >
                                             <div className="w-[35px] h-[35px] left-[-3px] top-0 absolute bg-club-header-blue rounded-full flex justify-center items-center cursor-pointer">
                                                 <PencilIcon className="h-6 w-6 text-white"/>
                                             </div>
@@ -408,7 +417,8 @@ const EditProfilePage = () => {
                                             id="profilePictureInput"
                                             accept="image/*"
                                             style={{ display: 'none' }}
-                                        />
+                                            onChange={(e) => (handleImageChange(e))} 
+                                       />
                                     
                         </div>
                         {
