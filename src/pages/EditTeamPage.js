@@ -338,7 +338,7 @@ const EditTeamPage = () => {
                                 <LocationInput 
                                     onLocationChange={handleLocationChange} 
                                     borderColor="club-header-blue" 
-                                    isIconVisible={false} 
+                                    isIconVisible={true} 
                                     value={locationInputValue}
                                     placeholder={formValues.location || 'Location'}
                                 />
@@ -384,7 +384,7 @@ const EditTeamPage = () => {
                         <div className="flex-col justify-start items-start gap-2 flex">
 
 
-                            <div className="flex-col justify-start items-start gap-1 flex">
+                            <div className="flex-col mt-3 justify-start items-start gap-1 flex">
                                 <div className=" justify-start items-start gap-2.5 inline-flex">
                                     <div className="text-blue-600 text-xl font-russoOne">Social Media</div>
                                 </div>

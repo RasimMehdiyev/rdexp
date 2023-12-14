@@ -58,13 +58,14 @@ const LocationInput = ({ onLocationChange, borderColor, isIconVisible, value ,pl
     <div className='input-container w-full'>
       <div className="relative w-full">
         {isIconVisible && <img className="input-icon pt-4" src={process.env.PUBLIC_URL + "/images/map-pin.svg"} alt="map-pin" />}
-        <input
+        <textarea
           id="location-autocomplete"
           type="text"
           value={inputValue}
           onChange={handleInputChange}
-          placeholder={placeholder}
-          className={`text-black font-interReg p-2 w-full border-2 pl-${isIconVisible ? '8' : '2'} border-${borderColor} h-30 rounded-10px m-auto `}
+          //placeholder={placeholder}
+          rows={3}
+          className={`text-black font-interReg p-2 w-full mb-2 border-2 pl-${isIconVisible ? '8' : '2'} border-${borderColor} h-30 rounded-10px m-auto `}
         />
       </div>
     </div>
