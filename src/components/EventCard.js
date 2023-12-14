@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { UserGroupIcon } from '@heroicons/react/24/solid'
-import ToggleSwitch from '../ToggleSwitch';
+import ToggleSwitch from "./ToggleSwitch";
 
 const EventCard = ({ type, eventName, teamName, eventTime, location, attendance, number_invitation, date }) => {
 

@@ -394,7 +394,7 @@ const EventOverviewEdit = () => {
                   <div className='text-sm text-red-500'>Please ensure that title event, date, time, team, and location are filled/selected</div>
                 )}
 
-                <h5 className="text-2xl text-left text-sn-main-blue font-russoOne  mt-5 mb-3">Event Details</h5>
+                <h5 className="text-2xl text-left text-sn-main-blue font-russoOne  mt-5 mb-5">Event Details</h5>
                 {isButtonDisabled &&
                     <h3 className="font-interELight text-sn-main-orange">
                     All orange fields are mandatory.

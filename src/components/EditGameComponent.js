@@ -448,7 +448,7 @@ const EditGameComponent = ({
                                                 <select 
                                                     id={`player_select_${position.id}`}
                                                     onChange={(event) => handlePlayerChange(event, position)}
-                                                    className="form-select w-full px-2 py-2 bg-white rounded-lg border-red-500 border text-red-500"
+                                                    className="form-select w-full px-2 py-2  bg-white rounded-lg border-red-500 border text-red-500"
                                                     disabled={!selectedID}
                                                 >
                                                     <option value="" className="text-black" >
