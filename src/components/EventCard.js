@@ -62,7 +62,7 @@ const EventCard = ({ type, eventName, teamName, eventTime, location, attendance,
         <div className="location-section inline-flex gap-1.5 w-full">
           <div className="w-6 h-6 px-[2.62px] py-[0.67px] justify-center items-center flex">
             <img
-              className="w-6 h-6 absolute mb-2 text-[#485687]"
+              className="w-[17px] h-[17px] relative mb-2 text-[#485687]"
               src={process.env.PUBLIC_URL + "/images/pin.svg"}
               style={{ filter: '#485687', left: '-1px', top: '2px' }}
             />
