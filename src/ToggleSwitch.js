@@ -28,7 +28,7 @@ const ToggleSwitch = ({ onToggle }) => {
 
   return (
     <div className="flex flex-col items-center relative p-2">
-        <div className='absolute font-inter text-sm font-bold text-orange-700 bottom-[29px] left-[8px]'>attend?</div>
+        <div className='absolute font-inter text-sm font-bold text-orange-700 bottom-[33px] left-[11px]'>attend?</div>
       <input
         type="range"
         name="points"
@@ -38,21 +38,21 @@ const ToggleSwitch = ({ onToggle }) => {
         max="3"
         value={toggleState}
         id="custom-toggle"
-        className={`tgl appearance-none w-12 h-5 ${getBackgroundColor()} rounded-full p-0 cursor-pointer`}
+        className={`tgl appearance-none w-14 h-6 ${getBackgroundColor()} rounded-full p-0 cursor-pointer`}
         style={{
-          '--thumb-size': '1.25rem',
+          '--thumb-size': '1.50rem',
           '--thumb-color': 'gray',
           '--thumb-border-radius': '50%',
         }}
       />
       {toggleState === 1 && (
-        <div className="absolute font-inter text-sm font-bold top-1/2 left-[40px] transform -translate-x-1/2 -translate-y-1/2 text-white">
+        <div className="absolute font-inter text-md font-bold top-1/2 left-[48px] transform -translate-x-1/2 -translate-y-1/2 text-white">
           ✓
         </div>
       )}
       {toggleState === 3 && (
-        <div className="absolute font-arial text-sm top-[17px] left-[24px] transform -translate-x-1/2 -translate-y-1/2 text-white">
-          x
+        <div className="absolute font-arial text-xs top-[20px] left-[24px] transform -translate-x-1/2 -translate-y-1/2 text-white">
+          X
         </div>
       )}
       <style>
