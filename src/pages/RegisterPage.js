@@ -175,7 +175,7 @@ function RegisterPage() {
             <SynthleteLogo />
             <form className='text-center gap-2 w-80 items-center flex flex-col justify-center' onSubmit={handleSubmit}>
                     <input
-                        className='shadow-md placeholder-text p-2 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue'
+                        className='placeholder:-translate-x-2 shadow-md placeholder-text p-2 font-interReg w-full h-12 rounded-lg border-2 border-club-header-blue'
                         placeholder='Full Name'
                         type="text"
                         value={fullName}
@@ -191,7 +191,7 @@ function RegisterPage() {
                     />
                     
                     <input
-                    className={`shadow-md placeholder-text p-2 font-interReg w-full h-12 rounded-lg border-2 
+                    className={`placeholder:-translate-x-2 shadow-md placeholder-text p-2 font-interReg w-full h-12 rounded-lg border-2 
                     ${
                         emailError ? 'border-red-500' : 'border-club-header-blue'
                       } ${
