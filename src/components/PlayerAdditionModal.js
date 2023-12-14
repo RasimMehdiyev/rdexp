@@ -3,18 +3,52 @@ import { Dialog, Transition } from '@headlessui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { supabase } from '../lib/helper/supabaseClient';
+import PersonTag from './PersonTagNotDeletable';
 
 const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
   const [inputValue, setInputValue] = useState('');
   const [inputError, setInputError] = useState(false);
+  const [players, setPlayers] = useState([]); // [user_id, user_name]
+  const [extras, setExtras] = useState([]); // [user_id, user_name]
+  const [suggestions, setSuggestions] = useState([]); // [user_id, user_name
 
 
   useEffect(() => {
     if (!isOpen) {
       setInputValue('');
       setInputError(false);
+      setSuggestions([]);
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    // get all users with role_id 2 and 3
+    const getAllPlayers = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('users')
+          .select('id,full_name, number, role_id');
+
+        if (error) {
+          console.error('Error fetching users:', error);
+          return;
+        }
+
+        // setUsers(data);
+        setExtras(data.filter(user => user.role_id === 3));
+        setPlayers(data.filter(user => user.role_id === 2));
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
+    };
+    getAllPlayers();
+  },[])
+
+
+  useEffect(() => {
+    console.log('Updated players:', players);
+    console.log('Updated extras:', extras);
+  },[players, extras])
 
 
   const handleInputChange = async (e) => {
@@ -23,8 +57,21 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
     if (inputError) {
       setInputError(false); // Reset error state when user starts typing again
     }
+
+    const filteredSuggestions = isPlayer 
+    ? players.filter(player => player.full_name.toLowerCase().includes(inputValue.toLowerCase())) 
+    : extras.filter(extra => extra.full_name.toLowerCase().includes(inputValue.toLowerCase()));
+
+    console.log(filteredSuggestions)
+    setSuggestions(filteredSuggestions);
+    console.log(suggestions)
   };
 
+
+  const handleSuggestionClick = (fullName) => {
+    setInputValue(fullName);
+    setSuggestions([]); // Clear suggestions after selection
+  };
 
   const handleSave = async () => {
     try {
@@ -56,7 +103,7 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
 
       return { data, error };
     } catch (error) {
-      throw error;
+      // throw error;
     }
   };
   
@@ -103,6 +150,27 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
                   placeholder={isPlayer ? "Enter player's name" : "Enter name"}
                 />
               </div>
+                {/* Suggestions List */}
+                {suggestions.length > 0 && (
+                  <div className="mt-2 max-h-40 overflow-auto z-20">
+                    {suggestions.map((suggestion, index) => (
+                      <div 
+                        key={index}                           
+                        onClick={() => handleSuggestionClick(suggestion.full_name)}
+                        className='py-2'
+                      >
+                        <PersonTag 
+                          id={suggestion.id}
+                          name={suggestion.full_name}
+                          number={suggestion.number}
+                          team={null}
+                          isPlayer={isPlayer}
+                        />
+                      </div>
+
+                    ))}
+                  </div>
+                )}
               <div className="mt-4">
                 <button
                   type="button"
