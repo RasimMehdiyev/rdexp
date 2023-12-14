@@ -39,6 +39,7 @@ const EditProfilePage = () => {
 
     const [hasUserMadeChanges, setHasUserMadeChanges] = useState(false);
     const [showFloatingMessage, setShowFloatingMessage] = useState(true);
+    const [isCoach, setIsCoach] = useState(false);
 
     const [oldPassword, setOldPassword] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -50,13 +51,13 @@ const EditProfilePage = () => {
     const [passwordColor, setPasswordColor] = React.useState('club-header-blue');
     const [showOldPassword, setShowOldPassword] = React.useState(false);
     const [isOldPasswordMatch, setIsOldPasswordMatch] = React.useState(false);
-    const [buttonState, setButtonState] = React.useState(false);
 
     const handlePasswordChange = (e) => {
         const newPassword = e.target.value;
         setPassword(newPassword);
         checkPasswordMatch(newPassword, confirmPassword);
         checkOldNewPasswordMatch(newPassword, oldPassword);
+        updateButtonState();
     }
 
     const handlePasswordBlur = (e) => {
@@ -73,6 +74,8 @@ const EditProfilePage = () => {
         const newConfirmPassword = e.target.value;
         setConfirmPassword(newConfirmPassword);
         checkPasswordMatch(password, newConfirmPassword);
+        updateButtonState();
+
     }
 
     const checkOldNewPasswordMatch = (newPassword, oldPassword) => {
@@ -95,6 +98,7 @@ const EditProfilePage = () => {
         const newOldPassword = e.target.value;
         setOldPassword(newOldPassword);
         checkOldNewPasswordMatch(password, newOldPassword);
+        updateButtonState();
     }
 
     const handleOldPasswordBlur = (e) => {
@@ -162,9 +166,9 @@ const EditProfilePage = () => {
 
     const handleInputChange = (e) => {
         setNewEmail(e.target.value);
-        setHasUserMadeChanges(true);
+        updateButtonState(); // Call this after state update
     };
-    // Similar for other input fields
+
     
 
     const handleImageChange = (e) => {
@@ -180,25 +184,27 @@ const EditProfilePage = () => {
     };
 
     const updateButtonState = () => {
-        const isValidEmail = newEmail ? validateEmail(newEmail) : false;
-
-        if (!isValidEmail) {
-            setEmailError(true);
-        }
-        else {
-            setEmailError(false);
-        }
-
-        const allFieldsFilled = newEmail.trim() !== '' && newPhoneNumber.trim() !== '' && newNumber.trim() !== '';
+        const isEmailValid = newEmail ? validateEmail(newEmail) : true;
+        const isPhoneNumberValid = newPhoneNumber ? validatePhoneNumber(newPhoneNumber) : true;
+        const isPasswordValid = (!oldPassword && !password && !confirmPassword) || (password.length >= 8 && isPasswordMatch && !isOldPasswordMatch);
+        const isPlayerNumberValid = role === 'Player' ? newNumber.trim() !== '' : true;
     
-        setButtonEnabled(isValidEmail && allFieldsFilled && hasUserMadeChanges);
-        setButtonOpacity(isValidEmail && allFieldsFilled && hasUserMadeChanges ? 1 : 0.5);
+        const hasEmailChanged = newEmail !== userData.email;
+        const hasPhoneNumberChanged = newPhoneNumber !== userData.phone_number;
+        const hasBioChanged = newBio !== userData.bio;
+        const hasPlayerNumberChanged = role === 'Player' ? newNumber !== userData.number : false;
+        const hasPasswordChanged = oldPassword || password || confirmPassword;
+    
+        const hasMadeChanges = hasEmailChanged || hasPhoneNumberChanged || hasBioChanged || hasPlayerNumberChanged || hasPasswordChanged;
+    
+        setButtonEnabled(isEmailValid && isPhoneNumberValid && isPasswordValid && isPlayerNumberValid && hasMadeChanges);
+        setButtonOpacity(isEmailValid && isPhoneNumberValid && isPasswordValid && isPlayerNumberValid && hasMadeChanges ? 1 : 0.5);
     };
     
 
     useEffect(() => {
         updateButtonState();
-    }, [newEmail, newPhoneNumber, newBio, newNumber]);
+    }, [newEmail, newPhoneNumber, newBio, newNumber, oldPassword, password, confirmPassword]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -216,6 +222,7 @@ const EditProfilePage = () => {
                 if (userError) throw userError;
                 setUserData(userData);
                 setRole(userData.role);
+                setIsCoach(userData.role_id == 2 ? true : false);
                 setNewEmail(userData.email || '');
                 setNewPhoneNumber(userData.phone_number || '');
                 setNewNumber(userData.number || '');
@@ -349,9 +356,13 @@ const EditProfilePage = () => {
                 buttonOpacity={buttonOpacity}
             />
             <div className="grow flex bg-indigo-100 flex-col items-center justify-start h-screen">
-                {showFloatingMessage && (
+                {/* {showFloatingMessage &&  (
                     <FloatingMessage />
-                )}
+                )} */}
+                {
+                    isCoach ? <FloatingMessage />
+                    : <div></div>
+                }
                 <div className="grow p-4 flex-col justify-start items-center gap-4 inline-flex">
                     <div className={`profile-flipper ${showNumber ? 'show-number' : ''}`} onDoubleClick={handleProfileClick}>
                         <div className="profile-front"> 
@@ -537,7 +548,6 @@ const EditProfilePage = () => {
                                         )
                                         }
 
-                                        {/* <button className={`${changeButtonState()}`}>RESET</button> */}
                             </form>
                         </div>
                     </div>
