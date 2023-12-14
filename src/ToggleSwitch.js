@@ -48,7 +48,7 @@ const ToggleSwitch = ({ onToggle }) => {
       />
       {toggleState === 1 && (
         <div
-          className="absolute font-inter text-md font-bold top-1/2 left-[40px] transform -translate-x-1/2 -translate-y-1/2 text-white"
+          className="absolute font-inter text-md top-1/2 left-[40px] transform -translate-x-1/2 -translate-y-1/2 text-white"
           style={{ pointerEvents: 'none' }}
         >
           ✓
