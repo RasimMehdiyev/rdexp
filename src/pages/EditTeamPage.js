@@ -415,7 +415,7 @@ const EditTeamPage = () => {
 
                                  {/* Facebook Section */}
 
-                                <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue  justify-start items-center gap-2.5 inline-flex">
+                                <div className="w-[322px] h-12 mb-1 pl-3 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue  justify-start items-center gap-2.5 inline-flex">
                                     <img src={`${process.env.PUBLIC_URL}/images/facebook.svg`} alt='facebook' />
                                     <div className="w-full h-auto justify-start items-center flex">
                                         <input
@@ -431,7 +431,7 @@ const EditTeamPage = () => {
 
                                 {/* Instagram Section */}
 
-                                <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
+                                <div className="w-[322px] h-12 mb-1 pl-3 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
                                     <img src={`${process.env.PUBLIC_URL}/images/instagram.svg`} alt='instagram' />
                                     <div className="w-full h-auto justify-start items-center flex">                            
                                         <input
@@ -447,7 +447,7 @@ const EditTeamPage = () => {
 
                                 {/* X Section */}
 
-                                <div className="w-[322px] h-12 mb-3 pl-3 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
+                                <div className="w-[322px] h-12 mb-1 pl-3 pr-4 py-3 bg-white rounded-lg border-2 border-club-header-blue justify-start items-center gap-2.5 inline-flex">
                                     <img src={`${process.env.PUBLIC_URL}/images/twitter.svg`} alt='twitter' />
                                     <div className="w-full h-auto justify-start items-center flex">                            
                                         <input
