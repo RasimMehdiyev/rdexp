@@ -10,8 +10,6 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [emailError, setEmailError] = useState('');
     const navigate = useNavigate();
-    const [user, setUser] = useState(null);
-    const inputRef = useRef(null);
     const [credentialError, setCredentialError] = useState('');
 
     const handleLogin = async (e) => {
@@ -22,7 +20,7 @@ const LoginPage = () => {
             toast.success('Login successful! Redirecting...', { position: "top-center" });
             setTimeout(() => {
                 navigate('/');
-            }, 3000);
+            }, 1500);
         } catch (error) {
             setCredentialError(true);
             toast.error(error.error_description || error.message, { position: "top-center" });
@@ -49,12 +47,6 @@ const LoginPage = () => {
 
     };
 
-    useEffect(() => {
-        // Your existing useEffect logic
-    }, [])
-
-    {/*const isDisabled = !email || !password;*/}
-
     const validateEmail = (inputEmail) => {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailPattern.test(inputEmail);
@@ -79,6 +71,24 @@ const LoginPage = () => {
             setEmailError('');
         }
     };
+
+    const forgottenPassword = async () => {
+
+        if (email.trim() === '') {
+            setEmailError('');
+        } else if (!validateEmail(email)) {
+            setEmailError('Please enter a valid email address');
+            toast.error("Please enter a valid email address.", {position: "top-center", autoClose: 3000,zIndex: 50});
+        }
+        else{
+            toast.success("Password reset email sent!", {position: "top-center", autoClose: 3000,zIndex: 50});
+        }
+        
+
+        await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: 'http://localhost:3000/password/reset/',
+          })
+    }
 
     const [allFieldsFilled, setAllFieldsFilled] = useState(false);
     useEffect(() => {
@@ -112,6 +122,7 @@ const LoginPage = () => {
                     placeholder="Password"
                     placeholderColor={credentialError ? 'red-500' : 'sn-main-orange'}
                 />
+                <p className='py-1 text-xs font-[Arial] text-sn-main-orange cursor-pointer' onClick={forgottenPassword}>Cannot login? <strong className='underline'>Reset password</strong></p>
                 <button
                        
                         className={`text-white bg-sn-main-orange mt-5 w-64 h-16 font-russoOne rounded-10px ${

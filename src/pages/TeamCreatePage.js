@@ -161,7 +161,7 @@ const TeamCreatePage = () => {
       setTimeout(() => {
           console.log("redirecting")
         navigate('/club/create/settings');
-      }, 3000); 
+      }, 1500); 
     } catch (error) {
       toast.error(error.error_description || error.message, { position: "top-center" });
     }
@@ -241,7 +241,7 @@ const insertExtras = async () => {
             YOUR TEAM
           </h1>
           <input
-            className={`mt-5 h-12 p-2 ${teamBorderColor} ${teamError ? 'text-red-500' : 'text-black'} w-[60vw] rounded-10px border-2 border-club-header-blue font-interReg placeholder-text`}
+            className={`placeholder:-translate-x-2 mt-5 h-12 p-2 ${teamBorderColor} ${teamError ? 'text-red-500' : 'text-black'} w-[60vw] rounded-10px border-2 border-club-header-blue font-interReg placeholder-text`}
             placeholder="Team name"
             value={teamName}
             onChange={handleTeamNameChange}
@@ -262,7 +262,7 @@ const insertExtras = async () => {
             <PersonTag key={index} {...player} onDelete={deletePlayer} />        
           ))}
 
-          <UserInput onAdd={addPlayer} users={playersUsers} />
+          <UserInput onAdd={addPlayer} users={playersUsers} isPlayer={true}/>
           <h1 className="pt-7 pb-4 text-3xl text-club-header-blue">
               Add extras
           </h1>
@@ -271,7 +271,7 @@ const insertExtras = async () => {
           {extras.map((extra, index) => (
             <PersonTag key={index} {...extra} onDelete={deleteExtra} />        
           ))}
-          <UserInput onAdd={addExtra} users={extrasUsers} />
+          <UserInput onAdd={addExtra} users={extrasUsers} isPlayer={false}/>
         </div>
       </div>
 

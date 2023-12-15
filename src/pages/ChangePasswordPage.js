@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import PasswordInput from '../components/PasswordInput'
-import { supabase } from '../lib/helper/supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import StickyPasswordChange from '../components/StickyPasswordChange';
 

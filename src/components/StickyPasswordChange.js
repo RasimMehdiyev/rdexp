@@ -27,7 +27,7 @@ const StickyPasswordChange = ({buttonState , newPassword}) => {
             toast.success("Password changed successfully", {position: "top-center", autoClose: 3000,zIndex: 50});
             setTimeout(() => {
                 navigate('/profile');
-            }, 3000);
+            }, 1500);
         }
     }
 

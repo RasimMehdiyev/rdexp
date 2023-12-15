@@ -70,7 +70,7 @@ const GameSettings = () => {
       toast.success('Game settings saved!', { position: "top-center" });
       setTimeout(() => {
         navigate('/');
-      }, 3000); 
+      }, 1500); 
     } catch (error) {
       toast.error('Error saving game settings!', { position: "top-center" });
     }
@@ -89,11 +89,11 @@ const GameSettings = () => {
           <h3 className="items-center flex flex-row justify-center pb-7 mt-3 text-2xl font-interELight text-club-header-blue p-1 bg-white rounded-10px shadow-md h-[6vh] w-[70vw] ">
             {
               loading ? (
-                      <p className="spinner-club mt-[10px] items-center"></p>
+                      <p className="spinner-club mt-[20px] items-center"></p>
                       )
                       :
                       (
-                          <p>{teamName.team_name}</p>
+                          <p className="mt-[20px] items-center">{teamName.team_name ? teamName.team_name : "No team"}</p>
                       )
             }  
           </h3>
@@ -104,7 +104,8 @@ const GameSettings = () => {
             Add roles
           </h1>
           <h3 className="pb-7 font-interELight text-club-header-blue">
-            These roles are positions, distinct from players, that require someone to fill them during every game of the team.
+            Set up necessary roles like referee, scorekeeper, or equipment manager needed for your team&apos;s games. 
+            Just enter role names to the list below.
           </h3>
 
           {roles.map((role, index) => (

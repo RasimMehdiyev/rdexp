@@ -6,6 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import LoadingPage from './LoadingPage.js';
 import useTeamData from '../hooks/useTeamData';
 import { useState, useEffect } from 'react';
+import {toast, ToastContainer} from 'react-toastify';
 
 
 const TeamProfilePage = () => {
@@ -19,9 +20,6 @@ const TeamProfilePage = () => {
 
     useEffect(() => {
 
-        console.log("User team ids:", userTeamIds);
-        console.log("Team id:", teamId);
-        console.log("Club id", clubId);
         if(!loading){
             if(userData){
                 if (!loading && (!userTeamIds.includes(Number(teamId)))) {
@@ -122,6 +120,7 @@ const Tab = ({ isActive, label, onClick }) => {
         <Tab isActive={tab === 0} label="About" onClick={() => onTabChange(0)} />
         <Tab isActive={tab === 1} label="Members" onClick={() => onTabChange(1)} />
         <Tab isActive={tab === 2} label="Settings" onClick={() => onTabChange(2)} />
+        <ToastContainer/>
       </div>
     );
   };

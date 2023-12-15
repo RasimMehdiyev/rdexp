@@ -40,11 +40,12 @@ const TeamProfileHeaderComponent = ({ clubData, teamData, teamSocialsData, userT
       
             {/* Stadium information */}
             <div>
+                {/*
                 {clubData.stadium ? (
                     <div className="text-center text-neutral-300 text-xs font-interReg uppercase">{clubData.stadium}</div>
                 ) : (
                     <div className="text-center text-neutral-300 text-xs font-interReg uppercase">No stadium</div>
-                )}
+                )}*/}
                 {clubData.location ? (
                     <div className="text-center text-neutral-300 text-xs font-interReg uppercase">{clubData.location}</div>
                 ) : (

@@ -34,12 +34,12 @@ const NewGamePage = () => {
             if (checkInput()) setInputCheck(true);
             else {
                 setInputCheck(false);
-                setLoading(false);
+                // setLoading(false);
                 return;
             }
 
             try {
-                setLoading(true);
+                // setLoading(true);
                 const userResponse = await supabase.auth.getUser();
                 // console.log("User:", userResponse);
                 const user = userResponse.data.user;
@@ -78,21 +78,22 @@ const NewGamePage = () => {
                         if (errorExtrasData) throw errorExtrasData;
 
 
-                        toast.success('Event created successfully! Redirecting...', { position: "top-center", zIndex: 50});
-                        setTimeout(() => {
-                          navigate('/');
-                        }, 3000); 
+
                     };                            
                 }                    
                             
             } catch (error) {
-                toast.error(error.error_description || error.message, { position: "top-center" });
+                toast.error(error.error_description || error.message, { position: "bottom-center" });
             }
             finally {
-                setLoading(false);
+                // setLoading(false);
+                toast.success('Event created successfully! Redirecting...', { position: "bottom-center", zIndex: 50});
+                setTimeout(() => {
+                  navigate('/');
+                }, 1500); 
             }
         } else {
-            setLoading(true);
+            // setLoading(true);
             if (checkInput()) setInputCheck(true);
             else {
                 setInputCheck(false);
@@ -142,11 +143,11 @@ const NewGamePage = () => {
             } catch (error) {
                 console.error("Error uploading data", error);
             } finally {
-                setLoading(false);
-                toast.success('Event created successfully! Redirecting...', { position: "top-center", zIndex: 50});
+                // setLoading(false);
+                toast.success('Event created successfully! Redirecting...', { position: "bottom-center", zIndex: 50});
                 setTimeout(() => {
                   navigate('/');
-                }, 3000); 
+                }, 1500); 
             }
             
             
@@ -231,7 +232,7 @@ const NewGamePage = () => {
     }, [])
     
     if (loading) {
-        return (<LoadingPage></LoadingPage>)
+        // return (<LoadingPage></LoadingPage>)
     } else if (userCheck) {
         return (
             <div>
@@ -243,7 +244,11 @@ const NewGamePage = () => {
                         <div className='text-sm text-red-500'>Please ensure that title event, date, time, team, and location are filled/selected</div>
                     )}
 
-                    <h5 className="text-2xl text-sn-main-blue font-russoOne">Event Details</h5>
+                    <h5 className="text-2xl text-sn-main-blue font-russoOne mb-3">Event Details</h5>
+                    {isButtonDisabled &&
+                    <h3 className="font-interELight text-sn-main-orange">
+                    All orange fields are mandatory.
+                    </h3>}
 
                     <input
                         value={eventTitle}

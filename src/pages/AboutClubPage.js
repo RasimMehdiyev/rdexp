@@ -194,7 +194,7 @@ export const AboutClubPage = () => {
     console.log('club id', clubTeamData.id);
     localStorage.setItem('teamID', teamData.id);
 
-    toast.success('Successful club registration! 🎉 Redirecting...', {
+    toast.success('Successful club registration! Redirecting...', {
       position: 'top-center',
       autoClose: 5000,
       hideProgressBar: false,
@@ -207,7 +207,7 @@ export const AboutClubPage = () => {
 
     setTimeout(() => {
       navigate('/team/create');
-    }, 5000);
+    }, 1500);
   };
 
   return (
@@ -219,7 +219,7 @@ export const AboutClubPage = () => {
       <div className="flex flex-col justify-center">
         <input
           onChange={handleClubNameInputChange}
-          className={`border-2 ${clubBorderColor} ${clubError ? 'text-red-500' : 'text-black'} p-2 w-[60vw] mx-auto rounded-10px h-12`}
+          className={`placeholder:-translate-x-2 border-2 ${clubBorderColor} ${clubError ? 'text-red-500' : 'text-black'} p-2 w-[60vw] mx-auto rounded-10px h-12`}
           type="text"
           placeholder="Club name"
           maxLength={30}
@@ -251,7 +251,7 @@ export const AboutClubPage = () => {
         <p className='font-russoOne text-[20px] '>Contact details</p>
 
         <input
-          className={`shadow-md placeholder-text p-2 font-interReg w-full h-12 rounded-lg border-2 
+          className={`placeholder:-translate-x-2 shadow-md placeholder-text p-2 font-interReg w-full h-12 rounded-lg border-2 
                         ${emailBorderColor} ${
             emailError ? 'text-red-500' : 'text-black'
           }`}

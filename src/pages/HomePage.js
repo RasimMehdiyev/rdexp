@@ -7,7 +7,6 @@ import EventCard from "../components/EventCard";
 import React from 'react';
 import LoadingPage from './LoadingPage';
 import StickyMonthHeader from '../components/StickyMonthComponent';
-import { PlusIcon } from '@heroicons/react/24/solid';
 
 const HomePage = () => {
   const [userData, setUserData] = useState({});
@@ -16,6 +15,7 @@ const HomePage = () => {
   const [fetchedTeams, setFetchedTeams] = useState([]);
   const [isCoach, setIsCoach] = useState(false);
   const [currentMonth, setCurrentMonth] = useState('');
+  const [userId, setUserId] = useState('');
 
   const [filter, setFilter] = useState('all'); 
   const [team, setTeam] = useState(-1); 
@@ -59,9 +59,8 @@ const HomePage = () => {
         .select('id, role_id')
         .eq("user_id", uuid)
         .single();
-  
-      console.log("This is the user table id and role");
-      console.log(userTableIdAndRole);
+
+      setUserId(userTableIdAndRole.id)
   
       if (tableIdError) {
         console.error(tableIdError);
@@ -140,8 +139,6 @@ const HomePage = () => {
     // If it's not the toggle switch, navigate to the event overview
     if (!isToggleSwitch && !event.target.classList.contains('toggle-switch')) {
       event.preventDefault();
-      console.log("open card");
-      console.log(index);
       navigate('/event-overview/' + index);
     }
   };
@@ -164,7 +161,6 @@ const HomePage = () => {
           LogRocket.getSessionURL(sessionURL => {
             amplitude.getInstance().logEvent('LogRocket', { 'sessionURL': sessionURL });
           });
-          console.log("SessionURL:", sessionURL);
 
           await getEvents(user.data.user.id);
 
@@ -178,9 +174,7 @@ const HomePage = () => {
       }
     }
 
-    console.log("Home page fetches starting now");
     fetchData();
-    console.log("Fetched events: ", fetchedEvents);
 
   }, [navigate]);
 
@@ -265,14 +259,11 @@ const handleTeamChange = (newTeam) => {
 
 
 const toggleFilterDropdown = () => {
-  console.log("toggle filter dropdown", openDropdown);
   setOpenDropdown(openDropdown === 'filter' ? null : 'filter');
 };
 
 const toggleTeamDropdown = () => {
-  console.log("toggle team dropdown before", openDropdown);
   setOpenDropdown(openDropdown === 'team' ? null : 'team');
-  console.log("toggle team dropdown after", openDropdown);
 };
 
 
@@ -341,6 +332,8 @@ else {
                   .map((event, index) => (
                     <div key={index} onClick={(e) => openCard(event.id , e)} className="event-card">
                       <EventCard
+                        id={event.id}
+                        userId={userId}
                         type={event.type}
                         eventName={event.eventName}
                         teamName={event.teamName}
@@ -348,6 +341,7 @@ else {
                         location={event.location}
                         attendance={event.attendance}
                         number_invitation={event.number_invitation}
+                        isCoach={isCoach}
                       >
                       </EventCard>
                       
@@ -425,7 +419,7 @@ else {
                 </p>
                 <p
                   className={`cursor-pointer ${filter === 'team building' ? 'text-sn-light-orange font-bold' : ''}`}
-                  onClick={() => handleFilterChange('team building')}
+                  onClick={() => handleFilterChange('tb')}
                 >
                   Team building
                 </p>

@@ -3,46 +3,105 @@ import { Dialog, Transition } from '@headlessui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { supabase } from '../lib/helper/supabaseClient';
+import PersonTag from './PersonTagNotDeletable';
+import { toast, ToastContainer } from 'react-toastify';
 
-const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
+
+const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId}) => {
   const [inputValue, setInputValue] = useState('');
   const [inputError, setInputError] = useState(false);
+  const [players, setPlayers] = useState([]); // [user_id, user_name]
+  const [extras, setExtras] = useState([]); // [user_id, user_name]
+  const [suggestions, setSuggestions] = useState([]); // [user_id, user_name
+  const [isSelectionValid, setIsSelectionValid] = useState(false); // [user_id, user_name
 
 
   useEffect(() => {
     if (!isOpen) {
       setInputValue('');
       setInputError(false);
+      setSuggestions([]);
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    // get all users with role_id 2 and 3
+    const getAllPlayers = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('users')
+          .select('id,full_name, number, role_id');
+
+        if (error) {
+          console.error('Error fetching users:', error);
+          return;
+        }
+
+        // setUsers(data);
+        setExtras(data.filter(user => user.role_id === 3));
+        setPlayers(data.filter(user => user.role_id === 2));
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
+    };
+    getAllPlayers();
+  },[])
+
+
+  useEffect(() => {
+  },[players, extras])
 
 
   const handleInputChange = async (e) => {
     setInputValue(e.target.value);
+    setIsSelectionValid(false);
     const { data, error } = await checkConstraints(inputValue);
     if (inputError) {
       setInputError(false); // Reset error state when user starts typing again
     }
+
+    const filteredSuggestions = isPlayer 
+    ? players.filter(player => player.full_name.toLowerCase().includes(inputValue.toLowerCase())) 
+    : extras.filter(extra => extra.full_name.toLowerCase().includes(inputValue.toLowerCase()));
+
+    setSuggestions(filteredSuggestions);
   };
 
 
+  const handleSuggestionClick = (fullName) => {
+    setInputValue(fullName);
+    setSuggestions([]); // Clear suggestions after selection
+    setIsSelectionValid(true);
+  };
+
   const handleSave = async () => {
+    const roleName = isPlayer ? 'Player' : 'Extra';
     try {
       const { data, error } = await checkConstraints(inputValue);
-      console.log(data, error)
       if (error) {
-        setInputError('Error checking constraints: ' + error.message);
+        setInputError('This ' + roleName + ' is already part of the team. Please try someone else.');
       } else if (data) {
-        onSave(data);
-        setInputValue('');
-        onClose();
+
+        if (data.exists){
+          setInputError('This ' + roleName + ' is already part of the team. Please try someone else.');
+        }
+        else{
+          onSave(data);
+          setInputValue('');
+          onClose();
+          toast.success(roleName + ' added successfully!', { position: "bottom-center", zIndex: 50, autoClose: 3000 });
+        }
       } else {
-        setInputError('Player not found or does not meet criteria.');
+        setInputError('This '+ roleName +' not found or does not meet criteria.');
       }
     } catch (error) {
       setInputError('Error checking constraints: ' + error.message);
+      // toast.error('Error checking constraints: ' + error.message, { position: "top-center", zIndex: 50, autoClose: 3000 });
     }
-    console.log(inputError)
+    finally{
+      setInputValue('');
+
+    }
   };
 
   const checkConstraints = async (fullName) => {
@@ -56,7 +115,8 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
 
       return { data, error };
     } catch (error) {
-      throw error;
+      console.error('Error in checkConstraints:', error);
+      return { error };
     }
   };
   
@@ -102,17 +162,40 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
                   className={`pl-10 border-2 ${inputError ? 'border-red-500 bg-red-100 text-red-500' : 'border-club-header-blue bg-white '} h-12 w-full rounded-10px text-lg placeholder:-translate-x-2`}
                   placeholder={isPlayer ? "Enter player's name" : "Enter name"}
                 />
+                    {inputError && <p className="text-red-500 text-sm mt-2">{inputError}</p>}
               </div>
+                {/* Suggestions List */}
+                {suggestions.length > 0 && (
+                  <div className="mt-2 max-h-40 overflow-auto z-20">
+                    {suggestions.map((suggestion, index) => (
+                      <div 
+                        key={index}                           
+                        onClick={() => handleSuggestionClick(suggestion.full_name)}
+                        className='py-2'
+                      >
+                        <PersonTag 
+                          id={suggestion.id}
+                          name={suggestion.full_name}
+                          number={suggestion.number}
+                          team={null}
+                          isPlayer={isPlayer}
+                        />
+                      </div>
+
+                    ))}
+                  </div>
+                )}
               <div className="mt-4">
                 <button
                   type="button"
-                  className={`inline-flex justify-center px-4 py-2 text-lg font-interELight text-white bg-club-header-blue rounded-10px w-full ${inputValue ? '' : 'opacity-50 cursor-not-allowed'}`}
+                  className={`inline-flex justify-center px-4 py-2 text-lg font-interELight text-white bg-club-header-blue rounded-10px w-full ${isSelectionValid ? '' : 'opacity-50 cursor-not-allowed'}`}
                   onClick={handleSave}
-                  disabled={!inputValue}
+                  disabled={!isSelectionValid}
                 >
                   SAVE
                 </button>
               </div>
+              <ToastContainer />
             </div>
           </Transition.Child>
         </div>
