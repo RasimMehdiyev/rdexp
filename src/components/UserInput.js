@@ -43,7 +43,7 @@ const UserInput = ({ onAdd, users, isPlayer }) => {
       const user = data.data[0];
       if (user && user.user_id != null) { 
         onAdd({ ...inputValue, id: user.user_id, number: user.user_number });
-        setInputValue({ name: '', id: null, number: null }); // Reset inputValue
+        setInputValue({ name: '', id: null }); // Reset inputValue
         setSuggestions([]);
       } else {
         setInputError(`This ${roleName} not found or does not meet criteria.`);
@@ -60,6 +60,7 @@ const UserInput = ({ onAdd, users, isPlayer }) => {
     onAdd({ name: user.full_name, id: user.id, number:user.number }); // Add the user to the parent component
     setInputValue({ name: '', id: null }); // Reset input field and ID after selecting
     setSuggestions([]); // Clear suggestions after selecting
+    setInputError(false);
   };
 
   const checkConstraints = async (fullName) => {
