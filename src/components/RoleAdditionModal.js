@@ -1,8 +1,5 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
 import RoleInput from '../components/RoleInput.js';
 
 export default function RoleAdditionModal({ isOpen, closeModal }) {

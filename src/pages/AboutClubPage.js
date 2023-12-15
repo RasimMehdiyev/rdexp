@@ -194,7 +194,7 @@ export const AboutClubPage = () => {
     console.log('club id', clubTeamData.id);
     localStorage.setItem('teamID', teamData.id);
 
-    toast.success('Successful club registration! 🎉 Redirecting...', {
+    toast.success('Successful club registration! Redirecting...', {
       position: 'top-center',
       autoClose: 5000,
       hideProgressBar: false,
@@ -207,7 +207,7 @@ export const AboutClubPage = () => {
 
     setTimeout(() => {
       navigate('/team/create');
-    }, 5000);
+    }, 1500);
   };
 
   return (

@@ -215,7 +215,7 @@ const EditProfilePage = () => {
             toast.success('Profile updated successfully! Redirecting...', { position: "bottom-center", zIndex: 50});
             setTimeout(() => {
               navigate('/profile');
-            }, 3000); 
+            }, 1500); 
         }
 
     };

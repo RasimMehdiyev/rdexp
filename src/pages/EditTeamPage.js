@@ -136,7 +136,7 @@ const EditTeamPage = () => {
             toast.success('Team updated successfully! Redirecting...', { position: "bottom-center", zIndex: 50});
             setTimeout(() => {
               navigate(`/team-profile/${clubId}/${teamId}`);
-            }, 3000); 
+            }, 1500); 
         }
     };
     

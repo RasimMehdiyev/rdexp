@@ -185,7 +185,7 @@ const EventOverviewEdit = () => {
             } finally {
                 // setLoading(false);
                 toast.success('Event updated successfully!', { position: "bottom-center", zIndex: 50, autoClose: 3000 });
-                setTimeout(() => {navigate('/');}, 3000);
+                setTimeout(() => {navigate('/');}, 1500);
             }
         } else {
             // setLoading(true);
@@ -229,7 +229,7 @@ const EventOverviewEdit = () => {
             } finally {
                 // setLoading(false);
                 toast.success('Event updated successfully!', { position: "bottom-center", zIndex: 50, autoClose: 3000 });
-                setTimeout(() => {navigate('/');}, 3000);
+                setTimeout(() => {navigate('/');}, 1500);
             }
             
             

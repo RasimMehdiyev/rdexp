@@ -90,7 +90,7 @@ export const ForgottenPasswordPage = () => {
           toast.success("Password changed successfully", {position: "top-center", autoClose: 3000,zIndex: 50});
           setTimeout(() => {
               navigate('/login');
-          }, 3000);
+          }, 1500);
       }
       }
 

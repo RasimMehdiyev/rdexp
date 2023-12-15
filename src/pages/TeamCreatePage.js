@@ -161,7 +161,7 @@ const TeamCreatePage = () => {
       setTimeout(() => {
           console.log("redirecting")
         navigate('/club/create/settings');
-      }, 3000); 
+      }, 1500); 
     } catch (error) {
       toast.error(error.error_description || error.message, { position: "top-center" });
     }

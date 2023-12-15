@@ -90,7 +90,7 @@ const NewGamePage = () => {
                 toast.success('Event created successfully! Redirecting...', { position: "bottom-center", zIndex: 50});
                 setTimeout(() => {
                   navigate('/');
-                }, 3000); 
+                }, 1500); 
             }
         } else {
             // setLoading(true);
@@ -147,7 +147,7 @@ const NewGamePage = () => {
                 toast.success('Event created successfully! Redirecting...', { position: "bottom-center", zIndex: 50});
                 setTimeout(() => {
                   navigate('/');
-                }, 3000); 
+                }, 1500); 
             }
             
             

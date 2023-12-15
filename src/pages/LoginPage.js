@@ -20,7 +20,7 @@ const LoginPage = () => {
             toast.success('Login successful! Redirecting...', { position: "top-center" });
             setTimeout(() => {
                 navigate('/');
-            }, 3000);
+            }, 1500);
         } catch (error) {
             setCredentialError(true);
             toast.error(error.error_description || error.message, { position: "top-center" });

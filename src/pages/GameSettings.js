@@ -70,7 +70,7 @@ const GameSettings = () => {
       toast.success('Game settings saved!', { position: "top-center" });
       setTimeout(() => {
         navigate('/');
-      }, 3000); 
+      }, 1500); 
     } catch (error) {
       toast.error('Error saving game settings!', { position: "top-center" });
     }

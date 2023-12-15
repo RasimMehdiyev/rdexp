@@ -163,7 +163,7 @@ function RegisterPage() {
                 } else {
                     navigate('/');
                 }
-            }, 3000);
+            }, 1500);
         } catch (error) {
             toast.error(error.error_description || error.message, { position: "top-center" });
         }
