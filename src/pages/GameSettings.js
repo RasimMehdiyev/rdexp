@@ -104,7 +104,8 @@ const GameSettings = () => {
             Add roles
           </h1>
           <h3 className="pb-7 font-interELight text-club-header-blue">
-            These roles are positions, distinct from players, that require someone to fill them during every game of the team.
+            Set up necessary roles like referee, scorekeeper, or equipment manager needed for your team&apos;s games. 
+            Just enter role names to the list below.
           </h3>
 
           {roles.map((role, index) => (
