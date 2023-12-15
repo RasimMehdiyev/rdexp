@@ -44,10 +44,10 @@
     const userResponse = await supabase.auth.getUser();
     var userId = userResponse.data.user; 
     if (userId) {
+    dataLayer.push({'event': 'login', 'userId': userId});
     gtag('config', 'G-QPMTL4HE99', { 'user_id': userId });
-    } 
-    else {
-    gtag('config', 'G-QPMTL4HE99');
+      } else {
+      gtag('config', 'G-QPMTL4HE99');
     }
   </script>
   <body style="background-color:#ffffff;">
