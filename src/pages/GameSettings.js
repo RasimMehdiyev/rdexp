@@ -89,11 +89,11 @@ const GameSettings = () => {
           <h3 className="items-center flex flex-row justify-center pb-7 mt-3 text-2xl font-interELight text-club-header-blue p-1 bg-white rounded-10px shadow-md h-[6vh] w-[70vw] ">
             {
               loading ? (
-                      <p className="spinner-club mt-[10px] items-center"></p>
+                      <p className="spinner-club mt-[20px] items-center"></p>
                       )
                       :
                       (
-                          <p>{teamName.team_name}</p>
+                          <p className="mt-[20px] items-center">{teamName.team_name ? teamName.team_name : "No team"}</p>
                       )
             }  
           </h3>

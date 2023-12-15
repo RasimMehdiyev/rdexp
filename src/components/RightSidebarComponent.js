@@ -35,13 +35,6 @@ const RightSideBarComponent = ({ toggleSidebar }) => {
           </div>
           <span>My Profile</span>
         </Link>
-        {/* Notifications */}
-        <Link onClick={toggleSidebar} to='/notification' className='flex items-center space-x-2 p-2 rounded-md justify-start'>
-          <div className="bg-sn-main-blue rounded-full p-2 flex items-center justify-center w-8 h-8">
-            <FontAwesomeIcon icon={faBell} className="h-4 w-4 text-white"/> 
-          </div>
-          <span>Notifications</span>
-        </Link>
         {/* Log Out */}
         <Link onClick={handleLogout} className='flex items-center space-x-2 p-2 rounded-md justify-start'>
           <div className="bg-sn-main-blue rounded-full p-2 flex items-center justify-center w-8 h-8">

@@ -122,7 +122,7 @@ const TeamManagementComponent = ({ teamData, coach, players, extras, isCoach, se
                 {/* Extras Section */}
                 <div className="self-stretch flex-col justify-start items-start flex pb-10">
                     <div className="self-stretch justify-start items-center inline-flex pt-5 pb-4 gap-2.5">
-                        <div className="text-blue-800 text-2xl font-russoOne">Extra</div>
+                        <div className="text-blue-800 text-2xl font-russoOne">Extras</div>
                         {isCoach && (
                             <div className="h-8 bg-blue-800 rounded-[10px] justify-center items-center flex" onClick={() => { setAddingPlayer(false); setAdditionModalOpen(true); }}>
                                 <img src={`${process.env.PUBLIC_URL}/images/plus-square.svg`} alt="Add Extra" />

@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../lib/helper/supabaseClient';
 import StickySubheaderEventCreateComponent from '../components/StickySubheaderEventCreateComponent';
 import LoadingPage from './LoadingPage';
+import {toast , ToastContainer} from 'react-toastify';
 
 const EventOverviewEdit = () => {
     
@@ -183,8 +184,8 @@ const EventOverviewEdit = () => {
                 console.error("Error uploading data", error);
             } finally {
                 setLoading(false);
-                navigate('/');
-
+                toast.success('Event updated successfully!', { position: "bottom-center", zIndex: 50, autoClose: 3000 });
+                setTimeout(() => {navigate('/');}, 3000);
             }
         } else {
             setLoading(true);
@@ -226,7 +227,8 @@ const EventOverviewEdit = () => {
                 console.error("Error uploading data", error);
             } finally {
                 setLoading(false);
-                navigate('/');
+                toast.success('Event updated successfully!', { position: "bottom-center", zIndex: 50, autoClose: 3000 });
+                setTimeout(() => {navigate('/');}, 3000);
             }
             
             
@@ -394,8 +396,11 @@ const EventOverviewEdit = () => {
                   <div className='text-sm text-red-500'>Please ensure that title event, date, time, team, and location are filled/selected</div>
                 )}
 
-                <h5 className="text-2xl text-left text-sn-main-blue font-russoOne  mt-5 mb-3">Event Details</h5>
-          
+                <h5 className="text-2xl text-left text-sn-main-blue font-russoOne  mt-5 mb-5">Event Details</h5>
+                {isButtonDisabled &&
+                    <h3 className="font-interELight text-sn-main-orange">
+                    All orange fields are mandatory.
+                    </h3>}
                 <div className="flex justify-center mb-4">
                     <input
                         value={eventTitle} // Use the gameName from generalInfo
@@ -431,6 +436,7 @@ const EventOverviewEdit = () => {
                     />
                 )}
                 </div>
+                <ToastContainer />
             </div>
         );            
     } else {
