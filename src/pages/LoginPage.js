@@ -14,15 +14,16 @@ const LoginPage = () => {
     const inputRef = useRef(null);
     const [credentialError, setCredentialError] = useState('');
 
-    const handleLogin = async (e) => {
+   const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const { error, user } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+            const { error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) throw error;
+            const userResponse = await supabase.auth.getUser();
+                console.log("User:", userResponse);
+                const user = userResponse.data.user;
 
-        console.log("User:", user);
-
-        if (user) {
+             if (user) {
             // Correctly call the RPC function
             const { data, error: rpcError } = await supabase
                 .rpc('increment_times_logged_in', { user_id_input: user.id });
