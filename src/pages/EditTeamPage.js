@@ -127,11 +127,16 @@ const EditTeamPage = () => {
             const updatedTeamData = await updateTeamData(teamId, formValues);
             const updatedClubData = await updateClubData(clubId, formValues);
             const updatedSocialsData = await updateTeamSocialsData(teamId, formValues);
-            navigate(`/team-profile/${clubId}/${teamId}`);
+            
+            //navigate(`/team-profile/${clubId}/${teamId}`);
         } catch (error) {
             console.error("Error updating data:", error);
         } finally {
-            setLoading(false);
+            //setLoading(false);
+            toast.success('Team updated successfully! Redirecting...', { position: "bottom-center", zIndex: 50});
+            setTimeout(() => {
+              navigate(`/team-profile/${clubId}/${teamId}`);
+            }, 3000); 
         }
     };
     
