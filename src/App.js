@@ -24,7 +24,7 @@ import EditTeamPage from './pages/EditTeamPage.js';
 import Oops from './pages/OopsPage.js';
 import { ForgottenPasswordPage } from './pages/ForgottenPasswordPage.js';
 
-LogRocket.init('u7ityk/synthlete');
+LogRocket.init('imcbbj/synthlete');
 
 const App = () => {
    const [rightIsOpen, setRightIsOpen] = useState(false);
