@@ -41,7 +41,14 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    gtag('config', 'G-QPMTL4HE99');
+    const userResponse = await supabase.auth.getUser();
+    var userId = userResponse.data.user; 
+    if (userId) {
+    dataLayer.push({'event': 'login', 'userId': userId});
+    gtag('config', 'G-QPMTL4HE99', { 'user_id': userId });
+      } else {
+      gtag('config', 'G-QPMTL4HE99');
+    }
   </script>
   <body style="background-color:#ffffff;">
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MDTXVW5X"

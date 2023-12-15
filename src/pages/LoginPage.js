@@ -12,11 +12,35 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const [credentialError, setCredentialError] = useState('');
 
-    const handleLogin = async (e) => {
+   const handleLogin = async (e) => {
         e.preventDefault();
         try {
             const { error } = await supabase.auth.signInWithPassword({ email, password });
             if (error) throw error;
+            const userResponse = await supabase.auth.getUser();
+                console.log("User:", userResponse);
+                const user = userResponse.data.user;
+
+             if (user) {
+            // Correctly call the RPC function
+            const { data, error: rpcError } = await supabase
+                .rpc('increment_times_logged_in', { user_id_input: user.id });
+
+            // Check for any errors during the RPC call
+            if (rpcError) throw rpcError;
+            console.log('Updated user times_logged_in:', data);
+
+            try {
+                const { data, error } = await supabase.rpc('count_users_over_five_logins');
+            
+                if (error) throw error;
+            
+                console.log("Number of users with more than five logins: ", data);
+              } catch (error) {
+                console.error("Error fetching count: ", error.message);
+              }
+        }
+            
             toast.success('Login successful! Redirecting...', { position: "top-center" });
             setTimeout(() => {
                 navigate('/');
