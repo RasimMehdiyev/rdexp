@@ -31,6 +31,16 @@ const LoginPage = () => {
             // Check for any errors during the RPC call
             if (rpcError) throw rpcError;
             console.log('Updated user times_logged_in:', data);
+
+            try {
+                const { data, error } = await supabase.rpc('count_users_over_five_logins');
+            
+                if (error) throw error;
+            
+                console.log("Number of users with more than five logins: ", data);
+              } catch (error) {
+                console.error("Error fetching count: ", error.message);
+              }
         }
             
             toast.success('Login successful! Redirecting...', { position: "top-center" });
