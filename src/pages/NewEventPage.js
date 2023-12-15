@@ -39,7 +39,7 @@ const NewGamePage = () => {
             }
 
             try {
-                setLoading(true);
+                // setLoading(true);
                 const userResponse = await supabase.auth.getUser();
                 // console.log("User:", userResponse);
                 const user = userResponse.data.user;
@@ -93,7 +93,7 @@ const NewGamePage = () => {
                 }, 3000); 
             }
         } else {
-            setLoading(true);
+            // setLoading(true);
             if (checkInput()) setInputCheck(true);
             else {
                 setInputCheck(false);
@@ -143,7 +143,7 @@ const NewGamePage = () => {
             } catch (error) {
                 console.error("Error uploading data", error);
             } finally {
-                setLoading(false);
+                // setLoading(false);
                 toast.success('Event created successfully! Redirecting...', { position: "bottom-center", zIndex: 50});
                 setTimeout(() => {
                   navigate('/');
