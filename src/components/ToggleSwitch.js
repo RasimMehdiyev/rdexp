@@ -82,7 +82,7 @@ const ToggleSwitch = ({ userId, eventId }) => {
 
   return (
     <div className="flex flex-col items-center relative">
-      <div className='absolute font-inter text-sm font-bold text-orange-700 bottom-[25px] left-[5px]'>attend?</div>
+      <div className='absolute font-interBond text-sm text-orange-700 bottom-[25px] left-[5px]'>attend?</div>
       <input
         type="range"
         name="points"
