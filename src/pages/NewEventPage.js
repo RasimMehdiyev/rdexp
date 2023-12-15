@@ -78,18 +78,19 @@ const NewGamePage = () => {
                         if (errorExtrasData) throw errorExtrasData;
 
 
-                        toast.success('Event created successfully! Redirecting...', { position: "top-center", zIndex: 50});
-                        setTimeout(() => {
-                          navigate('/');
-                        }, 3000); 
+
                     };                            
                 }                    
                             
             } catch (error) {
-                toast.error(error.error_description || error.message, { position: "top-center" });
+                toast.error(error.error_description || error.message, { position: "bottom-center" });
             }
             finally {
                 setLoading(false);
+                toast.success('Event created successfully! Redirecting...', { position: "bottom-center", zIndex: 50});
+                setTimeout(() => {
+                  navigate('/');
+                }, 3000); 
             }
         } else {
             setLoading(true);
@@ -143,7 +144,7 @@ const NewGamePage = () => {
                 console.error("Error uploading data", error);
             } finally {
                 setLoading(false);
-                toast.success('Event created successfully! Redirecting...', { position: "top-center", zIndex: 50});
+                toast.success('Event created successfully! Redirecting...', { position: "bottom-center", zIndex: 50});
                 setTimeout(() => {
                   navigate('/');
                 }, 3000); 

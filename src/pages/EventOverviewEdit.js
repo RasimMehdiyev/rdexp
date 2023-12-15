@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../lib/helper/supabaseClient';
 import StickySubheaderEventCreateComponent from '../components/StickySubheaderEventCreateComponent';
 import LoadingPage from './LoadingPage';
+import {toast , ToastContainer} from 'react-toastify';
 
 const EventOverviewEdit = () => {
     
@@ -183,8 +184,8 @@ const EventOverviewEdit = () => {
                 console.error("Error uploading data", error);
             } finally {
                 setLoading(false);
-                navigate('/');
-
+                toast.success('Event updated successfully!', { position: "bottom-center", zIndex: 50, autoClose: 3000 });
+                setTimeout(() => {navigate('/');}, 3000);
             }
         } else {
             setLoading(true);
@@ -226,7 +227,8 @@ const EventOverviewEdit = () => {
                 console.error("Error uploading data", error);
             } finally {
                 setLoading(false);
-                navigate('/');
+                toast.success('Event updated successfully!', { position: "bottom-center", zIndex: 50, autoClose: 3000 });
+                setTimeout(() => {navigate('/');}, 3000);
             }
             
             
@@ -434,6 +436,7 @@ const EventOverviewEdit = () => {
                     />
                 )}
                 </div>
+                <ToastContainer />
             </div>
         );            
     } else {
