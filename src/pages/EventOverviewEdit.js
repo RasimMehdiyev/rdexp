@@ -48,13 +48,13 @@ const EventOverviewEdit = () => {
     const handleOnChange = async () => {
         
         if (generalInfo.type == "Game" | generalInfo.type == "") {
-            setLoading(true);
-            console.log("event title", eventTitle);
-            console.log("selected option", selectedOption);
-            console.log("general info", generalInfo);
-            console.log("players", selectedPlayers);
-            console.log("extras", selectedExtras);
-            console.log("team", selectedTeam);
+            // setLoading(true);
+            // console.log("event title", eventTitle);
+            // console.log("selected option", selectedOption);
+            // console.log("general info", generalInfo);
+            // console.log("players", selectedPlayers);
+            // console.log("extras", selectedExtras);
+            // console.log("team", selectedTeam);
 
             // const timezoneOffsetMinutes = new Date().getTimezoneOffset();
             // const timezoneOffsetHours = timezoneOffsetMinutes / 60;
@@ -68,13 +68,13 @@ const EventOverviewEdit = () => {
             const timestamp = `${generalInfo.date} ${generalInfo.time}:00+00`;
 
             //const timestamp = `${generalInfo.date} ${generalInfo.time}:00+00`;
-            console.log("timestamp", timestamp);
+            // console.log("timestamp", timestamp);
 
             const toUploadPlayers = selectedPlayers.map((p) => ({ user_id: p.id, position_id: p.position_id }));
             const toUploadExtras = selectedExtras.map((ex) => ({ user_id: ex.id, extrarole_id: ex.extraRole_id }));
 
-            console.log("to upload players", toUploadPlayers);
-            console.log("to upload extras", toUploadExtras);
+            // console.log("to upload players", toUploadPlayers);
+            // console.log("to upload extras", toUploadExtras);
 
             if (checkInput()) setInputCheck(true);
             else {
@@ -183,33 +183,33 @@ const EventOverviewEdit = () => {
             } catch (error) {
                 console.error("Error uploading data", error);
             } finally {
-                setLoading(false);
+                // setLoading(false);
                 toast.success('Event updated successfully!', { position: "bottom-center", zIndex: 50, autoClose: 3000 });
                 setTimeout(() => {navigate('/');}, 3000);
             }
         } else {
-            setLoading(true);
+            // setLoading(true);
             if (checkInput()) setInputCheck(true);
             else {
-                setInputCheck(false);
-                setLoading(false);
+                // setInputCheck(false);
+                // setLoading(false);
                 return;
             }
-            console.log("event title", eventTitle);
-            console.log("selected option", generalInfo.type);
-            console.log("general info", generalInfo);
-            console.log("players", selectedPlayers);
-            console.log("team", selectedTeam);
+            // console.log("event title", eventTitle);
+            // console.log("selected option", generalInfo.type);
+            // console.log("general info", generalInfo);
+            // console.log("players", selectedPlayers);
+            // console.log("team", selectedTeam);
 
             const timestamp = `${generalInfo.date} ${generalInfo.time}:00+00`;
-            console.log("timestamp", timestamp);
+            // console.log("timestamp", timestamp);
 
             const toUploadPlayers = selectedPlayers.map((p) => ({ user_id: p.id }));
 
-            console.log("to upload players", toUploadPlayers);
+            // console.log("to upload players", toUploadPlayers);
             try {
                 const userResponse = await supabase.auth.getUser();
-                console.log("User:", userResponse);
+                // console.log("User:", userResponse);
                 const user = userResponse.data.user;
                 if (user) {
                     const { data: updatedEvent, error: updateError } = await supabase
@@ -224,9 +224,10 @@ const EventOverviewEdit = () => {
                     .eq('id', generalInfo.eventid);                          
                     }                  
             } catch (error) {
-                console.error("Error uploading data", error);
+                // console.error("Error uploading data", error);
+                toast.error('Error uploading data', { position: "bottom-center", zIndex: 50, autoClose: 3000 });
             } finally {
-                setLoading(false);
+                // setLoading(false);
                 toast.success('Event updated successfully!', { position: "bottom-center", zIndex: 50, autoClose: 3000 });
                 setTimeout(() => {navigate('/');}, 3000);
             }
@@ -242,15 +243,15 @@ const EventOverviewEdit = () => {
     }     
 
     useEffect(() => {
-        console.log("new general info", generalInfo);
+        // console.log("new general info", generalInfo);
     }, [generalInfo]);
 
     useEffect(() => {
-        console.log("new selected extras in parent", selectedExtras);
+        // console.log("new selected extras in parent", selectedExtras);
     }, [selectedExtras]);
 
     useEffect(() => {
-        console.log("new selected players in parent", selectedPlayers);
+        // console.log("new selected players in parent", selectedPlayers);
     }, [selectedPlayers]);
 
     useEffect(() => {
@@ -377,13 +378,13 @@ const EventOverviewEdit = () => {
     
     
     useEffect(() => {
-      console.log("Selected Team in Parent:", selectedTeam);
+    //   console.log("Selected Team in Parent:", selectedTeam);
     }, [selectedTeam]);
     
 
 
     if (loading) {
-        return (<LoadingPage></LoadingPage>)
+        // return (<LoadingPage></LoadingPage>)
     } else if (userCheck){    
         return (
             <div className="flex flex-col min-h-screen bg-almostwhite font-interReg">

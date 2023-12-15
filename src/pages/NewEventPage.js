@@ -34,7 +34,7 @@ const NewGamePage = () => {
             if (checkInput()) setInputCheck(true);
             else {
                 setInputCheck(false);
-                setLoading(false);
+                // setLoading(false);
                 return;
             }
 
@@ -86,7 +86,7 @@ const NewGamePage = () => {
                 toast.error(error.error_description || error.message, { position: "bottom-center" });
             }
             finally {
-                setLoading(false);
+                // setLoading(false);
                 toast.success('Event created successfully! Redirecting...', { position: "bottom-center", zIndex: 50});
                 setTimeout(() => {
                   navigate('/');
@@ -232,7 +232,7 @@ const NewGamePage = () => {
     }, [])
     
     if (loading) {
-        return (<LoadingPage></LoadingPage>)
+        // return (<LoadingPage></LoadingPage>)
     } else if (userCheck) {
         return (
             <div>
