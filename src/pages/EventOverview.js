@@ -61,9 +61,49 @@ const EventOverview = () => {
                 setRole(userTableIdAndRole.role_id);
             }
         }
+
+
         isLoggedIn();
     }, [role])
     
+
+    useEffect(() => {
+        const isLoggedIn = async () => {
+          const userResponse = await supabase.auth.getUser();
+          console.log(userResponse);
+          if (!userResponse.data.user) {
+            navigate('/auth');
+          } else {
+            const { data: userData, error: userError } = await supabase
+              .from('users')
+              .select('role_id, view_eventoverview_activation')
+              .eq("user_id", userResponse.data.user.id)
+              .single();
+      
+            console.log("This is the user role and event overview activation status:");
+            console.log(userData);
+            setRole(userData.role_id);
+      
+            // If the view_eventoverview_activation is false, call the RPC to set it to true
+            if (userData.view_eventoverview_activation === false) {
+              const { data: rpcData, error: rpcError } = await supabase
+                .rpc('activate_event_overview', { user_id_input: userResponse.data.user.id });
+      
+              if (rpcError) {
+                console.error('Error activating event overview:', rpcError);
+              } else {
+                console.log('Event overview activated:', rpcData);
+                // You might want to update the local state or re-fetch the user data to reflect the change
+              }
+            }
+          }
+        }
+      
+        isLoggedIn();
+      }, [role])
+
+
+      
     useEffect(() => {
         const fetchEventDetails = async () => {
           setLoading(true);                    
