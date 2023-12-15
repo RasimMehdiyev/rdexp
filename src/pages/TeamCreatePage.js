@@ -262,7 +262,7 @@ const insertExtras = async () => {
             <PersonTag key={index} {...player} onDelete={deletePlayer} />        
           ))}
 
-          <UserInput onAdd={addPlayer} users={playersUsers} />
+          <UserInput onAdd={addPlayer} users={playersUsers} isPlayer={true}/>
           <h1 className="pt-7 pb-4 text-3xl text-club-header-blue">
               Add extras
           </h1>
@@ -271,7 +271,7 @@ const insertExtras = async () => {
           {extras.map((extra, index) => (
             <PersonTag key={index} {...extra} onDelete={deleteExtra} />        
           ))}
-          <UserInput onAdd={addExtra} users={extrasUsers} />
+          <UserInput onAdd={addExtra} users={extrasUsers} isPlayer={false}/>
         </div>
       </div>
 
