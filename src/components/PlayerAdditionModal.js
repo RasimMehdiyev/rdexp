@@ -4,8 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { supabase } from '../lib/helper/supabaseClient';
 import PersonTag from './PersonTagNotDeletable';
+import { toast, ToastContainer } from 'react-toastify';
 
-const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
+
+const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId}) => {
   const [inputValue, setInputValue] = useState('');
   const [inputError, setInputError] = useState(false);
   const [players, setPlayers] = useState([]); // [user_id, user_name]
@@ -73,10 +75,10 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
   };
 
   const handleSave = async () => {
+    const roleName = isPlayer ? 'Player' : 'Extra';
     try {
       const { data, error } = await checkConstraints(inputValue);
       if (error) {
-        const roleName = isPlayer ? 'Player' : 'Extra';
         setInputError('This ' + roleName + ' is already part of the team. Please try someone else.');
       } else if (data) {
 
@@ -87,12 +89,18 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
           onSave(data);
           setInputValue('');
           onClose();
+          toast.success(roleName + ' added successfully!', { position: "top-center", zIndex: 50, autoClose: 3000 });
         }
       } else {
         setInputError('This '+ roleName +' not found or does not meet criteria.');
       }
     } catch (error) {
       setInputError('Error checking constraints: ' + error.message);
+      // toast.error('Error checking constraints: ' + error.message, { position: "top-center", zIndex: 50, autoClose: 3000 });
+    }
+    finally{
+      setInputValue('');
+
     }
   };
 
@@ -187,6 +195,7 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
                   SAVE
                 </button>
               </div>
+              <ToastContainer />
             </div>
           </Transition.Child>
         </div>
