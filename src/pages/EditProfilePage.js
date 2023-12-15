@@ -344,7 +344,7 @@ const EditProfilePage = () => {
                             <div className="w-full h-auto justify-start items-center flex">
                                 <input
                                     className={`text-base  ${emailError ? 'text-red-500' : 'text-black'} font-normal font-interReg leading-normal w-full placeholder:-translate-x-2`}
-                                    placeholder={userData.email}
+                                    placeholder="Email"
                                     type="email"
                                     value={newEmail}
                                         onChange={(event) => {
@@ -362,7 +362,7 @@ const EditProfilePage = () => {
                             style={{ height: '3rem', marginBottom: '30px' }}
                             inputStyle={{ height: '100%', width:'100%' }}
                             className={`text-black phone-input border-2 rounded-lg border-club-header-blue `}
-                            placeholder={placeholderPhoneNumber}
+                            placeholder="Phone"
                             dropdownStyle={{ textAlign: 'left' }} 
                             value={newPhoneNumber}
                             onChange={(newPhoneNumber) => {
@@ -393,7 +393,7 @@ const EditProfilePage = () => {
                                     }}
                                     className={`text-black font-normal font-interReg basis-0 grow`}
                                     rows='5'
-                                    placeholder={placeholderBio}
+                                    placeholder="Bio"
                                     onBlur={handleBioBlur}
                                     />
                             </div>

@@ -89,7 +89,7 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId}) => {
           onSave(data);
           setInputValue('');
           onClose();
-          toast.success(roleName + ' added successfully!', { position: "top-center", zIndex: 50, autoClose: 3000 });
+          toast.success(roleName + ' added successfully!', { position: "bottom-center", zIndex: 50, autoClose: 3000 });
         }
       } else {
         setInputError('This '+ roleName +' not found or does not meet criteria.');
