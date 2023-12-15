@@ -66,7 +66,7 @@ const LocationInput = ({ onLocationChange, borderColor, isIconVisible, value }) 
           onChange={handleInputChange}
           placeholder="Location"
           rows={3}
-          className={`text-black font-interReg p-2 w-full mb-2 border-2 pl-${isIconVisible ? '8' : '2'} border-${borderColor} h-30 rounded-10px m-auto `}
+          className={`text-black font-interReg p-2 w-full mb-2 border-2 pl-${isIconVisible ? '10' : '2'} border-${borderColor} h-30 rounded-10px m-auto `}
         />
       </div>
     </div>

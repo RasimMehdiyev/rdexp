@@ -108,7 +108,7 @@ export const ForgottenPasswordPage = () => {
                                 handlePasswordBlur={(e) => {handlePasswordBlur(e)}}
                                 togglePasswordVisibility={() => setShowPassword(!showPassword)}
                                 password={password}
-                                placeholder="New Password"
+                                placeholder="New password"
                                 placeholderColor={passwordColor}
                         />
 
@@ -120,7 +120,7 @@ export const ForgottenPasswordPage = () => {
                             handlePasswordBlur={handleConfirmPasswordBlur}
                             togglePasswordVisibility={() => setShowConfirmPassword(!showConfirmPassword)}
                             password={confirmPassword}
-                            placeholder="Confirm New Password"
+                            placeholder="Confirm new password"
                             placeholderColor={passwordColor}
                         />
                         {passwordLengthError && (
