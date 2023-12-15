@@ -11,6 +11,7 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
   const [players, setPlayers] = useState([]); // [user_id, user_name]
   const [extras, setExtras] = useState([]); // [user_id, user_name]
   const [suggestions, setSuggestions] = useState([]); // [user_id, user_name
+  const [isSelectionValid, setIsSelectionValid] = useState(false); // [user_id, user_name
 
 
   useEffect(() => {
@@ -51,6 +52,7 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
 
   const handleInputChange = async (e) => {
     setInputValue(e.target.value);
+    setIsSelectionValid(false);
     const { data, error } = await checkConstraints(inputValue);
     if (inputError) {
       setInputError(false); // Reset error state when user starts typing again
@@ -67,6 +69,7 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
   const handleSuggestionClick = (fullName) => {
     setInputValue(fullName);
     setSuggestions([]); // Clear suggestions after selection
+    setIsSelectionValid(true);
   };
 
   const handleSave = async () => {
@@ -177,9 +180,9 @@ const PlayerAdditionModal = ({ isOpen, onClose, onSave, isPlayer, teamId }) => {
               <div className="mt-4">
                 <button
                   type="button"
-                  className={`inline-flex justify-center px-4 py-2 text-lg font-interELight text-white bg-club-header-blue rounded-10px w-full ${inputValue ? '' : 'opacity-50 cursor-not-allowed'}`}
+                  className={`inline-flex justify-center px-4 py-2 text-lg font-interELight text-white bg-club-header-blue rounded-10px w-full ${isSelectionValid ? '' : 'opacity-50 cursor-not-allowed'}`}
                   onClick={handleSave}
-                  disabled={!inputValue}
+                  disabled={!isSelectionValid}
                 >
                   SAVE
                 </button>
